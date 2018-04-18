@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="2.1" xmlns="http://xmlns.jcp.org/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd">
+	<persistence-unit name="locale-commessa" transaction-type="RESOURCE_LOCAL">
+		<class>it.ltc.database.model.commessa.Contenitore</class>
+		<class>it.ltc.database.model.commessa.Documento</class>
+		<class>it.ltc.database.model.commessa.Fornitore</class>
+		<class>it.ltc.database.model.commessa.Ingresso</class>
+		<class>it.ltc.database.model.commessa.IngressoDettaglio</class>
+		<class>it.ltc.database.model.commessa.IngressoDettaglioPK</class>
+		<class>it.ltc.database.model.commessa.IngressoDettaglioCollo</class>
+		<class>it.ltc.database.model.commessa.Magazzino</class>
+		<class>it.ltc.database.model.commessa.Prodotto</class>
+		<class>it.ltc.database.model.commessa.Stoccaggio</class>
+		<class>it.ltc.database.model.commessa.StoccaggioMovimento</class>
+		<class>it.ltc.database.model.commessa.StoccaggioMovimentoPK</class>
+		<class>it.ltc.database.model.commessa.TipoEventoIngresso</class>
+		<class>it.ltc.database.model.commessa.TipoEventoUscita</class>
+		<class>it.ltc.database.model.commessa.TrackingIngresso</class>
+		<class>it.ltc.database.model.commessa.TrackingIngressoPK</class>
+		<class>it.ltc.database.model.commessa.TrackingUscita</class>
+		<class>it.ltc.database.model.commessa.TrackingUscitaPK</class>
+		<class>it.ltc.database.model.commessa.Uscita</class>
+		<class>it.ltc.database.model.commessa.UscitaDettaglio</class>
+		<class>it.ltc.database.model.commessa.UscitaDettaglioPK</class>
+		<class>it.ltc.database.model.commessa.UscitaDettaglioCollo</class>
+		<properties>
+			<property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver" />
+			<property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/ltc_commessa" />
+			<property name="javax.persistence.jdbc.user" value="ltc" />
+			<property name="javax.persistence.jdbc.password" value="myltcpsw1087" />
+			<property name="hibernate.hbm2ddl.auto" value="none" />
+			<property name="hibernate.dialect" value="org.hibernate.dialect.MySQLDialect" />
+			<property name="hibernate.connection.driver_class" value="com.mysql.jdbc.Driver"/>
+			<property name="hibernate.connection.provider_class" value="org.hibernate.service.jdbc.connections.internal.C3P0ConnectionProvider" />
+			<property name="hibernate.connection.url" value="jdbc:mysql://localhost:3306/ltc_commessa"/>
+			<property name="hibernate.connection.password" value="myltcpsw1087"/>
+			<property name="hibernate.connection.username" value="ltc"/>
+			<property name="hibernate.connection.useUnicode" value="true" />
+			<property name="hibernate.connection.useJDBCCompliantTimezoneShift"	value="true" />
+			<property name="hibernate.connection.useLegacyDatetimeCode"	value="false" />
+			<property name="hibernate.connection.serverTimezone" value="UTC" />
+			<property name="hibernate.connection.autoReconnect" value="true" />
+			<property name="hibernate.connection.useSSL" value="false" />
+			<property name="hibernate.c3p0.max_size" value="3" />
+			<property name="hibernate.c3p0.min_size" value="0" />
+			<property name="hibernate.c3p0.acquire_increment" value="1" />
+			<property name="hibernate.c3p0.idle_test_period" value="300" />
+			<property name="hibernate.c3p0.max_statements" value="0" />
+			<property name="hibernate.c3p0.timeout" value="100" />
+			<property name="hibernate.c3p0.preferredTestQuery" value="SELECT 1"/>
+			<property name="hibernate.c3p0.testConnectionOnCheckout" value="true"/>
+			<property name="hibernate.ejb.entitymanager_factory_name" value="locale-commessa"/>
+		</properties>
+	</persistence-unit>
+</persistence>
