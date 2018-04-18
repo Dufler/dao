@@ -1,0 +1,44 @@
+package it.ltc.database.model.centrale;
+
+import java.io.Serializable;
+import javax.persistence.*;
+
+
+/**
+ * The persistent class for the cliente database table.
+ * 
+ */
+@Entity
+@Table(name="cliente")
+@NamedQuery(name="Cliente.findAll", query="SELECT c FROM Cliente c")
+public class Cliente implements Serializable {
+	private static final long serialVersionUID = 1L;
+
+	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	@Column(unique=true, nullable=false)
+	private int id;
+
+	@Column(name="id_azienda", nullable=false)
+	private int idAzienda;
+
+	public Cliente() {
+	}
+
+	public int getId() {
+		return this.id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public int getIdAzienda() {
+		return this.idAzienda;
+	}
+
+	public void setIdAzienda(int idAzienda) {
+		this.idAzienda = idAzienda;
+	}
+
+}

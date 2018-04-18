@@ -1,0 +1,216 @@
+package it.ltc.database.model.centrale;
+
+import java.io.Serializable;
+import java.util.Date;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.NamedQuery;
+import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+
+
+/**
+ * The persistent class for the spedizione_giacenza database table.
+ * 
+ */
+@Entity
+@Table(name="spedizione_giacenza")
+@NamedQuery(name="SpedizioneGiacenza.findAll", query="SELECT s FROM SpedizioneGiacenza s")
+public class SpedizioneGiacenza implements Serializable {
+	
+	private static final long serialVersionUID = 1L;
+	
+	/**
+	 * Definisce i possibili stati di fatturazione.
+	 * Lo stato di default, <code>NON_FATTURABILE</code>, è uno stato pozzo per gestire i casi limite, come le simulazioni, che non dovranno mai essere fatturate.
+	 * @author Damiano
+	 *
+	 */
+	public enum Fatturazione { 
+		
+		NON_FATTURABILE("Non fatturabile"),
+		IN_DEFINIZIONE("Non ancora fatturabile"),
+		FATTURABILE("Fatturabile"),
+		FATTURATA("Gia' fatturata");
+		
+		private final String descrizione;
+		
+		private Fatturazione(String descrizione) {
+			this.descrizione = descrizione;
+		}
+		
+		@Override
+		public String toString() {
+			return descrizione;
+		}
+	}
+
+	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	@Column(unique=true, nullable=false)
+	private int id;
+
+	@Column(precision=10, scale=3)
+	private Double costo;
+
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name="data_apertura")
+	private Date dataApertura;
+
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name="data_chiusura")
+	private Date dataChiusura;
+
+	@Column(nullable=false, length=1, columnDefinition="ENUM('NON_FATTURABILE', 'IN_DEFINIZIONE', 'FATTURABILE', 'FATTURATA')")
+	@Enumerated(EnumType.STRING)
+	private Fatturazione fatturazione;
+
+	@Column(name="id_commessa", nullable=false)
+	private int idCommessa;
+
+	@Column(name="id_destinatario", nullable=false)
+	private int idDestinatario;
+
+	@Column(name="id_mittente", nullable=false)
+	private int idMittente;
+
+	@Column(name="id_documento", nullable=false)
+	private int idDocumento;
+
+	@Column(name="id_spedizione", nullable=false)
+	private int idSpedizione;
+
+	@Column(name="lettera_di_vettura", nullable=false, length=45)
+	private String letteraDiVettura;
+
+	@Column(name="lettera_di_vettura_originale", nullable=false, length=45)
+	private String letteraDiVetturaOriginale;
+
+	@Column(length=200)
+	private String note;
+
+	@Column(precision=10, scale=3)
+	private Double ricavo;
+
+	public SpedizioneGiacenza() {}
+
+	public int getId() {
+		return this.id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public Double getCosto() {
+		return this.costo;
+	}
+
+	public void setCosto(Double costo) {
+		this.costo = costo;
+	}
+
+	public Date getDataApertura() {
+		return this.dataApertura;
+	}
+
+	public void setDataApertura(Date dataApertura) {
+		this.dataApertura = dataApertura;
+	}
+
+	public Date getDataChiusura() {
+		return this.dataChiusura;
+	}
+
+	public void setDataChiusura(Date dataChiusura) {
+		this.dataChiusura = dataChiusura;
+	}
+
+	public Fatturazione getFatturazione() {
+		return this.fatturazione;
+	}
+
+	public void setFatturazione(Fatturazione fatturazione) {
+		this.fatturazione = fatturazione;
+	}
+
+	public int getIdCommessa() {
+		return this.idCommessa;
+	}
+
+	public void setIdCommessa(int idCommessa) {
+		this.idCommessa = idCommessa;
+	}
+
+	public int getIdDestinatario() {
+		return this.idDestinatario;
+	}
+
+	public void setIdDestinatario(int idDestinatario) {
+		this.idDestinatario = idDestinatario;
+	}
+
+	public int getIdMittente() {
+		return this.idMittente;
+	}
+
+	public void setIdMittente(int idMittente) {
+		this.idMittente = idMittente;
+	}
+
+	public int getIdDocumento() {
+		return this.idDocumento;
+	}
+
+	public void setIdDocumento(int idDocumento) {
+		this.idDocumento = idDocumento;
+	}
+
+	public int getIdSpedizione() {
+		return this.idSpedizione;
+	}
+
+	public void setIdSpedizione(int idSpedizione) {
+		this.idSpedizione = idSpedizione;
+	}
+
+	public String getLetteraDiVettura() {
+		return this.letteraDiVettura;
+	}
+
+	public void setLetteraDiVettura(String letteraDiVettura) {
+		this.letteraDiVettura = letteraDiVettura;
+	}
+
+	public String getLetteraDiVetturaOriginale() {
+		return this.letteraDiVetturaOriginale;
+	}
+
+	public void setLetteraDiVetturaOriginale(String letteraDiVetturaOriginale) {
+		this.letteraDiVetturaOriginale = letteraDiVetturaOriginale;
+	}
+
+	public String getNote() {
+		return this.note;
+	}
+
+	public void setNote(String note) {
+		this.note = note;
+	}
+
+	public Double getRicavo() {
+		return this.ricavo;
+	}
+
+	public void setRicavo(Double ricavo) {
+		this.ricavo = ricavo;
+	}
+
+}

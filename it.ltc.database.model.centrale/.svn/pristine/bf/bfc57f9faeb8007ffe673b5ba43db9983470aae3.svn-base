@@ -1,0 +1,346 @@
+package it.ltc.database.model.centrale;
+
+import java.io.Serializable;
+import javax.persistence.*;
+import java.math.BigDecimal;
+import java.util.Date;
+
+
+/**
+ * The persistent class for the spedizione database table.
+ * 
+ */
+@Entity
+@Table(name="spedizione")
+@NamedQuery(name="Spedizione.findAll", query="SELECT s FROM Spedizione s")
+public class Spedizione implements Serializable {
+	
+	private static final long serialVersionUID = 1L;
+
+	public enum TipoSpedizione {ITALIA, UE, EXTRA_UE}
+	
+	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	@Column(unique=true, nullable=false)
+	private int id;
+
+	@Column(nullable=false)
+	private boolean assicurazione;
+
+	@Column(name="codice_cliente", length=50)
+	private String codiceCliente;
+
+	private int colli;
+
+	@Column(nullable=false)
+	private boolean contrassegno;
+
+	@Column(precision=10, scale=3)
+	private BigDecimal costo;
+
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name="data_partenza")
+	private Date dataPartenza;
+
+	@Column(name="dati_completi", nullable=false)
+	private boolean datiCompleti;
+
+	@Column(nullable=false)
+	private boolean fatturazione;
+
+	@Column(nullable=false)
+	private boolean giacenza;
+
+	@Column(name="id_commessa", nullable=false)
+	private int idCommessa;
+
+	@Column(name="id_corriere")
+	private int idCorriere;
+
+	@Column(name="id_ordine", nullable=false)
+	private int idOrdine;
+
+	@Column(name="in_ritardo", nullable=false)
+	private boolean inRitardo;
+
+	@Column(name="indirizzo_destinazione", nullable=false)
+	private int indirizzoDestinazione;
+
+	@Column(name="indirizzo_partenza", nullable=false)
+	private int indirizzoPartenza;
+
+	@Column(name="lettera_di_vettura", length=45)
+	private String letteraDiVettura;
+
+	@Column(name="note", columnDefinition="MEDIUMTEXT")
+	private String note;
+
+	@Column(nullable=false)
+	private boolean particolarita;
+
+	@Column(precision=10, scale=3)
+	private BigDecimal peso;
+
+	private int pezzi;
+
+	@Column(precision=10, scale=3)
+	private BigDecimal ricavo;
+
+	@Column(name="riferimento_cliente", length=45)
+	private String riferimentoCliente;
+
+	@Column(name="riferimento_mittente", length=45)
+	private String riferimentoMittente;
+
+	@Column(nullable=false, length=3, columnDefinition="CHAR")
+	private String servizio;
+
+	@Column(nullable=false, length=3, columnDefinition="CHAR")
+	private String stato;
+
+	@Column(nullable=false, length=1, columnDefinition="ENUM('ITALIA', 'UE', 'EXTRA-UE')")
+	@Enumerated(EnumType.STRING)
+	private TipoSpedizione tipo;
+
+	@Column(name="valore_merce_dichiarato", precision=10, scale=2)
+	private BigDecimal valoreMerceDichiarato;
+
+	@Column(precision=10, scale=3)
+	private BigDecimal volume;
+
+	public Spedizione() {
+	}
+
+	public int getId() {
+		return this.id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public boolean getAssicurazione() {
+		return this.assicurazione;
+	}
+
+	public void setAssicurazione(boolean assicurazione) {
+		this.assicurazione = assicurazione;
+	}
+
+	public String getCodiceCliente() {
+		return this.codiceCliente;
+	}
+
+	public void setCodiceCliente(String codiceCliente) {
+		this.codiceCliente = codiceCliente;
+	}
+
+	public int getColli() {
+		return this.colli;
+	}
+
+	public void setColli(int colli) {
+		this.colli = colli;
+	}
+
+	public boolean getContrassegno() {
+		return this.contrassegno;
+	}
+
+	public void setContrassegno(boolean contrassegno) {
+		this.contrassegno = contrassegno;
+	}
+
+	public BigDecimal getCosto() {
+		return this.costo;
+	}
+
+	public void setCosto(BigDecimal costo) {
+		this.costo = costo;
+	}
+
+	public Date getDataPartenza() {
+		return this.dataPartenza;
+	}
+
+	public void setDataPartenza(Date dataPartenza) {
+		this.dataPartenza = dataPartenza;
+	}
+
+	public boolean getDatiCompleti() {
+		return this.datiCompleti;
+	}
+
+	public void setDatiCompleti(boolean datiCompleti) {
+		this.datiCompleti = datiCompleti;
+	}
+
+	public boolean getFatturazione() {
+		return this.fatturazione;
+	}
+
+	public void setFatturazione(boolean fatturazione) {
+		this.fatturazione = fatturazione;
+	}
+
+	public boolean getGiacenza() {
+		return this.giacenza;
+	}
+
+	public void setGiacenza(boolean giacenza) {
+		this.giacenza = giacenza;
+	}
+
+	public int getIdCommessa() {
+		return this.idCommessa;
+	}
+
+	public void setIdCommessa(int idCommessa) {
+		this.idCommessa = idCommessa;
+	}
+
+	public int getIdCorriere() {
+		return this.idCorriere;
+	}
+
+	public void setIdCorriere(int idCorriere) {
+		this.idCorriere = idCorriere;
+	}
+
+	public int getIdOrdine() {
+		return this.idOrdine;
+	}
+
+	public void setIdOrdine(int idOrdine) {
+		this.idOrdine = idOrdine;
+	}
+
+	public boolean getInRitardo() {
+		return this.inRitardo;
+	}
+
+	public void setInRitardo(boolean inRitardo) {
+		this.inRitardo = inRitardo;
+	}
+
+	public int getIndirizzoDestinazione() {
+		return this.indirizzoDestinazione;
+	}
+
+	public void setIndirizzoDestinazione(int indirizzoDestinazione) {
+		this.indirizzoDestinazione = indirizzoDestinazione;
+	}
+
+	public int getIndirizzoPartenza() {
+		return this.indirizzoPartenza;
+	}
+
+	public void setIndirizzoPartenza(int indirizzoPartenza) {
+		this.indirizzoPartenza = indirizzoPartenza;
+	}
+
+	public String getLetteraDiVettura() {
+		return this.letteraDiVettura;
+	}
+
+	public void setLetteraDiVettura(String letteraDiVettura) {
+		this.letteraDiVettura = letteraDiVettura;
+	}
+
+	public String getNote() {
+		return this.note;
+	}
+
+	public void setNote(String note) {
+		this.note = note;
+	}
+
+	public boolean getParticolarita() {
+		return this.particolarita;
+	}
+
+	public void setParticolarita(boolean particolarita) {
+		this.particolarita = particolarita;
+	}
+
+	public BigDecimal getPeso() {
+		return this.peso;
+	}
+
+	public void setPeso(BigDecimal peso) {
+		this.peso = peso;
+	}
+
+	public int getPezzi() {
+		return this.pezzi;
+	}
+
+	public void setPezzi(int pezzi) {
+		this.pezzi = pezzi;
+	}
+
+	public BigDecimal getRicavo() {
+		return this.ricavo;
+	}
+
+	public void setRicavo(BigDecimal ricavo) {
+		this.ricavo = ricavo;
+	}
+
+	public String getRiferimentoCliente() {
+		return this.riferimentoCliente;
+	}
+
+	public void setRiferimentoCliente(String riferimentoCliente) {
+		this.riferimentoCliente = riferimentoCliente;
+	}
+
+	public String getRiferimentoMittente() {
+		return this.riferimentoMittente;
+	}
+
+	public void setRiferimentoMittente(String riferimentoMittente) {
+		this.riferimentoMittente = riferimentoMittente;
+	}
+
+	public String getServizio() {
+		return this.servizio;
+	}
+
+	public void setServizio(String servizio) {
+		this.servizio = servizio;
+	}
+
+	public String getStato() {
+		return this.stato;
+	}
+
+	public void setStato(String stato) {
+		this.stato = stato;
+	}
+
+	public TipoSpedizione getTipo() {
+		return this.tipo;
+	}
+
+	public void setTipo(TipoSpedizione tipo) {
+		this.tipo = tipo;
+	}
+
+	public BigDecimal getValoreMerceDichiarato() {
+		return this.valoreMerceDichiarato;
+	}
+
+	public void setValoreMerceDichiarato(BigDecimal valoreMerceDichiarato) {
+		this.valoreMerceDichiarato = valoreMerceDichiarato;
+	}
+
+	public BigDecimal getVolume() {
+		return this.volume;
+	}
+
+	public void setVolume(BigDecimal volume) {
+		this.volume = volume;
+	}
+
+}

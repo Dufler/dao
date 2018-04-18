@@ -1,0 +1,78 @@
+package it.ltc.database.model.centrale;
+
+import java.io.Serializable;
+import javax.persistence.*;
+import java.math.BigDecimal;
+
+
+/**
+ * The persistent class for the storico_contrassegno database table.
+ * 
+ */
+@Entity
+@Table(name="storico_contrassegno")
+@NamedQuery(name="StoricoContrassegno.findAll", query="SELECT s FROM StoricoContrassegno s")
+public class StoricoContrassegno implements Serializable {
+	private static final long serialVersionUID = 1L;
+
+	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	@Column(name="id_spedizione", unique=true, nullable=false)
+	private int idSpedizione;
+
+	@Column(nullable=false)
+	private boolean annullato;
+
+	@Column(nullable=false, length=2, columnDefinition="CHAR")
+	private String tipo;
+
+	@Column(nullable=false, precision=10, scale=2)
+	private BigDecimal valore;
+
+	@Column(nullable=false, length=3, columnDefinition="CHAR")
+	private String valuta;
+
+	public StoricoContrassegno() {
+	}
+
+	public int getIdSpedizione() {
+		return this.idSpedizione;
+	}
+
+	public void setIdSpedizione(int idSpedizione) {
+		this.idSpedizione = idSpedizione;
+	}
+
+	public boolean getAnnullato() {
+		return this.annullato;
+	}
+
+	public void setAnnullato(boolean annullato) {
+		this.annullato = annullato;
+	}
+
+	public String getTipo() {
+		return this.tipo;
+	}
+
+	public void setTipo(String tipo) {
+		this.tipo = tipo;
+	}
+
+	public BigDecimal getValore() {
+		return this.valore;
+	}
+
+	public void setValore(BigDecimal valore) {
+		this.valore = valore;
+	}
+
+	public String getValuta() {
+		return this.valuta;
+	}
+
+	public void setValuta(String valuta) {
+		this.valuta = valuta;
+	}
+
+}

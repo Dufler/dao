@@ -1,0 +1,290 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="2.1" xmlns="http://xmlns.jcp.org/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd">
+	
+	<!-- Ambiente di test -->
+	<persistence-unit name="test" transaction-type="RESOURCE_LOCAL">
+		<class>it.ltc.database.model.centrale.Azienda</class>
+		<class>it.ltc.database.model.centrale.Cap</class>
+		<class>it.ltc.database.model.centrale.CapPK</class>
+		<class>it.ltc.database.model.centrale.CategoriaMerceologica</class>
+		<class>it.ltc.database.model.centrale.Cliente</class>
+		<class>it.ltc.database.model.centrale.Commessa</class>
+		<class>it.ltc.database.model.centrale.Corriere</class>
+		<class>it.ltc.database.model.centrale.CorriereServizio</class>
+		<class>it.ltc.database.model.centrale.CorriereServizioPK</class>
+		<class>it.ltc.database.model.centrale.Documento</class>
+		<class>it.ltc.database.model.centrale.FatturaAmbito</class>
+		<class>it.ltc.database.model.centrale.FatturaDocumento</class>
+		<class>it.ltc.database.model.centrale.FatturaModello</class>
+		<class>it.ltc.database.model.centrale.FatturaSottoAmbito</class>
+		<class>it.ltc.database.model.centrale.FatturaVoce</class>
+		<class>it.ltc.database.model.centrale.Feature</class>
+		<class>it.ltc.database.model.centrale.Indirizzo</class>
+		<class>it.ltc.database.model.centrale.Ingresso</class>
+		<class>it.ltc.database.model.centrale.JoinCommessaCorriere</class>
+		<class>it.ltc.database.model.centrale.ListinoCommessa</class>
+		<class>it.ltc.database.model.centrale.ListinoCommessaVoce</class>
+		<class>it.ltc.database.model.centrale.ListinoCommessaVoceFissa</class>
+		<class>it.ltc.database.model.centrale.ListinoCommessaVocePercentuale</class>
+		<class>it.ltc.database.model.centrale.ListinoCommessaVoceProporzionale</class>
+		<class>it.ltc.database.model.centrale.ListinoCommessaVoceScaglioni</class>
+		<class>it.ltc.database.model.centrale.ListinoCommessaVoceScaglioniPK</class>
+		<class>it.ltc.database.model.centrale.ListinoCommessaVoceScaglioniRipetuti</class>
+		<class>it.ltc.database.model.centrale.ListinoCorriere</class>
+		<class>it.ltc.database.model.centrale.ListinoCorriereVoce</class>
+		<class>it.ltc.database.model.centrale.ListinoCorriereVoceFissa</class>
+		<class>it.ltc.database.model.centrale.ListinoCorriereVocePercentuale</class>
+		<class>it.ltc.database.model.centrale.ListinoCorriereVoceProporzionale</class>
+		<class>it.ltc.database.model.centrale.ListinoCorriereVoceScaglioni</class>
+		<class>it.ltc.database.model.centrale.ListinoCorriereVoceScaglioniPK</class>
+		<class>it.ltc.database.model.centrale.ListinoCorriereVoceScaglioniRipetuti</class>
+		<class>it.ltc.database.model.centrale.Nazione</class>
+		<class>it.ltc.database.model.centrale.Ordine</class>
+		<class>it.ltc.database.model.centrale.OrdineTipo</class>
+		<class>it.ltc.database.model.centrale.Permesso</class>
+		<class>it.ltc.database.model.centrale.Provincia</class>
+		<class>it.ltc.database.model.centrale.Regione</class>
+		<class>it.ltc.database.model.centrale.Sede</class>
+		<class>it.ltc.database.model.centrale.Spedizione</class>
+		<class>it.ltc.database.model.centrale.SpedizioneAssicurazione</class>
+		<class>it.ltc.database.model.centrale.SpedizioneContrassegno</class>
+		<class>it.ltc.database.model.centrale.SpedizioneContrassegnoTipo</class>
+		<class>it.ltc.database.model.centrale.SpedizioneGiacenza</class>
+		<class>it.ltc.database.model.centrale.SpedizioneParticolarita</class>
+		<class>it.ltc.database.model.centrale.SpedizioneServizio</class>
+		<class>it.ltc.database.model.centrale.SpedizioneTipo</class>
+		<class>it.ltc.database.model.centrale.StoricoContrassegno</class>
+		<class>it.ltc.database.model.centrale.StoricoGiacenza</class>
+		<class>it.ltc.database.model.centrale.StoricoOrdine</class>
+		<class>it.ltc.database.model.centrale.StoricoSpedizione</class>
+		<class>it.ltc.database.model.centrale.Tracking</class>
+		<class>it.ltc.database.model.centrale.TrackingPK</class>
+		<class>it.ltc.database.model.centrale.TrackingStato</class>
+		<class>it.ltc.database.model.centrale.TrackingStatoCodificaCorriere</class>
+		<class>it.ltc.database.model.centrale.TrackingStatoCodificaCorrierePK</class>
+		<class>it.ltc.database.model.centrale.Utente</class>
+		<class>it.ltc.database.model.centrale.UtenteCommessaJoin</class>
+		<class>it.ltc.database.model.centrale.UtenteCommessaJoinPK</class>
+		<class>it.ltc.database.model.centrale.UtenteFeaturesJoin</class>
+		<class>it.ltc.database.model.centrale.UtenteFeaturesJoinPK</class>
+		<class>it.ltc.database.model.centrale.UtenteLog</class>
+		<class>it.ltc.database.model.centrale.UtenteLogEvento</class>
+		<class>it.ltc.database.model.centrale.UtentePermessiJoin</class>
+		<class>it.ltc.database.model.centrale.UtentePermessiJoinPK</class>
+		<class>it.ltc.database.model.centrale.UtenteSedeJoin</class>
+		<class>it.ltc.database.model.centrale.UtenteSedeJoinPK</class>
+		<class>it.ltc.database.model.centrale.Valuta</class>
+<!-- 		<exclude-unlisted-classes>false</exclude-unlisted-classes> -->
+<!-- 		<jar-file>it.ltc.database.model.centrale.jar</jar-file> -->
+		<properties>
+			<property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver" />
+			<property name="javax.persistence.jdbc.url" value="jdbc:mysql://192.168.0.11:3306/ltc_centrale" />
+			<property name="javax.persistence.jdbc.user" value="ltc" />
+			<property name="javax.persistence.jdbc.password" value="myltcpsw1087" />
+			<property name="hibernate.hbm2ddl.auto" value="none" />
+			<property name="hibernate.dialect" value="org.hibernate.dialect.MySQLDialect" />
+			<property name="hibernate.connection.useUnicode" value="true" />
+			<property name="hibernate.connection.useJDBCCompliantTimezoneShift"	value="true" />
+			<property name="hibernate.connection.useLegacyDatetimeCode"	value="false" />
+			<property name="hibernate.connection.serverTimezone" value="UTC" />
+			<property name="hibernate.connection.autoReconnect" value="true" />
+			<property name="hibernate.connection.useSSL" value="true" />
+			<property name="hibernate.connection.password" value="myltcpsw1087"/>
+			<property name="hibernate.connection.username" value="ltc"/>
+			<property name="hibernate.connection.url" value="jdbc:mysql://192.168.0.11:3306/ltc_centrale"/>
+			<property name="hibernate.connection.driver_class" value="com.mysql.jdbc.Driver"/>
+			<property name="hibernate.connection.provider_class" value="org.hibernate.connection.C3P0ConnectionProvider" />
+			<property name="hibernate.c3p0.max_size" value="3" />
+			<property name="hibernate.c3p0.min_size" value="0" />
+			<property name="hibernate.c3p0.acquire_increment" value="1" />
+			<property name="hibernate.c3p0.idle_test_period" value="300" />
+			<property name="hibernate.c3p0.max_statements" value="0" />
+			<property name="hibernate.c3p0.timeout" value="100" />
+<!-- 			<property name="hibernate.archive.autodetection" value="class" /> -->
+		</properties>
+	</persistence-unit>
+	
+	<!-- Ambiente di produzione -->
+	<persistence-unit name="produzione" transaction-type="RESOURCE_LOCAL">
+		<class>it.ltc.database.model.centrale.Azienda</class>
+		<class>it.ltc.database.model.centrale.Brand</class>
+		<class>it.ltc.database.model.centrale.Cap</class>
+		<class>it.ltc.database.model.centrale.CapPK</class>
+		<class>it.ltc.database.model.centrale.CategoriaEvento</class>
+		<class>it.ltc.database.model.centrale.CategoriaMerceologica</class>
+		<class>it.ltc.database.model.centrale.Cliente</class>
+		<class>it.ltc.database.model.centrale.Commessa</class>
+		<class>it.ltc.database.model.centrale.Corriere</class>
+		<class>it.ltc.database.model.centrale.CorriereServizio</class>
+		<class>it.ltc.database.model.centrale.CorriereServizioPK</class>
+		<class>it.ltc.database.model.centrale.Documento</class>
+		<class>it.ltc.database.model.centrale.FatturaAmbito</class>
+		<class>it.ltc.database.model.centrale.FatturaDocumento</class>
+		<class>it.ltc.database.model.centrale.FatturaModello</class>
+		<class>it.ltc.database.model.centrale.FatturaSottoAmbito</class>
+		<class>it.ltc.database.model.centrale.FatturaVoce</class>
+		<class>it.ltc.database.model.centrale.Feature</class>
+		<class>it.ltc.database.model.centrale.Indirizzo</class>
+		<class>it.ltc.database.model.centrale.Ingresso</class>
+		<class>it.ltc.database.model.centrale.JoinCommessaCorriere</class>
+		<class>it.ltc.database.model.centrale.ListinoCommessa</class>
+		<class>it.ltc.database.model.centrale.ListinoCommessaVoce</class>
+		<class>it.ltc.database.model.centrale.ListinoCommessaVoceFissa</class>
+		<class>it.ltc.database.model.centrale.ListinoCommessaVocePercentuale</class>
+		<class>it.ltc.database.model.centrale.ListinoCommessaVoceProporzionale</class>
+		<class>it.ltc.database.model.centrale.ListinoCommessaVoceScaglioni</class>
+		<class>it.ltc.database.model.centrale.ListinoCommessaVoceScaglioniPK</class>
+		<class>it.ltc.database.model.centrale.ListinoCommessaVoceScaglioniRipetuti</class>
+		<class>it.ltc.database.model.centrale.ListinoCorriere</class>
+		<class>it.ltc.database.model.centrale.ListinoCorriereVoce</class>
+		<class>it.ltc.database.model.centrale.ListinoCorriereVoceFissa</class>
+		<class>it.ltc.database.model.centrale.ListinoCorriereVocePercentuale</class>
+		<class>it.ltc.database.model.centrale.ListinoCorriereVoceProporzionale</class>
+		<class>it.ltc.database.model.centrale.ListinoCorriereVoceScaglioni</class>
+		<class>it.ltc.database.model.centrale.ListinoCorriereVoceScaglioniPK</class>
+		<class>it.ltc.database.model.centrale.ListinoCorriereVoceScaglioniRipetuti</class>
+		<class>it.ltc.database.model.centrale.Nazione</class>
+		<class>it.ltc.database.model.centrale.Ordine</class>
+		<class>it.ltc.database.model.centrale.OrdineTipo</class>
+		<class>it.ltc.database.model.centrale.Permesso</class>
+		<class>it.ltc.database.model.centrale.Provincia</class>
+		<class>it.ltc.database.model.centrale.Regione</class>
+		<class>it.ltc.database.model.centrale.Sede</class>
+		<class>it.ltc.database.model.centrale.Spedizione</class>
+		<class>it.ltc.database.model.centrale.SpedizioneAssicurazione</class>
+		<class>it.ltc.database.model.centrale.SpedizioneContrassegno</class>
+		<class>it.ltc.database.model.centrale.SpedizioneContrassegnoTipo</class>
+		<class>it.ltc.database.model.centrale.SpedizioneGiacenza</class>
+		<class>it.ltc.database.model.centrale.SpedizioneParticolarita</class>
+		<class>it.ltc.database.model.centrale.SpedizioneServizio</class>
+		<class>it.ltc.database.model.centrale.SpedizioneTipo</class>
+		<class>it.ltc.database.model.centrale.StoricoContrassegno</class>
+		<class>it.ltc.database.model.centrale.StoricoGiacenza</class>
+		<class>it.ltc.database.model.centrale.StoricoOrdine</class>
+		<class>it.ltc.database.model.centrale.StoricoSpedizione</class>
+		<class>it.ltc.database.model.centrale.Tracking</class>
+		<class>it.ltc.database.model.centrale.TrackingPK</class>
+		<class>it.ltc.database.model.centrale.TrackingStato</class>
+		<class>it.ltc.database.model.centrale.TrackingStatoCodificaCorriere</class>
+		<class>it.ltc.database.model.centrale.TrackingStatoCodificaCorrierePK</class>
+		<class>it.ltc.database.model.centrale.Utente</class>
+		<class>it.ltc.database.model.centrale.UtenteCommessaJoin</class>
+		<class>it.ltc.database.model.centrale.UtenteCommessaJoinPK</class>
+		<class>it.ltc.database.model.centrale.UtenteFeaturesJoin</class>
+		<class>it.ltc.database.model.centrale.UtenteFeaturesJoinPK</class>
+		<class>it.ltc.database.model.centrale.UtenteLog</class>
+		<class>it.ltc.database.model.centrale.UtenteLogEvento</class>
+		<class>it.ltc.database.model.centrale.UtentePermessiJoin</class>
+		<class>it.ltc.database.model.centrale.UtentePermessiJoinPK</class>
+		<class>it.ltc.database.model.centrale.UtenteSedeJoin</class>
+		<class>it.ltc.database.model.centrale.UtenteSedeJoinPK</class>
+		<class>it.ltc.database.model.centrale.Valuta</class>
+		<properties>
+			<property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver" />
+			<property name="javax.persistence.jdbc.url" value="jdbc:mysql://192.168.0.12:3306/ltc_centrale" />
+			<property name="javax.persistence.jdbc.user" value="ltc" />
+			<property name="javax.persistence.jdbc.password" value="myltcpsw1087" />
+			<property name="hibernate.hbm2ddl.auto" value="none" />
+			<property name="hibernate.dialect" value="org.hibernate.dialect.MySQLDialect" />
+			<property name="hibernate.connection.useUnicode" value="true" />
+			<property name="hibernate.connection.useJDBCCompliantTimezoneShift"	value="true" />
+			<property name="hibernate.connection.useLegacyDatetimeCode"	value="false" />
+			<property name="hibernate.connection.serverTimezone" value="UTC" />
+			<property name="hibernate.connection.autoReconnect" value="true" />
+			<property name="hibernate.connection.useSSL" value="true" />
+			<property name="hibernate.connection.password" value="myltcpsw1087"/>
+			<property name="hibernate.connection.username" value="ltc"/>
+			<property name="hibernate.connection.url" value="jdbc:mysql://192.168.0.12:3306/ltc_centrale"/>
+			<property name="hibernate.connection.driver_class" value="com.mysql.jdbc.Driver"/>
+			<property name="hibernate.c3p0.max_size" value="3" />
+			<property name="hibernate.c3p0.min_size" value="0" />
+			<property name="hibernate.c3p0.acquire_increment" value="1" />
+			<property name="hibernate.c3p0.idle_test_period" value="300" />
+			<property name="hibernate.c3p0.max_statements" value="0" />
+			<property name="hibernate.c3p0.timeout" value="100" />
+		</properties>
+	</persistence-unit>
+	
+	<!-- JTA connection pool sul server -->
+	<persistence-unit name="datasource-centrale" transaction-type="JTA">
+		<jta-data-source>java:/lct_centrale_xa</jta-data-source>
+		<class>it.ltc.database.model.centrale.Azienda</class>
+		<class>it.ltc.database.model.centrale.Cap</class>
+		<class>it.ltc.database.model.centrale.CapPK</class>
+		<class>it.ltc.database.model.centrale.CategoriaMerceologica</class>
+		<class>it.ltc.database.model.centrale.Cliente</class>
+		<class>it.ltc.database.model.centrale.Commessa</class>
+		<class>it.ltc.database.model.centrale.Corriere</class>
+		<class>it.ltc.database.model.centrale.CorriereServizio</class>
+		<class>it.ltc.database.model.centrale.CorriereServizioPK</class>
+		<class>it.ltc.database.model.centrale.Documento</class>
+		<class>it.ltc.database.model.centrale.FatturaAmbito</class>
+		<class>it.ltc.database.model.centrale.FatturaDocumento</class>
+		<class>it.ltc.database.model.centrale.FatturaModello</class>
+		<class>it.ltc.database.model.centrale.FatturaSottoAmbito</class>
+		<class>it.ltc.database.model.centrale.FatturaVoce</class>
+		<class>it.ltc.database.model.centrale.Feature</class>
+		<class>it.ltc.database.model.centrale.Indirizzo</class>
+		<class>it.ltc.database.model.centrale.Ingresso</class>
+		<class>it.ltc.database.model.centrale.JoinCommessaCorriere</class>
+		<class>it.ltc.database.model.centrale.ListinoCommessa</class>
+		<class>it.ltc.database.model.centrale.ListinoCommessaVoce</class>
+		<class>it.ltc.database.model.centrale.ListinoCommessaVoceFissa</class>
+		<class>it.ltc.database.model.centrale.ListinoCommessaVocePercentuale</class>
+		<class>it.ltc.database.model.centrale.ListinoCommessaVoceProporzionale</class>
+		<class>it.ltc.database.model.centrale.ListinoCommessaVoceScaglioni</class>
+		<class>it.ltc.database.model.centrale.ListinoCommessaVoceScaglioniPK</class>
+		<class>it.ltc.database.model.centrale.ListinoCommessaVoceScaglioniRipetuti</class>
+		<class>it.ltc.database.model.centrale.ListinoCorriere</class>
+		<class>it.ltc.database.model.centrale.ListinoCorriereVoce</class>
+		<class>it.ltc.database.model.centrale.ListinoCorriereVoceFissa</class>
+		<class>it.ltc.database.model.centrale.ListinoCorriereVocePercentuale</class>
+		<class>it.ltc.database.model.centrale.ListinoCorriereVoceProporzionale</class>
+		<class>it.ltc.database.model.centrale.ListinoCorriereVoceScaglioni</class>
+		<class>it.ltc.database.model.centrale.ListinoCorriereVoceScaglioniPK</class>
+		<class>it.ltc.database.model.centrale.ListinoCorriereVoceScaglioniRipetuti</class>
+		<class>it.ltc.database.model.centrale.Nazione</class>
+		<class>it.ltc.database.model.centrale.Ordine</class>
+		<class>it.ltc.database.model.centrale.OrdineTipo</class>
+		<class>it.ltc.database.model.centrale.Permesso</class>
+		<class>it.ltc.database.model.centrale.Provincia</class>
+		<class>it.ltc.database.model.centrale.Regione</class>
+		<class>it.ltc.database.model.centrale.Sede</class>
+		<class>it.ltc.database.model.centrale.Spedizione</class>
+		<class>it.ltc.database.model.centrale.SpedizioneAssicurazione</class>
+		<class>it.ltc.database.model.centrale.SpedizioneContrassegno</class>
+		<class>it.ltc.database.model.centrale.SpedizioneContrassegnoTipo</class>
+		<class>it.ltc.database.model.centrale.SpedizioneGiacenza</class>
+		<class>it.ltc.database.model.centrale.SpedizioneParticolarita</class>
+		<class>it.ltc.database.model.centrale.SpedizioneServizio</class>
+		<class>it.ltc.database.model.centrale.SpedizioneTipo</class>
+		<class>it.ltc.database.model.centrale.StoricoContrassegno</class>
+		<class>it.ltc.database.model.centrale.StoricoGiacenza</class>
+		<class>it.ltc.database.model.centrale.StoricoOrdine</class>
+		<class>it.ltc.database.model.centrale.StoricoSpedizione</class>
+		<class>it.ltc.database.model.centrale.Tracking</class>
+		<class>it.ltc.database.model.centrale.TrackingPK</class>
+		<class>it.ltc.database.model.centrale.TrackingStato</class>
+		<class>it.ltc.database.model.centrale.TrackingStatoCodificaCorriere</class>
+		<class>it.ltc.database.model.centrale.TrackingStatoCodificaCorrierePK</class>
+		<class>it.ltc.database.model.centrale.Utente</class>
+		<class>it.ltc.database.model.centrale.UtenteCommessaJoin</class>
+		<class>it.ltc.database.model.centrale.UtenteCommessaJoinPK</class>
+		<class>it.ltc.database.model.centrale.UtenteFeaturesJoin</class>
+		<class>it.ltc.database.model.centrale.UtenteFeaturesJoinPK</class>
+		<class>it.ltc.database.model.centrale.UtenteLog</class>
+		<class>it.ltc.database.model.centrale.UtenteLogEvento</class>
+		<class>it.ltc.database.model.centrale.UtentePermessiJoin</class>
+		<class>it.ltc.database.model.centrale.UtentePermessiJoinPK</class>
+		<class>it.ltc.database.model.centrale.UtenteSedeJoin</class>
+		<class>it.ltc.database.model.centrale.UtenteSedeJoinPK</class>
+		<class>it.ltc.database.model.centrale.Valuta</class>
+		<properties>
+			<property name="hibernate.hbm2ddl.auto" value="none" />
+			<property name="hibernate.show_sql" value="false" />
+			<property name="hibernate.dialect" value="org.hibernate.dialect.MySQLDialect" />
+			<property name="hibernate.transaction.jta.platform" value="JBossAS" />
+		</properties>
+	</persistence-unit>
+	
+</persistence>

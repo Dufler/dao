@@ -1,0 +1,57 @@
+package it.ltc.database.model.centrale;
+
+import java.io.Serializable;
+import javax.persistence.*;
+
+/**
+ * The primary key class for the utente_commessa_join database table.
+ * 
+ */
+@Embeddable
+public class UtenteCommessaJoinPK implements Serializable {
+	//default serial version id, required for serializable classes.
+	private static final long serialVersionUID = 1L;
+
+	@Column(unique=true, nullable=false, length=50)
+	private String utente;
+
+	@Column(name="id_commessa", insertable=false, updatable=false, unique=true, nullable=false)
+	private int idCommessa;
+
+	public UtenteCommessaJoinPK() {
+	}
+	public String getUtente() {
+		return this.utente;
+	}
+	public void setUtente(String utente) {
+		this.utente = utente;
+	}
+	public int getIdCommessa() {
+		return this.idCommessa;
+	}
+	public void setIdCommessa(int idCommessa) {
+		this.idCommessa = idCommessa;
+	}
+
+	public boolean equals(Object other) {
+		if (this == other) {
+			return true;
+		}
+		if (!(other instanceof UtenteCommessaJoinPK)) {
+			return false;
+		}
+		UtenteCommessaJoinPK castOther = (UtenteCommessaJoinPK)other;
+		return 
+			this.utente.equals(castOther.utente)
+			&& (this.idCommessa == castOther.idCommessa);
+	}
+
+	public int hashCode() {
+		final int prime = 31;
+		int hash = 17;
+		hash = hash * prime + this.utente.hashCode();
+		hash = hash * prime + this.idCommessa;
+		
+		return hash;
+	}
+}

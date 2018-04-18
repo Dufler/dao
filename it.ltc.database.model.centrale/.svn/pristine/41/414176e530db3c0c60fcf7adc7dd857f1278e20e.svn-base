@@ -1,0 +1,94 @@
+package it.ltc.database.model.centrale;
+
+import java.io.Serializable;
+import javax.persistence.*;
+import java.util.Date;
+
+
+/**
+ * The persistent class for the documento database table.
+ * 
+ */
+@Entity
+@Table(name="documento")
+@NamedQuery(name="Documento.findAll", query="SELECT d FROM Documento d")
+public class Documento implements Serializable {
+	
+	private static final long serialVersionUID = 1L;
+
+	public enum TipoDocumento {INGRESSO, ORDINE, LAVORAZIONE, ALTRO}
+	
+	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	@Column(unique=true, nullable=false)
+	private int id;
+
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name="data_creazione", nullable=false)
+	private Date dataCreazione;
+
+	@Column(name="id_commessa", nullable=false)
+	private int idCommessa;
+
+	@Column(name="riferimento_cliente", nullable=false, length=45)
+	private String riferimentoCliente;
+
+	@Column(name="riferimento_interno", nullable=false, length=45)
+	private String riferimentoInterno;
+
+	@Column(nullable=false, length=1, columnDefinition="ENUM('INGRESSO', 'ORDINE', 'LAVORAZIONE', 'ALTRO')")
+	@Enumerated(EnumType.STRING)
+	private TipoDocumento tipo;
+
+	public Documento() {
+	}
+
+	public int getId() {
+		return this.id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public Date getDataCreazione() {
+		return this.dataCreazione;
+	}
+
+	public void setDataCreazione(Date dataCreazione) {
+		this.dataCreazione = dataCreazione;
+	}
+
+	public int getIdCommessa() {
+		return this.idCommessa;
+	}
+
+	public void setIdCommessa(int idCommessa) {
+		this.idCommessa = idCommessa;
+	}
+
+	public String getRiferimentoCliente() {
+		return this.riferimentoCliente;
+	}
+
+	public void setRiferimentoCliente(String riferimentoCliente) {
+		this.riferimentoCliente = riferimentoCliente;
+	}
+
+	public String getRiferimentoInterno() {
+		return this.riferimentoInterno;
+	}
+
+	public void setRiferimentoInterno(String riferimentoInterno) {
+		this.riferimentoInterno = riferimentoInterno;
+	}
+
+	public TipoDocumento getTipo() {
+		return this.tipo;
+	}
+
+	public void setTipo(TipoDocumento tipo) {
+		this.tipo = tipo;
+	}
+
+}

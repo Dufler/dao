@@ -1,0 +1,104 @@
+package it.ltc.database.model.centrale;
+
+import java.io.Serializable;
+import javax.persistence.*;
+import java.util.Date;
+
+
+/**
+ * The persistent class for the fattura_documento database table.
+ * 
+ */
+@Entity
+@Table(name="fattura_documento")
+@NamedQuery(name="FatturaDocumento.findAll", query="SELECT f FROM FatturaDocumento f")
+public class FatturaDocumento implements Serializable {
+	
+	private static final long serialVersionUID = 1L;
+	
+	public enum Stato {GENERATA, APPROVATA, ARCHIVIATA}
+
+	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	@Column(unique=true, nullable=false)
+	private int id;
+
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name="data_generazione", nullable=false)
+	private Date dataGenerazione;
+
+	@Column(name="id_ambito", nullable=false)
+	private int idAmbito;
+
+	@Column(name="mese_anno", length=7, columnDefinition="CHAR")
+	private String meseAnno;
+
+	@Column(name="note", columnDefinition="MEDIUMTEXT")
+	private String note;
+
+	@Column(nullable=false, length=1, columnDefinition="ENUM('GENERATA', 'APPROVATA', 'ARCHIVIATA')")
+	@Enumerated(EnumType.STRING)
+	private Stato stato;
+
+	@Column(name="utente_creatore", nullable=false, length=50)
+	private String utenteCreatore;
+
+	public FatturaDocumento() {}
+
+	public int getId() {
+		return this.id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public Date getDataGenerazione() {
+		return this.dataGenerazione;
+	}
+
+	public void setDataGenerazione(Date dataGenerazione) {
+		this.dataGenerazione = dataGenerazione;
+	}
+
+	public int getIdAmbito() {
+		return this.idAmbito;
+	}
+
+	public void setIdAmbito(int idAmbito) {
+		this.idAmbito = idAmbito;
+	}
+
+	public String getMeseAnno() {
+		return this.meseAnno;
+	}
+
+	public void setMeseAnno(String meseAnno) {
+		this.meseAnno = meseAnno;
+	}
+
+	public String getNote() {
+		return this.note;
+	}
+
+	public void setNote(String note) {
+		this.note = note;
+	}
+
+	public Stato getStato() {
+		return this.stato;
+	}
+
+	public void setStato(Stato stato) {
+		this.stato = stato;
+	}
+
+	public String getUtenteCreatore() {
+		return this.utenteCreatore;
+	}
+
+	public void setUtenteCreatore(String utenteCreatore) {
+		this.utenteCreatore = utenteCreatore;
+	}
+
+}

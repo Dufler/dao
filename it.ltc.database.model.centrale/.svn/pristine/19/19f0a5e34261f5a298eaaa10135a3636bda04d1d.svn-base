@@ -1,0 +1,82 @@
+package it.ltc.database.model.centrale;
+
+import java.io.Serializable;
+import javax.persistence.*;
+
+
+/**
+ * The persistent class for the azienda database table.
+ * 
+ */
+@Entity
+@Table(name="azienda")
+@NamedQuery(name="Azienda.findAll", query="SELECT a FROM Azienda a")
+public class Azienda implements Serializable {
+	private static final long serialVersionUID = 1L;
+
+	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	@Column(unique=true, nullable=false)
+	private int id;
+
+	@Column(name="partita_iva", nullable=false, length=250)
+	private String partitaIva;
+
+	@Column(name="ragione_sociale", nullable=false, length=250)
+	private String ragioneSociale;
+
+	public Azienda() {
+	}
+
+	public int getId() {
+		return this.id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public String getPartitaIva() {
+		return this.partitaIva;
+	}
+
+	public void setPartitaIva(String partitaIva) {
+		this.partitaIva = partitaIva;
+	}
+
+	public String getRagioneSociale() {
+		return this.ragioneSociale;
+	}
+
+	public void setRagioneSociale(String ragioneSociale) {
+		this.ragioneSociale = ragioneSociale;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + id;
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Azienda other = (Azienda) obj;
+		if (id != other.id)
+			return false;
+		return true;
+	}
+
+	@Override
+	public String toString() {
+		return "Azienda [id=" + id + ", partitaIva=" + partitaIva + ", ragioneSociale=" + ragioneSociale + "]";
+	}
+
+}

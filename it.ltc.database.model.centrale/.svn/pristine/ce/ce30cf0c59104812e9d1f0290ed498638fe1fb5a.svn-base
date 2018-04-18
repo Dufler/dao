@@ -1,0 +1,84 @@
+package it.ltc.database.model.centrale;
+
+import java.io.Serializable;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.NamedQuery;
+import javax.persistence.Table;
+
+
+/**
+ * The persistent class for the spedizione_contrassegno database table.
+ * 
+ */
+@Entity
+@Table(name="spedizione_contrassegno")
+@NamedQuery(name="SpedizioneContrassegno.findAll", query="SELECT s FROM SpedizioneContrassegno s")
+public class SpedizioneContrassegno implements Serializable {
+	private static final long serialVersionUID = 1L;
+
+	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	@Column(name="id_spedizione", unique=true, nullable=false)
+	private int idSpedizione;
+
+	@Column(nullable=false)
+	private boolean annullato;
+
+	@Column(nullable=false, length=2, columnDefinition="CHAR")
+	private String tipo;
+
+	@Column(nullable=false, precision=10, scale=2)
+	private Double valore;
+
+	@Column(nullable=false, length=3, columnDefinition="CHAR")
+	private String valuta;
+
+	public SpedizioneContrassegno() {
+	}
+
+	public int getIdSpedizione() {
+		return this.idSpedizione;
+	}
+
+	public void setIdSpedizione(int idSpedizione) {
+		this.idSpedizione = idSpedizione;
+	}
+
+	public boolean getAnnullato() {
+		return this.annullato;
+	}
+
+	public void setAnnullato(boolean annullato) {
+		this.annullato = annullato;
+	}
+
+	public String getTipo() {
+		return this.tipo;
+	}
+
+	public void setTipo(String tipo) {
+		this.tipo = tipo;
+	}
+
+	public Double getValore() {
+		return this.valore;
+	}
+
+	public void setValore(Double valore) {
+		this.valore = valore;
+	}
+
+	public String getValuta() {
+		return this.valuta;
+	}
+
+	public void setValuta(String valuta) {
+		this.valuta = valuta;
+	}
+
+}

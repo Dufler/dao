@@ -1,0 +1,169 @@
+package it.ltc.database.model.centrale;
+
+import java.io.Serializable;
+import javax.persistence.*;
+import java.math.BigDecimal;
+import java.util.Date;
+
+
+/**
+ * The persistent class for the storico_giacenza database table.
+ * 
+ */
+@Entity
+@Table(name="storico_giacenza")
+@NamedQuery(name="StoricoGiacenza.findAll", query="SELECT s FROM StoricoGiacenza s")
+public class StoricoGiacenza implements Serializable {
+	private static final long serialVersionUID = 1L;
+
+	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	@Column(unique=true, nullable=false)
+	private int id;
+
+	@Column(precision=10, scale=3)
+	private BigDecimal costo;
+
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name="data_apertura", nullable=false)
+	private Date dataApertura;
+
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name="data_chiusura")
+	private Date dataChiusura;
+
+	@Column(nullable=false)
+	private boolean fatturazione;
+
+	@Column(name="id_commessa", nullable=false)
+	private int idCommessa;
+
+	@Column(name="id_destinatario", nullable=false)
+	private int idDestinatario;
+
+	@Column(name="id_mittente", nullable=false)
+	private int idMittente;
+
+	@Column(name="id_ordine", nullable=false)
+	private int idOrdine;
+
+	@Column(name="id_spedizione", nullable=false)
+	private int idSpedizione;
+
+	@Column(name="lettera_di_vettura", nullable=false, length=45)
+	private String letteraDiVettura;
+
+	@Column(name="lettera_di_vettura_originale", length=45)
+	private String letteraDiVetturaOriginale;
+
+	@Column(precision=10, scale=3)
+	private BigDecimal ricavo;
+
+	public StoricoGiacenza() {
+	}
+
+	public int getId() {
+		return this.id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public BigDecimal getCosto() {
+		return this.costo;
+	}
+
+	public void setCosto(BigDecimal costo) {
+		this.costo = costo;
+	}
+
+	public Date getDataApertura() {
+		return this.dataApertura;
+	}
+
+	public void setDataApertura(Date dataApertura) {
+		this.dataApertura = dataApertura;
+	}
+
+	public Date getDataChiusura() {
+		return this.dataChiusura;
+	}
+
+	public void setDataChiusura(Date dataChiusura) {
+		this.dataChiusura = dataChiusura;
+	}
+
+	public boolean getFatturazione() {
+		return this.fatturazione;
+	}
+
+	public void setFatturazione(boolean fatturazione) {
+		this.fatturazione = fatturazione;
+	}
+
+	public int getIdCommessa() {
+		return this.idCommessa;
+	}
+
+	public void setIdCommessa(int idCommessa) {
+		this.idCommessa = idCommessa;
+	}
+
+	public int getIdDestinatario() {
+		return this.idDestinatario;
+	}
+
+	public void setIdDestinatario(int idDestinatario) {
+		this.idDestinatario = idDestinatario;
+	}
+
+	public int getIdMittente() {
+		return this.idMittente;
+	}
+
+	public void setIdMittente(int idMittente) {
+		this.idMittente = idMittente;
+	}
+
+	public int getIdOrdine() {
+		return this.idOrdine;
+	}
+
+	public void setIdOrdine(int idOrdine) {
+		this.idOrdine = idOrdine;
+	}
+
+	public int getIdSpedizione() {
+		return this.idSpedizione;
+	}
+
+	public void setIdSpedizione(int idSpedizione) {
+		this.idSpedizione = idSpedizione;
+	}
+
+	public String getLetteraDiVettura() {
+		return this.letteraDiVettura;
+	}
+
+	public void setLetteraDiVettura(String letteraDiVettura) {
+		this.letteraDiVettura = letteraDiVettura;
+	}
+
+	public String getLetteraDiVetturaOriginale() {
+		return this.letteraDiVetturaOriginale;
+	}
+
+	public void setLetteraDiVetturaOriginale(String letteraDiVetturaOriginale) {
+		this.letteraDiVetturaOriginale = letteraDiVetturaOriginale;
+	}
+
+	public BigDecimal getRicavo() {
+		return this.ricavo;
+	}
+
+	public void setRicavo(BigDecimal ricavo) {
+		this.ricavo = ricavo;
+	}
+
+}

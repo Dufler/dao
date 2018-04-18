@@ -1,0 +1,55 @@
+package it.ltc.database.model.centrale;
+
+import java.io.Serializable;
+import javax.persistence.*;
+
+
+/**
+ * The persistent class for the azienda database table.
+ * 
+ */
+@Entity
+@Table(name="azienda")
+@NamedQuery(name="Azienda.findAll", query="SELECT a FROM Azienda a")
+public class Azienda implements Serializable {
+	private static final long serialVersionUID = 1L;
+
+	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	@Column(unique=true, nullable=false)
+	private int id;
+
+	@Column(name="partita_iva", nullable=false, length=250)
+	private String partitaIva;
+
+	@Column(name="ragione_sociale", nullable=false, length=250)
+	private String ragioneSociale;
+
+	public Azienda() {
+	}
+
+	public int getId() {
+		return this.id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public String getPartitaIva() {
+		return this.partitaIva;
+	}
+
+	public void setPartitaIva(String partitaIva) {
+		this.partitaIva = partitaIva;
+	}
+
+	public String getRagioneSociale() {
+		return this.ragioneSociale;
+	}
+
+	public void setRagioneSociale(String ragioneSociale) {
+		this.ragioneSociale = ragioneSociale;
+	}
+
+}
