@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="2.1" xmlns="http://xmlns.jcp.org/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd">
+	
+	
+	<!-- Stringa di connessione JTDS: jdbc:jtds:<server_type>://<server>[:<port>][/<database>][;<property>=<value>[;...]] -->
+	<!-- 			<property name="javax.persistence.jdbc.driver" value="net.sourceforge.jtds.jdbc.Driver" /> -->
+	<!-- 			<property name="javax.persistence.jdbc.url" value="jdbc:jtds:sqlserver://192.168.0.16:1433/DBTest" /> -->
+	<!-- Schema di default: <property name="hibernate.default_schema" value="dbo"/>  -->
+	
+	<!-- DB di test -->
+	<persistence-unit name="legacy-test" transaction-type="RESOURCE_LOCAL">
+		<class>it.ltc.database.model.legacy.Articoli</class>
+		<class>it.ltc.database.model.legacy.ColliPack</class>
+		<class>it.ltc.database.model.legacy.TestaCorr</class>
+		<class>it.ltc.database.model.legacy.Fornitori</class>
+		<class>it.ltc.database.model.legacy.CatMercGruppi</class>
+		<class>it.ltc.database.model.legacy.Destinatari</class>
+		<class>it.ltc.database.model.legacy.MagaMov</class>
+		<class>it.ltc.database.model.legacy.MagaSd</class>
+		<class>it.ltc.database.model.legacy.RighiOrdine</class>
+		<class>it.ltc.database.model.legacy.TestataOrdini</class>
+		<class>it.ltc.database.model.legacy.PakiArticolo</class>
+		<class>it.ltc.database.model.legacy.PakiTesta</class>
+		<class>it.ltc.database.model.legacy.Magazzini</class>
+		<class>it.ltc.database.model.legacy.ArtiBar</class>
+		<class>it.ltc.database.model.legacy.MittentiOrdine</class>
+		<properties>
+			<property name="javax.persistence.jdbc.driver" value="com.microsoft.sqlserver.jdbc.SQLServerDriver" />
+			<property name="javax.persistence.jdbc.url" value="jdbc:sqlserver://192.168.0.16:1433;databaseName=DBTest" />
+			<property name="javax.persistence.jdbc.user" value="ltc" />
+			<property name="javax.persistence.jdbc.password" value="ltcpsw" />
+			<property name="hibernate.hbm2ddl.auto" value="none" />
+			<property name="hibernate.show_sql" value="true" />
+			<property name="hibernate.dialect" value="org.hibernate.dialect.SQLServer2012Dialect" />
+			<property name="hibernate.default_schema" value="dbo"/>
+			<property name="hibernate.ejb.entitymanager_factory_name" value="legacy-test"/> <!-- Aggiunta per evitare che vengano create 2 PU -->
+			<property name="hibernate.connection.password" value="ltcpsw"/>
+			<property name="hibernate.connection.username" value="ltc"/>
+			<property name="hibernate.connection.url" value="jdbc:sqlserver://192.168.0.16:1433;databaseName=DBTest"/>
+			<property name="hibernate.connection.driver_class" value="com.microsoft.sqlserver.jdbc.SQLServerDriver"/>
+			<property name="hibernate.connection.provider_class" value="org.hibernate.connection.C3P0ConnectionProvider" />
+			<property name="hibernate.c3p0.max_size" value="3" />
+			<property name="hibernate.c3p0.min_size" value="0" />
+			<property name="hibernate.c3p0.acquire_increment" value="1" />
+			<property name="hibernate.c3p0.idle_test_period" value="300" />
+			<property name="hibernate.c3p0.max_statements" value="0" />
+			<property name="hibernate.c3p0.timeout" value="100" />
+		</properties>
+	</persistence-unit>
+</persistence>
