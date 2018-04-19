@@ -1,0 +1,12 @@
+it\ltc\database\model\sede\Magazzino.class
+it\ltc\database\model\sede\Ubicazione.class
+it\ltc\database\model\sede\Sede.class
+it\ltc\database\model\sede\CdgEvento.class
+it\ltc\database\model\sede\CdgEventoRiepilogoPK.class
+it\ltc\database\model\sede\CdgFase.class
+it\ltc\database\model\sede\json\CdgEventoRiepilogoJSON.class
+it\ltc\database\model\sede\Operatore.class
+it\ltc\database\model\sede\CdgEventoRiepilogo.class
+it\ltc\database\model\sede\Cliente.class
+it\ltc\database\model\sede\Commessa.class
+it\ltc\database\model\sede\CategoriaMerceologica.class

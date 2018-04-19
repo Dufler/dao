@@ -1,0 +1,13 @@
+it\ltc\database\model\utente\UtenteSedeJoin.class
+it\ltc\database\model\utente\UtenteCommessaJoinPK.class
+it\ltc\database\model\utente\UtentePermessiJoinPK.class
+it\ltc\database\model\utente\UtentePermessiJoin.class
+it\ltc\database\model\utente\Feature.class
+it\ltc\database\model\utente\Utente.class
+it\ltc\database\model\utente\UtenteCommessaJoin.class
+it\ltc\database\model\utente\Commessa.class
+it\ltc\database\model\utente\UtenteSedeJoinPK.class
+it\ltc\database\model\utente\UtenteFeaturesJoin.class
+it\ltc\database\model\utente\UtenteFeaturesJoinPK.class
+it\ltc\database\model\utente\Permesso.class
+it\ltc\database\model\utente\Sede.class
