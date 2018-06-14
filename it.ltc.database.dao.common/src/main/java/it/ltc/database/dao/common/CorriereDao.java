@@ -2,39 +2,27 @@ package it.ltc.database.dao.common;
 
 import java.util.List;
 
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
-
-import it.ltc.database.dao.Dao;
+import it.ltc.database.dao.ReadOnlyDao;
 import it.ltc.database.model.centrale.Corriere;
 
-public class CorriereDao extends Dao {
+public class CorriereDao extends ReadOnlyDao<Corriere> {
 
-	private static CorriereDao instance;
-
-	private CorriereDao() {
-		super(DATASOURCE_CENTRALE_PERSISTENCE_UNIT_NAME);
-	}
-
-	public static CorriereDao getInstance() {
-		if (null == instance) {
-			instance = new CorriereDao();
-		}
-		return instance;
+	public CorriereDao() {
+		this(LOCAL_CENTRALE_PERSISTENCE_UNIT_NAME);
 	}
 	
-	public Corriere findByID(int id) {
-		Corriere corriere = em.find(Corriere.class, id);
+	public CorriereDao(String persistenceUnit) {
+		super(persistenceUnit, Corriere.class);
+	}
+	
+	public Corriere trovaDaID(int id) {
+		Corriere corriere = findByID(id);
 		return corriere;
 	}
 	
-	public List<Corriere> findAll() {
-		CriteriaBuilder cb = em.getCriteriaBuilder();
-        CriteriaQuery<Corriere> criteria = cb.createQuery(Corriere.class);
-        Root<Corriere> member = criteria.from(Corriere.class);
-        criteria.select(member);
-        return em.createQuery(criteria).getResultList();
+	public List<Corriere> trovaTutti() {
+		List<Corriere> entities = findAll();
+		return entities;
 	}
 
 }

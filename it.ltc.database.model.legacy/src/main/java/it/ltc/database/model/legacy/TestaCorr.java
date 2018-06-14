@@ -16,7 +16,7 @@ import javax.persistence.NamedQuery;
 import javax.persistence.PrePersist;
 import javax.persistence.Table;
 
-import it.ltc.database.model.legacy.utility.StringUtility;
+import it.ltc.utility.miscellanea.string.StringUtility;
 
 
 /**
@@ -111,10 +111,9 @@ public class TestaCorr implements Serializable {
 //	@Lob
 //	private Clob documentoBase64;
 	
-	@Column(name="DocumentoBase64", columnDefinition="varbinary(MAX)", length=Integer.MAX_VALUE)
-	//@Type(type="text")
-	//private String documentoBase64;
-	private byte[] documentoBase64;
+	//FIXME: Ripristinarlo appena possibile
+//	@Column(name="DocumentoBase64", columnDefinition="varbinary(MAX)", length=Integer.MAX_VALUE)
+//	private byte[] documentoBase64;
 
 //	@Column(name="Estratto", nullable=false, length=2)
 //	private String estratto;
@@ -275,8 +274,8 @@ public class TestaCorr implements Serializable {
 //	@Column(name="TassMitt", length=1)
 //	private String tassMitt;
 
-	@Column(name="Telefono", length=30)
-	private String telefono;
+//	@Column(name="Telefono", length=30)
+//	private String telefono;
 
 //	@Column(name="Tipconsegna", length=1, columnDefinition="CHAR")
 //	private String tipconsegna;
@@ -592,13 +591,13 @@ public class TestaCorr implements Serializable {
 //		this.documentoBase64 = documentoBase64;
 //	}
 //	
-	public byte[] getDocumentoBase64() {
-		return documentoBase64;
-	}
-
-	public void setDocumentoBase64(byte[] documentoBase64) {
-		this.documentoBase64 = documentoBase64;
-	}
+//	public byte[] getDocumentoBase64() {
+//		return documentoBase64;
+//	}
+//
+//	public void setDocumentoBase64(byte[] documentoBase64) {
+//		this.documentoBase64 = documentoBase64;
+//	}
 
 	public String getIndirizzo() {
 		return this.indirizzo;
@@ -968,13 +967,13 @@ public class TestaCorr implements Serializable {
 //		this.tassMitt = tassMitt;
 //	}
 
-	public String getTelefono() {
-		return this.telefono;
-	}
-
-	public void setTelefono(String telefono) {
-		this.telefono = telefono;
-	}
+//	public String getTelefono() {
+//		return this.telefono;
+//	}
+//
+//	public void setTelefono(String telefono) {
+//		this.telefono = telefono;
+//	}
 
 //	public String getTipconsegna() {
 //		return this.tipconsegna;

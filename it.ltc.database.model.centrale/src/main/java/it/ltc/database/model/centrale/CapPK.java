@@ -23,12 +23,15 @@ public class CapPK implements Serializable {
 	public String getCap() {
 		return this.cap;
 	}
+	
 	public void setCap(String cap) {
 		this.cap = cap;
 	}
+	
 	public String getLocalita() {
 		return this.localita;
 	}
+	
 	public void setLocalita(String localita) {
 		this.localita = localita;
 	}

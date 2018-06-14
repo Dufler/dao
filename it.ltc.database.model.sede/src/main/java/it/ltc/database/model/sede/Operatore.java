@@ -12,23 +12,15 @@ import javax.persistence.*;
 @Table(name="operatore")
 @NamedQuery(name="Operatore.findAll", query="SELECT o FROM Operatore o")
 public class Operatore implements Serializable {
+	
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	private int id;
-
 	private String username;
+	
+	private int associazione;
 
-	public Operatore() {
-	}
-
-	public int getId() {
-		return this.id;
-	}
-
-	public void setId(int id) {
-		this.id = id;
-	}
+	public Operatore() {}
 
 	public String getUsername() {
 		return this.username;
@@ -36,6 +28,14 @@ public class Operatore implements Serializable {
 
 	public void setUsername(String username) {
 		this.username = username;
+	}
+
+	public int getAssociazione() {
+		return associazione;
+	}
+
+	public void setAssociazione(int associazione) {
+		this.associazione = associazione;
 	}
 
 }

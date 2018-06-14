@@ -16,13 +16,10 @@ public abstract class Dao {
 	private static final Logger logger = Logger.getLogger("Dao");
 	
 	public static final String LOCAL_CENTRALE_PERSISTENCE_UNIT_NAME = "locale-centrale";
-	public static final String DATASOURCE_CENTRALE_PERSISTENCE_UNIT_NAME = "datasource-centrale";
-	
+	public static final String LOCAL_UTENTE_PERSISTENCE_UNIT_NAME = "locale-utente";
 	public static final String LOCAL_SEDE_PERSISTENCE_UNIT_NAME = "locale-sede";
-	public static final String DATASOURCE_SEDE_PERSISTENCE_UNIT_NAME = "datasource-sede";
 	
 	protected final String persistenceUnit;
-	protected EntityManager em;
 	
 	/**
 	 * Costruttore di default.<br>
@@ -31,7 +28,6 @@ public abstract class Dao {
 	 */
 	public Dao(String persistenceUnit) {
 		this.persistenceUnit = persistenceUnit;
-		this.em = FactoryManager.getInstance().getFactory(persistenceUnit).createEntityManager();
 	}
 	
 	/**
@@ -40,8 +36,7 @@ public abstract class Dao {
 	 * @return L'oggetto utilizzabile per l'accesso ai dati.
 	 */
 	protected EntityManager getManager() {
-		if (em == null || !em.isOpen())
-			em = FactoryManager.getInstance().getFactory(persistenceUnit).createEntityManager();
+		EntityManager em = FactoryManager.getInstance().getFactory(persistenceUnit).createEntityManager();
 		return em;
 	}
 	

@@ -17,6 +17,8 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import it.ltc.database.model.centrale.enumcondivise.Fatturazione;
+
 
 /**
  * The persistent class for the spedizione_giacenza database table.
@@ -35,24 +37,24 @@ public class SpedizioneGiacenza implements Serializable, Comparable<SpedizioneGi
 	 * @author Damiano
 	 *
 	 */
-	public enum Fatturazione { 
-		
-		NON_FATTURABILE("Non fatturabile"),
-		IN_DEFINIZIONE("Non ancora fatturabile"),
-		FATTURABILE("Fatturabile"),
-		FATTURATA("Gia' fatturata");
-		
-		private final String descrizione;
-		
-		private Fatturazione(String descrizione) {
-			this.descrizione = descrizione;
-		}
-		
-		@Override
-		public String toString() {
-			return descrizione;
-		}
-	}
+//	public enum Fatturazione { 
+//		
+//		NON_FATTURABILE("Non fatturabile"),
+//		IN_DEFINIZIONE("Non ancora fatturabile"),
+//		FATTURABILE("Fatturabile"),
+//		FATTURATA("Gia' fatturata");
+//		
+//		private final String descrizione;
+//		
+//		private Fatturazione(String descrizione) {
+//			this.descrizione = descrizione;
+//		}
+//		
+//		@Override
+//		public String toString() {
+//			return descrizione;
+//		}
+//	}
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)

@@ -16,7 +16,7 @@ import javax.persistence.Table;
  * 
  */
 @Entity
-@Table(name="contatto")
+@Table(name="crm_contatto")
 @NamedQuery(name="Contatto.findAll", query="SELECT c FROM Contatto c")
 public class Contatto implements Serializable {
 	

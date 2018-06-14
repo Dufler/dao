@@ -30,6 +30,11 @@
 			<artifactId>hibernate-validator</artifactId>
 			<version>6.0.2.Final</version>
 		</dependency>
+		<dependency>
+			<groupId>it.ltc.utility</groupId>
+			<artifactId>miscellanea</artifactId>
+			<version>1.0</version>
+		</dependency>
 	</dependencies>
 	
 </project>

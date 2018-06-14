@@ -2,26 +2,17 @@ package it.ltc.database.dao.common;
 
 import java.util.List;
 
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
-
-import it.ltc.database.dao.Dao;
+import it.ltc.database.dao.ReadOnlyDao;
 import it.ltc.database.model.centrale.Regione;
 
-public class RegioneDao extends Dao {
-	
-	private static RegioneDao instance;
+public class RegioneDao extends ReadOnlyDao<Regione> {
 
-	private RegioneDao() {
-		super(DATASOURCE_CENTRALE_PERSISTENCE_UNIT_NAME);
+	public RegioneDao() {
+		this(LOCAL_CENTRALE_PERSISTENCE_UNIT_NAME);
 	}
-
-	public static RegioneDao getInstance() {
-		if (null == instance) {
-			instance = new RegioneDao();
-		}
-		return instance;
+	
+	public RegioneDao(String persistenceUnit) {
+		super(persistenceUnit, Regione.class);
 	}
 	
 	/**
@@ -30,8 +21,8 @@ public class RegioneDao extends Dao {
 	 * @param sigla
 	 * @return La regione corrispondente, se presente, <code>null</code> altrimenti.
 	 */
-	public Regione findBySigla(String sigla) {
-		Regione regione = em.find(Regione.class, sigla);
+	public Regione trovaDaSigla(String sigla) {
+		Regione regione = findByID(sigla);
 		return regione;
 	}
 	
@@ -39,12 +30,9 @@ public class RegioneDao extends Dao {
 	 * Restituisce la lista di tutte le regioni esistenti utilizzando il datasource di default.
 	 * @return La lista di tutte le regioni.
 	 */
-	public List<Regione> findAll() {
-		CriteriaBuilder cb = em.getCriteriaBuilder();
-        CriteriaQuery<Regione> criteria = cb.createQuery(Regione.class);
-        Root<Regione> member = criteria.from(Regione.class);
-        criteria.select(member);
-        return em.createQuery(criteria).getResultList();
+	public List<Regione> trovaTutte() {
+		List<Regione> entities = findAll();
+		return entities;
 	}
 
 }

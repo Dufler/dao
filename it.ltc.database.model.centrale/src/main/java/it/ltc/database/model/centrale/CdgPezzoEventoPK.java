@@ -54,8 +54,7 @@ public class CdgPezzoEventoPK implements Serializable {
 		final int prime = 31;
 		int hash = 17;
 		hash = hash * prime + this.pezzo;
-		hash = hash * prime + this.evento;
-		
+		hash = hash * prime + this.evento;	
 		return hash;
 	}
 }

@@ -38,7 +38,7 @@ public class CdgCostiRicaviGenerici implements Serializable {
 	@Column(nullable=false, length=100)
 	private String nome;
 
-	private Integer sede;
+	
 
 	public CdgCostiRicaviGenerici() {}
 
@@ -64,14 +64,6 @@ public class CdgCostiRicaviGenerici implements Serializable {
 
 	public void setNome(String nome) {
 		this.nome = nome;
-	}
-
-	public Integer getSede() {
-		return this.sede;
-	}
-
-	public void setSede(Integer sede) {
-		this.sede = sede;
 	}
 
 }

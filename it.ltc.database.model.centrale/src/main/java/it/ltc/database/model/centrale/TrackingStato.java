@@ -24,8 +24,7 @@ public class TrackingStato implements Serializable {
 	@Column(nullable=false, length=45)
 	private String nome;
 
-	public TrackingStato() {
-	}
+	public TrackingStato() {}
 
 	public String getCodice() {
 		return this.codice;

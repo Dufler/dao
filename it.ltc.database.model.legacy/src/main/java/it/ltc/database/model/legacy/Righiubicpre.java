@@ -9,6 +9,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQuery;
+import javax.persistence.PrePersist;
 import javax.persistence.Table;
 
 
@@ -184,6 +185,12 @@ public class Righiubicpre implements Serializable {
 	private int y;
 
 	public Righiubicpre() {}
+	
+	@PrePersist
+	public void prePersist() {
+		if (magaDisponibile == null)
+			magaDisponibile = "";
+	}
 
 	public int getIdubica() {
 		return this.idubica;

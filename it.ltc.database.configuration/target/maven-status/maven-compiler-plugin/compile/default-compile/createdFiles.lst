@@ -1,3 +1,4 @@
-it\ltc\database\dao\CRUDDao.class
 it\ltc\database\dao\Dao.class
 it\ltc\database\dao\FactoryManager.class
+it\ltc\database\dao\ReadOnlyDao.class
+it\ltc\database\dao\CRUDDao.class

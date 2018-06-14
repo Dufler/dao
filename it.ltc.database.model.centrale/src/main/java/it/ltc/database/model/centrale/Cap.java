@@ -12,13 +12,19 @@ import javax.persistence.*;
  */
 @Entity
 @Table(name="cap")
+@IdClass(CapPK.class)
 @NamedQuery(name="Cap.findAll", query="SELECT c FROM Cap c")
 public class Cap implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
 
-	@EmbeddedId
-	private CapPK id;
+	@Id
+	@Column(unique=true, nullable=false, length=5, columnDefinition="CHAR")
+	private String cap;
+
+	@Id
+	@Column(unique=true, nullable=false, length=200)
+	private String localita;
 
 	@Column(name="brt_disagiate", nullable=false)
 	private boolean brtDisagiate;
@@ -47,12 +53,27 @@ public class Cap implements Serializable {
 
 	public Cap() {}
 
-	public CapPK getId() {
-		return this.id;
+	public CapPK getPK() {
+		CapPK pk = new CapPK();
+		pk.setCap(cap);
+		pk.setLocalita(localita);
+		return pk;
 	}
-
-	public void setId(CapPK id) {
-		this.id = id;
+	
+	public String getCap() {
+		return this.cap;
+	}
+	
+	public void setCap(String cap) {
+		this.cap = cap;
+	}
+	
+	public String getLocalita() {
+		return this.localita;
+	}
+	
+	public void setLocalita(String localita) {
+		this.localita = localita;
 	}
 
 	public boolean getBrtDisagiate() {

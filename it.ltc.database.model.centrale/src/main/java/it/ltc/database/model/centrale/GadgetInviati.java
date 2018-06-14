@@ -10,7 +10,7 @@ import java.util.Date;
  * 
  */
 @Entity
-@Table(name="gadget_inviati")
+@Table(name="crm_gadget_inviati")
 @NamedQuery(name="GadgetInviati.findAll", query="SELECT g FROM GadgetInviati g")
 public class GadgetInviati implements Serializable {
 	private static final long serialVersionUID = 1L;

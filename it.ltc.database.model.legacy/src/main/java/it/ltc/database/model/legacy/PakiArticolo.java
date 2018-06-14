@@ -42,8 +42,11 @@ public class PakiArticolo implements Serializable {
 	@Column(name="CodBarre", length=20)
 	private String codBarre;
 
-//	@Column(name="CodMotivo", length=4)
-//	private String codMotivo;
+	/**
+	 * NONE è il default, va messo a INSE nel caso in cui non era presente nel dichiarato.
+	 */
+	@Column(name="CodMotivo", length=4)
+	private String codMotivo;
 
 	@Column(name="CodUnicoArt", length=15)
 	private String codUnicoArt;
@@ -171,12 +174,13 @@ public class PakiArticolo implements Serializable {
 		//nrOrdineFor = "";
 		qtaPreDoc = 0;
 		qtaPrelevata = 0;
-		qtaVerificata = 0;
+		//qtaVerificata = 0;
 		scelta = "";
-		utente = "WSE";
-		if (barcodeCollo == null || barcodeCollo.isEmpty())
-			barcodeCollo = Integer.toString(idPakiTesta);
 		dataModifica = new Timestamp(new Date().getTime());
+		if (utente == null) utente = "WSE";
+		if (barcodeCollo == null || barcodeCollo.isEmpty())	barcodeCollo = Integer.toString(idPakiTesta);
+		//Se non lo valorizzo metto il default.
+		if (codMotivo == null)	codMotivo = "NONE";
 	}
 	
 	@PreUpdate
@@ -216,13 +220,13 @@ public class PakiArticolo implements Serializable {
 		this.codBarre = codBarre;
 	}
 
-//	public String getCodMotivo() {
-//		return this.codMotivo;
-//	}
-//
-//	public void setCodMotivo(String codMotivo) {
-//		this.codMotivo = codMotivo;
-//	}
+	public String getCodMotivo() {
+		return this.codMotivo;
+	}
+
+	public void setCodMotivo(String codMotivo) {
+		this.codMotivo = codMotivo;
+	}
 
 	public String getCodUnicoArt() {
 		return this.codUnicoArt;
@@ -534,6 +538,28 @@ public class PakiArticolo implements Serializable {
 
 	public void setSeriali(List<String> seriali) {
 		this.seriali = seriali;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + idPakiArticolo;
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		PakiArticolo other = (PakiArticolo) obj;
+		if (idPakiArticolo != other.idPakiArticolo)
+			return false;
+		return true;
 	}
 
 }

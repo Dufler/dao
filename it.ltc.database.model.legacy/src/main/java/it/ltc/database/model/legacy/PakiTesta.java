@@ -15,6 +15,7 @@ import java.util.Date;
 @Table(name="pakiTesta")
 @NamedQuery(name="PakiTesta.findAll", query="SELECT p FROM PakiTesta p")
 public class PakiTesta implements Serializable {
+	
 	private static final long serialVersionUID = 1L;
 
 	@Id
@@ -22,8 +23,12 @@ public class PakiTesta implements Serializable {
 	@Column(unique=true, nullable=false)
 	private int idTestaPaki;
 
-//	@Column(name="AbilitaEccedenze", nullable=false, length=50)
-//	private String abilitaEccedenze;
+	/**
+	 * Nonostante i 50 caratteri a disposizione può assumere solo 2 valori: SI o NO, NO è il valore di default.
+	 * Nel caso in cui sia a "SI" permette di poter riscontrare un numero superiore di pezzi rispetto al dichiarato. Non permette comunque di inserire prodotti non presenti.
+	 */
+	@Column(name="AbilitaEccedenze", nullable=false, length=50)
+	private String abilitaEccedenze;
 //
 //	@Column(name="AbilitaGestione", nullable=false, length=10)
 //	private String abilitaGestione;
@@ -73,6 +78,9 @@ public class PakiTesta implements Serializable {
 //	@Column(name="FlagTra", length=1)
 //	private String flagTra;
 
+	/**
+	 * SI quando ce lo da il cliente, NO quando viene immesso dal customer care. Di default è SI.
+	 */
 	@Column(name="FlussoDichiarato", nullable=false, length=2)
 	private String flussoDichiarato;
 
@@ -96,13 +104,22 @@ public class PakiTesta implements Serializable {
 
 //	@Column(name="NomeFileFlusso", length=50)
 //	private String nomeFileFlusso;
+	
+	@Column(name="Note", length=250)
+	private String note;
 
 //	@Column(name="NrConfOrdAcq", length=50)
 //	private String nrConfOrdAcq;
 
+	/**
+	 * Riferimento del documento con cui è arrivata la merce.
+	 */
 	@Column(name="NrDocInterno", length=40)
 	private String nrDocInterno;
 
+	/**
+	 * Riferimento del cliente.
+	 */
 	@Column(name="NrPaki", length=30)
 	private String nrPaki;
 
@@ -115,10 +132,16 @@ public class PakiTesta implements Serializable {
 //	@Column(name="Prenotato", length=2)
 //	private String prenotato;
 
-	@Column(name="QtaTotAre") //riscontrato
+	/**
+	 * Quantità totale del riscontrato.
+	 */
+	@Column(name="QtaTotAre")
 	private int qtaTotAre;
 
-	@Column(name="QtaTotAto") //dichiarato
+	/**
+	 * Quantità totale del dichiarato.
+	 */
+	@Column(name="QtaTotAto")
 	private int qtaTotAto;
 //
 //	@Column(name="QtaTotDif")
@@ -142,9 +165,15 @@ public class PakiTesta implements Serializable {
 //	@Column(name="TipoCarico", length=50)
 //	private String tipoCarico;
 
+	/**
+	 * Tipologia del carico, viene verificata tramite i valori presenti nella tabella pakiTestaTipo.
+	 */
 	@Column(name="Tipodocumento", nullable=false, length=20)
 	private String tipodocumento;
 	
+	/**
+	 * Tipo del documento che accompagna la merce in ingresso.
+	 */
 	@Column(name="TipoDoc", length=20)
 	private String tipoDoc;
 
@@ -154,8 +183,11 @@ public class PakiTesta implements Serializable {
 //	@Column(name="TipoMerce", nullable=false, length=50)
 //	private String tipoMerce;
 
-//	@Column(name="TipoPack", length=3)
-//	private String tipoPack;
+	/**
+	 * Può assumere i valori: "INS" o "ART" dove "INS" permette di inserire nuovi prodotti in fase di riscontro e "ART", il default, non lo consente. 
+	 */
+	@Column(name="TipoPack", length=3)
+	private String tipoPack;
 
 //	@Column(name="TipoPacking", length=20)
 //	private String tipoPacking;
@@ -170,12 +202,15 @@ public class PakiTesta implements Serializable {
 		Date now = new Date();
 		SimpleDateFormat sdf = new SimpleDateFormat("yy");
 		qtaTotAre = 0;
-		flussoDichiarato = "SI";
-		stagione = "";
+		if (flussoDichiarato == null) flussoDichiarato = "SI";
+		if (stagione == null) stagione = "";
+		if (tipoPack == null) tipoPack = "ART";
 		dataInizio = new Timestamp(now.getTime());
 		creazione = new Timestamp(now.getTime());
 		anno = sdf.format(now);
 		stato = "INSERITO";
+		if (abilitaEccedenze == null)
+			abilitaEccedenze = "NO";
 	}
 	
 	@Override
@@ -215,13 +250,13 @@ public class PakiTesta implements Serializable {
 		this.idTestaPaki = idTestaPaki;
 	}
 
-//	public String getAbilitaEccedenze() {
-//		return this.abilitaEccedenze;
-//	}
-//
-//	public void setAbilitaEccedenze(String abilitaEccedenze) {
-//		this.abilitaEccedenze = abilitaEccedenze;
-//	}
+	public String getAbilitaEccedenze() {
+		return this.abilitaEccedenze;
+	}
+
+	public void setAbilitaEccedenze(String abilitaEccedenze) {
+		this.abilitaEccedenze = abilitaEccedenze;
+	}
 //
 //	public String getAbilitaGestione() {
 //		return this.abilitaGestione;
@@ -399,7 +434,15 @@ public class PakiTesta implements Serializable {
 		this.idFornitore = idFornitore;
 	}
 
-//	public String getLetto() {
+	public String getNote() {
+		return note;
+	}
+
+	public void setNote(String note) {
+		this.note = note;
+	}
+
+	//	public String getLetto() {
 //		return this.letto;
 //	}
 //
@@ -567,13 +610,13 @@ public class PakiTesta implements Serializable {
 //		this.tipoMerce = tipoMerce;
 //	}
 //
-//	public String getTipoPack() {
-//		return this.tipoPack;
-//	}
-//
-//	public void setTipoPack(String tipoPack) {
-//		this.tipoPack = tipoPack;
-//	}
+	public String getTipoPack() {
+		return this.tipoPack;
+	}
+
+	public void setTipoPack(String tipoPack) {
+		this.tipoPack = tipoPack;
+	}
 //
 //	public String getTipoPacking() {
 //		return this.tipoPacking;

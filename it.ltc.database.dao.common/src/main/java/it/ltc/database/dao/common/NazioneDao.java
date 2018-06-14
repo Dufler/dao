@@ -2,11 +2,7 @@ package it.ltc.database.dao.common;
 
 import java.util.List;
 
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
-
-import it.ltc.database.dao.Dao;
+import it.ltc.database.dao.ReadOnlyDao;
 import it.ltc.database.model.centrale.Nazione;
 
 /**
@@ -15,19 +11,14 @@ import it.ltc.database.model.centrale.Nazione;
  * @author Damiano
  *
  */
-public class NazioneDao extends Dao {
+public class NazioneDao extends ReadOnlyDao<Nazione> {
 
-	private static NazioneDao instance;
-
-	private NazioneDao() {
-		super(DATASOURCE_CENTRALE_PERSISTENCE_UNIT_NAME);
+	public NazioneDao() {
+		this(LOCAL_CENTRALE_PERSISTENCE_UNIT_NAME);
 	}
-
-	public static NazioneDao getInstance() {
-		if (null == instance) {
-			instance = new NazioneDao();
-		}
-		return instance;
+	
+	public NazioneDao(String persistenceUnit) {
+		super(persistenceUnit, Nazione.class);
 	}
 	
 	/**
@@ -36,8 +27,8 @@ public class NazioneDao extends Dao {
 	 * @param sigla
 	 * @return La nazione corrispondente, se presente, <code>null</code> altrimenti.
 	 */
-	public Nazione findByCodiceISO3(String iso3) {
-		Nazione nazione = em.find(Nazione.class, iso3);
+	public Nazione trovaDaCodiceISO3(String iso3) {
+		Nazione nazione = findByID(iso3);
 		return nazione;
 	}
 	
@@ -45,12 +36,10 @@ public class NazioneDao extends Dao {
 	 * Restituisce la lista di tutte le nazioni esistenti utilizzando il datasource di default.
 	 * @return La lista di tutte le nazioni.
 	 */
-	public List<Nazione> findAll() {
-		CriteriaBuilder cb = em.getCriteriaBuilder();
-        CriteriaQuery<Nazione> criteria = cb.createQuery(Nazione.class);
-        Root<Nazione> member = criteria.from(Nazione.class);
-        criteria.select(member);
-        return em.createQuery(criteria).getResultList();
+	public List<Nazione> trovaTutte() {
+		List<Nazione> entities = findAll();
+		entities.sort(null); //Le ordino per nome.
+        return entities;
 	}
 	
 }

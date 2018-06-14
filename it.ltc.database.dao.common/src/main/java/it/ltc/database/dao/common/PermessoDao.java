@@ -11,20 +11,13 @@ import it.ltc.database.model.utente.Permesso;
  *
  */
 public class PermessoDao extends CRUDDao<Permesso> {
-	
-	private static final String LOCAL_PERSISTENCE_UNIT = "locale-utente";
-	
-	private static PermessoDao instance;
 
-	private PermessoDao() {
-		super(LOCAL_PERSISTENCE_UNIT, Permesso.class);
+	public PermessoDao() {
+		this(LOCAL_UTENTE_PERSISTENCE_UNIT_NAME);
 	}
-
-	public static PermessoDao getInstance() {
-		if (null == instance) {
-			instance = new PermessoDao();
-		}
-		return instance;
+	
+	public PermessoDao(String persistenceUnit) {
+		super(persistenceUnit, Permesso.class);
 	}
 	
 	public Permesso trovaDaID(int id) {

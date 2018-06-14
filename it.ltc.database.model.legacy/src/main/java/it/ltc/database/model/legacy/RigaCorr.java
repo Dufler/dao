@@ -15,7 +15,7 @@ import javax.persistence.NamedQuery;
 import javax.persistence.PrePersist;
 import javax.persistence.Table;
 
-import it.ltc.database.model.legacy.utility.StringUtility;
+import it.ltc.utility.miscellanea.string.StringUtility;
 
 
 /**

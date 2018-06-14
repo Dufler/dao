@@ -38,12 +38,18 @@ public class FactoryManager {
 	 * @return una Factory capace di creare oggetti <code>EntityManager</code>.
 	 */
 	public EntityManagerFactory getFactory(String persistenceUnitName) {
-		if (!factories.containsKey(persistenceUnitName)) {
-			logger.info("Istanzio una nuova factory per la persistence unit: '" + persistenceUnitName + "'");
-			EntityManagerFactory emf = Persistence.createEntityManagerFactory(persistenceUnitName);
-			factories.put(persistenceUnitName, emf);
-		}
-		return factories.get(persistenceUnitName);
+		EntityManagerFactory factory = factories.get(persistenceUnitName);
+		if (factory == null || !factory.isOpen()) {
+			factory = createFactory(persistenceUnitName);
+		}		
+		return factory;
+	}
+	
+	private EntityManagerFactory createFactory(String persistenceUnitName) {
+		logger.info("Istanzio una nuova factory per la persistence unit: '" + persistenceUnitName + "'");
+		EntityManagerFactory emf = Persistence.createEntityManagerFactory(persistenceUnitName);
+		factories.put(persistenceUnitName, emf);
+		return emf;
 	}
 
 }

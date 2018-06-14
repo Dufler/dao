@@ -18,17 +18,20 @@ public class FatturaPreferenzeCommessaPK implements Serializable {
 	@Column(insertable=false, updatable=false, unique=true, nullable=false)
 	private int ambito;
 
-	public FatturaPreferenzeCommessaPK() {
-	}
+	public FatturaPreferenzeCommessaPK() {}
+	
 	public int getCommessa() {
 		return this.commessa;
 	}
+	
 	public void setCommessa(int commessa) {
 		this.commessa = commessa;
 	}
+	
 	public int getAmbito() {
 		return this.ambito;
 	}
+	
 	public void setAmbito(int ambito) {
 		this.ambito = ambito;
 	}
@@ -50,8 +53,7 @@ public class FatturaPreferenzeCommessaPK implements Serializable {
 		final int prime = 31;
 		int hash = 17;
 		hash = hash * prime + this.commessa;
-		hash = hash * prime + this.ambito;
-		
+		hash = hash * prime + this.ambito;	
 		return hash;
 	}
 }

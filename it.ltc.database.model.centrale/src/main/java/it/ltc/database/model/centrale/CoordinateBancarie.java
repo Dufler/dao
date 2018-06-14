@@ -28,8 +28,7 @@ public class CoordinateBancarie implements Serializable {
 	@Column(nullable=false, length=250)
 	private String ente;
 
-	public CoordinateBancarie() {
-	}
+	public CoordinateBancarie() {}
 
 	public int getId() {
 		return this.id;

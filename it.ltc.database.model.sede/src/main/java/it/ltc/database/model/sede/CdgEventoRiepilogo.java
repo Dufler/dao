@@ -10,13 +10,26 @@ import javax.persistence.*;
  */
 @Entity
 @Table(name="cdg_evento_riepilogo")
+@IdClass(CdgEventoRiepilogoPK.class)
 @NamedQuery(name="CdgEventoRiepilogo.findAll", query="SELECT c FROM CdgEventoRiepilogo c")
 public class CdgEventoRiepilogo implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
+	
+	@Id
+	@Column(insertable=false, updatable=false)
+	private int evento;
 
-	@EmbeddedId
-	private CdgEventoRiepilogoPK id;
+	@Id
+	@Column(insertable=false, updatable=false)
+	private int commessa;
+
+	@Id
+	@Temporal(TemporalType.DATE)
+	private java.util.Date giorno;
+
+//	@EmbeddedId
+//	private CdgEventoRiepilogoPK id;
 
 	@Column(name="durata_totale")
 	private int durataTotale;
@@ -26,14 +39,46 @@ public class CdgEventoRiepilogo implements Serializable {
 	private int pezzi;
 
 	public CdgEventoRiepilogo() {}
-
-	public CdgEventoRiepilogoPK getId() {
-		return this.id;
+	
+	public int getEvento() {
+		return this.evento;
+	}
+	
+	public void setEvento(int evento) {
+		this.evento = evento;
+	}
+	
+	public int getCommessa() {
+		return this.commessa;
+	}
+	
+	public void setCommessa(int commessa) {
+		this.commessa = commessa;
+	}
+	
+	public java.util.Date getGiorno() {
+		return this.giorno;
+	}
+	
+	public void setGiorno(java.util.Date giorno) {
+		this.giorno = giorno;
+	}
+	
+	public CdgEventoRiepilogoPK getPK() {
+		CdgEventoRiepilogoPK pk = new CdgEventoRiepilogoPK();
+		pk.setCommessa(commessa);
+		pk.setEvento(evento);
+		pk.setGiorno(giorno);
+		return pk;
 	}
 
-	public void setId(CdgEventoRiepilogoPK id) {
-		this.id = id;
-	}
+//	public CdgEventoRiepilogoPK getId() {
+//		return this.id;
+//	}
+//
+//	public void setId(CdgEventoRiepilogoPK id) {
+//		this.id = id;
+//	}
 
 	public int getDurataTotale() {
 		return this.durataTotale;

@@ -10,13 +10,19 @@ import javax.persistence.*;
  */
 @Entity
 @Table(name="cdg_pezzo_evento")
+@IdClass(CdgPezzoEventoPK.class)
 @NamedQuery(name="CdgPezzoEvento.findAll", query="SELECT c FROM CdgPezzoEvento c")
 public class CdgPezzoEvento implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
 
-	@EmbeddedId
-	private CdgPezzoEventoPK id;
+	@Id
+	@Column(updatable=false, nullable=false)
+	private int pezzo;
+
+	@Id
+	@Column(updatable=false, nullable=false)
+	private int evento;
 
 	@Column(nullable=false)
 	private double costo;
@@ -26,12 +32,27 @@ public class CdgPezzoEvento implements Serializable {
 
 	public CdgPezzoEvento() {}
 
-	public CdgPezzoEventoPK getId() {
-		return this.id;
+	public CdgPezzoEventoPK getPK() {
+		CdgPezzoEventoPK pk = new CdgPezzoEventoPK();
+		pk.setEvento(evento);
+		pk.setPezzo(pezzo);
+		return pk;
 	}
 
-	public void setId(CdgPezzoEventoPK id) {
-		this.id = id;
+	public int getPezzo() {
+		return this.pezzo;
+	}
+	
+	public void setPezzo(int pezzo) {
+		this.pezzo = pezzo;
+	}
+	
+	public int getEvento() {
+		return this.evento;
+	}
+	
+	public void setEvento(int evento) {
+		this.evento = evento;
 	}
 
 	public double getCosto() {

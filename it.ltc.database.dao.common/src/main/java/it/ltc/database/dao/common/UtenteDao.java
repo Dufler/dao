@@ -1,5 +1,6 @@
 package it.ltc.database.dao.common;
 
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -8,6 +9,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
 import org.jboss.logging.Logger;
@@ -27,12 +29,10 @@ public class UtenteDao extends CRUDDao<Utente> {
 	
 	private static final Logger logger = Logger.getLogger("UtenteDao");
 	
-	private static final String LOCAL_PERSISTENCE_UNIT = "locale-utente";
-	
 	private static UtenteDao instance;
 
 	private UtenteDao() {
-		super(LOCAL_PERSISTENCE_UNIT, Utente.class);
+		super(LOCAL_UTENTE_PERSISTENCE_UNIT_NAME, Utente.class);
 	}
 
 	public static UtenteDao getInstance() {
@@ -40,6 +40,20 @@ public class UtenteDao extends CRUDDao<Utente> {
 			instance = new UtenteDao();
 		}
 		return instance;
+	}
+	
+	public Utente getUserByResource(String risorsa) {
+		EntityManager em = getManager();
+		CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<Utente> criteria = cb.createQuery(Utente.class);
+        Root<Utente> member = criteria.from(Utente.class);
+        Predicate condizioneRisorsa = cb.equal(member.get("risorsaTemporanea"), risorsa);
+        Predicate condizioneTempo = cb.greaterThan(member.get("scadenzaRisorsa"), new Date());
+        criteria.select(member).where(cb.and(condizioneRisorsa, condizioneTempo));
+		List<Utente> lista = em.createQuery(criteria).setMaxResults(1).getResultList();
+		em.close();
+		Utente user = lista.isEmpty() ? null : lista.get(0);
+        return user;
 	}
 	
 	public Utente getUserByUsername(String username) {
@@ -371,6 +385,13 @@ public class UtenteDao extends CRUDDao<Utente> {
 		String email = info.getEmail();
 		if (email != null && !email.isEmpty())
 			user.setEmail(email);
+		//Controllo se è stata inserita una risorsa temporanea e una data di scadenza
+		String risorsa = info.getRisorsaTemporanea();
+		if (risorsa != null && !risorsa.isEmpty())
+			user.setRisorsaTemporanea(risorsa);
+		Date scadenza = info.getScadenzaRisorsa();
+		if (scadenza != null)
+			user.setScadenzaRisorsa(scadenza);
 		//Controllo se è stata fornita una password, se si la sostituisco.
 		String nuovaPassword = info.getNuovaPassword();
 		if (nuovaPassword != null && !nuovaPassword.isEmpty()) {

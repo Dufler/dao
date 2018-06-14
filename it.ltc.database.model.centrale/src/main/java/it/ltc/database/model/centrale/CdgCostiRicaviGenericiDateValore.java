@@ -41,9 +41,14 @@ public class CdgCostiRicaviGenericiDateValore implements Serializable {
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name="data_inizio", nullable=false)
 	private Date dataInizio;
+	
+	@Column(name="descrizione", length=250)
+	private String descrizione;
 
 	@Column(nullable=false)
 	private int generico;
+	
+	private Integer sede;
 
 	@Column(nullable=false, precision=10, scale=3)
 	private double valore;
@@ -82,12 +87,28 @@ public class CdgCostiRicaviGenericiDateValore implements Serializable {
 		this.dataInizio = dataInizio;
 	}
 
+	public String getDescrizione() {
+		return descrizione;
+	}
+
+	public void setDescrizione(String descrizione) {
+		this.descrizione = descrizione;
+	}
+
 	public int getGenerico() {
 		return this.generico;
 	}
 
 	public void setGenerico(int generico) {
 		this.generico = generico;
+	}
+	
+	public Integer getSede() {
+		return this.sede;
+	}
+
+	public void setSede(Integer sede) {
+		this.sede = sede;
 	}
 
 	public double getValore() {

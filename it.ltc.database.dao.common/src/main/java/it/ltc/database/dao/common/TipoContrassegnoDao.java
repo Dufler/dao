@@ -2,26 +2,17 @@ package it.ltc.database.dao.common;
 
 import java.util.List;
 
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
-
-import it.ltc.database.dao.Dao;
+import it.ltc.database.dao.ReadOnlyDao;
 import it.ltc.database.model.centrale.SpedizioneContrassegnoTipo;
 
-public class TipoContrassegnoDao extends Dao {
-	
-	private static TipoContrassegnoDao instance;
+public class TipoContrassegnoDao extends ReadOnlyDao<SpedizioneContrassegnoTipo> {
 
-	private TipoContrassegnoDao() {
-		super(DATASOURCE_CENTRALE_PERSISTENCE_UNIT_NAME);
+	public TipoContrassegnoDao() {
+		this(LOCAL_CENTRALE_PERSISTENCE_UNIT_NAME);
 	}
-
-	public static TipoContrassegnoDao getInstance() {
-		if (null == instance) {
-			instance = new TipoContrassegnoDao();
-		}
-		return instance;
+	
+	public TipoContrassegnoDao(String persistenceUnit) {
+		super(persistenceUnit, SpedizioneContrassegnoTipo.class);
 	}
 	
 	/**
@@ -30,8 +21,8 @@ public class TipoContrassegnoDao extends Dao {
 	 * @param codice
 	 * @return Il tipo di contrassegno corrispondente, se presente, <code>null</code> altrimenti.
 	 */
-	public SpedizioneContrassegnoTipo findByCodice(String codice) {
-		SpedizioneContrassegnoTipo tipo = em.find(SpedizioneContrassegnoTipo.class, codice);
+	public SpedizioneContrassegnoTipo trovaDaCodice(String codice) {
+		SpedizioneContrassegnoTipo tipo = findByID(codice);
 		return tipo;
 	}
 
@@ -39,12 +30,9 @@ public class TipoContrassegnoDao extends Dao {
 	 * Restituisce la lista di tutti i tipi di contrassegno esistenti utilizzando il datasource di default.
 	 * @return La lista di tutti i tipi di contrassegno.
 	 */
-	public List<SpedizioneContrassegnoTipo> findAll() {
-		CriteriaBuilder cb = em.getCriteriaBuilder();
-        CriteriaQuery<SpedizioneContrassegnoTipo> criteria = cb.createQuery(SpedizioneContrassegnoTipo.class);
-        Root<SpedizioneContrassegnoTipo> member = criteria.from(SpedizioneContrassegnoTipo.class);
-        criteria.select(member);
-        return em.createQuery(criteria).getResultList();
+	public List<SpedizioneContrassegnoTipo> trovaTutti() {
+		List<SpedizioneContrassegnoTipo> entities = findAll();
+		return entities;
 	}
 
 }

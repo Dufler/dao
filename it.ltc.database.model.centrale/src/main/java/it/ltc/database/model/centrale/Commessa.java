@@ -131,4 +131,9 @@ public class Commessa implements Serializable {
 		this.legacy = legacy;
 	}
 
+	@Override
+	public String toString() {
+		return "Commessa [id=" + id + ", nome=" + nome + ", nomeRisorsa=" + nomeRisorsa + ", legacy=" + legacy + "]";
+	}
+
 }

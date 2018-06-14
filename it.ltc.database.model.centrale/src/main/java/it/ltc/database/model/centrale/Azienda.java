@@ -9,7 +9,7 @@ import javax.persistence.*;
  * 
  */
 @Entity
-@Table(name="azienda")
+@Table(name="crm_azienda")
 @NamedQuery(name="Azienda.findAll", query="SELECT a FROM Azienda a")
 public class Azienda implements Serializable {
 	
@@ -18,6 +18,8 @@ public class Azienda implements Serializable {
 	public enum Valutazione { DA_VALUTARE, AFFIDABILE, NON_AFFIDABILE }
 	
 	public enum TipoLogistica { INTERNA, ESTERNA, ENTRAMBE, NESSUNA }
+	
+	public enum Trattativa { NO, IN_TRATTATIVA, CLIENTE, EX_CLIENTE }
 	
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
@@ -29,8 +31,9 @@ public class Azienda implements Serializable {
 	@Column(length=250)
 	private String email;
 
-	@Column(name="in_trattiva", nullable=false)
-	private boolean inTrattiva;
+	@Column(name="in_trattiva", nullable=false, length=1, columnDefinition="ENUM('NO', 'IN_TRATTATIVA', 'CLIENTE', 'EX_CLIENTE')")
+	@Enumerated(EnumType.STRING)
+	private Trattativa inTrattiva;
 
 	private Integer indirizzo;
 
@@ -53,6 +56,9 @@ public class Azienda implements Serializable {
 	@Column(nullable=false, length=1, columnDefinition="ENUM('DA_VALUTARE', 'AFFIDABILE', 'NON_AFFIDABILE')")
 	@Enumerated(EnumType.STRING)
 	private Valutazione valutazione;
+	
+	@Column(name="descrizione", columnDefinition="MEDIUMTEXT")
+	private String descrizione;
 
 	public Azienda() {}
 
@@ -80,11 +86,11 @@ public class Azienda implements Serializable {
 		this.email = email;
 	}
 
-	public boolean getInTrattiva() {
+	public Trattativa getInTrattiva() {
 		return this.inTrattiva;
 	}
 
-	public void setInTrattiva(boolean inTrattiva) {
+	public void setInTrattiva(Trattativa inTrattiva) {
 		this.inTrattiva = inTrattiva;
 	}
 
@@ -142,6 +148,14 @@ public class Azienda implements Serializable {
 
 	public void setValutazione(Valutazione valutazione) {
 		this.valutazione = valutazione;
+	}
+
+	public String getDescrizione() {
+		return descrizione;
+	}
+
+	public void setDescrizione(String descrizione) {
+		this.descrizione = descrizione;
 	}
 
 }

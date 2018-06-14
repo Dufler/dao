@@ -10,25 +10,45 @@ import javax.persistence.*;
  */
 @Entity
 @Table(name="cdg_commessa_evento")
+@IdClass(CdgCommessaEventoPK.class)
 @NamedQuery(name="CdgCommessaEvento.findAll", query="SELECT c FROM CdgCommessaEvento c")
 public class CdgCommessaEvento implements Serializable {
 	private static final long serialVersionUID = 1L;
 
-	@EmbeddedId
-	private CdgCommessaEventoPK id;
+	@Id
+	@Column(updatable=false, nullable=false)
+	private int evento;
+
+	@Id
+	@Column(updatable=false, nullable=false)
+	private int commessa;
 
 	@Column(nullable=false)
 	private int durata;
 
-	public CdgCommessaEvento() {
+	public CdgCommessaEvento() {}
+	
+	public int getEvento() {
+		return this.evento;
+	}
+	
+	public void setEvento(int evento) {
+		this.evento = evento;
+	}
+	
+	public int getCommessa() {
+		return this.commessa;
+	}
+	
+	public void setCommessa(int commessa) {
+		this.commessa = commessa;
 	}
 
-	public CdgCommessaEventoPK getId() {
-		return this.id;
-	}
-
-	public void setId(CdgCommessaEventoPK id) {
-		this.id = id;
+	public CdgCommessaEventoPK getPK() {
+		CdgCommessaEventoPK pk = new CdgCommessaEventoPK();
+		pk.setCommessa(commessa);
+		pk.setEvento(evento);
+		return pk;
 	}
 
 	public int getDurata() {

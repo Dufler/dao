@@ -17,18 +17,13 @@ import it.ltc.database.model.centrale.Commessa;
  *
  */
 public class CommessaDao extends CRUDDao<Commessa> {
-	
-	private static CommessaDao instance;
 
-	private CommessaDao() {
-		super(LOCAL_CENTRALE_PERSISTENCE_UNIT_NAME, Commessa.class);
+	public CommessaDao() {
+		this(LOCAL_CENTRALE_PERSISTENCE_UNIT_NAME);
 	}
-
-	public static CommessaDao getInstance() {
-		if (null == instance) {
-			instance = new CommessaDao();
-		}
-		return instance;
+	
+	public CommessaDao(String persistenceUnit) {
+		super(persistenceUnit, Commessa.class);
 	}
 	
 	/**

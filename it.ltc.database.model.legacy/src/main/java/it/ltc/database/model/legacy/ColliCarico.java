@@ -2,7 +2,14 @@ package it.ltc.database.model.legacy;
 
 import java.io.Serializable;
 import javax.persistence.*;
+
+import it.ltc.utility.miscellanea.string.StringUtility;
+import it.ltc.utility.miscellanea.time.DateConverter;
+
 import java.sql.Timestamp;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 
 
 /**
@@ -11,7 +18,10 @@ import java.sql.Timestamp;
  */
 @Entity
 @Table(name="ColliCarico")
-@NamedQuery(name="ColliCarico.findAll", query="SELECT c FROM ColliCarico c")
+@NamedQueries({
+	@NamedQuery(name="ColliCarico.findAll", query="SELECT c FROM ColliCarico c"),
+	@NamedQuery(name="ColliCarico.progressivoCollo", query="SELECT MAX(c.nrCollo) FROM ColliCarico c")
+})
 public class ColliCarico implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
@@ -21,136 +31,254 @@ public class ColliCarico implements Serializable {
 	@Column(name="IdCollo", unique=true, nullable=false)
 	private int idCollo;
 
+	/**
+	 * formato: yyyy
+	 */
 	@Column(name="Anno")
 	private int anno;
 
-	@Column(name="Annulla", nullable=false)
-	private int annulla;
+//	@Column(name="Annulla", nullable=false)
+//	private int annulla;
 
-	@Column(name="ApertoSfuso", length=1)
+	/**
+	 * default N, S quando viene aperto per rendere sfuso il prodotto all'interno.
+	 */
+	@Column(name="ApertoSfuso", length=1, insertable=false)
 	private String apertoSfuso;
 
+	/**
+	 * CPX + KeyColloCar
+	 */
 	@Column(name="Barcode", length=12)
 	private String barcode;
 
+	/**
+	 * default a NO nel prepersist.
+	 */
 	@Column(name="Bloccato", nullable=false, length=50)
 	private String bloccato;
 
+	/**
+	 * default a NO nel prepersist.
+	 */
 	@Column(name="Cancellato", length=2)
 	private String cancellato;
 
+	/**
+	 * Giorno della creazione senza l'ora.
+	 */
 	@Column(name="DataCrea")
 	private Timestamp dataCrea;
 
+	/**
+	 * Giorno della distruzione senza l'ora.
+	 */
 	@Column(name="DataDistruzione")
 	private Timestamp dataDistruzione;
 
+	/**
+	 * Viene valorizzato quando viene prelevata la cassa per intero sparando il bollone esterno.
+	 */
 	@Column(name="DataRilImballo")
 	private Timestamp dataRilImballo;
 
+	/**
+	 * Giorno in cui viene ubicata senza l'ora.
+	 */
 	@Column(name="DataUbica")
 	private Timestamp dataUbica;
 
-	@Column(name="DataUMod")
-	private Timestamp dataUMod;
+//	@Column(name="DataUMod")
+//	private Timestamp dataUMod;
 
+	/**
+	 * Default a NO nel prepersist
+	 */
 	@Column(name="Distrutto", length=2)
 	private String distrutto;
 
-	@Column(name="Fase", nullable=false, length=2)
-	private String fase;
+//	@Column(name="Fase", nullable=false, length=2)
+//	private String fase;
 
+	/**
+	 * Default a 0, passa a 1 quando viene generato il carico.
+	 */
 	@Column(nullable=false, length=1)
 	private String flagtc;
+	
+	//Il default su db è a SI, Andrea dice che non viene gestito.
+//	@Column(nullable=false, length=2)
+//	private String genPack;
 
-	@Column(nullable=false, length=2)
-	private String genPack;
-
+	/**
+	 * Barcode del cliente, potrebbe non esserci e in quel caso inserisco una stringa vuota.
+	 */
 	@Column(name="Id_Box", length=50)
 	private String id_Box;
 
-	@Column(name="IdAttCliente")
-	private int idAttCliente;
+//	@Column(name="IdAttCliente")
+//	private int idAttCliente;
 
+	/**
+	 * ID del pakitesta.
+	 */
 	@Column(name="IdDocumento")
 	private int idDocumento;
 
-	@Column(name="Imballato", nullable=false, length=50)
-	private String imballato;
+	//Ha un default a NO, non viene usato.
+//	@Column(name="Imballato", nullable=false, length=50)
+//	private String imballato;
 
+	/**
+	 * Valore univoco fatto così: YY + padding di 0 + progressivo collo.
+	 */
 	@Column(name="KeyColloCar", length=9)
 	private String keyColloCar;
 
-	@Column(name="KeyUbicaCar", length=15)
+	/**
+	 * Non va usato in inserimento, viene messo un default a NOUBICATO.
+	 */
+	@Column(name="KeyUbicaCar", length=15, insertable=false)
 	private String keyUbicaCar;
 
+	/**
+	 * Codifica del magazzino LTC
+	 */
 	@Column(name="Magazzino", length=10)
 	private String magazzino;
 
-	@Column(name="Note", length=100)
+	@Column(name="Note", length=100, insertable=false)
 	private String note;
 
+	/**
+	 * Progressivo della tabella.
+	 */
 	@Column(name="NrCollo")
 	private int nrCollo;
 
-	@Column(name="NrRiferimento")
-	private int nrRiferimento;
+//	@Column(name="NrRiferimento")
+//	private int nrRiferimento;
 
-	@Column(name="OpeUbica")
-	private int opeUbica;
+	/**
+	 * Codice dell'operatore che ubica il collo.
+	 */
+	@Column(name="OpeUbica", insertable=false)
+	private Integer opeUbica;
 
+	/**
+	 * Ora della creazione del collo.
+	 */
 	@Column(name="OraCrea")
 	private int oraCrea;
 
+	/**
+	 * Ora della distruzione del collo.
+	 */
 	@Column(name="OraDistruzione")
-	private int oraDistruzione;
+	private Integer oraDistruzione;
 
+	/**
+	 * Ora dell'ubicazione del collo.
+	 */
 	@Column(name="OraUbica")
-	private int oraUbica;
+	private Integer oraUbica;
 
-	@Column(name="OraUMod")
-	private int oraUMod;
+//	@Column(name="OraUMod")
+//	private int oraUMod;
 
-	@Column(name="Peso", nullable=false)
-	private int peso;
+//	@Column(name="Peso", nullable=false)
+//	private int peso;
 
-	@Column(name="RilevataImballo", nullable=false, length=1)
+	/**
+	 * Default a N, passa a S quando viene imballata la cassa per intero.
+	 */
+	@Column(name="RilevataImballo", nullable=false, length=1, insertable=false)
 	private String rilevataImballo;
 
-	@Column(name="Sessione", length=50)
-	private String sessione;
+	//TODO: Andrea deve verificare l'utilizzo
+//	@Column(name="Sessione", length=50, insertable=false)
+//	private String sessione;
 
-	@Column(name="Sessione_Chk", nullable=false, length=50)
-	private String sessione_Chk;
+	/**
+	 * Default a stringa vuota. //TODO: Andrea deve verificare l'utilizzo
+	 */
+//	@Column(name="Sessione_Chk", nullable=false, length=50, insertable=false)
+//	private String sessione_Chk;
 
-	@Column(name="Stato", length=6)
-	private String stato;
+	/**
+	 * Valore di deafult sul db ATTE
+	 */
+//	@Column(name="Stato", length=6)
+//	private String stato;
 
+	/**
+	 * Il tipo della cassa, se non c'è l'ho inserisco 'XXX' nel prepersist
+	 */
 	@Column(name="TipoCassa", nullable=false, length=50)
 	private String tipoCassa;
+	
+//	@Column(name="TipoCollo", length=10)
+//	private String tipoCollo;
 
-	@Column(name="TipoCollo", length=10)
-	private String tipoCollo;
-
-	@Column(name="Ubicato", length=2)
+	/**
+	 * Default a NO, passa a SI quando viene ubicato.
+	 */
+	@Column(name="Ubicato", length=2, insertable=false)
 	private String ubicato;
 
+	/**
+	 * Codice dell'operatore che ha distrutto il collo.
+	 */
 	@Column(name="UteDistruzione", length=20)
 	private String uteDistruzione;
 
+	/**
+	 * Metto un default a stringa vuota.
+	 */
 	@Column(name="Utente", length=20)
 	private String utente;
 
+	/**
+	 * Metto un default a stringa vuota.
+	 */
 	@Column(name="UtenteMod", length=20)
 	private String utenteMod;
 
+	/**
+	 * Metto un default a stringa vuota.
+	 */
 	@Column(name="UtenteUbica", nullable=false, length=20)
 	private String utenteUbica;
 
-	@Column(name="Volume", nullable=false)
-	private int volume;
+//	@Column(name="Volume", nullable=false)
+//	private int volume;
 
 	public ColliCarico() {}
+	
+	@PrePersist
+	public void prePersist() {
+		StringUtility su = new StringUtility();
+		anno = new GregorianCalendar().get(Calendar.YEAR);
+		dataCrea = new Timestamp(new Date().getTime());
+		oraCrea = DateConverter.getOraComeIntero(dataCrea);
+		dataCrea = DateConverter.ripulisciTimestap(dataCrea);
+		String annoCollo = Integer.toString(anno).substring(2, 4);
+		String progressivoCollo = su.getFormattedString(nrCollo, 7);
+		keyColloCar = annoCollo + progressivoCollo;
+		barcode = "CPX" + keyColloCar;
+		if (id_Box == null)
+			id_Box = "";
+		if (tipoCassa == null)
+			tipoCassa = "XXX";
+		bloccato = "NO";
+		cancellato = "NO";
+		distrutto = "NO";
+		flagtc = "0";
+		utente = "";
+		utenteMod = "";
+		utenteUbica = "";
+		uteDistruzione = "";
+	}
 
 	public int getIdCollo() {
 		return this.idCollo;
@@ -168,13 +296,13 @@ public class ColliCarico implements Serializable {
 		this.anno = anno;
 	}
 
-	public int getAnnulla() {
-		return this.annulla;
-	}
-
-	public void setAnnulla(int annulla) {
-		this.annulla = annulla;
-	}
+//	public int getAnnulla() {
+//		return this.annulla;
+//	}
+//
+//	public void setAnnulla(int annulla) {
+//		this.annulla = annulla;
+//	}
 
 	public String getApertoSfuso() {
 		return this.apertoSfuso;
@@ -240,13 +368,13 @@ public class ColliCarico implements Serializable {
 		this.dataUbica = dataUbica;
 	}
 
-	public Timestamp getDataUMod() {
-		return this.dataUMod;
-	}
-
-	public void setDataUMod(Timestamp dataUMod) {
-		this.dataUMod = dataUMod;
-	}
+//	public Timestamp getDataUMod() {
+//		return this.dataUMod;
+//	}
+//
+//	public void setDataUMod(Timestamp dataUMod) {
+//		this.dataUMod = dataUMod;
+//	}
 
 	public String getDistrutto() {
 		return this.distrutto;
@@ -256,13 +384,13 @@ public class ColliCarico implements Serializable {
 		this.distrutto = distrutto;
 	}
 
-	public String getFase() {
-		return this.fase;
-	}
-
-	public void setFase(String fase) {
-		this.fase = fase;
-	}
+//	public String getFase() {
+//		return this.fase;
+//	}
+//
+//	public void setFase(String fase) {
+//		this.fase = fase;
+//	}
 
 	public String getFlagtc() {
 		return this.flagtc;
@@ -272,13 +400,13 @@ public class ColliCarico implements Serializable {
 		this.flagtc = flagtc;
 	}
 
-	public String getGenPack() {
-		return this.genPack;
-	}
-
-	public void setGenPack(String genPack) {
-		this.genPack = genPack;
-	}
+//	public String getGenPack() {
+//		return this.genPack;
+//	}
+//
+//	public void setGenPack(String genPack) {
+//		this.genPack = genPack;
+//	}
 
 	public String getId_Box() {
 		return this.id_Box;
@@ -288,13 +416,13 @@ public class ColliCarico implements Serializable {
 		this.id_Box = id_Box;
 	}
 
-	public int getIdAttCliente() {
-		return this.idAttCliente;
-	}
-
-	public void setIdAttCliente(int idAttCliente) {
-		this.idAttCliente = idAttCliente;
-	}
+//	public int getIdAttCliente() {
+//		return this.idAttCliente;
+//	}
+//
+//	public void setIdAttCliente(int idAttCliente) {
+//		this.idAttCliente = idAttCliente;
+//	}
 
 	public int getIdDocumento() {
 		return this.idDocumento;
@@ -304,13 +432,13 @@ public class ColliCarico implements Serializable {
 		this.idDocumento = idDocumento;
 	}
 
-	public String getImballato() {
-		return this.imballato;
-	}
-
-	public void setImballato(String imballato) {
-		this.imballato = imballato;
-	}
+//	public String getImballato() {
+//		return this.imballato;
+//	}
+//
+//	public void setImballato(String imballato) {
+//		this.imballato = imballato;
+//	}
 
 	public String getKeyColloCar() {
 		return this.keyColloCar;
@@ -352,19 +480,19 @@ public class ColliCarico implements Serializable {
 		this.nrCollo = nrCollo;
 	}
 
-	public int getNrRiferimento() {
-		return this.nrRiferimento;
-	}
+//	public int getNrRiferimento() {
+//		return this.nrRiferimento;
+//	}
+//
+//	public void setNrRiferimento(int nrRiferimento) {
+//		this.nrRiferimento = nrRiferimento;
+//	}
 
-	public void setNrRiferimento(int nrRiferimento) {
-		this.nrRiferimento = nrRiferimento;
-	}
-
-	public int getOpeUbica() {
+	public Integer getOpeUbica() {
 		return this.opeUbica;
 	}
 
-	public void setOpeUbica(int opeUbica) {
+	public void setOpeUbica(Integer opeUbica) {
 		this.opeUbica = opeUbica;
 	}
 
@@ -376,37 +504,37 @@ public class ColliCarico implements Serializable {
 		this.oraCrea = oraCrea;
 	}
 
-	public int getOraDistruzione() {
+	public Integer getOraDistruzione() {
 		return this.oraDistruzione;
 	}
 
-	public void setOraDistruzione(int oraDistruzione) {
+	public void setOraDistruzione(Integer oraDistruzione) {
 		this.oraDistruzione = oraDistruzione;
 	}
 
-	public int getOraUbica() {
+	public Integer getOraUbica() {
 		return this.oraUbica;
 	}
 
-	public void setOraUbica(int oraUbica) {
+	public void setOraUbica(Integer oraUbica) {
 		this.oraUbica = oraUbica;
 	}
 
-	public int getOraUMod() {
-		return this.oraUMod;
-	}
-
-	public void setOraUMod(int oraUMod) {
-		this.oraUMod = oraUMod;
-	}
-
-	public int getPeso() {
-		return this.peso;
-	}
-
-	public void setPeso(int peso) {
-		this.peso = peso;
-	}
+//	public int getOraUMod() {
+//		return this.oraUMod;
+//	}
+//
+//	public void setOraUMod(int oraUMod) {
+//		this.oraUMod = oraUMod;
+//	}
+//
+//	public int getPeso() {
+//		return this.peso;
+//	}
+//
+//	public void setPeso(int peso) {
+//		this.peso = peso;
+//	}
 
 	public String getRilevataImballo() {
 		return this.rilevataImballo;
@@ -416,29 +544,29 @@ public class ColliCarico implements Serializable {
 		this.rilevataImballo = rilevataImballo;
 	}
 
-	public String getSessione() {
-		return this.sessione;
-	}
-
-	public void setSessione(String sessione) {
-		this.sessione = sessione;
-	}
-
-	public String getSessione_Chk() {
-		return this.sessione_Chk;
-	}
-
-	public void setSessione_Chk(String sessione_Chk) {
-		this.sessione_Chk = sessione_Chk;
-	}
-
-	public String getStato() {
-		return this.stato;
-	}
-
-	public void setStato(String stato) {
-		this.stato = stato;
-	}
+//	public String getSessione() {
+//		return this.sessione;
+//	}
+//
+//	public void setSessione(String sessione) {
+//		this.sessione = sessione;
+//	}
+//
+//	public String getSessione_Chk() {
+//		return this.sessione_Chk;
+//	}
+//
+//	public void setSessione_Chk(String sessione_Chk) {
+//		this.sessione_Chk = sessione_Chk;
+//	}
+//
+//	public String getStato() {
+//		return this.stato;
+//	}
+//
+//	public void setStato(String stato) {
+//		this.stato = stato;
+//	}
 
 	public String getTipoCassa() {
 		return this.tipoCassa;
@@ -448,13 +576,13 @@ public class ColliCarico implements Serializable {
 		this.tipoCassa = tipoCassa;
 	}
 
-	public String getTipoCollo() {
-		return this.tipoCollo;
-	}
-
-	public void setTipoCollo(String tipoCollo) {
-		this.tipoCollo = tipoCollo;
-	}
+//	public String getTipoCollo() {
+//		return this.tipoCollo;
+//	}
+//
+//	public void setTipoCollo(String tipoCollo) {
+//		this.tipoCollo = tipoCollo;
+//	}
 
 	public String getUbicato() {
 		return this.ubicato;
@@ -496,12 +624,12 @@ public class ColliCarico implements Serializable {
 		this.utenteUbica = utenteUbica;
 	}
 
-	public int getVolume() {
-		return this.volume;
-	}
-
-	public void setVolume(int volume) {
-		this.volume = volume;
-	}
+//	public int getVolume() {
+//		return this.volume;
+//	}
+//
+//	public void setVolume(int volume) {
+//		this.volume = volume;
+//	}
 
 }

@@ -13,6 +13,8 @@ import java.util.Date;
  */
 @Entity
 @Table(name="Articoli")
+//@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+//@DiscriminatorColumn(name="idUniArticolo", discriminatorType = DiscriminatorType.STRING)
 @NamedQuery(name="Articoli.findAll", query="SELECT a FROM Articoli a")
 public class Articoli implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -268,7 +270,7 @@ public class Articoli implements Serializable {
 	 * Setta alcuni valori non nullabili a default prima dell'inserimento.
 	 */
 	@PrePersist
-	public void setDefaultValues() {
+	public void prePersist() {
 		if (madeIn == null)
 			madeIn = "";
 		if (descAggiuntiva == null)
@@ -282,7 +284,7 @@ public class Articoli implements Serializable {
 	 * Imposta automaticamente la data di modifica.
 	 */
 	@PreUpdate
-	public void setUpdateTime() {
+	public void preUpdate() {
 		dataModifica = new Timestamp(new Date().getTime());
 	}
 

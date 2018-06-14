@@ -11,6 +11,7 @@ it\ltc\database\model\centrale\SpedizioneContrassegno.class
 it\ltc\database\model\centrale\UtenteCommessaJoinPK.class
 it\ltc\database\model\centrale\Ingresso$StatoIngresso.class
 it\ltc\database\model\centrale\ListinoCorriereVocePercentuale.class
+it\ltc\database\model\centrale\CrmTagCategoriaMerceologicaPK.class
 it\ltc\database\model\centrale\ListinoCorriereVoceScaglioniPK.class
 it\ltc\database\model\centrale\ListinoCorriere.class
 it\ltc\database\model\centrale\CdgCostiRicaviGenericiDateValore.class
@@ -21,6 +22,7 @@ it\ltc\database\model\centrale\Feature.class
 it\ltc\database\model\centrale\ListinoCommessaVoceScaglioniPK.class
 it\ltc\database\model\centrale\Sede.class
 it\ltc\database\model\centrale\FatturaModalitaPagamento.class
+it\ltc\database\model\centrale\CrmTagCategoriaMerceologica.class
 it\ltc\database\model\centrale\FatturaPreferenzeCommessaPK.class
 it\ltc\database\model\centrale\OrdineTipo.class
 it\ltc\database\model\centrale\TrackingStatoCodificaCorriere.class
@@ -29,6 +31,7 @@ it\ltc\database\model\centrale\Documento.class
 it\ltc\database\model\centrale\FatturaVoce.class
 it\ltc\database\model\centrale\Azienda$TipoLogistica.class
 it\ltc\database\model\centrale\CdgCostiRicaviGenerici.class
+it\ltc\database\model\centrale\Azienda$Trattativa.class
 it\ltc\database\model\centrale\SpedizioneGiacenza.class
 it\ltc\database\model\centrale\Azienda.class
 it\ltc\database\model\centrale\AziendaNote.class
@@ -40,6 +43,7 @@ it\ltc\database\model\centrale\GadgetInviati.class
 it\ltc\database\model\centrale\CdgCommessaEvento.class
 it\ltc\database\model\centrale\ListinoCorriereVoceFissa.class
 it\ltc\database\model\centrale\FatturaPreferenzeCommessa.class
+it\ltc\database\model\centrale\CdgBudget.class
 it\ltc\database\model\centrale\Indirizzo.class
 it\ltc\database\model\centrale\CdgPeriodico.class
 it\ltc\database\model\centrale\ListinoCorriereVoce$TipoCalcolo.class
@@ -54,7 +58,6 @@ it\ltc\database\model\centrale\AziendaBrandPK.class
 it\ltc\database\model\centrale\CdgCostiRicaviGenericiFasePK.class
 it\ltc\database\model\centrale\UtenteCommessaJoin.class
 it\ltc\database\model\centrale\FatturaDocumento$Stato.class
-it\ltc\database\model\centrale\json\ServizioCorriereJSON.class
 it\ltc\database\model\centrale\SpedizioneLight$Archiviazione.class
 it\ltc\database\model\centrale\SpedizioneGiacenza$Fatturazione.class
 it\ltc\database\model\centrale\CdgCostiRicaviGenericiFase.class
@@ -79,6 +82,7 @@ it\ltc\database\model\centrale\Commessa.class
 it\ltc\database\model\centrale\Ordine$TipoOrdine.class
 it\ltc\database\model\centrale\Cap.class
 it\ltc\database\model\centrale\json\CdgPezzoEventoJSON.class
+it\ltc\database\model\centrale\CdgBudgetPercentualiCosto.class
 it\ltc\database\model\centrale\Valuta.class
 it\ltc\database\model\centrale\ListinoCorriereVoceProporzionale.class
 it\ltc\database\model\centrale\VersioneTabella.class
@@ -89,6 +93,7 @@ it\ltc\database\model\centrale\CdgCostoAssociazione.class
 it\ltc\database\model\centrale\Nazione.class
 it\ltc\database\model\centrale\ListinoCommessaVoce.class
 it\ltc\database\model\centrale\TrackingPK.class
+it\ltc\database\model\centrale\CdgBudgetPercentualiCostoPK.class
 it\ltc\database\model\centrale\FatturaAmbito$CategoriaFattura.class
 it\ltc\database\model\centrale\FatturaModello.class
 it\ltc\database\model\centrale\UtenteSedeJoin.class
@@ -96,6 +101,7 @@ it\ltc\database\model\centrale\Ingresso$TipoIngresso.class
 it\ltc\database\model\centrale\ListinoCorriereVoceScaglioniRipetuti.class
 it\ltc\database\model\centrale\Tracking.class
 it\ltc\database\model\centrale\Utente.class
+it\ltc\database\model\centrale\CrmTagServiziRichiestiPK.class
 it\ltc\database\model\centrale\CorriereServizio.class
 it\ltc\database\model\centrale\UtenteSedeJoinPK.class
 it\ltc\database\model\centrale\ListinoCorriereVoceScaglioni.class
@@ -114,6 +120,7 @@ it\ltc\database\model\centrale\UtenteFeaturesJoinPK.class
 it\ltc\database\model\centrale\CdgPezzoEventoPK.class
 it\ltc\database\model\centrale\SpedizioneLight.class
 it\ltc\database\model\centrale\UtenteLog.class
+it\ltc\database\model\centrale\CrmTagServiziRichiesti.class
 it\ltc\database\model\centrale\ListinoCommessaVoceFissa.class
 it\ltc\database\model\centrale\TrackingStato.class
 it\ltc\database\model\centrale\CdgEvento.class

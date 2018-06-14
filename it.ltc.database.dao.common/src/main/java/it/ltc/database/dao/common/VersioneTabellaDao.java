@@ -2,39 +2,23 @@ package it.ltc.database.dao.common;
 
 import java.util.List;
 
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
-
-import it.ltc.database.dao.Dao;
+import it.ltc.database.dao.ReadOnlyDao;
 import it.ltc.database.model.centrale.VersioneTabella;
 
-public class VersioneTabellaDao extends Dao {
-	
-	private static VersioneTabellaDao instance;
+public class VersioneTabellaDao extends ReadOnlyDao<VersioneTabella> {
 
 	public VersioneTabellaDao() {
-		super(DATASOURCE_CENTRALE_PERSISTENCE_UNIT_NAME);
+		super(LOCAL_CENTRALE_PERSISTENCE_UNIT_NAME, VersioneTabella.class);
 	}
 	
-	public static VersioneTabellaDao getInstance() {
-		if (null == instance) {
-			instance = new VersioneTabellaDao();
-		}
-		return instance;
+	public VersioneTabella trovaDaCodice(String tabella) {
+		VersioneTabella versione = findByID(tabella);
+		return versione;
 	}
 	
-	public VersioneTabella findByCodice(String tabella) {
-		VersioneTabella valuta = em.find(VersioneTabella.class, tabella);
-		return valuta;
-	}
-	
-	public List<VersioneTabella> findAll() {
-		CriteriaBuilder cb = em.getCriteriaBuilder();
-        CriteriaQuery<VersioneTabella> criteria = cb.createQuery(VersioneTabella.class);
-        Root<VersioneTabella> member = criteria.from(VersioneTabella.class);
-        criteria.select(member);
-        return em.createQuery(criteria).getResultList();
+	public List<VersioneTabella> trovaTutte() {
+		List<VersioneTabella> entities = findAll();
+		return entities;
 	}
 
 }

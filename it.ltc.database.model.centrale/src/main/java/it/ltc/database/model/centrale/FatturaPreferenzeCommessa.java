@@ -10,12 +10,19 @@ import javax.persistence.*;
  */
 @Entity
 @Table(name="fattura_preferenze_commessa")
+@IdClass(FatturaPreferenzeCommessaPK.class)
 @NamedQuery(name="FatturaPreferenzeCommessa.findAll", query="SELECT f FROM FatturaPreferenzeCommessa f")
 public class FatturaPreferenzeCommessa implements Serializable {
+	
 	private static final long serialVersionUID = 1L;
 
-	@EmbeddedId
-	private FatturaPreferenzeCommessaPK id;
+	@Id
+	@Column(updatable=false, nullable=false)
+	private int commessa;
+
+	@Id
+	@Column(updatable=false, nullable=false)
+	private int ambito;
 
 	@Column(name="descrizione_fattura", nullable=false, columnDefinition="TEXT")
 	private String descrizioneFattura;
@@ -31,12 +38,27 @@ public class FatturaPreferenzeCommessa implements Serializable {
 
 	public FatturaPreferenzeCommessa() {}
 
-	public FatturaPreferenzeCommessaPK getId() {
-		return this.id;
+	public FatturaPreferenzeCommessaPK getPK() {
+		FatturaPreferenzeCommessaPK pk = new FatturaPreferenzeCommessaPK();
+		pk.setAmbito(ambito);
+		pk.setCommessa(commessa);
+		return pk;
 	}
 
-	public void setId(FatturaPreferenzeCommessaPK id) {
-		this.id = id;
+	public int getCommessa() {
+		return this.commessa;
+	}
+	
+	public void setCommessa(int commessa) {
+		this.commessa = commessa;
+	}
+	
+	public int getAmbito() {
+		return this.ambito;
+	}
+	
+	public void setAmbito(int ambito) {
+		this.ambito = ambito;
 	}
 
 	public String getDescrizioneFattura() {

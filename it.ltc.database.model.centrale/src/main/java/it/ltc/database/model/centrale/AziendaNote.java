@@ -10,7 +10,7 @@ import java.util.Date;
  * 
  */
 @Entity
-@Table(name="azienda_note")
+@Table(name="crm_azienda_note")
 @NamedQuery(name="AziendaNote.findAll", query="SELECT a FROM AziendaNote a")
 public class AziendaNote implements Serializable {
 	

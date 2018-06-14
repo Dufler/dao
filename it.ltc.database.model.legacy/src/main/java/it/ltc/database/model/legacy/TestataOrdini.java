@@ -66,6 +66,9 @@ public class TestataOrdini implements Serializable {
 	@Column(name = "CodCliente", length = 30)
 	private String codCliente;
 
+	/**
+	 * Uso il valore di default in inserimento.
+	 */
 	@Column(name = "CodCorriere", insertable = false, nullable = false, length = 50)
 	private String codCorriere;
 

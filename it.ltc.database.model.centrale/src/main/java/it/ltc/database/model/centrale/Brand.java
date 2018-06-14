@@ -9,7 +9,7 @@ import javax.persistence.*;
  * 
  */
 @Entity
-@Table(name="brand")
+@Table(name="crm_brand")
 @NamedQuery(name="Brand.findAll", query="SELECT b FROM Brand b")
 public class Brand implements Serializable {
 	
@@ -22,6 +22,9 @@ public class Brand implements Serializable {
 
 	@Column(nullable=false, length=250)
 	private String nome;
+	
+	@Column(columnDefinition="MEDIUMTEXT")
+	private String descrizione;
 
 	public Brand() {}
 
@@ -39,6 +42,14 @@ public class Brand implements Serializable {
 
 	public void setNome(String nome) {
 		this.nome = nome;
+	}
+
+	public String getDescrizione() {
+		return descrizione;
+	}
+
+	public void setDescrizione(String descrizione) {
+		this.descrizione = descrizione;
 	}
 
 }

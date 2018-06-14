@@ -1,6 +1,8 @@
 package it.ltc.database.model.legacy;
 
 import java.io.Serializable;
+import java.sql.Timestamp;
+import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -8,7 +10,10 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQuery;
+import javax.persistence.PrePersist;
 import javax.persistence.Table;
+
+import it.ltc.utility.miscellanea.time.DateConverter;
 
 
 /**
@@ -44,14 +49,14 @@ public class ColliPack implements Serializable {
 //	@Column(name="Controllata", nullable=false, length=2)
 //	private String controllata;
 
-//	@Column(name="DataAgg")
-//	private Timestamp dataAgg;
+	@Column(name="DataAgg")
+	private Timestamp dataAgg;
 //
 //	@Column(name="DataMod")
 //	private Timestamp dataMod;
 
-//	@Column(name="Descrizione", length=50)
-//	private String descrizione;
+	@Column(name="Descrizione", length=50)
+	private String descrizione;
 
 	/**
 	 * Descrive se il prodotto sia ancora disponibile o meno. N=OK, S=Finito.
@@ -101,8 +106,8 @@ public class ColliPack implements Serializable {
 //	@Column(name="Operatore", length=10)
 //	private String operatore;
 //
-//	@Column(name="OraAgg")
-//	private int oraAgg;
+	@Column(name="OraAgg")
+	private int oraAgg;
 //
 //	private int oramod;
 //
@@ -115,8 +120,8 @@ public class ColliPack implements Serializable {
 	@Column(name="Qta")
 	private int qta;
 
-//	@Column(nullable=false)
-//	private int qtaimpegnata;
+	@Column(nullable=false)
+	private int qtaimpegnata;
 //
 //	private int qtaOrigine;
 //
@@ -129,16 +134,26 @@ public class ColliPack implements Serializable {
 //	@Column(name="Stagcarico", length=20)
 //	private String stagcarico;
 //
-//	@Column(name="Taglia", length=15)
-//	private String taglia;
+	@Column(name="Taglia", length=15)
+	private String taglia;
 //
 //	@Column(name="Trasferito", nullable=false, length=2147483647)
 //	private String trasferito;
 	
-	@Column(name="Seriale", length=50)
-	private String seriale;
+//	@Column(name="Seriale", length=50)
+//	private String seriale;
 
 	public ColliPack() {}
+	
+	@PrePersist
+	public void prePersist() {
+		if (taglia == null) taglia = "";
+		if (descrizione == null) descrizione = "";
+		else if (descrizione.length() > 50) descrizione = descrizione.substring(0, 50);
+		dataAgg = new Timestamp(new Date().getTime());
+		oraAgg = DateConverter.getOraComeIntero(dataAgg);
+		dataAgg = DateConverter.ripulisciTimestap(dataAgg);
+	}
 
 	public int getIdColliPack() {
 		return this.idColliPack;
@@ -196,13 +211,13 @@ public class ColliPack implements Serializable {
 //		this.controllata = controllata;
 //	}
 //
-//	public Timestamp getDataAgg() {
-//		return this.dataAgg;
-//	}
-//
-//	public void setDataAgg(Timestamp dataAgg) {
-//		this.dataAgg = dataAgg;
-//	}
+	public Timestamp getDataAgg() {
+		return this.dataAgg;
+	}
+
+	public void setDataAgg(Timestamp dataAgg) {
+		this.dataAgg = dataAgg;
+	}
 //
 //	public Timestamp getDataMod() {
 //		return this.dataMod;
@@ -212,14 +227,14 @@ public class ColliPack implements Serializable {
 //		this.dataMod = dataMod;
 //	}
 
-//	public String getDescrizione() {
-//		return this.descrizione;
-//	}
-//
-//	public void setDescrizione(String descrizione) {
-//		this.descrizione = descrizione;
-//	}
-//
+	public String getDescrizione() {
+		return this.descrizione;
+	}
+
+	public void setDescrizione(String descrizione) {
+		this.descrizione = descrizione;
+	}
+
 	public String getFlagimp() {
 		return this.flagimp;
 	}
@@ -340,13 +355,13 @@ public class ColliPack implements Serializable {
 //		this.operatore = operatore;
 //	}
 //
-//	public int getOraAgg() {
-//		return this.oraAgg;
-//	}
-//
-//	public void setOraAgg(int oraAgg) {
-//		this.oraAgg = oraAgg;
-//	}
+	public int getOraAgg() {
+		return this.oraAgg;
+	}
+
+	public void setOraAgg(int oraAgg) {
+		this.oraAgg = oraAgg;
+	}
 //
 //	public int getOramod() {
 //		return this.oramod;
@@ -380,21 +395,21 @@ public class ColliPack implements Serializable {
 		this.qta = qta;
 	}
 
-	public String getSeriale() {
-		return seriale;
-	}
-
-	public void setSeriale(String seriale) {
-		this.seriale = seriale;
-	}
-
-//	public int getQtaimpegnata() {
-//		return this.qtaimpegnata;
+//	public String getSeriale() {
+//		return seriale;
 //	}
 //
-//	public void setQtaimpegnata(int qtaimpegnata) {
-//		this.qtaimpegnata = qtaimpegnata;
+//	public void setSeriale(String seriale) {
+//		this.seriale = seriale;
 //	}
+
+	public int getQtaimpegnata() {
+		return this.qtaimpegnata;
+	}
+
+	public void setQtaimpegnata(int qtaimpegnata) {
+		this.qtaimpegnata = qtaimpegnata;
+	}
 //
 //	public int getQtaOrigine() {
 //		return this.qtaOrigine;
@@ -428,13 +443,13 @@ public class ColliPack implements Serializable {
 //		this.stagcarico = stagcarico;
 //	}
 //
-//	public String getTaglia() {
-//		return this.taglia;
-//	}
-//
-//	public void setTaglia(String taglia) {
-//		this.taglia = taglia;
-//	}
+	public String getTaglia() {
+		return this.taglia;
+	}
+
+	public void setTaglia(String taglia) {
+		this.taglia = taglia;
+	}
 //
 //	public String getTrasferito() {
 //		return this.trasferito;

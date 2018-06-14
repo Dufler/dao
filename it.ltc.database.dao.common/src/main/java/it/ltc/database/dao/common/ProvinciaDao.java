@@ -2,11 +2,7 @@ package it.ltc.database.dao.common;
 
 import java.util.List;
 
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
-
-import it.ltc.database.dao.Dao;
+import it.ltc.database.dao.ReadOnlyDao;
 import it.ltc.database.model.centrale.Provincia;
 
 /**
@@ -15,19 +11,14 @@ import it.ltc.database.model.centrale.Provincia;
  * @author Damiano
  *
  */
-public class ProvinciaDao extends Dao {
-	
-	private static ProvinciaDao instance;
+public class ProvinciaDao extends ReadOnlyDao<Provincia> {
 
-	private ProvinciaDao() {
-		super(DATASOURCE_CENTRALE_PERSISTENCE_UNIT_NAME);
+	public ProvinciaDao() {
+		this(LOCAL_CENTRALE_PERSISTENCE_UNIT_NAME);
 	}
-
-	public static ProvinciaDao getInstance() {
-		if (null == instance) {
-			instance = new ProvinciaDao();
-		}
-		return instance;
+	
+	public ProvinciaDao(String persistenceUnit) {
+		super(persistenceUnit, Provincia.class);
 	}
 	
 	/**
@@ -36,8 +27,8 @@ public class ProvinciaDao extends Dao {
 	 * @param sigla
 	 * @return La provincia corrispondente, se presente, <code>null</code> altrimenti.
 	 */
-	public Provincia findBySigla(String sigla) {
-		Provincia provincia = em.find(Provincia.class, sigla);
+	public Provincia trovaDaSigla(String sigla) {
+		Provincia provincia = findByID(sigla);
 		return provincia;
 	}
 	
@@ -45,12 +36,10 @@ public class ProvinciaDao extends Dao {
 	 * Restituisce la lista di tutte le province esistenti utilizzando il datasource di default.
 	 * @return La lista di tutte le province.
 	 */
-	public List<Provincia> findAll() {
-		CriteriaBuilder cb = em.getCriteriaBuilder();
-        CriteriaQuery<Provincia> criteria = cb.createQuery(Provincia.class);
-        Root<Provincia> member = criteria.from(Provincia.class);
-        criteria.select(member);
-        return em.createQuery(criteria).getResultList();
+	public List<Provincia> trovaTutte() {
+		List<Provincia> entities = findAll();
+		entities.sort(null);
+		return entities;
 	}
 
 }

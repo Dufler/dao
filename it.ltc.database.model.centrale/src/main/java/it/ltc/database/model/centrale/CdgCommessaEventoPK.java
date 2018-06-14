@@ -18,17 +18,20 @@ public class CdgCommessaEventoPK implements Serializable {
 	@Column(insertable=false, updatable=false, unique=true, nullable=false)
 	private int commessa;
 
-	public CdgCommessaEventoPK() {
-	}
+	public CdgCommessaEventoPK() {}
+	
 	public int getEvento() {
 		return this.evento;
 	}
+	
 	public void setEvento(int evento) {
 		this.evento = evento;
 	}
+	
 	public int getCommessa() {
 		return this.commessa;
 	}
+	
 	public void setCommessa(int commessa) {
 		this.commessa = commessa;
 	}
@@ -50,8 +53,7 @@ public class CdgCommessaEventoPK implements Serializable {
 		final int prime = 31;
 		int hash = 17;
 		hash = hash * prime + this.evento;
-		hash = hash * prime + this.commessa;
-		
+		hash = hash * prime + this.commessa;		
 		return hash;
 	}
 }

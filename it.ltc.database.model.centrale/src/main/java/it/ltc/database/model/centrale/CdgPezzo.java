@@ -7,7 +7,7 @@ import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 
-import it.ltc.database.model.centrale.json.CdgPezzoEventoJSON;
+import it.ltc.database.model.centrale.CdgPezzoEvento;
 
 
 /**
@@ -41,13 +41,13 @@ public class CdgPezzo implements Serializable {
 	//Aggiunte
 	@JsonInclude(JsonInclude.Include.NON_NULL)
 	@Transient
-	private List<CdgPezzoEventoJSON> spacchettamenti;
+	private List<CdgPezzoEvento> spacchettamenti;
 
-	public List<CdgPezzoEventoJSON> getSpacchettamenti() {
+	public List<CdgPezzoEvento> getSpacchettamenti() {
 		return spacchettamenti;
 	}
 
-	public void setSpacchettamenti(List<CdgPezzoEventoJSON> spacchettamenti) {
+	public void setSpacchettamenti(List<CdgPezzoEvento> spacchettamenti) {
 		this.spacchettamenti = spacchettamenti;
 	}
 	//Fine

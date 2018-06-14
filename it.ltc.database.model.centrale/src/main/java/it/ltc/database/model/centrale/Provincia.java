@@ -11,7 +11,7 @@ import javax.persistence.*;
 @Entity
 @Table(name="provincia")
 @NamedQuery(name="Provincia.findAll", query="SELECT p FROM Provincia p")
-public class Provincia implements Serializable {
+public class Provincia implements Serializable, Comparable<Provincia> {
 	
 	private static final long serialVersionUID = 1L;
 
@@ -50,6 +50,12 @@ public class Provincia implements Serializable {
 
 	public void setRegione(String regione) {
 		this.regione = regione;
+	}
+
+	@Override
+	public int compareTo(Provincia o) {
+		int compare = nome.compareTo(o.getNome());
+		return compare;
 	}
 
 }

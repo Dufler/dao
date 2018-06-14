@@ -9,7 +9,7 @@ import javax.persistence.*;
  * 
  */
 @Entity
-@Table(name="azienda_contatti")
+@Table(name="crm_azienda_contatti")
 @IdClass(AziendaContattiPK.class)
 @NamedQuery(name="AziendaContatti.findAll", query="SELECT a FROM AziendaContatti a")
 public class AziendaContatti implements Serializable {

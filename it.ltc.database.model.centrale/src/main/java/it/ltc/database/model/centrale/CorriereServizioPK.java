@@ -21,23 +21,28 @@ public class CorriereServizioPK implements Serializable {
 	@Column(name="codifica_corriere", unique=true, nullable=false, length=10)
 	private String codificaCorriere;
 
-	public CorriereServizioPK() {
-	}
+	public CorriereServizioPK() {}
+	
 	public String getCodice() {
 		return this.codice;
 	}
+	
 	public void setCodice(String codice) {
 		this.codice = codice;
 	}
+	
 	public int getCorriere() {
 		return this.corriere;
 	}
+	
 	public void setCorriere(int corriere) {
 		this.corriere = corriere;
 	}
+	
 	public String getCodificaCorriere() {
 		return this.codificaCorriere;
 	}
+	
 	public void setCodificaCorriere(String codificaCorriere) {
 		this.codificaCorriere = codificaCorriere;
 	}

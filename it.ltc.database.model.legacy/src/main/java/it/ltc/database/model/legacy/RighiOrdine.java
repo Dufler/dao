@@ -91,8 +91,8 @@ public class RighiOrdine implements Serializable {
 	@Column(name="IdUnicoArt", length=15)
 	private String idUnicoArt;
 
-//	@Column(name="KeyUbiPre", length=15)
-//	private String keyUbiPre;
+	@Column(name="KeyUbiPre", length=15)
+	private String keyUbiPre;
 
 //	@Column(name="Listaorigine", nullable=false, length=21)
 //	private String listaorigine;
@@ -169,8 +169,8 @@ public class RighiOrdine implements Serializable {
 	@Column(name="Taglia", length=20)
 	private String taglia;
 
-//	@Column(name="Tipoord", length=10)
-//	private String tipoord;
+	@Column(name="Tipoord", length=30)
+	private String tipoord;
 
 	@Column(name="Ubicazione", length=100)
 	private String ubicazione;
@@ -202,13 +202,13 @@ public class RighiOrdine implements Serializable {
 		this.idRigoOrdine = idRigoOrdine;
 	}
 
-//	public String getArea() {
-//		return this.area;
-//	}
-//
-//	public void setArea(String area) {
-//		this.area = area;
-//	}
+	public String getArea() {
+		return this.area;
+	}
+
+	public void setArea(String area) {
+		this.area = area;
+	}
 
 	public int getIdTestataOrdine() {
 		return idTestataOrdine;
@@ -234,13 +234,13 @@ public class RighiOrdine implements Serializable {
 		this.barraUPC = barraUPC;
 	}
 
-//	public String getBox() {
-//		return this.box;
-//	}
-//
-//	public void setBox(String box) {
-//		this.box = box;
-//	}
+	public String getBox() {
+		return this.box;
+	}
+
+	public void setBox(String box) {
+		this.box = box;
+	}
 
 //	public int getCasseDaUbicare() {
 //		return this.casseDaUbicare;
@@ -314,13 +314,13 @@ public class RighiOrdine implements Serializable {
 		this.composizione = composizione;
 	}
 
-//	public String getCorsia() {
-//		return this.corsia;
-//	}
-//
-//	public void setCorsia(String corsia) {
-//		this.corsia = corsia;
-//	}
+	public String getCorsia() {
+		return this.corsia;
+	}
+
+	public void setCorsia(String corsia) {
+		this.corsia = corsia;
+	}
 //
 //	public Timestamp getDatagenmov() {
 //		return this.datagenmov;
@@ -386,13 +386,13 @@ public class RighiOrdine implements Serializable {
 		this.idUnicoArt = idUnicoArt;
 	}
 
-//	public String getKeyUbiPre() {
-//		return this.keyUbiPre;
-//	}
-//
-//	public void setKeyUbiPre(String keyUbiPre) {
-//		this.keyUbiPre = keyUbiPre;
-//	}
+	public String getKeyUbiPre() {
+		return this.keyUbiPre;
+	}
+
+	public void setKeyUbiPre(String keyUbiPre) {
+		this.keyUbiPre = keyUbiPre;
+	}
 //
 //	public String getListaorigine() {
 //		return this.listaorigine;
@@ -482,13 +482,13 @@ public class RighiOrdine implements Serializable {
 //		this.pezzieffet = pezzieffet;
 //	}
 
-//	public String getPiano() {
-//		return this.piano;
-//	}
-//
-//	public void setPiano(String piano) {
-//		this.piano = piano;
-//	}
+	public String getPiano() {
+		return this.piano;
+	}
+
+	public void setPiano(String piano) {
+		this.piano = piano;
+	}
 //
 //	public String getPONumber() {
 //		return this.PONumber;
@@ -602,14 +602,14 @@ public class RighiOrdine implements Serializable {
 		this.seriali = seriali;
 	}
 
-//	public String getTipoord() {
-//		return this.tipoord;
-//	}
-//
-//	public void setTipoord(String tipoord) {
-//		this.tipoord = tipoord;
-//	}
-//
+	public String getTipoord() {
+		return this.tipoord;
+	}
+
+	public void setTipoord(String tipoord) {
+		this.tipoord = tipoord;
+	}
+
 	public String getUbicazione() {
 		return this.ubicazione;
 	}

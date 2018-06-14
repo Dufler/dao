@@ -1,6 +1,7 @@
 C:\Users\Damiano\git-dao\it.ltc.database.model.centrale\src\main\java\it\ltc\database\model\centrale\CorriereServizioPK.java
 C:\Users\Damiano\git-dao\it.ltc.database.model.centrale\src\main\java\it\ltc\database\model\centrale\Provincia.java
 C:\Users\Damiano\git-dao\it.ltc.database.model.centrale\src\main\java\it\ltc\database\model\centrale\json\CdgCommessaEventoJSON.java
+C:\Users\Damiano\git-dao\it.ltc.database.model.centrale\src\main\java\it\ltc\database\model\centrale\CrmTagCategoriaMerceologica.java
 C:\Users\Damiano\git-dao\it.ltc.database.model.centrale\src\main\java\it\ltc\database\model\centrale\CoordinateBancarie.java
 C:\Users\Damiano\git-dao\it.ltc.database.model.centrale\src\main\java\it\ltc\database\model\centrale\ListinoCorriereVocePercentuale.java
 C:\Users\Damiano\git-dao\it.ltc.database.model.centrale\src\main\java\it\ltc\database\model\centrale\FatturaSottoAmbito.java
@@ -33,9 +34,11 @@ C:\Users\Damiano\git-dao\it.ltc.database.model.centrale\src\main\java\it\ltc\dat
 C:\Users\Damiano\git-dao\it.ltc.database.model.centrale\src\main\java\it\ltc\database\model\centrale\Valuta.java
 C:\Users\Damiano\git-dao\it.ltc.database.model.centrale\src\main\java\it\ltc\database\model\centrale\AziendaBrand.java
 C:\Users\Damiano\git-dao\it.ltc.database.model.centrale\src\main\java\it\ltc\database\model\centrale\Feature.java
+C:\Users\Damiano\git-dao\it.ltc.database.model.centrale\src\main\java\it\ltc\database\model\centrale\CdgBudget.java
 C:\Users\Damiano\git-dao\it.ltc.database.model.centrale\src\main\java\it\ltc\database\model\centrale\GadgetInviati.java
 C:\Users\Damiano\git-dao\it.ltc.database.model.centrale\src\main\java\it\ltc\database\model\centrale\TrackingPK.java
 C:\Users\Damiano\git-dao\it.ltc.database.model.centrale\src\main\java\it\ltc\database\model\centrale\json\VoceScaglioneJSON.java
+C:\Users\Damiano\git-dao\it.ltc.database.model.centrale\src\main\java\it\ltc\database\model\centrale\CrmTagCategoriaMerceologicaPK.java
 C:\Users\Damiano\git-dao\it.ltc.database.model.centrale\src\main\java\it\ltc\database\model\centrale\JoinCommessaCorriere.java
 C:\Users\Damiano\git-dao\it.ltc.database.model.centrale\src\main\java\it\ltc\database\model\centrale\SpedizioneLight.java
 C:\Users\Damiano\git-dao\it.ltc.database.model.centrale\src\main\java\it\ltc\database\model\centrale\FatturaAmbito.java
@@ -51,6 +54,7 @@ C:\Users\Damiano\git-dao\it.ltc.database.model.centrale\src\main\java\it\ltc\dat
 C:\Users\Damiano\git-dao\it.ltc.database.model.centrale\src\main\java\it\ltc\database\model\centrale\Brand.java
 C:\Users\Damiano\git-dao\it.ltc.database.model.centrale\src\main\java\it\ltc\database\model\centrale\ListinoCorriere.java
 C:\Users\Damiano\git-dao\it.ltc.database.model.centrale\src\main\java\it\ltc\database\model\centrale\SpedizioneGiacenza.java
+C:\Users\Damiano\git-dao\it.ltc.database.model.centrale\src\main\java\it\ltc\database\model\centrale\CdgBudgetPercentualiCosto.java
 C:\Users\Damiano\git-dao\it.ltc.database.model.centrale\src\main\java\it\ltc\database\model\centrale\Ingresso.java
 C:\Users\Damiano\git-dao\it.ltc.database.model.centrale\src\main\java\it\ltc\database\model\centrale\json\CdgPezzoEventoJSON.java
 C:\Users\Damiano\git-dao\it.ltc.database.model.centrale\src\main\java\it\ltc\database\model\centrale\CdgCostiRicaviCommesse.java
@@ -60,13 +64,14 @@ C:\Users\Damiano\git-dao\it.ltc.database.model.centrale\src\main\java\it\ltc\dat
 C:\Users\Damiano\git-dao\it.ltc.database.model.centrale\src\main\java\it\ltc\database\model\centrale\FatturaDocumento.java
 C:\Users\Damiano\git-dao\it.ltc.database.model.centrale\src\main\java\it\ltc\database\model\centrale\CdgCostiRicaviGenerici.java
 C:\Users\Damiano\git-dao\it.ltc.database.model.centrale\src\main\java\it\ltc\database\model\centrale\Azienda.java
-C:\Users\Damiano\git-dao\it.ltc.database.model.centrale\src\main\java\it\ltc\database\model\centrale\json\ServizioCorriereJSON.java
 C:\Users\Damiano\git-dao\it.ltc.database.model.centrale\src\main\java\it\ltc\database\model\centrale\Regione.java
 C:\Users\Damiano\git-dao\it.ltc.database.model.centrale\src\main\java\it\ltc\database\model\centrale\FatturaPreferenzeCommessaPK.java
 C:\Users\Damiano\git-dao\it.ltc.database.model.centrale\src\main\java\it\ltc\database\model\centrale\SpedizioneAssicurazione.java
 C:\Users\Damiano\git-dao\it.ltc.database.model.centrale\src\main\java\it\ltc\database\model\centrale\Operatore.java
 C:\Users\Damiano\git-dao\it.ltc.database.model.centrale\src\main\java\it\ltc\database\model\centrale\AziendaContatti.java
 C:\Users\Damiano\git-dao\it.ltc.database.model.centrale\src\main\java\it\ltc\database\model\centrale\VersioneTabella.java
+C:\Users\Damiano\git-dao\it.ltc.database.model.centrale\src\main\java\it\ltc\database\model\centrale\CrmTagServiziRichiestiPK.java
+C:\Users\Damiano\git-dao\it.ltc.database.model.centrale\src\main\java\it\ltc\database\model\centrale\CdgBudgetPercentualiCostoPK.java
 C:\Users\Damiano\git-dao\it.ltc.database.model.centrale\src\main\java\it\ltc\database\model\centrale\FatturaPreferenzeCommessa.java
 C:\Users\Damiano\git-dao\it.ltc.database.model.centrale\src\main\java\it\ltc\database\model\centrale\Utente.java
 C:\Users\Damiano\git-dao\it.ltc.database.model.centrale\src\main\java\it\ltc\database\model\centrale\Ordine.java
@@ -93,6 +98,7 @@ C:\Users\Damiano\git-dao\it.ltc.database.model.centrale\src\main\java\it\ltc\dat
 C:\Users\Damiano\git-dao\it.ltc.database.model.centrale\src\main\java\it\ltc\database\model\centrale\UtentePermessiJoinPK.java
 C:\Users\Damiano\git-dao\it.ltc.database.model.centrale\src\main\java\it\ltc\database\model\centrale\UtenteFeaturesJoinPK.java
 C:\Users\Damiano\git-dao\it.ltc.database.model.centrale\src\main\java\it\ltc\database\model\centrale\FatturaVoce.java
+C:\Users\Damiano\git-dao\it.ltc.database.model.centrale\src\main\java\it\ltc\database\model\centrale\CrmTagServiziRichiesti.java
 C:\Users\Damiano\git-dao\it.ltc.database.model.centrale\src\main\java\it\ltc\database\model\centrale\SpedizioneParticolarita.java
 C:\Users\Damiano\git-dao\it.ltc.database.model.centrale\src\main\java\it\ltc\database\model\centrale\CdgCostiRicaviGenericiDateValore.java
 C:\Users\Damiano\git-dao\it.ltc.database.model.centrale\src\main\java\it\ltc\database\model\centrale\Indirizzo.java

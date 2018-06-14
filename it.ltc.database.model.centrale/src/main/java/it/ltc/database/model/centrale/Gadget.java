@@ -9,7 +9,7 @@ import javax.persistence.*;
  * 
  */
 @Entity
-@Table(name="gadget")
+@Table(name="crm_gadget")
 @NamedQuery(name="Gadget.findAll", query="SELECT g FROM Gadget g")
 public class Gadget implements Serializable {
 	

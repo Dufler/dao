@@ -1,13 +1,12 @@
 package it.ltc.database.dao;
 
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Table;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
 
 import org.jboss.logging.Logger;
 
@@ -18,42 +17,12 @@ import org.jboss.logging.Logger;
  *
  * @param <T>
  */
-public abstract class CRUDDao<T> extends Dao {
+public abstract class CRUDDao<T> extends ReadOnlyDao<T> {
 	
 	private static final Logger logger = Logger.getLogger("CRUDDao");
-	
-	private final Class<T> c;
 
 	public CRUDDao(String persistenceUnit, Class<T> c) {
-		super(persistenceUnit);
-		this.c = c;
-	}
-	
-	/**
-	 * Restituisce tutte le entity esistenti.
-	 * @return una lista di entities.
-	 */
-	protected List<T> findAll() {
-		EntityManager em = getManager();
-		CriteriaBuilder cb = em.getCriteriaBuilder();
-        CriteriaQuery<T> criteria = cb.createQuery(c);
-        Root<T> member = criteria.from(c);
-        criteria.select(member);
-		List<T> lista = em.createQuery(criteria).getResultList();
-		em.close();
-        return lista;
-	}
-	
-	/**
-	 * Cerca la specifica entity usando la chiave passata come argomento.
-	 * @param id il valore di chiave che identifica la entity desiderata.
-	 * @return la entity trovata o <code>null</code> se non ci sono corrispondenze.
-	 */
-	protected T findByID(Object id) {
-		EntityManager em = getManager();
-		T entity = em.find(c, id);
-		em.close();
-		return entity;
+		super(persistenceUnit, c);
 	}
 	
 	/**
@@ -84,11 +53,10 @@ public abstract class CRUDDao<T> extends Dao {
 	/**
 	 * Inserisce le entities passate come argomento nel db.
 	 * @param entities le entities da salvare.
-	 * @return Il risultato dell'operazione.
+	 * @return le entities salvate, alcuni campi potrebbero essere stati valorizzati automaticamente in seguito all'inserimento (es. ID autoincrement) oppure <code>null</code> in caso di fallimento.
 	 */
-	protected boolean insert(List<T> entities) {
-		boolean insert;
-		if (entities != null) {
+	protected List<T> insert(List<T> entities) {
+		if (entities != null && !entities.isEmpty()) {
 			EntityManager em = getManager();
 			EntityTransaction t = em.getTransaction();
 			try {
@@ -96,19 +64,16 @@ public abstract class CRUDDao<T> extends Dao {
 				for (T entity : entities)
 					em.persist(entity);
 				t.commit();
-				insert = true;
 			} catch (Exception e) {
 				logger.error(e);
 				if (t != null && t.isActive())
 					t.rollback();
-				insert = false;
+				entities = null;
 			} finally {
 				em.close();
 			}
-		} else {
-			insert = false;
 		}
-		return insert;
+		return entities;
 	}
 	
 	/**
@@ -162,11 +127,52 @@ public abstract class CRUDDao<T> extends Dao {
 				}
 			} else {
 				em.close();
+				entity = null;
 			}
 		} else {
 			entity = null;
 		}
 		return entity;
+	}
+	
+	/**
+	 * Esegue l'aggiornamento delle entities identificabili tramite le <code>key</code> con i valori contenuti nella mappa.<br>
+	 * La copia di tali valori viene eseguita tramite il metodo <method>updateValues</method> che deve essere opportunamente implementato.
+	 * @param entities la mappa che contiene le entities da aggiornare.
+	 * @return la entities salvate, alcuni campi potrebbero essere stati valorizzati automaticamente in seguito all'aggiornamento (es. data_modifica con un Trigger) oppure <code>null</code> in caso di fallimento.
+	 */
+	protected List<T> update(Map<Object, T> entities) {
+		List<T> updatedEntities;
+		if (entities != null && !entities.isEmpty()) {
+			updatedEntities = new LinkedList<>();
+			EntityManager em = getManager();
+			EntityTransaction t = em.getTransaction();
+			try {
+				t.begin();
+				for (Object key : entities.keySet()) {
+					T entity = entities.get(key);
+					T oldEntity = em.find(c, key);
+					if (oldEntity != null) {
+						updateValues(oldEntity, entity);
+						em.merge(oldEntity);
+						updatedEntities.add(oldEntity);
+					} else {
+						throw new RuntimeException("Entity non trovata, ID: " + key);
+					}
+				}
+				t.commit();
+			} catch (Exception e) {
+				logger.error(e);
+				if (t != null && t.isActive())
+					t.rollback();
+				updatedEntities = null;
+			} finally {
+				em.close();
+			}
+		} else {
+			updatedEntities = null;
+		}
+		return updatedEntities;
 	}
 
 	/**
@@ -209,6 +215,43 @@ public abstract class CRUDDao<T> extends Dao {
 			entity = null;
 		}
 		return entity;
+	}
+	
+	/**
+	 * Esegue l'eliminazione di una entity presente nel db identificabile tramite la <code>key</code> passata come argomento.
+	 * @param key la chiave che identifica l'entity già presente nel db.
+	 * @return la entity eliminata oppure <code>null</code> in caso di fallimento.
+	 */
+	protected List<T> delete(List<Object> keys) {
+		List<T> entities;
+		if (keys != null && !keys.isEmpty()) {
+			entities = new LinkedList<>();
+			EntityManager em = getManager();
+			EntityTransaction t = em.getTransaction();
+			try {
+				t.begin();
+				for (Object key : keys) {
+					T entity = em.find(c, key);
+					if (entity != null) {
+						em.remove(entity);
+						entities.add(entity);
+					} else {
+						throw new RuntimeException("Entity non trovata, ID: " + key);
+					}
+				}
+				t.commit();	
+			} catch (Exception e) {
+				logger.error(e);
+				if (t != null && t.isActive())
+					t.rollback();
+				entities = null;
+			} finally {
+				em.close();
+			}
+		} else {
+			entities = null;
+		}
+		return entities;
 	}
 
 }

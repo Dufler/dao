@@ -1,10 +1,19 @@
 package it.ltc.database.model.legacy;
 
 import java.io.Serializable;
-import javax.persistence.*;
 import java.sql.Timestamp;
-import java.util.Calendar;
 import java.util.GregorianCalendar;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.NamedQuery;
+import javax.persistence.PrePersist;
+import javax.persistence.Table;
+
+import it.ltc.utility.miscellanea.time.DateConverter;
 
 
 /**
@@ -23,8 +32,8 @@ public class MagaMov implements Serializable {
 	@Column(name="IdMagaMov", unique=true, nullable=false)
 	private int idMagaMov;
 
-//	@Column(name="Cancellato", nullable=false, length=2)
-//	private String cancellato;
+	@Column(name="Cancellato", nullable=false, length=2)
+	private String cancellato;
 
 	@Column(name="Causale", nullable=false, length=3)
 	private String causale;
@@ -106,10 +115,12 @@ public class MagaMov implements Serializable {
 	public void prePersist() {
 		GregorianCalendar now = new GregorianCalendar();
 		dataMovMag = new Timestamp(now.getTimeInMillis());
-		oraMovMag = (now.get(Calendar.HOUR_OF_DAY) * 100) + (now.get(Calendar.MINUTE));
-		if (trasmesso == null)
-			trasmesso = "NO";
-		utente = "WEBSERVICE";
+		oraMovMag = DateConverter.getOraComeIntero(dataMovMag);
+		dataMovMag = DateConverter.ripulisciTimestap(dataMovMag);
+		docData = DateConverter.ripulisciTimestap(dataMovMag);
+		if (trasmesso == null) trasmesso = "NO";
+		if (cancellato == null) cancellato = "NO";
+		if (utente == null) utente = "WEBSERVICE";
 	}
 
 	public int getIdMagaMov() {
@@ -120,13 +131,13 @@ public class MagaMov implements Serializable {
 		this.idMagaMov = idMagaMov;
 	}
 
-//	public String getCancellato() {
-//		return this.cancellato;
-//	}
-//
-//	public void setCancellato(String cancellato) {
-//		this.cancellato = cancellato;
-//	}
+	public String getCancellato() {
+		return this.cancellato;
+	}
+
+	public void setCancellato(String cancellato) {
+		this.cancellato = cancellato;
+	}
 
 	public String getCausale() {
 		return this.causale;

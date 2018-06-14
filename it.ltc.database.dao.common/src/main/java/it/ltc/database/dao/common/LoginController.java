@@ -3,6 +3,8 @@ package it.ltc.database.dao.common;
 import java.io.IOException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
@@ -10,6 +12,8 @@ import org.jboss.logging.Logger;
 
 import it.ltc.database.model.centrale.Commessa;
 import it.ltc.database.model.utente.Utente;
+import it.ltc.utility.mail.Email;
+import it.ltc.utility.mail.MailMan;
 import sun.misc.BASE64Decoder;
 
 /**
@@ -22,6 +26,13 @@ public class LoginController {
 	
 	private static final Logger logger = Logger.getLogger("LoginController");
 	
+	private static final long durataRisorsa = 86400000; //24 ore
+	private static final String indirizzoRisorseTemporanee = "http://web.services.ltc-logistics.it/areaclienti/reimpostaPassword/";
+	private static final String indirizzoMail = "sysinfo@ltc-logistics.it";
+	private static final String passwordMail = "ltc10183";
+	private static final String indirizzoMailDestinario = "support@ltc-logistics.it";
+	private static final String oggettoMail = "Reimposta la password LTC";
+	
 	private static LoginController instance;
 	
 	private final BASE64Decoder decoder;
@@ -31,7 +42,7 @@ public class LoginController {
 	private LoginController() {
 		decoder = new BASE64Decoder();
 		userDao = UtenteDao.getInstance();
-		commesseDao = CommessaDao.getInstance();
+		commesseDao = new CommessaDao();
 	}
 
 	public static LoginController getInstance() {
@@ -211,6 +222,54 @@ public class LoginController {
 	public List<Utente> getUtenti(boolean details) {
 		List<Utente> utenti = userDao.trovaTutti(details);
 		return utenti;
+	}
+
+	public Utente reimpostaPassword(String username) {
+		//controllo se l'utente esiste: se lo trovo vado a impostare una risorsa temporanea e una scadenza.
+		Utente user = getUserDetailsByUsername(username);
+		if (user != null) {
+			Date now = new Date();
+			String path = getHash(now.toString());
+			long expiration = now.getTime() + durataRisorsa;
+			now.setTime(expiration);
+			user.setRisorsaTemporanea(path);
+			user.setScadenzaRisorsa(now);
+			user = userDao.aggiorna(user);
+			if (user != null) {
+				inviaMail(user);
+			}
+		}
+		return user;
+	}
+	
+	private boolean inviaMail(Utente account) {
+		String corpo = "Salve " + account.getUsername() + ",\n\r";
+		corpo += "a questo indirizzo:\n\r";
+		corpo += indirizzoRisorseTemporanee + account.getRisorsaTemporanea() + "\n\r";
+		corpo += "puoi reimpostare la tua password.\n\r\n\r";
+		corpo += "Cordiali saluti,\n\r";
+		corpo += "L&TC";
+		List<String> destinatari = new ArrayList<String>();
+		destinatari.add(indirizzoMailDestinario);
+		destinatari.add(account.getEmail());
+		MailMan postino = new MailMan(indirizzoMail, passwordMail, true);
+		Email email = new Email(oggettoMail, corpo);		
+		return postino.invia(destinatari, email);
+	}
+
+	public Utente trovaDaRisorsa(String risorsa) {
+		Utente user = userDao.getUserByResource(risorsa);
+		return user;
+	}
+
+	public Utente reimpostaNuovaPassword(String risorsa, String nuovaPassword) {
+		Utente user = userDao.getUserByResource(risorsa);
+		if (user != null) {
+			nuovaPassword = getHash(nuovaPassword);
+			user.setNuovaPassword(nuovaPassword);
+			user = userDao.aggiorna(user);
+		}
+		return user;
 	}
 
 }
