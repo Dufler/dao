@@ -11,7 +11,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.NamedQuery;
 import javax.persistence.PrePersist;
 import javax.persistence.Table;
 
@@ -24,7 +23,7 @@ import it.ltc.utility.miscellanea.string.StringUtility;
  */
 @Entity
 @Table(name="RigaCorr")
-@NamedQuery(name="RigaCorr.findAll", query="SELECT r FROM RigaCorr r")
+//@NamedQuery(name="RigaCorr.findAll", query="SELECT r FROM RigaCorr r")
 public class RigaCorr implements Serializable {
 	
 	private static final long serialVersionUID = 1L;

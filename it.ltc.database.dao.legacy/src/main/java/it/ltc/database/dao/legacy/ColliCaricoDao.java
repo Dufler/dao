@@ -65,6 +65,11 @@ public class ColliCaricoDao extends CRUDDao<ColliCarico> {
 		return entity;
 	}
 	
+	public ColliCarico trovaDaCodice(String codice) {
+		ColliCarico entity = findOnlyOneEqualTo("keyColloCar", codice);
+		return entity;
+	}
+	
 	public ColliCarico inserisci(ColliCarico collo) {
 		ColliCarico entity = insert(collo);
 		return entity;

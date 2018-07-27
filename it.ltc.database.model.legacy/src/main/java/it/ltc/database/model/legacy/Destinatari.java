@@ -13,7 +13,7 @@ import javax.persistence.*;
  */
 @Entity
 @Table(name="Destinatari")
-@NamedQuery(name="Destinatari.findAll", query="SELECT d FROM Destinatari d")
+//@NamedQuery(name="Destinatari.findAll", query="SELECT d FROM Destinatari d")
 public class Destinatari implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
@@ -49,7 +49,7 @@ public class Destinatari implements Serializable {
 	@Column(name="CodIso", length=3)
 	private String codIso;
 
-	@Column(name="CodNaz", length=50)
+	@Column(name="CodNaz", length=3)
 	private String codNaz;
 
 	@Column(name="Email", length=100)
@@ -63,7 +63,7 @@ public class Destinatari implements Serializable {
 
 //	private int idContabile;
 
-	@Column(name="Indirizzo", length=50)
+	@Column(name="Indirizzo", length=250)
 	private String indirizzo;
 
 	@Column(name="Località", length=40)
@@ -94,6 +94,9 @@ public class Destinatari implements Serializable {
 	@Column(name="Tel", length=50)
 	private String tel;
 
+	/**
+	 * "DES" se è un destinatario fisico (normale), "CON" se è un destinatario contabile.
+	 */
 	@Column(name="TipoDestina", length=4)
 	private String tipoDestina;
 
@@ -101,9 +104,9 @@ public class Destinatari implements Serializable {
 	
 	@PrePersist
 	public void prePersist() {
-		codContabile = "";
-		codDestina = sdf.format(new Date());
-		tipoDestina = "DES ";
+		if (codContabile == null) codContabile = "";
+		if (codDestina == null) codDestina = sdf.format(new Date());
+		if (tipoDestina == null) tipoDestina = "DES ";
 	}
 
 	public int getIdDestina() {

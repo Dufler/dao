@@ -10,14 +10,32 @@ public class ArtibarDao extends CRUDDao<ArtiBar> {
 	}
 	
 	public ArtiBar trovaDaSKU(String sku) {
-        ArtiBar articolo = findFirstOneEqualTo("codiceArticolo", sku);
+        ArtiBar articolo = findFirstOneEqualTo("codiceArticolo", sku); //E' possibile che c'è ne sia più di uno.
 		return articolo;
+	}
+	
+	public ArtiBar inserisci(ArtiBar barcode) {
+		ArtiBar entity = insert(barcode);
+		return entity;
+	}
+	
+	public ArtiBar aggiorna(ArtiBar barcode) {
+		ArtiBar entity = update(barcode, barcode.getIdArtiBar());
+		return entity;
+	}
+	
+	public ArtiBar elimina(ArtiBar barcode) {
+		ArtiBar entity = delete(barcode.getIdArtiBar());
+		return entity;
 	}
 
 	@Override
 	protected void updateValues(ArtiBar oldEntity, ArtiBar entity) {
-		// TODO Auto-generated method stub
-		
+		oldEntity.setBarraEAN(entity.getBarraEAN());
+		oldEntity.setBarraUPC(entity.getBarraUPC());
+		oldEntity.setCodiceArticolo(entity.getCodiceArticolo());
+		oldEntity.setIdUniArticolo(entity.getIdUniArticolo());
+		oldEntity.setTaglia(entity.getTaglia());
 	}
 
 }

@@ -12,7 +12,7 @@ import java.util.List;
  */
 @Entity
 @Table(name="RighiOrdine")
-@NamedQuery(name="RighiOrdine.findAll", query="SELECT r FROM RighiOrdine r")
+//@NamedQuery(name="RighiOrdine.findAll", query="SELECT r FROM RighiOrdine r")
 public class RighiOrdine implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
@@ -28,10 +28,10 @@ public class RighiOrdine implements Serializable {
 	@Column(name="Area", nullable=false, length=2)
 	private String area;
 
-	@Column(name="BarraEAN", length=40)
+	@Column(name="BarraEAN", length=50)
 	private String barraEAN;
 
-	@Column(name="BarraUPC", length=40)
+	@Column(name="BarraUPC", length=50)
 	private String barraUPC;
 
 	@Column(name="Box", length=2)
@@ -73,7 +73,7 @@ public class RighiOrdine implements Serializable {
 	@Column(name="DataOrdine")
 	private Timestamp dataOrdine;
 
-	@Column(name="Descrizione", length=50)
+	@Column(name="Descrizione", length=100)
 	private String descrizione;
 
 //	@Column(name="Esclusione", length=2)
@@ -130,8 +130,8 @@ public class RighiOrdine implements Serializable {
 	@Column(name="Piano", length=2)
 	private String piano;
 
-//	@Column(length=20)
-//	private String PONumber;
+	@Column(length=20)
+	private String PONumber;
 
 //	@Column(name="Posizione")
 //	private int posizione;
@@ -185,13 +185,14 @@ public class RighiOrdine implements Serializable {
 		qtadaubicare = qtaSpedizione;
 		qtaAssegnata = 0;
 		numerata = "-";
-		area = "  ";
-		box = "  ";
-		corsia = "   ";
-		piano = "  ";
-		scaffale = "   ";
+		area = "  "; //2
+		box = "  "; //2
+		corsia = "   "; //3
+		piano = "  "; //2
+		scaffale = "   "; //3
 		ubicazione = "";
 		nrcollo = "0         ";
+		if (PONumber == null) PONumber = "";
 	}
 
 	public int getIdRigoOrdine() {
@@ -489,14 +490,14 @@ public class RighiOrdine implements Serializable {
 	public void setPiano(String piano) {
 		this.piano = piano;
 	}
-//
-//	public String getPONumber() {
-//		return this.PONumber;
-//	}
-//
-//	public void setPONumber(String PONumber) {
-//		this.PONumber = PONumber;
-//	}
+
+	public String getPONumber() {
+		return this.PONumber;
+	}
+
+	public void setPONumber(String PONumber) {
+		this.PONumber = PONumber;
+	}
 //
 //	public int getPosizione() {
 //		return this.posizione;

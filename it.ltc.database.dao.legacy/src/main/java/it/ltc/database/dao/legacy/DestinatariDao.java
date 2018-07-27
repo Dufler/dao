@@ -33,6 +33,11 @@ public class DestinatariDao extends CRUDDao<Destinatari> {
 		return entity;
 	}
 	
+	public Destinatari trovaDaCodice(String codice) {
+		Destinatari entity = findOnlyOneEqualTo("codDestina", codice);
+		return entity;
+	}
+	
 	public Destinatari trovaIndirizzo(String ragioneSociale, String cap, String indirizzo, String localita, String nazione) {
 		//Impongo le condizioni di ricerca
 		List<CondizioneWhere> condizioni = new LinkedList<>();

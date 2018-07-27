@@ -11,7 +11,7 @@ import java.sql.Timestamp;
  */
 @Entity
 @Table(name="RighiImballo")
-@NamedQuery(name="RighiImballo.findAll", query="SELECT r FROM RighiImballo r")
+//@NamedQuery(name="RighiImballo.findAll", query="SELECT r FROM RighiImballo r")
 public class RighiImballo implements Serializable {
 	
 	private static final long serialVersionUID = 1L;

@@ -1,5 +1,8 @@
+C:\Users\Damiano\git-dao\it.ltc.database.model.legacy\src\main\java\it\ltc\database\model\legacy\Corrieri.java
 C:\Users\Damiano\git-dao\it.ltc.database.model.legacy\src\main\java\it\ltc\database\model\legacy\ScorteColli.java
 C:\Users\Damiano\git-dao\it.ltc.database.model.legacy\src\main\java\it\ltc\database\model\legacy\ColliImballo.java
+C:\Users\Damiano\git-dao\it.ltc.database.model.legacy\src\main\java\it\ltc\database\model\legacy\Nazioni.java
+C:\Users\Damiano\git-dao\it.ltc.database.model.legacy\src\main\java\it\ltc\database\model\legacy\Colori.java
 C:\Users\Damiano\git-dao\it.ltc.database.model.legacy\src\main\java\it\ltc\database\model\legacy\documento\TestaCorrConDocumento.java
 C:\Users\Damiano\git-dao\it.ltc.database.model.legacy\src\main\java\it\ltc\database\model\legacy\Scorte2.java
 C:\Users\Damiano\git-dao\it.ltc.database.model.legacy\src\main\java\it\ltc\database\model\legacy\Ubicazioni.java
@@ -11,6 +14,7 @@ C:\Users\Damiano\git-dao\it.ltc.database.model.legacy\src\main\java\it\ltc\datab
 C:\Users\Damiano\git-dao\it.ltc.database.model.legacy\src\main\java\it\ltc\database\model\legacy\seriale\ColliPackConSeriale.java
 C:\Users\Damiano\git-dao\it.ltc.database.model.legacy\src\main\java\it\ltc\database\model\legacy\Destinatari.java
 C:\Users\Damiano\git-dao\it.ltc.database.model.legacy\src\main\java\it\ltc\database\model\legacy\PakiTestaTipo.java
+C:\Users\Damiano\git-dao\it.ltc.database.model.legacy\src\main\java\it\ltc\database\model\legacy\Stagioni.java
 C:\Users\Damiano\git-dao\it.ltc.database.model.legacy\src\main\java\it\ltc\database\model\legacy\Magazzini.java
 C:\Users\Damiano\git-dao\it.ltc.database.model.legacy\src\main\java\it\ltc\database\model\legacy\RighiImballo.java
 C:\Users\Damiano\git-dao\it.ltc.database.model.legacy\src\main\java\it\ltc\database\model\legacy\ColliPreleva.java
@@ -32,5 +36,6 @@ C:\Users\Damiano\git-dao\it.ltc.database.model.legacy\src\main\java\it\ltc\datab
 C:\Users\Damiano\git-dao\it.ltc.database.model.legacy\src\main\java\it\ltc\database\model\legacy\ColliPack.java
 C:\Users\Damiano\git-dao\it.ltc.database.model.legacy\src\main\java\it\ltc\database\model\legacy\ColliCarico.java
 C:\Users\Damiano\git-dao\it.ltc.database.model.legacy\src\main\java\it\ltc\database\model\legacy\MagaSd.java
+C:\Users\Damiano\git-dao\it.ltc.database.model.legacy\src\main\java\it\ltc\database\model\legacy\Numerata.java
 C:\Users\Damiano\git-dao\it.ltc.database.model.legacy\src\main\java\it\ltc\database\model\legacy\RighiOrdine.java
 C:\Users\Damiano\git-dao\it.ltc.database.model.legacy\src\main\java\it\ltc\database\model\legacy\ArtiBar.java

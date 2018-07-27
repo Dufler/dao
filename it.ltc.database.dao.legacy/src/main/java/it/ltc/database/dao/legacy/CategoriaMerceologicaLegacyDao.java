@@ -12,7 +12,7 @@ public class CategoriaMerceologicaLegacyDao extends ReadOnlyDao<CatMercGruppi> {
 	}
 	
 	public CatMercGruppi trovaDaCodice(String codice) {
-		CatMercGruppi entity = findFirstOneEqualTo("categoria", codice);
+		CatMercGruppi entity = findOnlyOneEqualTo("categoria", codice);
         return entity;
 	}
 	

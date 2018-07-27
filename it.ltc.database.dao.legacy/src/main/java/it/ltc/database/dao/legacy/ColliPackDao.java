@@ -47,7 +47,7 @@ public class ColliPackDao extends CRUDDao<ColliPack> {
 	}
 	
 	public boolean isProdottoPresenteInMagazzino(String sku) {
-		ColliPack entity = findFirstOneEqualTo("codArtStr", sku);
+		ColliPack entity = findOnlyOneEqualTo("codArtStr", sku);
         boolean presente = entity != null;
 		return presente;
 	}

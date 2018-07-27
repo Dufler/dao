@@ -14,7 +14,7 @@ import java.util.Date;
  */
 @Entity
 @Table(name="ColliPreleva")
-@NamedQuery(name="ColliPreleva.findAll", query="SELECT c FROM ColliPreleva c")
+//@NamedQuery(name="ColliPreleva.findAll", query="SELECT c FROM ColliPreleva c")
 public class ColliPreleva implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
@@ -105,6 +105,9 @@ public class ColliPreleva implements Serializable {
 	 */
 	@Column(name="NrDistinta")
 	private int nrDistinta;
+	
+	@Column(name = "NrLista", length = 21)
+	private String nrLista;
 
 //	@Column(name="NrDocCheckOut", nullable=false)
 //	private int nrDocCheckOut;
@@ -121,8 +124,8 @@ public class ColliPreleva implements Serializable {
 //	@Column(name="Scaffale", length=3)
 //	private String scaffale;
 
-//	@Column(name="Spedito", nullable=false, length=2)
-//	private String spedito;
+	@Column(name="Spedito", nullable=false, length=2)
+	private String spedito;
 
 //	@Column(name="Stato", nullable=false, length=50)
 //	private String stato;
@@ -158,6 +161,7 @@ public class ColliPreleva implements Serializable {
 		nrDistinta = Integer.parseInt(today);
 		vet1 = codiceCorriere;
 		vet2 = " ";
+		if (spedito == null) spedito = "NO";
 	}
 
 	public int getIdColliPreleva() {
@@ -327,6 +331,14 @@ public class ColliPreleva implements Serializable {
 	public void setNrDistinta(int nrDistinta) {
 		this.nrDistinta = nrDistinta;
 	}
+	
+	public String getNrLista() {
+		return this.nrLista;
+	}
+
+	public void setNrLista(String nrLista) {
+		this.nrLista = nrLista;
+	}
 
 //	public int getNrDocCheckOut() {
 //		return this.nrDocCheckOut;
@@ -368,13 +380,13 @@ public class ColliPreleva implements Serializable {
 //		this.scaffale = scaffale;
 //	}
 
-//	public String getSpedito() {
-//		return this.spedito;
-//	}
-//
-//	public void setSpedito(String spedito) {
-//		this.spedito = spedito;
-//	}
+	public String getSpedito() {
+		return this.spedito;
+	}
+
+	public void setSpedito(String spedito) {
+		this.spedito = spedito;
+	}
 //
 //	public String getStato() {
 //		return this.stato;

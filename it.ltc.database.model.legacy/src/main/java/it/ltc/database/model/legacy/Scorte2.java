@@ -1,7 +1,13 @@
 package it.ltc.database.model.legacy;
 
 import java.io.Serializable;
-import javax.persistence.*;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
 
 /**
@@ -11,7 +17,7 @@ import javax.persistence.*;
  */
 @Entity
 @Table(name="Scorte2")
-@NamedQuery(name="Scorte2.findAll", query="SELECT s FROM Scorte2 s")
+//@NamedQuery(name="Scorte2.findAll", query="SELECT s FROM Scorte2 s")
 public class Scorte2 implements Serializable {
 	
 	private static final long serialVersionUID = 1L;

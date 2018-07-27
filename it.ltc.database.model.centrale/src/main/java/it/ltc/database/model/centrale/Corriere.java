@@ -25,8 +25,7 @@ public class Corriere implements Serializable {
 	@Column(nullable=false, length=250)
 	private String nome;
 
-	public Corriere() {
-	}
+	public Corriere() {}
 
 	public int getId() {
 		return this.id;

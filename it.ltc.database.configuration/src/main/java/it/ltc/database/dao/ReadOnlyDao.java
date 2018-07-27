@@ -8,7 +8,7 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
-import org.jboss.logging.Logger;
+import org.apache.log4j.Logger;
 
 /**
  * Dao per leggere dal DB.
@@ -101,10 +101,12 @@ public class ReadOnlyDao<T> extends Dao {
 			switch (condizione.getOperatore()) {
 				case EQUAL : predicates[index] = cb.equal(member.get(condizione.getColonna()), condizione.getValore()); break;
 				case LIKE : predicates[index] = cb.like(member.get(condizione.getColonna()), "%" + condizione.getValore().toString() + "%"); break;
+				case START_WITH : predicates[index] = cb.like(member.get(condizione.getColonna()), condizione.getValore().toString() + "%"); break;
+				case END_WITH : predicates[index] = cb.like(member.get(condizione.getColonna()), "%" + condizione.getValore().toString()); break;
 				case GREATER : predicates[index] = cb.greaterThan(member.get(condizione.getColonna()), (Comparable) condizione.getValore()); break;
-				case GREATERTHAN : predicates[index] = cb.greaterThanOrEqualTo(member.get(condizione.getColonna()), (Comparable) condizione.getValore()); break;
+				case GREATER_OR_EQUAL : predicates[index] = cb.greaterThanOrEqualTo(member.get(condizione.getColonna()), (Comparable) condizione.getValore()); break;
 				case LESSER : predicates[index] = cb.lessThan(member.get(condizione.getColonna()), (Comparable) condizione.getValore()); break;
-				case LESSERTHAN : predicates[index] = cb.lessThanOrEqualTo(member.get(condizione.getColonna()), (Comparable) condizione.getValore()); break;
+				case LESSER_OR_EQUAL : predicates[index] = cb.lessThanOrEqualTo(member.get(condizione.getColonna()), (Comparable) condizione.getValore()); break;
 			}
 			index++;
 		}
@@ -148,6 +150,30 @@ public class ReadOnlyDao<T> extends Dao {
 	        criteria.select(member).where(cb.equal(member.get(columnName), value));
 			List<T> lista = em.createQuery(criteria).setMaxResults(1).getResultList();
 			entity = lista.isEmpty() ? null : lista.get(0);
+		} catch (Exception e) {
+			logger.error(e);
+			entity = null;
+		} finally {
+			em.close();
+		}		
+        return entity;
+	}
+	
+	/**
+	 * Restituisce la prima entity esistente che ha quella proprietà.<br>
+	 * Il numero massimo di entity che verranno cercate è 1.
+	 * @return una entity o <code>null</code> in caso di errori o nessuna corrispondenza.
+	 */
+	protected T findOnlyOneEqualTo(String columnName, Object value) {
+		T entity;
+		EntityManager em = getManager();
+		try {
+			CriteriaBuilder cb = em.getCriteriaBuilder();
+	        CriteriaQuery<T> criteria = cb.createQuery(c);
+	        Root<T> member = criteria.from(c);
+	        criteria.select(member).where(cb.equal(member.get(columnName), value));
+			List<T> lista = em.createQuery(criteria).setMaxResults(2).getResultList();
+			entity = lista.size() == 1 ? lista.get(0) : null;
 		} catch (Exception e) {
 			logger.error(e);
 			entity = null;

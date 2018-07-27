@@ -7,7 +7,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
 
@@ -17,7 +16,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name="MagaSd")
-@NamedQuery(name="MagaSd.findAll", query="SELECT m FROM MagaSd m")
+//@NamedQuery(name="MagaSd.findAll", query="SELECT m FROM MagaSd m")
 public class MagaSd implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
@@ -58,6 +57,34 @@ public class MagaSd implements Serializable {
 //	private int totOut;
 
 	public MagaSd() {}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + idMagaSd;
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		MagaSd other = (MagaSd) obj;
+		if (idMagaSd != other.idMagaSd)
+			return false;
+		return true;
+	}
+
+	@Override
+	public String toString() {
+		return "MagaSd [codMaga=" + codMaga + ", disponibile=" + disponibile + ", esistenza=" + esistenza
+				+ ", idUniArticolo=" + idUniArticolo + ", impegnato=" + impegnato + "]";
+	}
 
 	public int getIdMagaSd() {
 		return this.idMagaSd;

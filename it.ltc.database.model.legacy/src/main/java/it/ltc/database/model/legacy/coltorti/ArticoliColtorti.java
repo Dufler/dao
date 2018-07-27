@@ -51,7 +51,7 @@ import java.util.Date;
  */
 @Entity
 @Table(name="Articoli")
-@NamedQuery(name="ArticoliColtorti.findAll", query="SELECT a FROM ArticoliColtorti a")
+//@NamedQuery(name="ArticoliColtorti.findAll", query="SELECT a FROM ArticoliColtorti a")
 public class ArticoliColtorti implements Serializable {
 	private static final long serialVersionUID = 1L;
 
@@ -310,12 +310,12 @@ public class ArticoliColtorti implements Serializable {
 	 */
 	@PrePersist
 	public void setDefaultValues() {
-		if (madeIn == null)
-			madeIn = "";
-		if (descAggiuntiva == null)
-			descAggiuntiva = "";
-		if (composizione == null)
-			composizione = "";
+		if (madeIn == null)	madeIn = "";
+		if (descAggiuntiva == null)	descAggiuntiva = "";
+		if (composizione == null) composizione = "";
+		if (colore == null) colore = "";
+		if (catMercDett == null) catMercDett = "";
+		if (codArtOld == null) codArtOld = "";
 		dataModifica = new Timestamp(new Date().getTime());
 	}
 	

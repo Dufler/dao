@@ -8,7 +8,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.NamedQuery;
 import javax.persistence.PrePersist;
 import javax.persistence.Table;
 
@@ -19,8 +18,9 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name="Righiubicpre")
-@NamedQuery(name="Righiubicpre.findAll", query="SELECT r FROM Righiubicpre r")
+//@NamedQuery(name="Righiubicpre.findAll", query="SELECT r FROM Righiubicpre r")
 public class Righiubicpre implements Serializable {
+	
 	private static final long serialVersionUID = 1L;
 
 	@Id

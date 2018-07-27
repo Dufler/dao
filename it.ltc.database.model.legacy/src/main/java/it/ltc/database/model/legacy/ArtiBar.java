@@ -12,7 +12,7 @@ import java.util.Date;
  */
 @Entity
 @Table(name="ArtiBar")
-@NamedQuery(name="ArtiBar.findAll", query="SELECT a FROM ArtiBar a")
+//@NamedQuery(name="ArtiBar.findAll", query="SELECT a FROM ArtiBar a")
 public class ArtiBar implements Serializable {
 	
 	private static final long serialVersionUID = 1L;

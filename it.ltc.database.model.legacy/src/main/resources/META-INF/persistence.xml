@@ -40,6 +40,11 @@
 		<class>it.ltc.database.model.legacy.TestataOrdiniTipo</class>
 		<class>it.ltc.database.model.legacy.PakiTestaTipo</class>
 		<class>it.ltc.database.model.legacy.seriale.ColliPackConSeriale</class>
+		<class>it.ltc.database.model.legacy.Nazioni</class>
+		<class>it.ltc.database.model.legacy.Numerata</class>
+		<class>it.ltc.database.model.legacy.Colori</class>
+		<class>it.ltc.database.model.legacy.Stagioni</class>
+		<class>it.ltc.database.model.legacy.Corrieri</class>
 		<properties>
 			<property name="javax.persistence.jdbc.driver" value="com.microsoft.sqlserver.jdbc.SQLServerDriver" />
 			<property name="javax.persistence.jdbc.url" value="jdbc:sqlserver://192.168.0.16:1433;databaseName=DBTest" />
@@ -59,6 +64,7 @@
 			<property name="hibernate.c3p0.min_size" value="0" />
 			<property name="hibernate.c3p0.acquire_increment" value="1" />
 			<property name="hibernate.c3p0.idle_test_period" value="300" />
+			<property name="hibernate.c3p0.checkoutTimeout" value="5000" />
 			<property name="hibernate.c3p0.max_statements" value="0" />
 			<property name="hibernate.c3p0.timeout" value="100" />
 		</properties>
@@ -86,6 +92,7 @@
 		<class>it.ltc.database.model.legacy.RighiImballoLight</class>
 		<class>it.ltc.database.model.legacy.RighiOrdine</class>
 		<class>it.ltc.database.model.legacy.TestaCorr</class>
+		<class>it.ltc.database.model.legacy.documento.TestaCorrConDocumento</class>
 		<class>it.ltc.database.model.legacy.TestataOrdini</class>
 		<class>it.ltc.database.model.legacy.ColliCarico</class>
 		<class>it.ltc.database.model.legacy.Righiubicpre</class>
@@ -116,6 +123,7 @@
 			<property name="hibernate.c3p0.min_size" value="0" />
 			<property name="hibernate.c3p0.acquire_increment" value="1" />
 			<property name="hibernate.c3p0.idle_test_period" value="300" />
+			<property name="hibernate.c3p0.checkoutTimeout" value="5000" />
 			<property name="hibernate.c3p0.max_statements" value="0" />
 			<property name="hibernate.c3p0.timeout" value="100" />
 		</properties>
@@ -151,6 +159,7 @@
 			<property name="hibernate.c3p0.min_size" value="0" />
 			<property name="hibernate.c3p0.acquire_increment" value="1" />
 			<property name="hibernate.c3p0.idle_test_period" value="300" />
+			<property name="hibernate.c3p0.checkoutTimeout" value="5000" />
 			<property name="hibernate.c3p0.max_statements" value="0" />
 			<property name="hibernate.c3p0.timeout" value="100" />
 		</properties>
@@ -288,6 +297,7 @@
 			<property name="hibernate.c3p0.min_size" value="0" />
 			<property name="hibernate.c3p0.acquire_increment" value="1" />
 			<property name="hibernate.c3p0.idle_test_period" value="300" />
+			<property name="hibernate.c3p0.checkoutTimeout" value="5000" />
 			<property name="hibernate.c3p0.max_statements" value="0" />
 			<property name="hibernate.c3p0.timeout" value="100" />
 		</properties>
@@ -315,6 +325,7 @@
 			<property name="hibernate.c3p0.min_size" value="0" />
 			<property name="hibernate.c3p0.acquire_increment" value="1" />
 			<property name="hibernate.c3p0.idle_test_period" value="300" />
+			<property name="hibernate.c3p0.checkoutTimeout" value="5000" />
 			<property name="hibernate.c3p0.max_statements" value="0" />
 			<property name="hibernate.c3p0.timeout" value="100" />
 		</properties>
@@ -342,6 +353,7 @@
 			<property name="hibernate.c3p0.min_size" value="0" />
 			<property name="hibernate.c3p0.acquire_increment" value="1" />
 			<property name="hibernate.c3p0.idle_test_period" value="300" />
+			<property name="hibernate.c3p0.checkoutTimeout" value="5000" />
 			<property name="hibernate.c3p0.max_statements" value="0" />
 			<property name="hibernate.c3p0.timeout" value="100" />
 		</properties>
@@ -369,6 +381,7 @@
 			<property name="hibernate.c3p0.min_size" value="0" />
 			<property name="hibernate.c3p0.acquire_increment" value="1" />
 			<property name="hibernate.c3p0.idle_test_period" value="300" />
+			<property name="hibernate.c3p0.checkoutTimeout" value="5000" />
 			<property name="hibernate.c3p0.max_statements" value="0" />
 			<property name="hibernate.c3p0.timeout" value="100" />
 		</properties>
@@ -396,6 +409,7 @@
 			<property name="hibernate.c3p0.min_size" value="0" />
 			<property name="hibernate.c3p0.acquire_increment" value="1" />
 			<property name="hibernate.c3p0.idle_test_period" value="300" />
+			<property name="hibernate.c3p0.checkoutTimeout" value="5000" />
 			<property name="hibernate.c3p0.max_statements" value="0" />
 			<property name="hibernate.c3p0.timeout" value="100" />
 		</properties>
@@ -423,6 +437,7 @@
 			<property name="hibernate.c3p0.min_size" value="0" />
 			<property name="hibernate.c3p0.acquire_increment" value="1" />
 			<property name="hibernate.c3p0.idle_test_period" value="300" />
+			<property name="hibernate.c3p0.checkoutTimeout" value="5000" />
 			<property name="hibernate.c3p0.max_statements" value="0" />
 			<property name="hibernate.c3p0.timeout" value="100" />
 		</properties>
@@ -433,7 +448,7 @@
 		<class>it.ltc.database.model.legacy.TestaCorr</class>
 		<properties>
 			<property name="javax.persistence.jdbc.driver" value="com.microsoft.sqlserver.jdbc.SQLServerDriver" />
-			<property name="javax.persistence.jdbc.url" value="jdbc:sqlserver://192.168.171.100:1433;databaseName=DBBik" />
+			<property name="javax.persistence.jdbc.url" value="jdbc:sqlserver://192.168.0.220:1433;databaseName=DBBik" />
 			<property name="javax.persistence.jdbc.user" value="ltc" />
 			<property name="javax.persistence.jdbc.password" value="ltcpsw" />
 			<property name="hibernate.hbm2ddl.auto" value="none" />
@@ -443,13 +458,14 @@
 			<property name="hibernate.ejb.entitymanager_factory_name" value="legacy-zeis"/> <!-- Aggiunta per evitare che vengano create 2 PU -->
 			<property name="hibernate.connection.password" value="ltcpsw"/>
 			<property name="hibernate.connection.username" value="ltc"/>
-			<property name="hibernate.connection.url" value="jdbc:sqlserver://192.168.171.100:1433;databaseName=DBBik"/>
+			<property name="hibernate.connection.url" value="jdbc:sqlserver://192.168.0.220:1433;databaseName=DBBik"/>
 			<property name="hibernate.connection.driver_class" value="com.microsoft.sqlserver.jdbc.SQLServerDriver"/>
 			<property name="hibernate.connection.provider_class" value="org.hibernate.connection.C3P0ConnectionProvider" />
 			<property name="hibernate.c3p0.max_size" value="3" />
 			<property name="hibernate.c3p0.min_size" value="0" />
 			<property name="hibernate.c3p0.acquire_increment" value="1" />
 			<property name="hibernate.c3p0.idle_test_period" value="300" />
+			<property name="hibernate.c3p0.checkoutTimeout" value="5000" />
 			<property name="hibernate.c3p0.max_statements" value="0" />
 			<property name="hibernate.c3p0.timeout" value="100" />
 			<property name="hibernate.c3p0.acquireRetryAttempts" value="3"/>

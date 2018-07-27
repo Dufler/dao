@@ -2,6 +2,9 @@ package it.ltc.database.model.legacy;
 
 import java.io.Serializable;
 import javax.persistence.*;
+
+import it.ltc.utility.miscellanea.time.DateConverter;
+
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -13,7 +16,7 @@ import java.util.Date;
  */
 @Entity
 @Table(name="pakiTesta")
-@NamedQuery(name="PakiTesta.findAll", query="SELECT p FROM PakiTesta p")
+//@NamedQuery(name="PakiTesta.findAll", query="SELECT p FROM PakiTesta p")
 public class PakiTesta implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
@@ -60,8 +63,8 @@ public class PakiTesta implements Serializable {
 	@Column(name="DataArrivo")
 	private Timestamp dataArrivo;
 
-//	@Column(name="DataGenFile")
-//	private Timestamp dataGenFile;
+	@Column(name="DataGenFile")
+	private Timestamp dataGenFile;
 
 	@Column(name="DataInizio")
 	private Timestamp dataInizio;
@@ -84,11 +87,11 @@ public class PakiTesta implements Serializable {
 	@Column(name="FlussoDichiarato", nullable=false, length=2)
 	private String flussoDichiarato;
 
-//	@Column(name="GeneratoFile", length=2)
-//	private String generatoFile;
+	@Column(name="GeneratoFile", length=2)
+	private String generatoFile;
 
-//	@Column(name="GeneratoMov", length=2)
-//	private String generatoMov;
+	@Column(name="GeneratoMov", length=2)
+	private String generatoMov;
 
 //	@Column(name="GeneratoPack", length=2)
 //	private String generatoPack;
@@ -123,11 +126,11 @@ public class PakiTesta implements Serializable {
 	@Column(name="NrPaki", length=30)
 	private String nrPaki;
 
-//	@Column(name="OraGenFile")
-//	private int oraGenFile;
+	@Column(name="OraGenFile")
+	private Integer oraGenFile;
 
-//	@Column(name="OraInizio")
-//	private int oraInizio;
+	@Column(name="OraInizio")
+	private Integer oraInizio;
 
 //	@Column(name="Prenotato", length=2)
 //	private String prenotato;
@@ -200,17 +203,36 @@ public class PakiTesta implements Serializable {
 	@PrePersist
 	public void prePersist() {
 		Date now = new Date();
+		Timestamp stamp = new Timestamp(now.getTime());
 		SimpleDateFormat sdf = new SimpleDateFormat("yy");
 		qtaTotAre = 0;
 		if (flussoDichiarato == null) flussoDichiarato = "SI";
 		if (stagione == null) stagione = "";
 		if (tipoPack == null) tipoPack = "ART";
-		dataInizio = new Timestamp(now.getTime());
-		creazione = new Timestamp(now.getTime());
+		if (abilitaEccedenze == null) abilitaEccedenze = "NO";
+		//dataInizio = new Timestamp(now.getTime());
+		//oraInizio = DateConverter.getOraComeIntero(dataInizio);
+		//dataInizio = DateConverter.ripulisciTimestap(dataInizio);
+		creazione = stamp;
+		setDataOraInizio(stamp);
 		anno = sdf.format(now);
 		stato = "INSERITO";
-		if (abilitaEccedenze == null)
-			abilitaEccedenze = "NO";
+		generatoMov = "NO";
+		generatoFile = "NO";
+	}
+	
+	public void setDataOraInizio(Timestamp time) {
+		if (time == null)
+			time = new Timestamp(new Date().getTime());
+		oraInizio = DateConverter.getOraComeIntero(time);
+		dataInizio = DateConverter.ripulisciTimestap(time);
+	}
+	
+	public void setDataOraGenerazione(Timestamp time) {
+		if (time == null)
+			time = new Timestamp(new Date().getTime());
+		oraGenFile = DateConverter.getOraComeIntero(time);
+		dataGenFile = DateConverter.ripulisciTimestap(time);
 	}
 	
 	@Override
@@ -338,13 +360,13 @@ public class PakiTesta implements Serializable {
 		this.dataArrivo = dataArrivo;
 	}
 
-//	public Timestamp getDataGenFile() {
-//		return this.dataGenFile;
-//	}
-//
-//	public void setDataGenFile(Timestamp dataGenFile) {
-//		this.dataGenFile = dataGenFile;
-//	}
+	public Timestamp getDataGenFile() {
+		return this.dataGenFile;
+	}
+
+	public void setDataGenFile(Timestamp dataGenFile) {
+		this.dataGenFile = dataGenFile;
+	}
 
 	public Timestamp getDataInizio() {
 		return this.dataInizio;
@@ -394,21 +416,21 @@ public class PakiTesta implements Serializable {
 		this.flussoDichiarato = flussoDichiarato;
 	}
 
-//	public String getGeneratoFile() {
-//		return this.generatoFile;
-//	}
-//
-//	public void setGeneratoFile(String generatoFile) {
-//		this.generatoFile = generatoFile;
-//	}
-//
-//	public String getGeneratoMov() {
-//		return this.generatoMov;
-//	}
-//
-//	public void setGeneratoMov(String generatoMov) {
-//		this.generatoMov = generatoMov;
-//	}
+	public String getGeneratoFile() {
+		return this.generatoFile;
+	}
+
+	public void setGeneratoFile(String generatoFile) {
+		this.generatoFile = generatoFile;
+	}
+
+	public String getGeneratoMov() {
+		return this.generatoMov;
+	}
+
+	public void setGeneratoMov(String generatoMov) {
+		this.generatoMov = generatoMov;
+	}
 //
 //	public String getGeneratoPack() {
 //		return this.generatoPack;
@@ -482,21 +504,21 @@ public class PakiTesta implements Serializable {
 		this.nrPaki = nrPaki;
 	}
 
-//	public int getOraGenFile() {
-//		return this.oraGenFile;
-//	}
-//
-//	public void setOraGenFile(int oraGenFile) {
-//		this.oraGenFile = oraGenFile;
-//	}
-//
-//	public int getOraInizio() {
-//		return this.oraInizio;
-//	}
-//
-//	public void setOraInizio(int oraInizio) {
-//		this.oraInizio = oraInizio;
-//	}
+	public Integer getOraGenFile() {
+		return this.oraGenFile;
+	}
+
+	public void setOraGenFile(Integer oraGenFile) {
+		this.oraGenFile = oraGenFile;
+	}
+
+	public Integer getOraInizio() {
+		return this.oraInizio;
+	}
+
+	public void setOraInizio(Integer oraInizio) {
+		this.oraInizio = oraInizio;
+	}
 //
 //	public String getPrenotato() {
 //		return this.prenotato;

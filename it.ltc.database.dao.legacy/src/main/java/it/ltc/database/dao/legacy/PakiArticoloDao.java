@@ -6,18 +6,24 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
+import javax.persistence.EntityManager;
+
+import org.apache.log4j.Logger;
+
 import it.ltc.database.dao.CRUDDao;
 import it.ltc.database.dao.CondizioneWhere;
 import it.ltc.database.model.legacy.PakiArticolo;
 
 public class PakiArticoloDao extends CRUDDao<PakiArticolo> {
+	
+	private static final Logger logger = Logger.getLogger("PakiArticoloDao");
 
 	public PakiArticoloDao(String persistenceUnit) {
 		super(persistenceUnit, PakiArticolo.class);
 	}
 	
 	public boolean isProdottoPresenteInCarichi(String sku) {
-		PakiArticolo entity = findFirstOneEqualTo("codArtStr", sku);
+		PakiArticolo entity = findOnlyOneEqualTo("codArtStr", sku);
         boolean presente = entity != null;
 		return presente;
 	}
@@ -42,9 +48,47 @@ public class PakiArticoloDao extends CRUDDao<PakiArticolo> {
         return lista;
 	}
 	
+	public List<PakiArticolo> trovaRigheDaCaricoENumeroRiga(int idCarico, int numeroRiga) {
+		CondizioneWhere condizioneCarico = new CondizioneWhere("idPakiTesta", idCarico);
+		CondizioneWhere condizioneRiga = new CondizioneWhere("rigaPacki", numeroRiga);
+		List<CondizioneWhere> condizioni = new LinkedList<>();
+		condizioni.add(condizioneCarico);
+		condizioni.add(condizioneRiga);
+		List<PakiArticolo> lista = findAll(condizioni);
+        return lista;
+	}
+	
 	public List<PakiArticolo> trovaRigheDaCollo(String collo) {
 		List<PakiArticolo> lista = findAllEqualTo("barcodeCollo", collo);
         return lista;
+	}
+	
+	public int calcolaTotaleDichiaratoPerCarico(int idCarico) {
+		int totale;
+		EntityManager em = getManager();
+		try {
+			totale = em.createNamedQuery("PakiArticolo.totaleDichiaratoPerCarico", Long.class).setParameter("carico", idCarico).getSingleResult().intValue();
+		} catch (Exception e) {
+			logger.error(e);
+			totale = -1;
+		} finally {
+			em.close();
+		}
+		return totale;
+	}
+	
+	public int calcolaTotaleVerificatoPerCarico(int idCarico) {
+		int totale;
+		EntityManager em = getManager();
+		try {
+			totale = em.createNamedQuery("PakiArticolo.totaleVerificatoPerCarico", Long.class).setParameter("carico", idCarico).getSingleResult().intValue();
+		} catch (Exception e) {
+			logger.error(e);
+			totale = -1;
+		} finally {
+			em.close();
+		}
+		return totale;
 	}
 	
 	public PakiArticolo inserisci(PakiArticolo riga) {
@@ -78,14 +122,14 @@ public class PakiArticoloDao extends CRUDDao<PakiArticolo> {
 		oldEntity.setCodMotivo(entity.getCodMotivo());
 		oldEntity.setCodUnicoArt(entity.getCodUnicoArt());
 		oldEntity.setDataModifica(new Timestamp(new Date().getTime()));
-		oldEntity.setIdPakiTesta(entity.getIdPakiTesta());
+		//oldEntity.setIdPakiTesta(entity.getIdPakiTesta());
 		oldEntity.setKeyUbicaCar(entity.getKeyUbicaCar());
 		oldEntity.setKeyUbicaPre(entity.getKeyUbicaPre());
 		oldEntity.setMadeIn(entity.getMadeIn());
 		oldEntity.setMagazzino(entity.getMagazzino());
 		oldEntity.setMagazzinoltc(entity.getMagazzinoltc());
 		oldEntity.setNrDispo(entity.getNrDispo());
-		oldEntity.setNrOrdineFor(entity.getNrOrdineFor());
+		//oldEntity.setNrOrdineFor(entity.getNrOrdineFor());
 		oldEntity.setQtaPaki(entity.getQtaPaki());
 		oldEntity.setQtaPreDoc(entity.getQtaPreDoc());
 		oldEntity.setQtaPrelevata(entity.getQtaPrelevata());

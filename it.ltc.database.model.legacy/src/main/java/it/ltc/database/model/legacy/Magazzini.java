@@ -1,7 +1,13 @@
 package it.ltc.database.model.legacy;
 
 import java.io.Serializable;
-import javax.persistence.*;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
 
 /**
@@ -10,8 +16,9 @@ import javax.persistence.*;
  */
 @Entity
 @Table(name="Magazzini")
-@NamedQuery(name="Magazzini.findAll", query="SELECT m FROM Magazzini m")
+//@NamedQuery(name="Magazzini.findAll", query="SELECT m FROM Magazzini m")
 public class Magazzini implements Serializable {
+	
 	private static final long serialVersionUID = 1L;
 
 	@Id
@@ -58,8 +65,7 @@ public class Magazzini implements Serializable {
 //	@Column(name="TipoOrdine", nullable=false, length=10)
 //	private String tipoOrdine;
 
-	public Magazzini() {
-	}
+	public Magazzini() {}
 
 	public int getIdMagazzino() {
 		return this.idMagazzino;

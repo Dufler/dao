@@ -10,7 +10,7 @@ import javax.persistence.*;
  */
 @Entity
 @Table(name="Fornitori")
-@NamedQuery(name="Fornitori.findAll", query="SELECT f FROM Fornitori f")
+//@NamedQuery(name="Fornitori.findAll", query="SELECT f FROM Fornitori f")
 public class Fornitori implements Serializable {
 	private static final long serialVersionUID = 1L;
 
@@ -61,7 +61,7 @@ public class Fornitori implements Serializable {
 //	@Column(name="IndiC", length=50)
 //	private String indiC;
 
-	@Column(name="Indirizzo", length=40)
+	@Column(name="Indirizzo", length=250)
 	private String indirizzo;
 
 	@Column(length=50)
@@ -87,9 +87,11 @@ public class Fornitori implements Serializable {
 
 	@Column(name="Tipodocumento", length=10)
 	private String tipodocumento;
+	
+	@Column(name="note", length=250)
+	private String note;
 
-	public Fornitori() {
-	}
+	public Fornitori() {}
 	
 	@PrePersist
 	public void prePersist() {
@@ -287,6 +289,14 @@ public class Fornitori implements Serializable {
 
 	public void setTipodocumento(String tipodocumento) {
 		this.tipodocumento = tipodocumento;
+	}
+
+	public String getNote() {
+		return note;
+	}
+
+	public void setNote(String note) {
+		this.note = note;
 	}
 
 }

@@ -1,5 +1,7 @@
 package it.ltc.database.dao.legacy.coltorti;
 
+import java.util.Date;
+import java.util.LinkedList;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -8,10 +10,11 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 
 import it.ltc.database.dao.CRUDDao;
+import it.ltc.database.dao.CondizioneWhere;
+import it.ltc.database.dao.CondizioneWhere.Operatore;
 import it.ltc.database.model.legacy.coltorti.ArticoliColtorti;
-import it.ltc.model.shared.dao.IProdottoDao;
 
-public class ArticoliColtortiDao extends CRUDDao<ArticoliColtorti> implements IProdottoDao<ArticoliColtorti> {
+public class ArticoliColtortiDao extends CRUDDao<ArticoliColtorti> {
 	
 	public ArticoliColtortiDao(String persistenceUnit) {
 		super(persistenceUnit, ArticoliColtorti.class);
@@ -22,7 +25,6 @@ public class ArticoliColtortiDao extends CRUDDao<ArticoliColtorti> implements IP
 		return entity;
 	}
 	
-	@Override
 	public List<ArticoliColtorti> trovaTutti() {
 		List<ArticoliColtorti> entities = findAll();
 		return entities;
@@ -44,17 +46,15 @@ public class ArticoliColtortiDao extends CRUDDao<ArticoliColtorti> implements IP
 	}
 	
 	public ArticoliColtorti trovaDaIDUnivoco(String idUnivoco) {
-		ArticoliColtorti entity = findFirstOneEqualTo("idUniArticolo", idUnivoco);
+		ArticoliColtorti entity = findOnlyOneEqualTo("idUniArticolo", idUnivoco);
 		return entity;
 	}
 	
-	@Override
 	public ArticoliColtorti trovaDaSKU(String sku) {
-		ArticoliColtorti entity = findFirstOneEqualTo("codArtStr", sku);
+		ArticoliColtorti entity = findOnlyOneEqualTo("codArtStr", sku);
 		return entity;
 	}
 	
-	@Override
 	public ArticoliColtorti trovaDaBarcode(String barcode) {
 		EntityManager em = getManager();
 		CriteriaBuilder cb = em.getCriteriaBuilder();
@@ -97,6 +97,27 @@ public class ArticoliColtortiDao extends CRUDDao<ArticoliColtorti> implements IP
 		oldEntity.setValVen(entity.getValVen());
 		//Aggiungo qui le particolarità
 		oldEntity.setParticolarita(entity.getParticolarita());
+	}
+
+	public List<ArticoliColtorti> trova(String sku, String modello, String stagione, String descrizione, int maxResults) {
+		List<CondizioneWhere> condizioni = new LinkedList<>();
+		if (sku != null && !sku.isEmpty())
+			condizioni.add(new CondizioneWhere("codArtStr", sku, Operatore.LIKE));
+		if (modello != null && !modello.isEmpty())
+			condizioni.add(new CondizioneWhere("modello", modello, Operatore.LIKE));
+		if (stagione != null && !stagione.isEmpty())
+			condizioni.add(new CondizioneWhere("stagione", stagione));
+		if (descrizione != null && !descrizione.isEmpty())
+			condizioni.add(new CondizioneWhere("descrizione", descrizione, Operatore.LIKE));
+		List<ArticoliColtorti> entities = findAll(condizioni, maxResults);
+		return entities;
+	}
+
+	public List<ArticoliColtorti> trovaDaUltimaModifica(Date ultimaModifica) {
+		List<CondizioneWhere> condizioni = new LinkedList<>();
+		condizioni.add(new CondizioneWhere("dataModifica", ultimaModifica, Operatore.GREATER));
+		List<ArticoliColtorti> entities = findAll(condizioni);
+        return entities;
 	}
 
 }

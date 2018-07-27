@@ -130,8 +130,10 @@ public class LoginController {
 			String password = auth[1];
 			user = userDao.getUserByUsername(username, true, refresh);
 			String hashedPassword = getHash(password);
-			if (!user.getPassword().equals(hashedPassword))
+			if (user != null && !user.getPassword().equals(hashedPassword)) {
+				logger.warn("Richiesta di login tramite basic auth non valida. Stringa ricevuta: '" + authenticationString + "', username: '" + username + "', password: '" + password + "'");
 				user = null;
+			}
 		} else {
 			logger.warn("Richiesta di login tramite basic auth non conforme. Stringa ricevuta: '" + authenticationString + "'");
 			user = null;

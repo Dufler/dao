@@ -19,7 +19,7 @@ public class SpedizioneDao extends CRUDDao<Spedizione> {
 	}
 	
 	public Spedizione trovaDaLetteraDiVettura(String letteraDiVettura) {
-		Spedizione entity = findFirstOneEqualTo("letteraDiVettura", letteraDiVettura);
+		Spedizione entity = findOnlyOneEqualTo("letteraDiVettura", letteraDiVettura);
 		return entity;
 	}
 	

@@ -9,7 +9,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.NamedQuery;
 import javax.persistence.PrePersist;
 import javax.persistence.Table;
 
@@ -22,8 +21,9 @@ import it.ltc.utility.miscellanea.time.DateConverter;
  */
 @Entity
 @Table(name="ColliPack")
-@NamedQuery(name="ColliPack.findAll", query="SELECT c FROM ColliPack c")
+//@NamedQuery(name="ColliPack.findAll", query="SELECT c FROM ColliPack c")
 public class ColliPack implements Serializable {
+	
 	private static final long serialVersionUID = 1L;
 
 	@Id
@@ -67,8 +67,11 @@ public class ColliPack implements Serializable {
 //	@Column(name="Flagpre", nullable=false, length=1)
 //	private String flagpre;
 
-//	@Column(name="Flagtc")
-//	private int flagtc;
+	/**
+	 * 0 quando non ancora disponibile, passa 1 quando viene generato il carico. 
+	 */
+	@Column(name="Flagtc")
+	private int flagtc;
 
 	@Column(name="IdPakiarticolo")
 	private int idPakiarticolo;
@@ -103,9 +106,9 @@ public class ColliPack implements Serializable {
 //	@Column(name="NrRiferimento")
 //	private int nrRiferimento;
 //
-//	@Column(name="Operatore", length=10)
-//	private String operatore;
-//
+	@Column(name="Operatore", length=10)
+	private String operatore;
+
 	@Column(name="OraAgg")
 	private int oraAgg;
 //
@@ -251,13 +254,13 @@ public class ColliPack implements Serializable {
 //		this.flagpre = flagpre;
 //	}
 //
-//	public int getFlagtc() {
-//		return this.flagtc;
-//	}
-//
-//	public void setFlagtc(int flagtc) {
-//		this.flagtc = flagtc;
-//	}
+	public int getFlagtc() {
+		return this.flagtc;
+	}
+
+	public void setFlagtc(int flagtc) {
+		this.flagtc = flagtc;
+	}
 
 	public int getIdPakiarticolo() {
 		return this.idPakiarticolo;
@@ -346,15 +349,15 @@ public class ColliPack implements Serializable {
 //	public void setNrRiferimento(int nrRiferimento) {
 //		this.nrRiferimento = nrRiferimento;
 //	}
-//
-//	public String getOperatore() {
-//		return this.operatore;
-//	}
-//
-//	public void setOperatore(String operatore) {
-//		this.operatore = operatore;
-//	}
-//
+
+	public String getOperatore() {
+		return this.operatore;
+	}
+
+	public void setOperatore(String operatore) {
+		this.operatore = operatore;
+	}
+
 	public int getOraAgg() {
 		return this.oraAgg;
 	}

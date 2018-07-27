@@ -67,7 +67,7 @@ public class ColliCarico implements Serializable {
 	/**
 	 * Giorno della creazione senza l'ora.
 	 */
-	@Column(name="DataCrea")
+	@Column(name="DataCrea", updatable=false)
 	private Timestamp dataCrea;
 
 	/**
@@ -132,7 +132,7 @@ public class ColliCarico implements Serializable {
 	/**
 	 * Valore univoco fatto così: YY + padding di 0 + progressivo collo.
 	 */
-	@Column(name="KeyColloCar", length=9)
+	@Column(name="KeyColloCar", length=9, updatable=false)
 	private String keyColloCar;
 
 	/**
@@ -153,7 +153,7 @@ public class ColliCarico implements Serializable {
 	/**
 	 * Progressivo della tabella.
 	 */
-	@Column(name="NrCollo")
+	@Column(name="NrCollo", updatable=false)
 	private int nrCollo;
 
 //	@Column(name="NrRiferimento")
@@ -168,7 +168,7 @@ public class ColliCarico implements Serializable {
 	/**
 	 * Ora della creazione del collo.
 	 */
-	@Column(name="OraCrea")
+	@Column(name="OraCrea", updatable=false)
 	private int oraCrea;
 
 	/**
@@ -208,8 +208,8 @@ public class ColliCarico implements Serializable {
 	/**
 	 * Valore di deafult sul db ATTE
 	 */
-//	@Column(name="Stato", length=6)
-//	private String stato;
+	@Column(name="Stato", length=6)
+	private String stato;
 
 	/**
 	 * Il tipo della cassa, se non c'è l'ho inserisco 'XXX' nel prepersist
@@ -223,7 +223,7 @@ public class ColliCarico implements Serializable {
 	/**
 	 * Default a NO, passa a SI quando viene ubicato.
 	 */
-	@Column(name="Ubicato", length=2, insertable=false)
+	@Column(name="Ubicato", length=2)
 	private String ubicato;
 
 	/**
@@ -235,7 +235,7 @@ public class ColliCarico implements Serializable {
 	/**
 	 * Metto un default a stringa vuota.
 	 */
-	@Column(name="Utente", length=20)
+	@Column(name="Utente", length=20, updatable=false)
 	private String utente;
 
 	/**
@@ -266,18 +266,18 @@ public class ColliCarico implements Serializable {
 		String progressivoCollo = su.getFormattedString(nrCollo, 7);
 		keyColloCar = annoCollo + progressivoCollo;
 		barcode = "CPX" + keyColloCar;
-		if (id_Box == null)
-			id_Box = "";
-		if (tipoCassa == null)
-			tipoCassa = "XXX";
+		if (id_Box == null)	id_Box = "";
+		if (tipoCassa == null) tipoCassa = "XXX";
+		if (utente == null) utente = "";
+		ubicato = "NO";
 		bloccato = "NO";
 		cancellato = "NO";
 		distrutto = "NO";
 		flagtc = "0";
-		utente = "";
 		utenteMod = "";
 		utenteUbica = "";
 		uteDistruzione = "";
+		stato = "APERTO";
 	}
 
 	public int getIdCollo() {
@@ -560,13 +560,13 @@ public class ColliCarico implements Serializable {
 //		this.sessione_Chk = sessione_Chk;
 //	}
 //
-//	public String getStato() {
-//		return this.stato;
-//	}
-//
-//	public void setStato(String stato) {
-//		this.stato = stato;
-//	}
+	public String getStato() {
+		return this.stato;
+	}
+
+	public void setStato(String stato) {
+		this.stato = stato;
+	}
 
 	public String getTipoCassa() {
 		return this.tipoCassa;

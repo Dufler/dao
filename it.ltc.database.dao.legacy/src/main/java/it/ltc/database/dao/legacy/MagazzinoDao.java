@@ -17,12 +17,12 @@ public class MagazzinoDao extends ReadOnlyDao<Magazzini> {
 	}
 
 	public Magazzini trovaDaCodiceLTC(String codice) {
-        Magazzini magazzino = findFirstOneEqualTo("codiceMag", codice);
+        Magazzini magazzino = findOnlyOneEqualTo("codiceMag", codice);
 		return magazzino;
 	}
 
 	public Magazzini trovaDaCodificaCliente(String codifica) {
-        Magazzini magazzino = findFirstOneEqualTo("magaCliente", codifica);
+        Magazzini magazzino = findOnlyOneEqualTo("magaCliente", codifica);
 		return magazzino;
 	}
 

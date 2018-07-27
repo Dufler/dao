@@ -12,7 +12,7 @@ public class TestataOrdiniTipoDao extends ReadOnlyDao<TestataOrdiniTipo> {
 	}
 	
 	public TestataOrdiniTipo trovaTipoDaCodice(String codice) {
-		TestataOrdiniTipo entity = findFirstOneEqualTo("codice", codice);
+		TestataOrdiniTipo entity = findOnlyOneEqualTo("codice", codice);
 		return entity;
 	}
 	

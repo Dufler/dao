@@ -17,7 +17,7 @@ public class ImballoDao extends ReadOnlyDao<Imballi> {
 	}
 
 	public Imballi trovaDaCodice(String codice) {
-		Imballi imballo = findFirstOneEqualTo("codImballo", codice);
+		Imballi imballo = findOnlyOneEqualTo("codImballo", codice);
         return imballo;
 	}
 

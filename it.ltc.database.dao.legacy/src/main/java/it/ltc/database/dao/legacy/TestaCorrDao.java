@@ -34,5 +34,10 @@ public class TestaCorrDao extends CRUDDao<TestaCorr> {
 		// TODO Auto-generated method stub
 		
 	}
+	
+	public TestaCorr trovaDaID(int id) {
+		TestaCorr entity = findByID(id);
+		return entity;
+	}
 
 }

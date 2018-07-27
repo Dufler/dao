@@ -10,8 +10,9 @@ import javax.persistence.*;
  */
 @Entity
 @Table(name="pakiTestaTipo")
-@NamedQuery(name="PakiTestaTipo.findAll", query="SELECT p FROM PakiTestaTipo p")
+//@NamedQuery(name="PakiTestaTipo.findAll", query="SELECT p FROM PakiTestaTipo p")
 public class PakiTestaTipo implements Serializable {
+	
 	private static final long serialVersionUID = 1L;
 
 	@Id
@@ -19,9 +20,11 @@ public class PakiTestaTipo implements Serializable {
 	@Column(unique=true, nullable=false, length=30)
 	private String codice;
 
-	@Lob
-	@Column(nullable=false)
+	@Column(nullable=false, length=250)
 	private String descrizione;
+	
+	@Column(nullable=false, length=50)
+	private String particolarita;
 
 	public PakiTestaTipo() {}
 
@@ -39,6 +42,14 @@ public class PakiTestaTipo implements Serializable {
 
 	public void setDescrizione(String descrizione) {
 		this.descrizione = descrizione;
+	}
+
+	public String getParticolarita() {
+		return particolarita;
+	}
+
+	public void setParticolarita(String particolarita) {
+		this.particolarita = particolarita;
 	}
 
 }

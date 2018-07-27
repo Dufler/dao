@@ -15,7 +15,7 @@ import java.util.Date;
 @Table(name="Articoli")
 //@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 //@DiscriminatorColumn(name="idUniArticolo", discriminatorType = DiscriminatorType.STRING)
-@NamedQuery(name="Articoli.findAll", query="SELECT a FROM Articoli a")
+//@NamedQuery(name="Articoli.findAll", query="SELECT a FROM Articoli a")
 public class Articoli implements Serializable {
 	private static final long serialVersionUID = 1L;
 
@@ -195,8 +195,8 @@ public class Articoli implements Serializable {
 //	@Column(name="Pubb", nullable=false, length=2, insertable=false)
 //	private String pubb;
 
-//	@Column(name="QtaConf")
-//	private int qtaConf;
+	@Column(name="QtaConf")
+	private int qtaConf;
 
 //	@Column(name="QtaImba", nullable=false, insertable=false)
 //	private int qtaImba;
@@ -237,11 +237,11 @@ public class Articoli implements Serializable {
 //	@Column(name="UbiScorta", length=50)
 //	private String ubiScorta;
 
-//	@Column(name="Um", length=10)
-//	private String um;
+	@Column(name="Um", length=10)
+	private String um;
 
-//	@Column(name="UmPos")
-//	private int umPos;
+	@Column(name="UmPos")
+	private int umPos;
 
 //	@Column(name="Utente", length=15)
 //	private String utente;
@@ -271,12 +271,15 @@ public class Articoli implements Serializable {
 	 */
 	@PrePersist
 	public void prePersist() {
-		if (madeIn == null)
-			madeIn = "";
-		if (descAggiuntiva == null)
-			descAggiuntiva = "";
-		if (composizione == null)
-			composizione = "";
+		if (madeIn == null)	madeIn = "";
+		if (descAggiuntiva == null)	descAggiuntiva = "";
+		if (composizione == null) composizione = "";
+		if (colore == null) colore = "";
+		if (catMercDett == null) catMercDett = "";
+		if (codArtOld == null) codArtOld = "";
+		if (qtaConf < 0) qtaConf = 1;
+		if (um == null) um = "Pz.";
+		if (umPos < 1) umPos = 1;
 		dataModifica = new Timestamp(new Date().getTime());
 	}
 	
@@ -752,13 +755,13 @@ public class Articoli implements Serializable {
 //		this.pubb = pubb;
 //	}
 //
-//	public int getQtaConf() {
-//		return this.qtaConf;
-//	}
-//
-//	public void setQtaConf(int qtaConf) {
-//		this.qtaConf = qtaConf;
-//	}
+	public int getQtaConf() {
+		return this.qtaConf;
+	}
+
+	public void setQtaConf(int qtaConf) {
+		this.qtaConf = qtaConf;
+	}
 //
 //	public int getQtaImba() {
 //		return this.qtaImba;
@@ -864,21 +867,21 @@ public class Articoli implements Serializable {
 //		this.ubiScorta = ubiScorta;
 //	}
 //
-//	public String getUm() {
-//		return this.um;
-//	}
-//
-//	public void setUm(String um) {
-//		this.um = um;
-//	}
-//
-//	public int getUmPos() {
-//		return this.umPos;
-//	}
-//
-//	public void setUmPos(int umPos) {
-//		this.umPos = umPos;
-//	}
+	public String getUm() {
+		return this.um;
+	}
+
+	public void setUm(String um) {
+		this.um = um;
+	}
+
+	public int getUmPos() {
+		return this.umPos;
+	}
+
+	public void setUmPos(int umPos) {
+		this.umPos = umPos;
+	}
 //
 //	public String getUtente() {
 //		return this.utente;

@@ -8,7 +8,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Table;
 
-import org.jboss.logging.Logger;
+import org.apache.log4j.Logger;
 
 /**
  * Classe per l'accesso allo strato di persistenza da estendere e parametrizzare per la specifica entity.
@@ -126,6 +126,7 @@ public abstract class CRUDDao<T> extends ReadOnlyDao<T> {
 					em.close();
 				}
 			} else {
+				logger.error("Update fallito, entity non trovata tramite l'ID");
 				em.close();
 				entity = null;
 			}
@@ -209,9 +210,11 @@ public abstract class CRUDDao<T> extends ReadOnlyDao<T> {
 					em.close();
 				}
 			} else {
+				logger.error("Delete fallito, entity non trovata tramite l'ID");
 				em.close();
 			}
 		} else {
+			logger.error("Delete fallito, L'ID passato come argomento è null");
 			entity = null;
 		}
 		return entity;
@@ -249,6 +252,7 @@ public abstract class CRUDDao<T> extends ReadOnlyDao<T> {
 				em.close();
 			}
 		} else {
+			logger.error("Delete fallito, la lista di ID passati come argomento è null o vuota");
 			entities = null;
 		}
 		return entities;

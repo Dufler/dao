@@ -2,6 +2,7 @@ package it.ltc.database.model.legacy;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -10,6 +11,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
@@ -23,7 +25,12 @@ import javax.persistence.Transient;
  */
 @Entity
 @Table(name="pakiArticolo")
-@NamedQuery(name="PakiArticolo.findAll", query="SELECT p FROM PakiArticolo p")
+@NamedQueries({
+	//@NamedQuery(name="PakiArticolo.findAll", query="SELECT p FROM PakiArticolo p"),
+	@NamedQuery(name="PakiArticolo.totaleDichiaratoPerCarico", query="SELECT SUM(p.qtaPaki) FROM PakiArticolo p WHERE p.idPakiTesta = :carico"),
+	@NamedQuery(name="PakiArticolo.totaleVerificatoPerCarico", query="SELECT SUM(p.qtaVerificata) FROM PakiArticolo p WHERE p.idPakiTesta = :carico")
+})
+
 public class PakiArticolo implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
@@ -45,7 +52,7 @@ public class PakiArticolo implements Serializable {
 	/**
 	 * NONE è il default, va messo a INSE nel caso in cui non era presente nel dichiarato.
 	 */
-	@Column(name="CodMotivo", length=4)
+	@Column(name="CodMotivo", length=4, updatable=false)
 	private String codMotivo;
 
 	@Column(name="CodUnicoArt", length=15)
@@ -75,7 +82,10 @@ public class PakiArticolo implements Serializable {
 //	@Column(name="IdDestina")
 //	private int idDestina;
 
-	@Column(name="IdPakiTesta", nullable=false)
+	/**
+	 * Non aggiornabile, come nrOrdineFor
+	 */
+	@Column(name="IdPakiTesta", nullable=false, updatable=false)
 	private int idPakiTesta;
 
 //	@Column(name="KeyColloCar", length=9)
@@ -90,7 +100,7 @@ public class PakiArticolo implements Serializable {
 	@Column(name="MadeIn", length=3)
 	private String madeIn;
 
-	@Column(name="Magazzino", length=5)
+	@Column(name="Magazzino", length=10)
 	private String magazzino;
 
 	@Column(name="Magazzinoltc", length=5)
@@ -108,7 +118,10 @@ public class PakiArticolo implements Serializable {
 	@Column(name="NrDispo", length=30)
 	private String nrDispo;
 
-	@Column(name="NrOrdineFor", length=50)
+	/**
+	 * Non aggiornabile, come idPakiTesta. Rappresenta il riferimento al carico.
+	 */
+	@Column(name="NrOrdineFor", length=50, updatable=false)
 	private String nrOrdineFor;
 
 //	@Column(name="OraAgg")
@@ -141,8 +154,8 @@ public class PakiArticolo implements Serializable {
 	@Column(name="Scelta", length=50)
 	private String scelta;
 
-//	@Column(name="Stagcarico", length=10)
-//	private String stagcarico;
+	@Column(name="Stagcarico", length=10)
+	private String stagcarico;
 
 //	@Column(name="StpSovra", length=1)
 //	private String stpSovra;
@@ -169,23 +182,29 @@ public class PakiArticolo implements Serializable {
 	
 	@PrePersist
 	public void prePersist() {
+		Date now = new Date();
+		SimpleDateFormat sdf = new SimpleDateFormat("yy");
 		keyUbicaCar = "";
 		keyUbicaPre = "";
-		//nrOrdineFor = "";
 		qtaPreDoc = 0;
 		qtaPrelevata = 0;
-		//qtaVerificata = 0;
+		qtaVerificata = 0;
 		scelta = "";
-		dataModifica = new Timestamp(new Date().getTime());
+		dataModifica = new Timestamp(now.getTime());
 		if (utente == null) utente = "WSE";
 		if (barcodeCollo == null || barcodeCollo.isEmpty())	barcodeCollo = Integer.toString(idPakiTesta);
 		//Se non lo valorizzo metto il default.
-		if (codMotivo == null)	codMotivo = "NONE";
+		if (codMotivo == null) codMotivo = "NONE";
+		if (nrOrdineFor == null) nrOrdineFor = "";
+		if (stagcarico == null) stagcarico = "CO" + sdf.format(now);
 	}
 	
 	@PreUpdate
 	public void preUpdate() {
 		dataModifica = new Timestamp(new Date().getTime());
+		if (keyUbicaCar == null) keyUbicaCar = "";
+		if (keyUbicaPre == null) keyUbicaPre = "";
+		if (scelta == null) scelta = "";
 	}
 
 	public int getIdPakiArticolo() {
@@ -476,13 +495,13 @@ public class PakiArticolo implements Serializable {
 		this.scelta = scelta;
 	}
 
-//	public String getStagcarico() {
-//		return this.stagcarico;
-//	}
-//
-//	public void setStagcarico(String stagcarico) {
-//		this.stagcarico = stagcarico;
-//	}
+	public String getStagcarico() {
+		return this.stagcarico;
+	}
+
+	public void setStagcarico(String stagcarico) {
+		this.stagcarico = stagcarico;
+	}
 //
 //	public String getStpSovra() {
 //		return this.stpSovra;

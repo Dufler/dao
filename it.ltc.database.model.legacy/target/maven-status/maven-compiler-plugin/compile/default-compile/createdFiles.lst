@@ -1,4 +1,5 @@
 it\ltc\database\model\legacy\CatMercGruppi.class
+it\ltc\database\model\legacy\Numerata.class
 it\ltc\database\model\legacy\ArtiBar.class
 it\ltc\database\model\legacy\documento\TestaCorrConDocumento.class
 it\ltc\database\model\legacy\RigaCorr.class
@@ -9,6 +10,8 @@ it\ltc\database\model\legacy\Righiubicpre.class
 it\ltc\database\model\legacy\ScorteColli.class
 it\ltc\database\model\legacy\ColliPreleva.class
 it\ltc\database\model\legacy\coltorti\ArticoliColtorti.class
+it\ltc\database\model\legacy\Nazioni.class
+it\ltc\database\model\legacy\Colori.class
 it\ltc\database\model\legacy\PakiArticolo.class
 it\ltc\database\model\legacy\TestataOrdiniTipo.class
 it\ltc\database\model\legacy\ColliCarico.class
@@ -18,12 +21,14 @@ it\ltc\database\model\legacy\PakiTestaTipo.class
 it\ltc\database\model\legacy\Fornitori.class
 it\ltc\database\model\legacy\TestaCorr.class
 it\ltc\database\model\legacy\Articoli.class
+it\ltc\database\model\legacy\Corrieri.class
 it\ltc\database\model\legacy\RighiOrdine.class
 it\ltc\database\model\legacy\TestataOrdini.class
 it\ltc\database\model\legacy\model\StatoCarico.class
 it\ltc\database\model\legacy\MagaSd.class
 it\ltc\database\model\legacy\scadenza\ColliPackConScadenza.class
 it\ltc\database\model\legacy\Ubicazioni.class
+it\ltc\database\model\legacy\Stagioni.class
 it\ltc\database\model\legacy\Scorte.class
 it\ltc\database\model\legacy\MagaMov.class
 it\ltc\database\model\legacy\RighiImballo.class

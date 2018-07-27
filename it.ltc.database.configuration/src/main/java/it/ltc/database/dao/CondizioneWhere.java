@@ -7,7 +7,7 @@ package it.ltc.database.dao;
  */
 public class CondizioneWhere {
 	
-	public enum Operatore{ EQUAL, LIKE, GREATER, GREATERTHAN, LESSER, LESSERTHAN }
+	public enum Operatore{ EQUAL, LIKE, START_WITH, END_WITH, GREATER, GREATER_OR_EQUAL, LESSER, LESSER_OR_EQUAL }
 	
 	private final String colonna;
 	private final Object valore;

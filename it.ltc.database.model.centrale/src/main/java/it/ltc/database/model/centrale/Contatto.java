@@ -7,7 +7,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
 
@@ -17,7 +16,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name="crm_contatto")
-@NamedQuery(name="Contatto.findAll", query="SELECT c FROM Contatto c")
+//@NamedQuery(name="Contatto.findAll", query="SELECT c FROM Contatto c")
 public class Contatto implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
@@ -30,12 +29,8 @@ public class Contatto implements Serializable {
 	@Column(nullable=false, length=100)
 	private String cognome;
 
-//	@Temporal(TemporalType.DATE)
-//	@Column(name="data_di_nascita")
-//	private Date dataDiNascita;
-
-	@Column(length=250)
-	private String email;
+//	@Column(length=250)
+//	private String email;
 
 	private Integer indirizzo;
 
@@ -45,11 +40,14 @@ public class Contatto implements Serializable {
 	@Column(nullable=false, length=100)
 	private String ruolo;
 
-	@Column(length=100)
-	private String telefono;
+//	@Column(length=100)
+//	private String telefono;
 
-	@Column(nullable=false, length=100)
-	private String titolo;
+//	@Column(nullable=false, length=100)
+//	private String titolo;
+	
+	@Column(name="descrizione", columnDefinition="MEDIUMTEXT")
+	private String descrizione;
 
 	public Contatto() {}
 
@@ -69,21 +67,13 @@ public class Contatto implements Serializable {
 		this.cognome = cognome;
 	}
 
-//	public Date getDataDiNascita() {
-//		return this.dataDiNascita;
+//	public String getEmail() {
+//		return this.email;
 //	}
 //
-//	public void setDataDiNascita(Date dataDiNascita) {
-//		this.dataDiNascita = dataDiNascita;
+//	public void setEmail(String email) {
+//		this.email = email;
 //	}
-
-	public String getEmail() {
-		return this.email;
-	}
-
-	public void setEmail(String email) {
-		this.email = email;
-	}
 
 	public Integer getIndirizzo() {
 		return this.indirizzo;
@@ -109,20 +99,28 @@ public class Contatto implements Serializable {
 		this.ruolo = ruolo;
 	}
 
-	public String getTelefono() {
-		return this.telefono;
+//	public String getTelefono() {
+//		return this.telefono;
+//	}
+//
+//	public void setTelefono(String telefono) {
+//		this.telefono = telefono;
+//	}
+
+//	public String getTitolo() {
+//		return this.titolo;
+//	}
+//
+//	public void setTitolo(String titolo) {
+//		this.titolo = titolo;
+//	}
+	
+	public String getDescrizione() {
+		return descrizione;
 	}
 
-	public void setTelefono(String telefono) {
-		this.telefono = telefono;
-	}
-
-	public String getTitolo() {
-		return this.titolo;
-	}
-
-	public void setTitolo(String titolo) {
-		this.titolo = titolo;
+	public void setDescrizione(String descrizione) {
+		this.descrizione = descrizione;
 	}
 
 }

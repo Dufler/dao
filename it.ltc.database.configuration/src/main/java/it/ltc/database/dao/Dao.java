@@ -4,7 +4,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Query;
 
-import org.jboss.logging.Logger;
+import org.apache.log4j.Logger;
 
 /**
  * Classe che consente l'accesso ai dati presenti nel db.

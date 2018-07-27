@@ -1,5 +1,7 @@
 package it.ltc.database.dao.legacy;
 
+import java.util.Date;
+import java.util.LinkedList;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -8,22 +10,21 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 
 import it.ltc.database.dao.CRUDDao;
+import it.ltc.database.dao.CondizioneWhere;
+import it.ltc.database.dao.CondizioneWhere.Operatore;
 import it.ltc.database.model.legacy.Articoli;
-import it.ltc.model.shared.dao.IProdottoDao;
 
-public class ArticoliDao extends CRUDDao<Articoli> implements IProdottoDao<Articoli> {
+public class ArticoliDao extends CRUDDao<Articoli> {
 	
 	public ArticoliDao(String persistenceUnit) {
 		super(persistenceUnit, Articoli.class);
 	}
 	
-	@Override
 	public Articoli trovaDaID(int id) {
 		Articoli entity = findByID(id);
 		return entity;
 	}
-	
-	@Override
+
 	public List<Articoli> trovaTutti() {
 		List<Articoli> entities = findAll();
 		return entities;
@@ -45,17 +46,15 @@ public class ArticoliDao extends CRUDDao<Articoli> implements IProdottoDao<Artic
 	}
 	
 	public Articoli trovaDaIDUnivoco(String idUnivoco) {
-		Articoli entity = findFirstOneEqualTo("idUniArticolo", idUnivoco);
+		Articoli entity = findOnlyOneEqualTo("idUniArticolo", idUnivoco);
 		return entity;
 	}
 	
-	@Override
 	public Articoli trovaDaSKU(String sku) {
-		Articoli entity = findFirstOneEqualTo("codArtStr", sku);
+		Articoli entity = findOnlyOneEqualTo("codArtStr", sku);
 		return entity;
 	}
 	
-	@Override
 	public Articoli trovaDaBarcode(String barcode) {
 		EntityManager em = getManager();
 		CriteriaBuilder cb = em.getCriteriaBuilder();
@@ -96,6 +95,27 @@ public class ArticoliDao extends CRUDDao<Articoli> implements IProdottoDao<Artic
 		oldEntity.setTaglia(entity.getTaglia());
 		oldEntity.setTipoCassa(entity.getTipoCassa());
 		oldEntity.setValVen(entity.getValVen());
+	}
+
+	public List<Articoli> trova(String sku, String modello, String stagione, String descrizione, int maxResults) {
+		List<CondizioneWhere> condizioni = new LinkedList<>();
+		if (sku != null && !sku.isEmpty())
+			condizioni.add(new CondizioneWhere("codArtStr", sku, Operatore.LIKE));
+		if (modello != null && !modello.isEmpty())
+			condizioni.add(new CondizioneWhere("modello", modello, Operatore.LIKE));
+		if (stagione != null && !stagione.isEmpty())
+			condizioni.add(new CondizioneWhere("stagione", stagione));
+		if (descrizione != null && !descrizione.isEmpty())
+			condizioni.add(new CondizioneWhere("descrizione", descrizione, Operatore.LIKE));
+		List<Articoli> entities = findAll(condizioni, maxResults);
+		return entities;
+	}
+
+	public List<Articoli> trovaDaUltimaModifica(Date ultimaModifica) {
+		List<CondizioneWhere> condizioni = new LinkedList<>();
+		condizioni.add(new CondizioneWhere("dataModifica", ultimaModifica, Operatore.GREATER));
+		List<Articoli> entities = findAll(condizioni);
+        return entities;
 	}
 
 }

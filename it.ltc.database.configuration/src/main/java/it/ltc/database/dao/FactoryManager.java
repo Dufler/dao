@@ -5,7 +5,7 @@ import java.util.HashMap;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 
-import org.jboss.logging.Logger;
+import org.apache.log4j.Logger;
 
 /**
  * Classe Factory che produce e memorizza <code>EntityManagerFactory</code> centralizzandoli.

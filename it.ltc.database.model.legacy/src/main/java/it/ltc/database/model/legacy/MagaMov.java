@@ -9,7 +9,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.NamedQuery;
 import javax.persistence.PrePersist;
 import javax.persistence.Table;
 
@@ -22,7 +21,7 @@ import it.ltc.utility.miscellanea.time.DateConverter;
  */
 @Entity
 @Table(name="MagaMov")
-@NamedQuery(name="MagaMov.findAll", query="SELECT m FROM MagaMov m")
+//@NamedQuery(name="MagaMov.findAll", query="SELECT m FROM MagaMov m")
 public class MagaMov implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
@@ -118,6 +117,7 @@ public class MagaMov implements Serializable {
 		oraMovMag = DateConverter.getOraComeIntero(dataMovMag);
 		dataMovMag = DateConverter.ripulisciTimestap(dataMovMag);
 		docData = DateConverter.ripulisciTimestap(dataMovMag);
+		if (keyCollo == null) keyCollo = "0000000000";
 		if (trasmesso == null) trasmesso = "NO";
 		if (cancellato == null) cancellato = "NO";
 		if (utente == null) utente = "WEBSERVICE";
