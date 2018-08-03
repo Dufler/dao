@@ -35,8 +35,21 @@ public class AziendaNote implements Serializable {
 
 	@Column(nullable=false, length=250)
 	private String note;
+	
+	@Transient
+	private String nomeAzienda;
+	
+	@Transient
+	private String nomeContatto;
+	
+	@Transient
+	private String dataFormattata;
 
-	public AziendaNote() {}
+	public AziendaNote() {
+		nomeAzienda = "";
+		nomeContatto = "";
+		dataFormattata = "";
+	}
 	
 	@PrePersist
 	public void prePersist() {
@@ -90,6 +103,30 @@ public class AziendaNote implements Serializable {
 
 	public void setNote(String note) {
 		this.note = note;
+	}
+
+	public String getNomeAzienda() {
+		return nomeAzienda;
+	}
+
+	public void setNomeAzienda(String nomeAzienda) {
+		this.nomeAzienda = nomeAzienda;
+	}
+
+	public String getNomeContatto() {
+		return nomeContatto;
+	}
+
+	public void setNomeContatto(String nomeContatto) {
+		this.nomeContatto = nomeContatto;
+	}
+
+	public String getDataFormattata() {
+		return dataFormattata;
+	}
+
+	public void setDataFormattata(String dataFormattata) {
+		this.dataFormattata = dataFormattata;
 	}
 
 }

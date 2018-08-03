@@ -15,7 +15,7 @@ public class FornitoreDao extends CRUDDao<Fornitori> {
 	}
 	
 	public Fornitori trovaDaCodice(String codiceFornitore) {
-        Fornitori fornitore = findOnlyOneEqualTo("codiceFornitore", codiceFornitore);
+        Fornitori fornitore = findFirstOneEqualTo("codiceFornitore", codiceFornitore);
 		return fornitore;
 	}
 	

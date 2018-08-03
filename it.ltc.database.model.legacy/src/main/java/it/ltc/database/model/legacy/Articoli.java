@@ -63,7 +63,7 @@ public class Articoli implements Serializable {
 	@Column(name="CodArtInt")
 	private int codArtInt;
 
-	@Column(name="CodArtOld", length=50)
+	@Column(name="CodArtOld", length=100)
 	private String codArtOld;
 
 	@Column(name="CodArtStr", nullable=false, length=100)
@@ -288,6 +288,15 @@ public class Articoli implements Serializable {
 	 */
 	@PreUpdate
 	public void preUpdate() {
+		if (madeIn == null)	madeIn = "";
+		if (descAggiuntiva == null)	descAggiuntiva = "";
+		if (composizione == null) composizione = "";
+		if (colore == null) colore = "";
+		if (catMercDett == null) catMercDett = "";
+		if (codArtOld == null) codArtOld = "";
+		if (qtaConf < 0) qtaConf = 1;
+		if (um == null) um = "Pz.";
+		if (umPos < 1) umPos = 1;
 		dataModifica = new Timestamp(new Date().getTime());
 	}
 

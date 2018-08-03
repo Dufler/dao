@@ -175,6 +175,9 @@ public class PakiArticolo implements Serializable {
 	@Column(name="CodArtStr", length=50)
 	private String codArtStr;
 	
+	@Column(name="note", length=50)
+	private String note;
+	
 	@Transient
 	private List<String> seriali;
 
@@ -549,6 +552,14 @@ public class PakiArticolo implements Serializable {
 
 	public void setCodArtStr(String codArtStr) {
 		this.codArtStr = codArtStr;
+	}
+
+	public String getNote() {
+		return note;
+	}
+
+	public void setNote(String note) {
+		this.note = note;
 	}
 
 	public List<String> getSeriali() {

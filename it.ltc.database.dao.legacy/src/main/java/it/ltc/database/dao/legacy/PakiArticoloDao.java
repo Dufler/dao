@@ -137,6 +137,7 @@ public class PakiArticoloDao extends CRUDDao<PakiArticolo> {
 		oldEntity.setRigaPacki(entity.getRigaPacki());
 		oldEntity.setScelta(entity.getScelta());
 		oldEntity.setUtente(entity.getUtente());
+		oldEntity.setNote(entity.getNote());
 	}
 
 }

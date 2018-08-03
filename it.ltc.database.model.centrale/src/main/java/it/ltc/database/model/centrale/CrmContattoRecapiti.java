@@ -15,7 +15,7 @@ public class CrmContattoRecapiti implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
 	
-	public enum Tipo { TELEFONO, EMAIL, SKYPE }
+	public enum Tipo { TELEFONO, EMAIL, SKYPE, ALTRO }
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
@@ -28,7 +28,7 @@ public class CrmContattoRecapiti implements Serializable {
 	@Column(nullable=false, length=200)
 	private String recapito;
 
-	@Column(nullable=false, length=1, name="tipo", columnDefinition="ENUM('TELEFONO', 'EMAIL', 'SKYPE')")
+	@Column(nullable=false, length=1, name="tipo", columnDefinition="ENUM('TELEFONO', 'EMAIL', 'SKYPE', 'ALTRO')")
 	@Enumerated(EnumType.STRING)
 	private Tipo tipo;
 

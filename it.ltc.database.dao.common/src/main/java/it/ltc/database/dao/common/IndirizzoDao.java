@@ -21,8 +21,24 @@ public class IndirizzoDao extends CRUDDao<Indirizzo> {
 	public IndirizzoDao(String persistenceUnit) {
 		super(persistenceUnit, Indirizzo.class);
 	}
+	
+	public Indirizzo salvaIndirizzo(Indirizzo indirizzo) {
+		//Controllo se l'indirizzo esiste già, se non esiste lo inserisco.
+		Indirizzo esistente = trovaIndirizzo(indirizzo);
+		if (esistente == null) {
+			//Nel caso in cui mi hanno chiesto di salvare un indirizzo già presente a sistema (cioè con ID valorizzato) 
+			//ma comunque abbastanza diverso dalla versione precedente ne creo uno nuovo.
+			indirizzo.setId(0);
+			esistente = insert(indirizzo);
+		} else {
+			//Se cambiano pochi dettagli (es. numero di telefono) aggiorno quello che serve e lo restituisco.
+			indirizzo.setId(esistente.getId());
+			esistente = aggiorna(indirizzo);
+		}
+		return esistente;
+	}
 
-	public Indirizzo trovaIndirizzo(Indirizzo nuovoIndirizzo) {
+	protected Indirizzo trovaIndirizzo(Indirizzo nuovoIndirizzo) {
 		EntityManager em = getManager();
 		//Controllo se ne ho già almeno un altro con le stesse caratteristiche.
 		CriteriaBuilder cb = em.getCriteriaBuilder();
@@ -41,16 +57,12 @@ public class IndirizzoDao extends CRUDDao<Indirizzo> {
 		return indirizzo;
 	}
 	
-	public Indirizzo inserisci(Indirizzo nuovoIndirizzo) {
-		//Controllo se l'indirizzo esiste già, se non esiste lo inserisco.
-		Indirizzo esistente = trovaIndirizzo(nuovoIndirizzo);
-		if (esistente == null) {
-			esistente = insert(nuovoIndirizzo);
-		}
-		return esistente;
+	protected Indirizzo inserisci(Indirizzo indirizzo) {
+		Indirizzo entity = insert(indirizzo);
+		return entity;
 	}
 	
-	public Indirizzo aggiorna(Indirizzo indirizzo) {
+	protected Indirizzo aggiorna(Indirizzo indirizzo) {
 		Indirizzo entity = update(indirizzo, indirizzo.getId());
 		return entity;
 	}

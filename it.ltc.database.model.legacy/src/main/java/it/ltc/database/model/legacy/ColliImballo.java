@@ -1,6 +1,8 @@
 package it.ltc.database.model.legacy;
 
 import java.io.Serializable;
+import java.sql.Timestamp;
+import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -8,6 +10,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+
+import it.ltc.utility.miscellanea.time.DateConverter;
 
 
 /**
@@ -62,8 +66,8 @@ public class ColliImballo implements Serializable {
 //	@Column(name="CtrlEtic", length=2)
 //	private String ctrlEtic;
 
-//	@Column(name="DataCrea")
-//	private Timestamp dataCrea;
+	@Column(name="DataCrea")
+	private Timestamp dataCrea;
 
 //	@Column(name="DataDocArrivo")
 //	private Timestamp dataDocArrivo;
@@ -113,8 +117,8 @@ public class ColliImballo implements Serializable {
 //	@Column(name="NrCPX")
 //	private int nrCPX;
 
-//	@Column(name="NrDocArrivo", length=10)
-//	private String nrDocArrivo;
+	@Column(name="NrDocArrivo", length=30)
+	private String nrDocArrivo;
 
 	@Column(name="NrIdCollo", nullable=false)
 	private int nrIdCollo;
@@ -128,8 +132,8 @@ public class ColliImballo implements Serializable {
 //	@Column(name="NrSovraStp")
 //	private int nrSovraStp;
 
-//	@Column(name="OraCrea")
-//	private int oraCrea;
+	@Column(name="OraCrea")
+	private int oraCrea;
 
 //	@Column(name="OraGen")
 //	private int oraGen;
@@ -188,6 +192,12 @@ public class ColliImballo implements Serializable {
 	private int volume;
 
 	public ColliImballo() {}
+	
+	public void prePersist() {
+		dataCrea = new Timestamp(new Date().getTime());
+		oraCrea = DateConverter.getOraComeIntero(dataCrea);
+		dataCrea = DateConverter.ripulisciTimestap(dataCrea);
+	}
 
 	public int getIdColliImballo() {
 		return this.idColliImballo;
@@ -285,13 +295,13 @@ public class ColliImballo implements Serializable {
 //		this.ctrlEtic = ctrlEtic;
 //	}
 //
-//	public Timestamp getDataCrea() {
-//		return this.dataCrea;
-//	}
-//
-//	public void setDataCrea(Timestamp dataCrea) {
-//		this.dataCrea = dataCrea;
-//	}
+	public Timestamp getDataCrea() {
+		return this.dataCrea;
+	}
+
+	public void setDataCrea(Timestamp dataCrea) {
+		this.dataCrea = dataCrea;
+	}
 //
 //	public Timestamp getDataDocArrivo() {
 //		return this.dataDocArrivo;
@@ -421,13 +431,13 @@ public class ColliImballo implements Serializable {
 //		this.nrCPX = nrCPX;
 //	}
 //
-//	public String getNrDocArrivo() {
-//		return this.nrDocArrivo;
-//	}
-//
-//	public void setNrDocArrivo(String nrDocArrivo) {
-//		this.nrDocArrivo = nrDocArrivo;
-//	}
+	public String getNrDocArrivo() {
+		return this.nrDocArrivo;
+	}
+
+	public void setNrDocArrivo(String nrDocArrivo) {
+		this.nrDocArrivo = nrDocArrivo;
+	}
 
 	public int getNrIdCollo() {
 		return this.nrIdCollo;
@@ -461,13 +471,13 @@ public class ColliImballo implements Serializable {
 //		this.nrSovraStp = nrSovraStp;
 //	}
 //
-//	public int getOraCrea() {
-//		return this.oraCrea;
-//	}
-//
-//	public void setOraCrea(int oraCrea) {
-//		this.oraCrea = oraCrea;
-//	}
+	public int getOraCrea() {
+		return this.oraCrea;
+	}
+
+	public void setOraCrea(int oraCrea) {
+		this.oraCrea = oraCrea;
+	}
 //
 //	public int getOraGen() {
 //		return this.oraGen;

@@ -26,8 +26,8 @@ public class Imballi implements Serializable {
 	@Column(name="CodImballo", length=2)
 	private String codImballo;
 
-//	@Column(name="Descrizione", length=30)
-//	private String descrizione;
+	@Column(name="Descrizione", length=30)
+	private String descrizione;
 
 	@Column(name="H")
 	private double h;
@@ -35,8 +35,8 @@ public class Imballi implements Serializable {
 	@Column(name="L")
 	private double l;
 
-//	@Column(name="PesoGr")
-//	private int pesoGr;
+	@Column(name="PesoGr")
+	private int pesoGr;
 
 //	@Column(name="Trascodifica", nullable=false, length=30)
 //	private String trascodifica;
@@ -73,13 +73,13 @@ public class Imballi implements Serializable {
 		this.codImballo = codImballo;
 	}
 
-//	public String getDescrizione() {
-//		return this.descrizione;
-//	}
-//
-//	public void setDescrizione(String descrizione) {
-//		this.descrizione = descrizione;
-//	}
+	public String getDescrizione() {
+		return this.descrizione;
+	}
+
+	public void setDescrizione(String descrizione) {
+		this.descrizione = descrizione;
+	}
 
 	public double getH() {
 		return this.h;
@@ -97,13 +97,13 @@ public class Imballi implements Serializable {
 		this.l = l;
 	}
 
-//	public int getPesoGr() {
-//		return this.pesoGr;
-//	}
-//
-//	public void setPesoGr(int pesoGr) {
-//		this.pesoGr = pesoGr;
-//	}
+	public int getPesoGr() {
+		return this.pesoGr;
+	}
+
+	public void setPesoGr(int pesoGr) {
+		this.pesoGr = pesoGr;
+	}
 //
 //	public String getTrascodifica() {
 //		return this.trascodifica;
