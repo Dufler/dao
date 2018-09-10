@@ -63,8 +63,8 @@ public class ArticoliColtorti implements Serializable {
 //	@Column(name="AggIdOld", nullable=false, length=2, insertable=false)
 //	private String aggIdOld;
 
-	@Column(name="AliquotaIVA")
-	private BigDecimal aliquotaIVA;
+//	@Column(name="AliquotaIVA")
+//	private BigDecimal aliquotaIVA;
 
 	@Column(name="ArtH")
 	private Integer artH;
@@ -96,8 +96,8 @@ public class ArticoliColtorti implements Serializable {
 	@Column(name="CatMercGruppo", nullable=false, length=50)
 	private String catMercGruppo;
 
-	@Column(name="CodArtInt")
-	private int codArtInt;
+//	@Column(name="CodArtInt")
+//	private int codArtInt;
 
 	@Column(name="CodArtOld", length=50)
 	private String codArtOld;
@@ -279,8 +279,8 @@ public class ArticoliColtorti implements Serializable {
 //	@Column(name="UmPos")
 //	private int umPos;
 
-//	@Column(name="Utente", length=15)
-//	private String utente;
+	@Column(name="Utente", length=15)
+	private String utente;
 
 //	@Column(name="ValAcq")
 //	private BigDecimal valAcq;
@@ -316,6 +316,7 @@ public class ArticoliColtorti implements Serializable {
 		if (colore == null) colore = "";
 		if (catMercDett == null) catMercDett = "";
 		if (codArtOld == null) codArtOld = "";
+		if (utente == null) utente = "SERVIZIO";
 		dataModifica = new Timestamp(new Date().getTime());
 	}
 	
@@ -323,7 +324,14 @@ public class ArticoliColtorti implements Serializable {
 	 * Imposta automaticamente la data di modifica.
 	 */
 	@PreUpdate
-	public void setUpdateTime() {
+	public void preUpdate() {
+		if (madeIn == null)	madeIn = "";
+		if (descAggiuntiva == null)	descAggiuntiva = "";
+		if (composizione == null) composizione = "";
+		if (colore == null) colore = "";
+		if (catMercDett == null) catMercDett = "";
+		if (codArtOld == null) codArtOld = "";
+		if (utente == null) utente = "SERVIZIO";
 		dataModifica = new Timestamp(new Date().getTime());
 	}
 
@@ -343,13 +351,13 @@ public class ArticoliColtorti implements Serializable {
 //		this.aggIdOld = aggIdOld;
 //	}
 
-	public BigDecimal getAliquotaIVA() {
-		return this.aliquotaIVA;
-	}
-
-	public void setAliquotaIVA(BigDecimal aliquotaIVA) {
-		this.aliquotaIVA = aliquotaIVA;
-	}
+//	public BigDecimal getAliquotaIVA() {
+//		return this.aliquotaIVA;
+//	}
+//
+//	public void setAliquotaIVA(BigDecimal aliquotaIVA) {
+//		this.aliquotaIVA = aliquotaIVA;
+//	}
 
 	public Integer getArtH() {
 		return this.artH;
@@ -431,13 +439,13 @@ public class ArticoliColtorti implements Serializable {
 		this.catMercGruppo = catMercGruppo;
 	}
 
-	public int getCodArtInt() {
-		return this.codArtInt;
-	}
-
-	public void setCodArtInt(int codArtInt) {
-		this.codArtInt = codArtInt;
-	}
+//	public int getCodArtInt() {
+//		return this.codArtInt;
+//	}
+//
+//	public void setCodArtInt(int codArtInt) {
+//		this.codArtInt = codArtInt;
+//	}
 
 	public String getCodArtOld() {
 		return this.codArtOld;
@@ -919,13 +927,13 @@ public class ArticoliColtorti implements Serializable {
 //		this.umPos = umPos;
 //	}
 //
-//	public String getUtente() {
-//		return this.utente;
-//	}
-//
-//	public void setUtente(String utente) {
-//		this.utente = utente;
-//	}
+	public String getUtente() {
+		return this.utente;
+	}
+
+	public void setUtente(String utente) {
+		this.utente = utente;
+	}
 //
 //	public BigDecimal getValAcq() {
 //		return this.valAcq;

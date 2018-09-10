@@ -27,10 +27,10 @@ public class PakiTesta implements Serializable {
 	private int idTestaPaki;
 
 	/**
-	 * Nonostante i 50 caratteri a disposizione può assumere solo 2 valori: SI o NO, NO è il valore di default.
+	 * Può assumere solo 2 valori: SI o NO, NO è il valore di default.
 	 * Nel caso in cui sia a "SI" permette di poter riscontrare un numero superiore di pezzi rispetto al dichiarato. Non permette comunque di inserire prodotti non presenti.
 	 */
-	@Column(name="AbilitaEccedenze", nullable=false, length=50)
+	@Column(name="AbilitaEccedenze", nullable=false, length=2)
 	private String abilitaEccedenze;
 //
 //	@Column(name="AbilitaGestione", nullable=false, length=10)
@@ -78,8 +78,15 @@ public class PakiTesta implements Serializable {
 //	@Column(name="Esito", length=6)
 //	private String esito;
 
-//	@Column(name="FlagTra", length=1)
-//	private String flagTra;
+	/**
+	 * Indica lo stato di trasmissione delle info sul riscontro del carico al cliente:
+	 * N: default, non trasmesso
+	 * C: carico con ordine a fornitore, riscontro parziale di tutto l'acquistato ma va comunque trasmesso.
+	 * F: ordine regolare lavorato e chiuso
+	 * T: trasmesso al cliente, stato finale.
+	 */
+	@Column(name="FlagTra", length=1)
+	private String flagTra;
 
 	/**
 	 * SI quando ce lo da il cliente, NO quando viene immesso dal customer care. Di default è SI.
@@ -102,8 +109,8 @@ public class PakiTesta implements Serializable {
 	@Column(name="IdFornitore")
 	private int idFornitore;
 
-//	@Column(name="Letto", length=50)
-//	private String letto;
+	@Column(name="Letto", length=50)
+	private String letto;
 
 //	@Column(name="NomeFileFlusso", length=50)
 //	private String nomeFileFlusso;
@@ -162,6 +169,15 @@ public class PakiTesta implements Serializable {
 	@Column(name="Stagione", length=1)
 	private String stagione;
 
+	/**
+	 * Gli stati possibili sono:
+	 * INSERITO: lo stato di default appena viene inserito a sistema, significa che esiste sono il forma informatica.
+	 * ARRIVATO: indica che il carico è arrivato presso i nostri magazzini
+	 * IN_LAVORAZIONE: indica che il carico è in fase di riscontro
+	 * LAVORATO: indica che il carico è stato completamente riscontrato, i movimenti di magazzino non sono stati ancora fatti.
+	 * CHIUSO: indica che il carico è stato riscontrato e caricato a magazzino.
+	 * ANNULLATO: indica che il carico è stato annullato e non verrà più gestito, rimane per fini storici o di controllo dentro i nostri sistemi.
+	 */
 	@Column(name="Stato", length=15)
 	private String stato;
 
@@ -219,6 +235,8 @@ public class PakiTesta implements Serializable {
 		stato = "INSERITO";
 		generatoMov = "NO";
 		generatoFile = "NO";
+		letto = "NO";
+		flagTra = "N";
 	}
 	
 	public void setDataOraInizio(Timestamp time) {
@@ -400,13 +418,13 @@ public class PakiTesta implements Serializable {
 //		this.esito = esito;
 //	}
 //
-//	public String getFlagTra() {
-//		return this.flagTra;
-//	}
-//
-//	public void setFlagTra(String flagTra) {
-//		this.flagTra = flagTra;
-//	}
+	public String getFlagTra() {
+		return this.flagTra;
+	}
+
+	public void setFlagTra(String flagTra) {
+		this.flagTra = flagTra;
+	}
 
 	public String getFlussoDichiarato() {
 		return this.flussoDichiarato;
@@ -464,13 +482,13 @@ public class PakiTesta implements Serializable {
 		this.note = note;
 	}
 
-	//	public String getLetto() {
-//		return this.letto;
-//	}
-//
-//	public void setLetto(String letto) {
-//		this.letto = letto;
-//	}
+	public String getLetto() {
+		return this.letto;
+	}
+
+	public void setLetto(String letto) {
+		this.letto = letto;
+	}
 //
 //	public String getNomeFileFlusso() {
 //		return this.nomeFileFlusso;

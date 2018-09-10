@@ -64,7 +64,7 @@ public class MagaMov implements Serializable {
 	@Column(name="Esistenzamov", nullable=false)
 	private int esistenzamov;
 
-//	private int IDdocum;
+	private Integer IDdocum;
 
 	@Column(name="IdUniArticolo", nullable=false, length=25)
 	private String idUniArticolo;
@@ -102,8 +102,8 @@ public class MagaMov implements Serializable {
 //	@Column(name="TipoCollo", length=3)
 //	private String tipoCollo;
 
-	@Column(nullable=false, length=2)
-	private String trasmesso;
+//	@Column(nullable=false, length=2)
+//	private String trasmesso;
 
 	@Column(name="Utente", length=20)
 	private String utente;
@@ -118,9 +118,9 @@ public class MagaMov implements Serializable {
 		dataMovMag = DateConverter.ripulisciTimestap(dataMovMag);
 		docData = DateConverter.ripulisciTimestap(dataMovMag);
 		if (keyCollo == null) keyCollo = "0000000000";
-		if (trasmesso == null) trasmesso = "NO";
+		//if (trasmesso == null) trasmesso = "NO";
 		if (cancellato == null) cancellato = "NO";
-		if (utente == null) utente = "WEBSERVICE";
+		if (utente == null) utente = "SERVIZIO";
 	}
 
 	public int getIdMagaMov() {
@@ -219,13 +219,13 @@ public class MagaMov implements Serializable {
 		this.esistenzamov = esistenzamov;
 	}
 
-//	public int getIDdocum() {
-//		return this.IDdocum;
-//	}
-//
-//	public void setIDdocum(int IDdocum) {
-//		this.IDdocum = IDdocum;
-//	}
+	public Integer getIDdocum() {
+		return this.IDdocum;
+	}
+
+	public void setIDdocum(Integer IDdocum) {
+		this.IDdocum = IDdocum;
+	}
 
 	public String getIdUniArticolo() {
 		return this.idUniArticolo;
@@ -323,13 +323,13 @@ public class MagaMov implements Serializable {
 //		this.tipoCollo = tipoCollo;
 //	}
 
-	public String getTrasmesso() {
-		return this.trasmesso;
-	}
-
-	public void setTrasmesso(String trasmesso) {
-		this.trasmesso = trasmesso;
-	}
+//	public String getTrasmesso() {
+//		return this.trasmesso;
+//	}
+//
+//	public void setTrasmesso(String trasmesso) {
+//		this.trasmesso = trasmesso;
+//	}
 
 	public String getUtente() {
 		return this.utente;

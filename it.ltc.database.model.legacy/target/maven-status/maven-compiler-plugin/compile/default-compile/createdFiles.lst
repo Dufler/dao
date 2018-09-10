@@ -2,7 +2,9 @@ it\ltc\database\model\legacy\CatMercGruppi.class
 it\ltc\database\model\legacy\Numerata.class
 it\ltc\database\model\legacy\ArtiBar.class
 it\ltc\database\model\legacy\documento\TestaCorrConDocumento.class
+it\ltc\database\model\legacy\UbicaColliLog.class
 it\ltc\database\model\legacy\RigaCorr.class
+it\ltc\database\model\legacy\TempCorr.class
 it\ltc\database\model\legacy\Imballi.class
 it\ltc\database\model\legacy\bundle\CasseKIT.class
 it\ltc\database\model\legacy\MittentiOrdine.class

@@ -31,11 +31,11 @@ public class CasseKIT implements Serializable {
 	
 	public CasseKIT() {}
 
-	public Integer getId() {
+	public int getId() {
 		return id;
 	}
 
-	public void setId(Integer id) {
+	public void setId(int id) {
 		this.id = id;
 	}
 

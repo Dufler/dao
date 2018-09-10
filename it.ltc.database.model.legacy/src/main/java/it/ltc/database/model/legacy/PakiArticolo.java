@@ -40,7 +40,7 @@ public class PakiArticolo implements Serializable {
 	@Column(unique=true, nullable=false)
 	private int idPakiArticolo;
 
-	@Column(name="BarcodeCollo", length=50)
+	@Column(name="BarcodeCollo", length=55)
 	private String barcodeCollo;
 
 //	@Column(name="Caricato", length=1)
@@ -151,8 +151,8 @@ public class PakiArticolo implements Serializable {
 	@Column(name="RigaPacki")
 	private int rigaPacki;
 
-	@Column(name="Scelta", length=50)
-	private String scelta;
+//	@Column(name="Scelta", length=50)
+//	private String scelta;
 
 	@Column(name="Stagcarico", length=10)
 	private String stagcarico;
@@ -192,7 +192,7 @@ public class PakiArticolo implements Serializable {
 		qtaPreDoc = 0;
 		qtaPrelevata = 0;
 		qtaVerificata = 0;
-		scelta = "";
+		//scelta = "";
 		dataModifica = new Timestamp(now.getTime());
 		if (utente == null) utente = "WSE";
 		if (barcodeCollo == null || barcodeCollo.isEmpty())	barcodeCollo = Integer.toString(idPakiTesta);
@@ -207,7 +207,7 @@ public class PakiArticolo implements Serializable {
 		dataModifica = new Timestamp(new Date().getTime());
 		if (keyUbicaCar == null) keyUbicaCar = "";
 		if (keyUbicaPre == null) keyUbicaPre = "";
-		if (scelta == null) scelta = "";
+		//if (scelta == null) scelta = "";
 	}
 
 	public int getIdPakiArticolo() {
@@ -490,13 +490,13 @@ public class PakiArticolo implements Serializable {
 		this.rigaPacki = rigaPacki;
 	}
 
-	public String getScelta() {
-		return this.scelta;
-	}
-
-	public void setScelta(String scelta) {
-		this.scelta = scelta;
-	}
+//	public String getScelta() {
+//		return this.scelta;
+//	}
+//
+//	public void setScelta(String scelta) {
+//		this.scelta = scelta;
+//	}
 
 	public String getStagcarico() {
 		return this.stagcarico;

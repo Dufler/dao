@@ -50,6 +50,52 @@ public class ReadOnlyDao<T> extends Dao {
 	}
 	
 	/**
+	 * Restituisce l'unica entity trovata corrispondente alle condizioni specificate. 
+	 * @return un'entity o <code>null</code> in caso di errori o se esiste più di un'entity corrispondente.
+	 */
+	protected T findJustOne(List<CondizioneWhere> conditions) {
+		T entity;
+		EntityManager em = getManager();
+		try {
+			CriteriaBuilder cb = em.getCriteriaBuilder();
+	        CriteriaQuery<T> criteria = cb.createQuery(c);
+	        Root<T> member = criteria.from(c);
+	        criteria.select(member).where(getConditions(conditions, cb, member));
+	        List<T> lista = em.createQuery(criteria).getResultList();
+			entity = lista.size() == 1 ? lista.get(0) : null;
+		} catch (Exception e) {
+			logger.error(e);
+			entity = null;
+		} finally {
+			em.close();
+		}		
+        return entity;
+	}
+	
+	/**
+	 * Restituisce un'entity che corrisponde ai criteri specificati. Nel caso che più entity siano trovate viene restituita la prima.
+	 * @return una lista di entities o <code>null</code> in caso di errori.
+	 */
+	protected T findOne(List<CondizioneWhere> conditions) {
+		T entity;
+		EntityManager em = getManager();
+		try {
+			CriteriaBuilder cb = em.getCriteriaBuilder();
+	        CriteriaQuery<T> criteria = cb.createQuery(c);
+	        Root<T> member = criteria.from(c);
+	        criteria.select(member).where(getConditions(conditions, cb, member));
+	        List<T> lista = em.createQuery(criteria).getResultList();
+			entity = lista.isEmpty() ? null : lista.get(0);
+		} catch (Exception e) {
+			logger.error(e);
+			entity = null;
+		} finally {
+			em.close();
+		}		
+        return entity;
+	}
+	
+	/**
 	 * Restituisce tutte le entity esistenti che corrispondono ai criteri specificati.
 	 * @return una lista di entities o <code>null</code> in caso di errori.
 	 */
@@ -137,7 +183,7 @@ public class ReadOnlyDao<T> extends Dao {
 	
 	/**
 	 * Restituisce la prima entity esistente che ha quella proprietà.<br>
-	 * Il numero massimo di entity che verranno cercate è 1.
+	 * Il numero massimo di entity che verranno restituite è 1 anche se potrebbero corrispoderne di più.
 	 * @return una entity o <code>null</code> in caso di errori o nessuna corrispondenza.
 	 */
 	protected T findFirstOneEqualTo(String columnName, Object value) {

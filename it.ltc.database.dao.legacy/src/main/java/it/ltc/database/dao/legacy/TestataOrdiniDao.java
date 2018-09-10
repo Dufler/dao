@@ -16,6 +16,11 @@ public class TestataOrdiniDao extends CRUDDao<TestataOrdini> {
 		return entity;
 	}
 	
+	public TestataOrdini trovaDaNumeroLista(String nrLista) {
+		TestataOrdini entity = findOnlyOneEqualTo("nrLista", nrLista);
+		return entity;
+	}
+	
 	public TestataOrdini trovaDaRiferimento(String riferimento) {
 		TestataOrdini entity = findOnlyOneEqualTo("rifOrdineCli", riferimento);
 		return entity;

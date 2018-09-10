@@ -14,8 +14,24 @@ public class ColliPackDao extends CRUDDao<ColliPack> {
 
 	@Override
 	protected void updateValues(ColliPack oldEntity, ColliPack entity) {
-		// TODO Auto-generated method stub
-		
+		oldEntity.setCodArtStr(entity.getCodArtStr());
+		oldEntity.setCodiceArticolo(entity.getCodiceArticolo());
+		oldEntity.setDescrizione(entity.getDescrizione());
+		oldEntity.setFlagimp(entity.getFlagimp());
+		oldEntity.setFlagtc(entity.getFlagtc());
+		oldEntity.setIdPakiarticolo(entity.getIdPakiarticolo());
+		oldEntity.setIdTestaPaki(entity.getIdTestaPaki());
+		oldEntity.setMagazzino(entity.getMagazzino());
+		oldEntity.setNrIdColloPk(entity.getNrIdColloPk());
+		oldEntity.setOperatore(entity.getOperatore());
+		oldEntity.setQta(entity.getQta());
+		oldEntity.setQtaimpegnata(entity.getQtaimpegnata());
+		oldEntity.setTaglia(entity.getTaglia());
+	}
+	
+	public ColliPack aggiorna(ColliPack collipack) {
+		ColliPack entity = update(collipack, collipack.getIdColliPack());
+		return entity;
 	}
 	
 	public List<ColliPack> inserisci(List<ColliPack> collipacks) {

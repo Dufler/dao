@@ -10,6 +10,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 
 import it.ltc.utility.miscellanea.time.DateConverter;
@@ -150,6 +151,16 @@ public class ColliPack implements Serializable {
 	
 	@PrePersist
 	public void prePersist() {
+		if (taglia == null) taglia = "";
+		if (descrizione == null) descrizione = "";
+		else if (descrizione.length() > 50) descrizione = descrizione.substring(0, 50);
+		dataAgg = new Timestamp(new Date().getTime());
+		oraAgg = DateConverter.getOraComeIntero(dataAgg);
+		dataAgg = DateConverter.ripulisciTimestap(dataAgg);
+	}
+	
+	@PreUpdate
+	public void preUpdate() {
 		if (taglia == null) taglia = "";
 		if (descrizione == null) descrizione = "";
 		else if (descrizione.length() > 50) descrizione = descrizione.substring(0, 50);

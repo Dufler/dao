@@ -1,8 +1,10 @@
 package it.ltc.database.dao.legacy;
 
+import java.util.LinkedList;
 import java.util.List;
 
 import it.ltc.database.dao.CRUDDao;
+import it.ltc.database.dao.CondizioneWhere;
 import it.ltc.database.model.legacy.PakiTesta;
 
 public class PakiTestaDao extends CRUDDao<PakiTesta> {
@@ -14,6 +16,14 @@ public class PakiTestaDao extends CRUDDao<PakiTesta> {
 	public PakiTesta trovaDaID(int id) {
 		PakiTesta entity = findByID(id);
 		return entity;
+	}
+	
+	public List<PakiTesta> trovaCarichiChiusiDaEsportare() {
+		List<CondizioneWhere> condizioni = new LinkedList<>();
+		condizioni.add(new CondizioneWhere("stato", "CHIUSO"));
+		condizioni.add(new CondizioneWhere("flagTra", "F"));
+		List<PakiTesta> entities = findAll(condizioni);
+		return entities;
 	}
 	
 	public List<PakiTesta> trovaDaStato(String stato) {
@@ -53,7 +63,9 @@ public class PakiTestaDao extends CRUDDao<PakiTesta> {
 
 	@Override
 	protected void updateValues(PakiTesta oldEntity, PakiTesta entity) {
-		//oldEntity.setStato(entity.getStato()); Lo modifico a parte, potrebbe essere necessario fare dei movimenti di magazzino.
+		//Faccio la modifica sullo stato solo in casi semplice, potrebbe essere necessario fare dei movimenti di magazzino o aggiornare altri campi.
+		if (!"INSERITO".equals(oldEntity.getStato()) && !"CHIUSO".equals(entity.getStato()))
+			oldEntity.setStato(entity.getStato());
 		oldEntity.setAbilitaEccedenze(entity.getAbilitaEccedenze());
 		//oldEntity.setAnno(entity.getAnno());
 		oldEntity.setCodFornitore(entity.getCodFornitore());
@@ -71,6 +83,7 @@ public class PakiTestaDao extends CRUDDao<PakiTesta> {
 		oldEntity.setTipoPack(entity.getTipoPack());
 		oldEntity.setQtaTotAre(entity.getQtaTotAre());
 		oldEntity.setQtaTotAto(entity.getQtaTotAto());
+		oldEntity.setFlagTra(entity.getFlagTra());
 	}
 
 }

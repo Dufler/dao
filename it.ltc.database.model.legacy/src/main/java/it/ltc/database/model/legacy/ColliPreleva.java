@@ -106,7 +106,7 @@ public class ColliPreleva implements Serializable {
 	@Column(name="NrDistinta")
 	private int nrDistinta;
 	
-	@Column(name = "NrLista", length = 21)
+	@Column(name="NrLista", length=21)
 	private String nrLista;
 
 //	@Column(name="NrDocCheckOut", nullable=false)
@@ -118,8 +118,8 @@ public class ColliPreleva implements Serializable {
 //	@Column(name="Piano", length=2)
 //	private String piano;
 
-//	@Column(nullable=false, length=1)
-//	private String PONumber;
+	@Column(name="PONumber", length=20)
+	private String poNumber;
 
 //	@Column(name="Scaffale", length=3)
 //	private String scaffale;
@@ -160,8 +160,9 @@ public class ColliPreleva implements Serializable {
 		gruppo = today + "00000";
 		nrDistinta = Integer.parseInt(today);
 		vet1 = codiceCorriere;
-		vet2 = " ";
+		if (vet2 == null) vet2 = " ";
 		if (spedito == null) spedito = "NO";
+		if (poNumber == null) poNumber = "";
 	}
 
 	public int getIdColliPreleva() {
@@ -364,13 +365,13 @@ public class ColliPreleva implements Serializable {
 //		this.piano = piano;
 //	}
 
-//	public String getPONumber() {
-//		return this.PONumber;
-//	}
-//
-//	public void setPONumber(String PONumber) {
-//		this.PONumber = PONumber;
-//	}
+	public String getPoNumber() {
+		return this.poNumber;
+	}
+
+	public void setPoNumber(String poNumber) {
+		this.poNumber = poNumber;
+	}
 
 //	public String getScaffale() {
 //		return this.scaffale;

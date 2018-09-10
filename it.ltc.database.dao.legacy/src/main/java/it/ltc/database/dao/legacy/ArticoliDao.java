@@ -11,6 +11,7 @@ import javax.persistence.criteria.Root;
 
 import it.ltc.database.dao.CRUDDao;
 import it.ltc.database.dao.CondizioneWhere;
+import it.ltc.database.dao.CondizioneWhere.Condizione;
 import it.ltc.database.dao.CondizioneWhere.Operatore;
 import it.ltc.database.model.legacy.Articoli;
 
@@ -55,6 +56,11 @@ public class ArticoliDao extends CRUDDao<Articoli> {
 		return entity;
 	}
 	
+	public Articoli trovaDaSKUVecchio(String sku) {
+		Articoli entity = findFirstOneEqualTo("codArtOld", sku);
+		return entity;
+	}
+	
 	public Articoli trovaDaBarcode(String barcode) {
 		EntityManager em = getManager();
 		CriteriaBuilder cb = em.getCriteriaBuilder();
@@ -79,14 +85,14 @@ public class ArticoliDao extends CRUDDao<Articoli> {
 		oldEntity.setCategoria(entity.getCategoria());
 		oldEntity.setCatMercDett(entity.getCatMercDett());
 		oldEntity.setCatMercGruppo(entity.getCatMercGruppo());
-		oldEntity.setCodArtInt(entity.getCodArtInt());
+		//oldEntity.setCodArtInt(entity.getCodArtInt());
 		oldEntity.setCodArtOld(entity.getCodArtOld());
 		oldEntity.setCodArtStr(entity.getCodArtStr());
 		oldEntity.setColore(entity.getColore());
 		oldEntity.setComposizione(entity.getComposizione());
 		oldEntity.setDescAggiuntiva(entity.getDescAggiuntiva());
 		oldEntity.setDescrizione(entity.getDescrizione());
-		oldEntity.setIdUniArticolo(entity.getIdUniArticolo());
+		//oldEntity.setIdUniArticolo(entity.getIdUniArticolo()); //Non va mai aggiornato, non ho trovato un solo caso in cui si possa o debba fare. Il resto delle tabelle non ha FK e non si aggiorna di conseguenza.
 		oldEntity.setLinea(entity.getLinea());
 		oldEntity.setMadeIn(entity.getMadeIn());
 		oldEntity.setModello(entity.getModello());
@@ -100,20 +106,20 @@ public class ArticoliDao extends CRUDDao<Articoli> {
 	public List<Articoli> trova(String sku, String modello, String stagione, String descrizione, int maxResults) {
 		List<CondizioneWhere> condizioni = new LinkedList<>();
 		if (sku != null && !sku.isEmpty())
-			condizioni.add(new CondizioneWhere("codArtStr", sku, Operatore.LIKE));
+			condizioni.add(new CondizioneWhere("codArtStr", sku, Operatore.LIKE, Condizione.OR));
 		if (modello != null && !modello.isEmpty())
-			condizioni.add(new CondizioneWhere("modello", modello, Operatore.LIKE));
+			condizioni.add(new CondizioneWhere("modello", modello, Operatore.LIKE, Condizione.OR));
 		if (stagione != null && !stagione.isEmpty())
 			condizioni.add(new CondizioneWhere("stagione", stagione));
 		if (descrizione != null && !descrizione.isEmpty())
-			condizioni.add(new CondizioneWhere("descrizione", descrizione, Operatore.LIKE));
+			condizioni.add(new CondizioneWhere("descrizione", descrizione, Operatore.LIKE, Condizione.OR));
 		List<Articoli> entities = findAll(condizioni, maxResults);
 		return entities;
 	}
 
 	public List<Articoli> trovaDaUltimaModifica(Date ultimaModifica) {
 		List<CondizioneWhere> condizioni = new LinkedList<>();
-		condizioni.add(new CondizioneWhere("dataModifica", ultimaModifica, Operatore.GREATER));
+		condizioni.add(new CondizioneWhere("dataModifica", ultimaModifica, Operatore.GREATER, Condizione.AND));
 		List<Articoli> entities = findAll(condizioni);
         return entities;
 	}

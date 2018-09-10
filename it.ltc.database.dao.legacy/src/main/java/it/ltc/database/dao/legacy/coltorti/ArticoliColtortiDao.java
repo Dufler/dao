@@ -11,6 +11,7 @@ import javax.persistence.criteria.Root;
 
 import it.ltc.database.dao.CRUDDao;
 import it.ltc.database.dao.CondizioneWhere;
+import it.ltc.database.dao.CondizioneWhere.Condizione;
 import it.ltc.database.dao.CondizioneWhere.Operatore;
 import it.ltc.database.model.legacy.coltorti.ArticoliColtorti;
 
@@ -79,7 +80,7 @@ public class ArticoliColtortiDao extends CRUDDao<ArticoliColtorti> {
 		oldEntity.setCategoria(entity.getCategoria());
 		oldEntity.setCatMercDett(entity.getCatMercDett());
 		oldEntity.setCatMercGruppo(entity.getCatMercGruppo());
-		oldEntity.setCodArtInt(entity.getCodArtInt());
+		//oldEntity.setCodArtInt(entity.getCodArtInt());
 		oldEntity.setCodArtOld(entity.getCodArtOld());
 		oldEntity.setCodArtStr(entity.getCodArtStr());
 		oldEntity.setColore(entity.getColore());
@@ -102,20 +103,20 @@ public class ArticoliColtortiDao extends CRUDDao<ArticoliColtorti> {
 	public List<ArticoliColtorti> trova(String sku, String modello, String stagione, String descrizione, int maxResults) {
 		List<CondizioneWhere> condizioni = new LinkedList<>();
 		if (sku != null && !sku.isEmpty())
-			condizioni.add(new CondizioneWhere("codArtStr", sku, Operatore.LIKE));
+			condizioni.add(new CondizioneWhere("codArtStr", sku, Operatore.LIKE, Condizione.OR));
 		if (modello != null && !modello.isEmpty())
-			condizioni.add(new CondizioneWhere("modello", modello, Operatore.LIKE));
+			condizioni.add(new CondizioneWhere("modello", modello, Operatore.LIKE, Condizione.OR));
 		if (stagione != null && !stagione.isEmpty())
 			condizioni.add(new CondizioneWhere("stagione", stagione));
 		if (descrizione != null && !descrizione.isEmpty())
-			condizioni.add(new CondizioneWhere("descrizione", descrizione, Operatore.LIKE));
+			condizioni.add(new CondizioneWhere("descrizione", descrizione, Operatore.LIKE, Condizione.OR));
 		List<ArticoliColtorti> entities = findAll(condizioni, maxResults);
 		return entities;
 	}
 
 	public List<ArticoliColtorti> trovaDaUltimaModifica(Date ultimaModifica) {
 		List<CondizioneWhere> condizioni = new LinkedList<>();
-		condizioni.add(new CondizioneWhere("dataModifica", ultimaModifica, Operatore.GREATER));
+		condizioni.add(new CondizioneWhere("dataModifica", ultimaModifica, Operatore.GREATER, Condizione.AND));
 		List<ArticoliColtorti> entities = findAll(condizioni);
         return entities;
 	}

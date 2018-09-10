@@ -15,6 +15,16 @@ public class ColliPrelevaDao extends CRUDDao<ColliPreleva> {
 		List<ColliPreleva> entities = findAllEqualTo("nrLista", numeroLista);
 		return entities;
 	}
+	
+	public List<ColliPreleva> trovaDaRiferimentoCliente(String riferimento) {
+		List<ColliPreleva> entities = findAllEqualTo("poNumber", riferimento);
+		return entities;
+	}
+	
+	public ColliPreleva trovaDaNumeroCollo(String numeroCollo) {
+		ColliPreleva entity = findFirstOneEqualTo("keyColloPre", numeroCollo);
+		return entity;
+	}
 
 	@Override
 	protected void updateValues(ColliPreleva oldEntity, ColliPreleva entity) {
@@ -28,6 +38,21 @@ public class ColliPrelevaDao extends CRUDDao<ColliPreleva> {
 		oldEntity.setSpedito(entity.getSpedito());
 		oldEntity.setVet1(entity.getVet1());
 		oldEntity.setVet2(entity.getVet2());
+	}
+
+	public ColliPreleva inserisci(ColliPreleva collo) {
+		ColliPreleva entity = insert(collo);
+		return entity;
+	}
+
+	public ColliPreleva aggiorna(ColliPreleva collo) {
+		ColliPreleva entity = update(collo, collo.getIdColliPreleva());
+		return entity;
+	}
+	
+	public ColliPreleva elimina(ColliPreleva collo) {
+		ColliPreleva entity = delete(collo.getIdColliPreleva());
+		return entity;
 	}
 
 }

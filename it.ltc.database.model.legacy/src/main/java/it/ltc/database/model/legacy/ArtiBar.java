@@ -52,11 +52,11 @@ public class ArtiBar implements Serializable {
 	@Column(name="IdUniArticolo", length=15)
 	private String idUniArticolo;
 
-//	@Column(name="Numerata", length=50)
-//	private String numerata;
-//
-//	@Column(name="Posizione")
-//	private int posizione;
+	@Column(name="Numerata", length=50)
+	private String numerata;
+
+	@Column(name="Posizione")
+	private Integer posizione;
 
 	@Column(name="Taglia", length=20)
 	private String taglia;
@@ -68,11 +68,17 @@ public class ArtiBar implements Serializable {
 	
 	@PrePersist
 	public void prePersist() {
+		if (numerata == null) numerata = "001";
+		if (posizione == null || posizione <= 0) posizione = 1;
+		if (taglia == null) taglia = "UNI";
 		dataAgg = new Timestamp(new Date().getTime());
 	}
 	
 	@PreUpdate
 	public void preUpdate() {
+		if (numerata == null) numerata = "001";
+		if (posizione == null || posizione <= 0) posizione = 1;
+		if (taglia == null) taglia = "UNI";
 		dataAgg = new Timestamp(new Date().getTime());
 	}
 
@@ -164,21 +170,21 @@ public class ArtiBar implements Serializable {
 		this.idUniArticolo = idUniArticolo;
 	}
 
-//	public String getNumerata() {
-//		return this.numerata;
-//	}
-//
-//	public void setNumerata(String numerata) {
-//		this.numerata = numerata;
-//	}
-//
-//	public int getPosizione() {
-//		return this.posizione;
-//	}
-//
-//	public void setPosizione(int posizione) {
-//		this.posizione = posizione;
-//	}
+	public String getNumerata() {
+		return this.numerata;
+	}
+
+	public void setNumerata(String numerata) {
+		this.numerata = numerata;
+	}
+
+	public Integer getPosizione() {
+		return this.posizione;
+	}
+
+	public void setPosizione(Integer posizione) {
+		this.posizione = posizione;
+	}
 
 	public String getTaglia() {
 		return this.taglia;

@@ -50,11 +50,11 @@ public class MagaSd implements Serializable {
 //	@Column(nullable=false)
 //	private int tempdispo;
 
-//	@Column(name="TotIn", nullable=false)
-//	private int totIn;
+	@Column(name="TotIn", nullable=false)
+	private int totIn;
 
-//	@Column(name="TotOut", nullable=false)
-//	private int totOut;
+	@Column(name="TotOut", nullable=false)
+	private int totOut;
 
 	public MagaSd() {}
 
@@ -158,20 +158,20 @@ public class MagaSd implements Serializable {
 //		this.tempdispo = tempdispo;
 //	}
 //
-//	public int getTotIn() {
-//		return this.totIn;
-//	}
+	public int getTotIn() {
+		return this.totIn;
+	}
 
-//	public void setTotIn(int totIn) {
-//		this.totIn = totIn;
-//	}
-//
-//	public int getTotOut() {
-//		return this.totOut;
-//	}
-//
-//	public void setTotOut(int totOut) {
-//		this.totOut = totOut;
-//	}
+	public void setTotIn(int totIn) {
+		this.totIn = totIn;
+	}
+
+	public int getTotOut() {
+		return this.totOut;
+	}
+
+	public void setTotOut(int totOut) {
+		this.totOut = totOut;
+	}
 
 }

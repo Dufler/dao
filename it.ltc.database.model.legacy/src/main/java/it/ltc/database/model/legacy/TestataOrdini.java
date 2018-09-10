@@ -373,24 +373,19 @@ public class TestataOrdini implements Serializable {
 		}
 		nrListaArrivato = 0; // TODO, in teoria sarebbe come un autoincrement
 		// Se non ho specificato l'operatore assumo che sia un servizio.
-		if (operatore == null || operatore.isEmpty())
-			operatore = "SERVIZIO";
+		if (operatore == null || operatore.isEmpty()) operatore = "SERVIZIO";
 		// Priorita', se null imposto il default.
-		if (priorita == null)
-			priorita = 1;
+		if (priorita == null) priorita = 1;
 		// Contrassegno
-		if (tipoIncasso == null)
-			tipoIncasso = "";
-		if (valContrassegno == null)
-			valContrassegno = 0.0;
-		if (valoreDoganale == null)
-			valoreDoganale = 0.0;
+		if (tipoIncasso == null) tipoIncasso = "";
+		if (valContrassegno == null) valContrassegno = 0.0;
+		if (valoreDoganale == null)	valoreDoganale = 0.0;
 		// Corriere, se null imposto a stringa vuota.
 		if (corriere == null)
 			corriere = "";
 		// Codice cliente per il corriere, se null imposto a stringa vuota.
-		if (codiceClienteCorriere == null)
-			codiceClienteCorriere = "";
+		if (codiceClienteCorriere == null)	codiceClienteCorriere = "";
+		if (stato == null) stato = "INSE";
 	}
 
 	public int getIdTestaSped() {

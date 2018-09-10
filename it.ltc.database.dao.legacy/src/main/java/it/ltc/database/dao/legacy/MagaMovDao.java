@@ -34,13 +34,23 @@ public class MagaMovDao extends CRUDDao<MagaMov> {
 		oldEntity.setSegnoEsi(entity.getSegnoEsi());
 		oldEntity.setSegnoImp(entity.getSegnoImp());
 		oldEntity.setTipo(entity.getTipo());
-		oldEntity.setTrasmesso(entity.getTrasmesso());
+		//oldEntity.setTrasmesso(entity.getTrasmesso());
 		oldEntity.setUtente(entity.getUtente());
 	}
 
 	public List<MagaMov> trovaMovimentiCarico(String riferimentoCarico) {
 		List<MagaMov> entities = findAllEqualTo("docNr", riferimentoCarico);
 		return entities;
+	}
+	
+	public List<MagaMov> trovaMovimentiProdotto(String idUnivocoArticolo) {
+		List<MagaMov> entities = findAllEqualTo("idUniArticolo", idUnivocoArticolo);
+		return entities;
+	}
+	
+	public MagaMov trovaDaID(int id) {
+		MagaMov entity = findByID(id);
+		return entity;
 	}
 
 }

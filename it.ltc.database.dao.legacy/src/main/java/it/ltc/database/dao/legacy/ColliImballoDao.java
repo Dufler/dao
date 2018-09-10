@@ -21,6 +21,11 @@ public class ColliImballoDao extends CRUDDao<ColliImballo> {
 		List<ColliImballo> entities = findAll(condizioni);
 		return entities;
 	}
+	
+	public ColliImballo trovaDaNumeroCollo(String numeroCollo) {
+		ColliImballo entity = findOnlyOneEqualTo("keyColloSpe", numeroCollo);
+		return entity;
+	}
 
 	@Override
 	protected void updateValues(ColliImballo oldEntity, ColliImballo entity) {

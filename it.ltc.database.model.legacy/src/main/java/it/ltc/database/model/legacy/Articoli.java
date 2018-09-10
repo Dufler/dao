@@ -27,8 +27,8 @@ public class Articoli implements Serializable {
 //	@Column(name="AggIdOld", nullable=false, length=2, insertable=false)
 //	private String aggIdOld;
 
-	@Column(name="AliquotaIVA")
-	private BigDecimal aliquotaIVA;
+//	@Column(name="AliquotaIVA")
+//	private BigDecimal aliquotaIVA;
 
 	@Column(name="ArtH")
 	private Integer artH;
@@ -60,8 +60,8 @@ public class Articoli implements Serializable {
 	@Column(name="CatMercGruppo", nullable=false, length=50)
 	private String catMercGruppo;
 
-	@Column(name="CodArtInt")
-	private int codArtInt;
+//	@Column(name="CodArtInt")
+//	private int codArtInt;
 
 	@Column(name="CodArtOld", length=100)
 	private String codArtOld;
@@ -165,8 +165,8 @@ public class Articoli implements Serializable {
 	@Column(name="Modello", nullable=false, length=40)
 	private String modello;
 
-//	@Column(name="Numerata", length=50)
-//	private String numerata;
+	@Column(name="Numerata", length=50)
+	private String numerata;
 
 //	@Column(name="Obsoleto", nullable=false, length=20, insertable=false)
 //	private String obsoleto;
@@ -243,8 +243,8 @@ public class Articoli implements Serializable {
 	@Column(name="UmPos")
 	private int umPos;
 
-//	@Column(name="Utente", length=15)
-//	private String utente;
+	@Column(name="Utente", length=15)
+	private String utente;
 
 //	@Column(name="ValAcq")
 //	private BigDecimal valAcq;
@@ -277,9 +277,11 @@ public class Articoli implements Serializable {
 		if (colore == null) colore = "";
 		if (catMercDett == null) catMercDett = "";
 		if (codArtOld == null) codArtOld = "";
-		if (qtaConf < 0) qtaConf = 1;
+		if (qtaConf <= 0) qtaConf = 1;
 		if (um == null) um = "Pz.";
 		if (umPos < 1) umPos = 1;
+		if (numerata == null) numerata = "001";
+		if (utente == null) utente = "SERVIZIO";
 		dataModifica = new Timestamp(new Date().getTime());
 	}
 	
@@ -294,9 +296,11 @@ public class Articoli implements Serializable {
 		if (colore == null) colore = "";
 		if (catMercDett == null) catMercDett = "";
 		if (codArtOld == null) codArtOld = "";
-		if (qtaConf < 0) qtaConf = 1;
+		if (qtaConf <= 0) qtaConf = 1;
 		if (um == null) um = "Pz.";
 		if (umPos < 1) umPos = 1;
+		if (numerata == null) numerata = "001";
+		if (utente == null) utente = "SERVIZIO";
 		dataModifica = new Timestamp(new Date().getTime());
 	}
 
@@ -316,13 +320,13 @@ public class Articoli implements Serializable {
 //		this.aggIdOld = aggIdOld;
 //	}
 
-	public BigDecimal getAliquotaIVA() {
-		return this.aliquotaIVA;
-	}
-
-	public void setAliquotaIVA(BigDecimal aliquotaIVA) {
-		this.aliquotaIVA = aliquotaIVA;
-	}
+//	public BigDecimal getAliquotaIVA() {
+//		return this.aliquotaIVA;
+//	}
+//
+//	public void setAliquotaIVA(BigDecimal aliquotaIVA) {
+//		this.aliquotaIVA = aliquotaIVA;
+//	}
 
 	public Integer getArtH() {
 		return this.artH;
@@ -404,13 +408,13 @@ public class Articoli implements Serializable {
 		this.catMercGruppo = catMercGruppo;
 	}
 
-	public int getCodArtInt() {
-		return this.codArtInt;
-	}
-
-	public void setCodArtInt(int codArtInt) {
-		this.codArtInt = codArtInt;
-	}
+//	public int getCodArtInt() {
+//		return this.codArtInt;
+//	}
+//
+//	public void setCodArtInt(int codArtInt) {
+//		this.codArtInt = codArtInt;
+//	}
 
 	public String getCodArtOld() {
 		return this.codArtOld;
@@ -684,13 +688,13 @@ public class Articoli implements Serializable {
 		this.modello = modello;
 	}
 
-//	public String getNumerata() {
-//		return this.numerata;
-//	}
-//
-//	public void setNumerata(String numerata) {
-//		this.numerata = numerata;
-//	}
+	public String getNumerata() {
+		return this.numerata;
+	}
+
+	public void setNumerata(String numerata) {
+		this.numerata = numerata;
+	}
 //
 //	public String getObsoleto() {
 //		return this.obsoleto;
@@ -891,14 +895,14 @@ public class Articoli implements Serializable {
 	public void setUmPos(int umPos) {
 		this.umPos = umPos;
 	}
-//
-//	public String getUtente() {
-//		return this.utente;
-//	}
-//
-//	public void setUtente(String utente) {
-//		this.utente = utente;
-//	}
+
+	public String getUtente() {
+		return this.utente;
+	}
+
+	public void setUtente(String utente) {
+		this.utente = utente;
+	}
 //
 //	public BigDecimal getValAcq() {
 //		return this.valAcq;
