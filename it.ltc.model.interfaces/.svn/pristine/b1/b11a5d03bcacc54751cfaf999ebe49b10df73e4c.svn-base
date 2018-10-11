@@ -1,0 +1,320 @@
+package it.ltc.model.interfaces.ordine;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+import it.ltc.model.interfaces.exception.ModelValidationException;
+import it.ltc.model.interfaces.indirizzo.MIndirizzo;
+import it.ltc.model.interfaces.model.ModelInterface;
+
+@JsonIgnoreProperties(ignoreUnknown=true)
+public class MOrdine implements ModelInterface {
+	
+	private static final long serialVersionUID = 1L;
+	
+	private static final SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+	
+	private String dataordine;
+	private String dataconsegna;
+	private String tipo;
+	private Integer priorita;
+	private String note;
+	private String riferimentoordine;
+	private String riferimentodocumentofiscale;
+	private String stato;
+	private MIndirizzo destinatario;
+	private MIndirizzo mittente;
+	private String corriere;
+	private String codicecorriere;
+	private String serviziocorriere;
+	private MContrassegno contrassegno;
+	private MAssicurazione assicurazione;
+	private MParticolarita particolarita;
+	private String tipoidentificazioneprodotti;
+	private List<ProdottoOrdinato> prodotti;
+	private Double valoredoganale;
+	private String codicetracking;	
+	
+	public MOrdine() {}
+	
+	@Override
+	public void valida() throws ModelValidationException {
+		if (dataconsegna != null) {
+			try {
+				Date dConsegna = sdf.parse(dataconsegna);
+				Date now = new Date();
+				if (dConsegna.before(now))
+					throw new ModelValidationException("La data indicata è precedente a oggi.");
+			} catch (ParseException e) {
+				throw new ModelValidationException("La data di consegna specificata non è valida. Usare il formato gg/mm/aaaa.");
+			}
+		}
+		if (tipo == null || tipo.isEmpty())
+			throw new ModelValidationException("Bisogna specificare un tipo di ordine.");
+		else {
+			//TODO - La lista completa deve essere ancora definita.
+			try {
+				TipoOrdine t = TipoOrdine.valueOf(tipo.toUpperCase());
+				//Per gli ordini in cui la spedizione è curata dal cliente mi assicuro di ricevere il loro codice di fatturazione
+				if (t == TipoOrdine.PRN || t == TipoOrdine.WEN) {
+					if (codicecorriere == null || codicecorriere.isEmpty())
+						throw new ModelValidationException("Bisogna specificare il vostro codice corriere per gli ordini di questo tipo.");
+				}
+			} catch (IllegalArgumentException e) {
+				//Il tipo di ordine non è valido
+				String errorMessage = "Il tipo di ordine indicato non è valido. L'elenco completo delle tipologie è: ";
+				for (TipoOrdine categoria : TipoOrdine.values()) {
+					errorMessage += categoria + " ";
+				}
+				errorMessage = errorMessage.trim();
+				throw new ModelValidationException(errorMessage);
+			}
+		}
+		if (tipoidentificazioneprodotti == null || tipoidentificazioneprodotti.isEmpty())
+			throw new ModelValidationException("Bisogna specificare un tipo di identificazione per i prodotti.");
+		else {
+			//TODO - La lista completa deve essere ancora definita.
+			try {
+				TipoIDProdotto.valueOf(tipoidentificazioneprodotti.toUpperCase());
+			} catch (IllegalArgumentException e) {
+				//Il tipo di ordine non è valido
+				String errorMessage = "Il tipo di identificazione per i prodotti indicato non è valido. L'elenco completo delle tipologie è: ";
+				for (TipoIDProdotto categoria : TipoIDProdotto.values()) {
+					errorMessage += categoria + " ";
+				}
+				errorMessage = errorMessage.trim();
+				throw new ModelValidationException(errorMessage);
+			}
+		}
+		if (riferimentoordine == null || riferimentoordine.isEmpty())
+			throw new ModelValidationException("Bisogna specificare un riferimento per l'ordine. Es. purchase order number");
+		if (destinatario == null) {
+			throw new ModelValidationException("Bisogna specificare un destinatario.");
+		} else {
+			destinatario.valida();
+		}
+		if (mittente == null) {
+			throw new ModelValidationException("Bisogna specificare un mittente.");
+		} else {
+			mittente.valida();
+		}
+		if (corriere == null || corriere.isEmpty())
+			throw new ModelValidationException("Bisogna specificare un corriere.");
+		else {
+			try {
+				Corriere.valueOf(corriere.toUpperCase());
+			} catch (IllegalArgumentException e) {
+				//Il tipo di ordine non è valido
+				String errorMessage = "Il corriere indicato non è valido. L'elenco completo dei corrieri è: ";
+				for (Corriere corriere : Corriere.values()) {
+					errorMessage += corriere + " ";
+				}
+				errorMessage = errorMessage.trim();
+				throw new ModelValidationException(errorMessage);
+			}
+		}
+		if (serviziocorriere == null || serviziocorriere.isEmpty())
+			throw new ModelValidationException("Bisogna un tipo di servizio per la spedizione.");
+		else {
+			try {
+				ServizioCorriere.valueOf(serviziocorriere.toUpperCase());
+			} catch (IllegalArgumentException e) {
+				//Il tipo di ordine non è valido
+				String errorMessage = "Il servizio corriere indicato non è valido. L'elenco completo dei livelli di servizio è: ";
+				for (ServizioCorriere servizio : ServizioCorriere.values()) {
+					errorMessage += servizio + " ";
+				}
+				errorMessage = errorMessage.trim();
+				throw new ModelValidationException(errorMessage);
+			}
+		}
+		if (priorita != null) {
+			if (priorita < 1 || priorita > 10)
+				throw new ModelValidationException("La priorita' può assumere solo valori compresi fra 1 e 10.");
+		}
+		if (valoredoganale != null && valoredoganale <= 0) {
+			throw new ModelValidationException("Il valore doganale non può essere minore o uguale a 0.00 euro");
+		}
+		if (contrassegno != null) {
+			contrassegno.valida();
+		}
+		if (assicurazione != null) {
+			assicurazione.valida();
+		}
+		if (particolarita != null) {
+			particolarita.valida();
+		}
+		if (prodotti == null || prodotti.size() == 0) {
+			throw new ModelValidationException("Bisogna elencare i prodotti.");
+		} else {
+			for (ProdottoOrdinato prodotto : prodotti) {
+				prodotto.valida(TipoIDProdotto.valueOf(tipoidentificazioneprodotti.toUpperCase()));
+			}
+		}
+	}
+	
+	public String getDataordine() {
+		return dataordine;
+	}
+	
+	public void setDataordine(String dataordine) {
+		this.dataordine = dataordine;
+	}
+	
+	public String getDataconsegna() {
+		return dataconsegna;
+	}
+	
+	public void setDataconsegna(String dataconsegna) {
+		this.dataconsegna = dataconsegna;
+	}
+	
+	public String getTipo() {
+		return tipo;
+	}
+	
+	public void setTipo(String tipo) {
+		this.tipo = tipo;
+	}
+	
+	public Integer getPriorita() {
+		return priorita;
+	}
+	
+	public void setPriorita(Integer priorita) {
+		this.priorita = priorita;
+	}
+	
+	public String getNote() {
+		return note;
+	}
+	
+	public void setNote(String note) {
+		this.note = note;
+	}
+	
+	public String getRiferimentoordine() {
+		return riferimentoordine;
+	}
+	
+	public void setRiferimentoordine(String riferimentoordine) {
+		this.riferimentoordine = riferimentoordine;
+	}
+	
+	public String getRiferimentodocumentofiscale() {
+		return riferimentodocumentofiscale;
+	}
+	
+	public void setRiferimentodocumentofiscale(String riferimentodocumentofiscale) {
+		this.riferimentodocumentofiscale = riferimentodocumentofiscale;
+	}
+	
+	public String getStato() {
+		return stato;
+	}
+	
+	public void setStato(String stato) {
+		this.stato = stato;
+	}
+	
+	public MIndirizzo getDestinatario() {
+		return destinatario;
+	}
+	
+	public void setDestinatario(MIndirizzo destinatario) {
+		this.destinatario = destinatario;
+	}
+	
+	public MIndirizzo getMittente() {
+		return mittente;
+	}
+	
+	public void setMittente(MIndirizzo mittente) {
+		this.mittente = mittente;
+	}
+	
+	public String getCorriere() {
+		return corriere;
+	}
+	
+	public void setCorriere(String corriere) {
+		this.corriere = corriere;
+	}
+	
+	public String getCodicecorriere() {
+		return codicecorriere;
+	}
+
+	public void setCodicecorriere(String codicecorriere) {
+		this.codicecorriere = codicecorriere;
+	}
+
+	public String getServiziocorriere() {
+		return serviziocorriere;
+	}
+
+	public void setServiziocorriere(String serviziocorriere) {
+		this.serviziocorriere = serviziocorriere;
+	}
+
+	public MContrassegno getContrassegno() {
+		return contrassegno;
+	}
+	
+	public void setContrassegno(MContrassegno contrassegno) {
+		this.contrassegno = contrassegno;
+	}
+	
+	public MAssicurazione getAssicurazione() {
+		return assicurazione;
+	}
+	
+	public void setAssicurazione(MAssicurazione assicurazione) {
+		this.assicurazione = assicurazione;
+	}
+	
+	public MParticolarita getParticolarita() {
+		return particolarita;
+	}
+	
+	public void setParticolarita(MParticolarita particolarita) {
+		this.particolarita = particolarita;
+	}
+
+	public String getTipoidentificazioneprodotti() {
+		return tipoidentificazioneprodotti;
+	}
+
+	public void setTipoidentificazioneprodotti(String tipoidentificazioneprodotti) {
+		this.tipoidentificazioneprodotti = tipoidentificazioneprodotti;
+	}
+
+	public List<ProdottoOrdinato> getProdotti() {
+		return prodotti;
+	}
+
+	public void setProdotti(List<ProdottoOrdinato> prodotti) {
+		this.prodotti = prodotti;
+	}
+
+	public Double getValoredoganale() {
+		return valoredoganale;
+	}
+
+	public void setValoredoganale(Double valoredoganale) {
+		this.valoredoganale = valoredoganale;
+	}
+
+	public String getCodicetracking() {
+		return codicetracking;
+	}
+
+	public void setCodicetracking(String codicetracking) {
+		this.codicetracking = codicetracking;
+	}
+
+}

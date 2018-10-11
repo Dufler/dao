@@ -1,0 +1,111 @@
+package it.ltc.model.persistence.prodotto;
+
+import it.ltc.logica.database.configuration.Database;
+import it.ltc.logica.database.model.centrale.Commessa;
+import it.ltc.logica.database.model.sqlserver.cliente.ArtiBar;
+import it.ltc.logica.database.model.sqlserver.cliente.ProdottoSQLServer;
+import it.ltc.logica.database.orm.EntityManager;
+import it.ltc.logica.database.orm.TransactionManager;
+import it.ltc.model.interfaces.exception.ModelPersistenceException;
+import it.ltc.model.interfaces.exception.ModelValidationException;
+import it.ltc.model.interfaces.model.IControllerModel;
+import it.ltc.model.interfaces.prodotto.MProdotto;
+
+public class ControllerProdottoSQLServer implements IControllerModel<MProdotto> {
+	
+	private final Commessa cliente;
+	
+	private EntityManager<ProdottoSQLServer> managerProdotti;
+	private EntityManager<ArtiBar> managerBarcode;
+	
+	public ControllerProdottoSQLServer(Commessa c){
+		cliente = c;
+		Database dbCliente = Database.getDBByID(cliente.getId());
+		managerProdotti = new EntityManager<ProdottoSQLServer>(ProdottoSQLServer.class, dbCliente);
+		managerBarcode = new EntityManager<ArtiBar>(ArtiBar.class, dbCliente);
+	}
+
+	@Override
+	public int inserisci(MProdotto prodotto) throws ModelPersistenceException {
+		//Istanzio i manager transazionali
+		Database dbCliente = Database.getDBByID(cliente.getId());
+		TransactionManager<ProdottoSQLServer> tManagerProdotti = new TransactionManager<ProdottoSQLServer>(ProdottoSQLServer.class, dbCliente);
+		TransactionManager<ArtiBar> tManagerBarcode = new TransactionManager<ArtiBar>(ArtiBar.class, dbCliente);
+		String errorMessage = "";
+		//Inserimento del prodotto
+		ProdottoSQLServer product = new ProdottoSQLServer();
+		//Inserimento delle caratteristiche del prodotto
+		product.setArtH(prodotto.getH());
+		product.setArtL(prodotto.getL());
+		product.setArtZ(prodotto.getZ());
+		Integer peso = prodotto.getPeso();
+		if (peso != null)
+			product.setArtPeso(new Double(peso) / 1000);
+		product.setCodArtStr(prodotto.getCodicemodello());
+		product.setColore(prodotto.getColore());
+		product.setDescrizione(prodotto.getDescrizione());
+		product.setGruppoMerc(prodotto.getCategoria());
+		product.setIdUniArticolo(prodotto.getChiavecliente());
+		product.setLinea(prodotto.getBrand());
+		product.setModello(prodotto.getCodicemodello());
+		product.setTaglia(prodotto.getTaglia());
+		int id = tManagerProdotti.insertAndReturnID(product);
+		if (id == -1)
+			errorMessage = "(Legacy) L'inserimento del prodotto è fallito. Se il problema persiste contattare il reparto IT.";
+		//Inserimento del barcode
+		ArtiBar barcode = new ArtiBar();
+		//Inserimento delle caratteristiche del barcode
+		barcode.setBarcodeEAN(prodotto.getBarcode());
+		barcode.setBarcodeUPC(prodotto.getBarcode());
+		barcode.setCodiceArticolo(prodotto.getCodicemodello());
+		barcode.setIdUniArticolo(prodotto.getChiavecliente());
+		boolean inserimentoBarcode = tManagerBarcode.insert(barcode);
+		if (!inserimentoBarcode)
+			errorMessage = "(Legacy) L'inserimento del barcode è fallito. Se il problema persiste contattare il reparto IT.";
+		if (id != -1 && inserimentoBarcode) {
+			tManagerProdotti.commit();
+			tManagerBarcode.commit();
+		} else {
+			tManagerProdotti.rollback();
+			tManagerBarcode.rollback();
+			throw new ModelPersistenceException(errorMessage);
+		}
+		return id;
+	}
+
+	@Override
+	public void valida(MProdotto prodotto) throws ModelValidationException {
+		//Controllo sul codice modello e taglia
+		ProdottoSQLServer filtroModelloTaglia = new ProdottoSQLServer();
+		filtroModelloTaglia.setCodArtStr(prodotto.getCodicemodello());
+		filtroModelloTaglia.setTaglia(prodotto.getTaglia());
+		ProdottoSQLServer trovatoModelloTaglia = managerProdotti.getEntity(filtroModelloTaglia);
+		if (trovatoModelloTaglia != null)
+			throw new ModelValidationException("(Legacy) E' gia' presente un prodotto con la stessa combinazione codice modello-taglia.");
+		//Controllo barcode
+		ArtiBar filtroBarcode = new ArtiBar();
+		filtroBarcode.setBarcodeEAN(prodotto.getBarcode());
+		ArtiBar trovatoBarcode = managerBarcode.getEntity(filtroBarcode);
+		if (trovatoBarcode != null)
+			throw new ModelValidationException("(Legacy) E' gia' presente un prodotto con lo stesso barcode.");
+		//Controllo chiave cliente
+		ProdottoSQLServer filtroChiave = new ProdottoSQLServer();
+		filtroChiave.setIdUniArticolo(prodotto.getChiavecliente());
+		ProdottoSQLServer trovatoChiave = managerProdotti.getEntity(filtroChiave);
+		if (trovatoChiave != null)
+			throw new ModelValidationException("(Legacy) E' gia' presente un prodotto con la stessa chiave identificativa.");
+	}
+
+	@Override
+	public boolean modifica(MProdotto model) throws ModelPersistenceException {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean elimina(MProdotto model) throws ModelPersistenceException {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+}

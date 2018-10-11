@@ -1,0 +1,33 @@
+package it.ltc.model.interfaces.carico;
+
+import it.ltc.model.interfaces.exception.ModelPersistenceException;
+import it.ltc.model.interfaces.exception.ModelValidationException;
+import it.ltc.model.interfaces.model.IControllerModel;
+
+public class IControllerCaricoMySQL implements IControllerModel<MCarico> {
+
+	@Override
+	public void valida(MCarico model) throws ModelValidationException {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public int inserisci(MCarico model) throws ModelPersistenceException {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public boolean modifica(MCarico model) throws ModelPersistenceException {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean elimina(MCarico model) throws ModelPersistenceException {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+}

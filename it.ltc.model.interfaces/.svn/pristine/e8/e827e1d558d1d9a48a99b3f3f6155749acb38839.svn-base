@@ -1,0 +1,241 @@
+package it.ltc.model.interfaces.prodotto;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+import it.ltc.model.interfaces.exception.ModelValidationException;
+import it.ltc.model.interfaces.model.ModelInterface;
+
+@JsonIgnoreProperties(ignoreUnknown=true)
+public class MProdotto implements ModelInterface {
+	
+	private static final long serialVersionUID = 1L;
+	
+	private String chiavecliente;
+	private String codicemodello;
+	private String barcode;
+	private String taglia;
+	private String colore;
+	private String descrizione;
+	private String composizione;
+	private String brand;
+	private String categoria;
+	private String sottocategoria;
+	private String madein;
+	private String stagione;
+	private Integer peso;
+	private Integer h;
+	private Integer l;
+	private Integer z;
+	private Double valore;
+
+	public MProdotto() {}
+
+	public void valida() throws ModelValidationException {
+		if (chiavecliente == null || chiavecliente.isEmpty())
+			throw new ModelValidationException("Bisogna specificare una chiave.");
+		if (codicemodello == null || codicemodello.isEmpty())
+			throw new ModelValidationException("Bisogna specificare un codice." + toString());
+		if (barcode == null || barcode.isEmpty())
+			throw new ModelValidationException("Bisogna specificare un barcode.");
+		if (taglia == null || taglia.isEmpty())
+			throw new ModelValidationException("Bisogna specificare una taglia.");
+		if (descrizione == null || descrizione.isEmpty())
+			throw new ModelValidationException("Bisogna specificare una descrizione.");
+		if (brand == null || brand.isEmpty())
+			throw new ModelValidationException("Bisogna specificare un brand.");
+		if (categoria == null || categoria.isEmpty())
+			throw new ModelValidationException("Bisogna specificare una categoria.");
+		else {
+			//TODO - fare un check sul valore passato
+			//Deve essere uno fra: ABBIGLIAMENTO, CALZATURE, ...
+			//La lista completa deve essere ancora definita.
+			try {
+				Categoria.valueOf(categoria.toUpperCase());
+			} catch (IllegalArgumentException e) {
+				//La categoria non è valida
+				String errorMessage = "La categoria indicata non è valida. L'elenco completo delle categorie è: ";
+				for (Categoria categoria : Categoria.values()) {
+					errorMessage += categoria + " ";
+				}
+				errorMessage = errorMessage.trim();
+				throw new ModelValidationException(errorMessage);
+			}
+		}
+		if (stagione != null) {
+			if (stagione.length() != 4) {
+				throw new ModelValidationException("La stagione indicata non è valida. Es. AI17");
+			} else {
+				try {
+					Stagione.valueOf(stagione.substring(0, 2));
+					Integer.parseInt(stagione.substring(2));
+				} catch (NumberFormatException e) {
+					throw new ModelValidationException("L'anno indicato per la stagione non è valido. Es. AI17");
+				} catch(IllegalArgumentException e) {
+					//La stagione indicata non è valida
+					String errorMessage = "La stagione indicata non è valida. L'elenco completo delle stagioni è: ";
+					for (Stagione stagione : Stagione.values()) {
+						errorMessage += stagione + " ";
+					}
+					errorMessage = errorMessage.trim();
+					throw new ModelValidationException(errorMessage);
+				}
+			}
+		}
+		if (peso != null && peso <= 0)
+			throw new ModelValidationException("Il peso specificato non è valido.");
+		if (h != null && h <= 0)
+			throw new ModelValidationException("L'altezza specificata non è valida.");
+		if (l != null && l <= 0)
+			throw new ModelValidationException("La lunghezza specificata non è valida.");
+		if (z != null && z <= 0)
+			throw new ModelValidationException("La profondità specificata non è valida.");
+		if (valore != null && valore <= 0)
+			throw new ModelValidationException("Il valore doganale specificato non è valido.");
+	}
+	
+	public String getChiavecliente() {
+		return chiavecliente;
+	}
+
+	public void setChiavecliente(String chiavecliente) {
+		this.chiavecliente = chiavecliente;
+	}
+
+	public String getCodicemodello() {
+		return codicemodello;
+	}
+
+	public void setCodicemodello(String codicemodello) {
+		this.codicemodello = codicemodello;
+	}
+
+	public String getBarcode() {
+		return barcode;
+	}
+
+	public void setBarcode(String barcode) {
+		this.barcode = barcode;
+	}
+
+	public String getTaglia() {
+		return taglia;
+	}
+
+	public void setTaglia(String taglia) {
+		this.taglia = taglia;
+	}
+
+	public String getColore() {
+		return colore;
+	}
+
+	public void setColore(String colore) {
+		this.colore = colore;
+	}
+
+	public String getDescrizione() {
+		return descrizione;
+	}
+
+	public void setDescrizione(String descrizione) {
+		this.descrizione = descrizione;
+	}
+
+	public String getComposizione() {
+		return composizione;
+	}
+
+	public void setComposizione(String composizione) {
+		this.composizione = composizione;
+	}
+
+	public String getBrand() {
+		return brand;
+	}
+
+	public void setBrand(String brand) {
+		this.brand = brand;
+	}
+
+	public String getCategoria() {
+		return categoria;
+	}
+
+	public void setCategoria(String categoria) {
+		this.categoria = categoria;
+	}
+
+	public String getSottocategoria() {
+		return sottocategoria;
+	}
+
+	public void setSottocategoria(String sottocategoria) {
+		this.sottocategoria = sottocategoria;
+	}
+
+	public String getMadein() {
+		return madein;
+	}
+
+	public void setMadein(String madein) {
+		this.madein = madein;
+	}
+
+	public String getStagione() {
+		return stagione;
+	}
+
+	public void setStagione(String stagione) {
+		this.stagione = stagione;
+	}
+
+	public Integer getPeso() {
+		return peso;
+	}
+
+	public void setPeso(Integer peso) {
+		this.peso = peso;
+	}
+
+	public Integer getH() {
+		return h;
+	}
+
+	public void setH(Integer h) {
+		this.h = h;
+	}
+
+	public Integer getL() {
+		return l;
+	}
+
+	public void setL(Integer l) {
+		this.l = l;
+	}
+
+	public Integer getZ() {
+		return z;
+	}
+
+	public void setZ(Integer z) {
+		this.z = z;
+	}
+
+	public Double getValore() {
+		return valore;
+	}
+
+	public void setValore(Double valore) {
+		this.valore = valore;
+	}
+
+	@Override
+	public String toString() {
+		return "Prodotto [chiavecliente=" + chiavecliente + ", codicemodello=" + codicemodello + ", barcode=" + barcode
+				+ ", taglia=" + taglia + ", colore=" + colore + ", descrizione=" + descrizione + ", composizione="
+				+ composizione + ", brand=" + brand + ", categoria=" + categoria + ", sottocategoria=" + sottocategoria
+				+ ", madeIn=" + madein + ", peso=" + peso + ", h=" + h + ", l=" + l + ", z=" + z + ", valore=" + valore
+				+ "]";
+	}
+	
+}

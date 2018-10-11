@@ -1,0 +1,16 @@
+package it.ltc.model.interfaces.model;
+
+import it.ltc.model.interfaces.exception.ModelPersistenceException;
+import it.ltc.model.interfaces.exception.ModelValidationException;
+
+public interface IControllerModel<T extends ModelInterface> {
+	
+	public void valida (T model) throws ModelValidationException;
+	
+	public int inserisci (T model) throws ModelPersistenceException;
+	
+	public boolean modifica (T model) throws ModelPersistenceException;
+	
+	public boolean elimina (T model) throws ModelPersistenceException;
+
+}

@@ -1,0 +1,130 @@
+package it.ltc.model.interfaces.ordine;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+import it.ltc.model.interfaces.exception.ModelValidationException;
+import it.ltc.model.interfaces.model.ModelInterface;
+
+@JsonIgnoreProperties(ignoreUnknown=true)
+public class ProdottoOrdinato implements ModelInterface {
+	
+	private static final long serialVersionUID = 1L;
+	
+	private Integer id;
+	private String chiavelegacy;
+	
+	private Integer quantita;
+	private String magazzino;
+	
+	private String barcode;
+	private String chiave;
+	private String codicemodello;
+	private String taglia;
+	
+	public ProdottoOrdinato() {}
+	
+	@Override
+	public void valida() throws ModelValidationException {
+		if (quantita == null || quantita <= 0) {
+			throw new ModelValidationException("La quantita' specificata non è valida.");
+		}
+		if (magazzino == null || magazzino.isEmpty()) {
+			throw new ModelValidationException("Bisogna specificare un magazzino.");
+		}
+	}
+	
+	public void validaBarcode() throws ModelValidationException {
+		if (barcode == null || barcode.isEmpty()) {
+			throw new ModelValidationException("Bisogna specificare un barcode.");
+		}
+	}
+	
+	public void validaChiave() throws ModelValidationException {
+		if (chiave == null || chiave.isEmpty()) {
+			throw new ModelValidationException("Bisogna specificare la chiave del prodotto.");
+		}
+	}
+	
+	public void validaModelloTaglia() throws ModelValidationException {
+		if (codicemodello == null || codicemodello.isEmpty()) {
+			throw new ModelValidationException("Bisogna specificare il codice del modello.");
+		}
+		if (taglia == null || taglia.isEmpty()) {
+			throw new ModelValidationException("Bisogna specificare la taglia.");
+		}
+	}
+	
+	public void valida(TipoIDProdotto tipo) throws ModelValidationException {
+		valida();
+		switch (tipo) {
+			case BARCODE : validaBarcode(); break;
+			case CHIAVE: validaChiave(); break;
+			case MODELLOTAGLIA: validaModelloTaglia(); break;
+		}
+	}
+
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
+
+	public String getChiavelegacy() {
+		return chiavelegacy;
+	}
+
+	public void setChiavelegacy(String chiavelegacy) {
+		this.chiavelegacy = chiavelegacy;
+	}
+
+	public Integer getQuantita() {
+		return quantita;
+	}
+
+	public void setQuantita(Integer quantita) {
+		this.quantita = quantita;
+	}
+
+	public String getMagazzino() {
+		return magazzino;
+	}
+
+	public void setMagazzino(String magazzino) {
+		this.magazzino = magazzino;
+	}
+	
+	public String getBarcode() {
+		return barcode;
+	}
+
+	public void setBarcode(String barcode) {
+		this.barcode = barcode;
+	}
+	
+	public String getChiave() {
+		return chiave;
+	}
+
+	public void setChiave(String chiave) {
+		this.chiave = chiave;
+	}
+	
+	public String getCodicemodello() {
+		return codicemodello;
+	}
+
+	public void setCodicemodello(String codicemodello) {
+		this.codicemodello = codicemodello;
+	}
+
+	public String getTaglia() {
+		return taglia;
+	}
+
+	public void setTaglia(String taglia) {
+		this.taglia = taglia;
+	}
+
+}

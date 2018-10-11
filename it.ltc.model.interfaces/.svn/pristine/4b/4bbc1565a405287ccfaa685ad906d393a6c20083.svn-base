@@ -1,0 +1,178 @@
+package it.ltc.model.interfaces.carico;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+import it.ltc.model.interfaces.exception.ModelValidationException;
+import it.ltc.model.interfaces.indirizzo.MIndirizzo;
+import it.ltc.model.interfaces.model.ModelInterface;
+import it.ltc.model.interfaces.ordine.ProdottoOrdinato;
+import it.ltc.model.interfaces.ordine.TipoIDProdotto;
+
+@JsonIgnoreProperties(ignoreUnknown=true)
+public class MCarico implements ModelInterface {
+
+	private static final long serialVersionUID = 1L;
+	
+	private static final SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+	
+	private String dataCarico;
+	private String dataArrivo;
+	private String tipo;
+	private String riferimento;
+	private String riferimentodocumentofiscale;
+	private String stato;
+	private MIndirizzo destinatario;
+	private MIndirizzo mittente;
+	private String tipoidentificazioneprodotti;
+	private List<ProdottoOrdinato> prodotti;
+	private String note;
+
+	@Override
+	public void valida() throws ModelValidationException {
+		if (dataArrivo != null && !dataArrivo.isEmpty()) {
+			try {
+				sdf.parse(dataArrivo);
+			} catch (ParseException e) {
+				String errorMessage = "La data di arrivo indicata non è valida. (usare il formato gg/mm/aaaa)";
+				throw new ModelValidationException(errorMessage);
+			}
+		}
+		if (tipo == null || tipo.isEmpty())
+			throw new ModelValidationException("Bisogna specificare un tipo di carico.");
+		else {
+			//TODO - La lista completa deve essere ancora definita.
+			try {
+				TipoCarico t = TipoCarico.valueOf(tipo.toUpperCase());
+				if (t == TipoCarico.RESO) {
+					
+				}
+			} catch (IllegalArgumentException e) {
+				//Il tipo di ordine non è valido
+				String errorMessage = "Il tipo di carico indicato non è valido. L'elenco completo delle tipologie è: ";
+				for (TipoCarico categoria : TipoCarico.values()) {
+					errorMessage += categoria + " ";
+				}
+				errorMessage = errorMessage.trim();
+				throw new ModelValidationException(errorMessage);
+			}
+		}
+		if (tipoidentificazioneprodotti == null || tipoidentificazioneprodotti.isEmpty())
+			throw new ModelValidationException("Bisogna specificare un tipo di identificazione per i prodotti.");
+		else {
+			//TODO - La lista completa deve essere ancora definita.
+			try {
+				TipoIDProdotto.valueOf(tipoidentificazioneprodotti.toUpperCase());
+			} catch (IllegalArgumentException e) {
+				//Il tipo di ordine non è valido
+				String errorMessage = "Il tipo di identificazione per i prodotti indicato non è valido. L'elenco completo delle tipologie è: ";
+				for (TipoIDProdotto categoria : TipoIDProdotto.values()) {
+					errorMessage += categoria + " ";
+				}
+				errorMessage = errorMessage.trim();
+				throw new ModelValidationException(errorMessage);
+			}
+		}
+		if (riferimento == null || riferimento.isEmpty())
+			throw new ModelValidationException("Bisogna specificare un riferimento per il carico. Es. purchase order number");
+		if (prodotti == null || prodotti.size() == 0) {
+			throw new ModelValidationException("Bisogna elencare i prodotti.");
+		} else {
+			for (ProdottoOrdinato prodotto : prodotti) {
+				prodotto.valida(TipoIDProdotto.valueOf(tipoidentificazioneprodotti.toUpperCase()));
+			}
+		}
+	}
+
+	public String getDataCarico() {
+		return dataCarico;
+	}
+
+	public void setDataCarico(String dataCarico) {
+		this.dataCarico = dataCarico;
+	}
+
+	public String getDataArrivo() {
+		return dataArrivo;
+	}
+
+	public void setDataArrivo(String dataArrivo) {
+		this.dataArrivo = dataArrivo;
+	}
+
+	public String getTipo() {
+		return tipo;
+	}
+
+	public void setTipo(String tipo) {
+		this.tipo = tipo;
+	}
+
+	public String getRiferimento() {
+		return riferimento;
+	}
+
+	public void setRiferimento(String riferimento) {
+		this.riferimento = riferimento;
+	}
+
+	public String getRiferimentodocumentofiscale() {
+		return riferimentodocumentofiscale;
+	}
+
+	public void setRiferimentodocumentofiscale(String riferimentodocumentofiscale) {
+		this.riferimentodocumentofiscale = riferimentodocumentofiscale;
+	}
+
+	public String getStato() {
+		return stato;
+	}
+
+	public void setStato(String stato) {
+		this.stato = stato;
+	}
+
+	public MIndirizzo getDestinatario() {
+		return destinatario;
+	}
+
+	public void setDestinatario(MIndirizzo destinatario) {
+		this.destinatario = destinatario;
+	}
+
+	public MIndirizzo getMittente() {
+		return mittente;
+	}
+
+	public void setMittente(MIndirizzo mittente) {
+		this.mittente = mittente;
+	}
+
+	public String getTipoidentificazioneprodotti() {
+		return tipoidentificazioneprodotti;
+	}
+
+	public void setTipoidentificazioneprodotti(String tipoidentificazioneprodotti) {
+		this.tipoidentificazioneprodotti = tipoidentificazioneprodotti;
+	}
+
+	public List<ProdottoOrdinato> getProdotti() {
+		return prodotti;
+	}
+
+	public void setProdotti(List<ProdottoOrdinato> prodotti) {
+		this.prodotti = prodotti;
+	}
+
+	public String getNote() {
+		return note;
+	}
+
+	public void setNote(String note) {
+		this.note = note;
+	}
+
+}

@@ -1,0 +1,468 @@
+package it.ltc.model.persistence.ordine;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.HashMap;
+import java.util.LinkedList;
+
+import org.apache.log4j.Logger;
+
+import it.ltc.logica.database.configuration.Database;
+import it.ltc.logica.database.model.centrale.Commessa;
+import it.ltc.logica.database.model.centrale.indirizzi.Nazione;
+import it.ltc.logica.database.model.sqlserver.cliente.ArtiBar;
+import it.ltc.logica.database.model.sqlserver.cliente.Articoli;
+import it.ltc.logica.database.model.sqlserver.cliente.Destinatario;
+import it.ltc.logica.database.model.sqlserver.cliente.MagaMov;
+import it.ltc.logica.database.model.sqlserver.cliente.MagaSd;
+import it.ltc.logica.database.model.sqlserver.cliente.RighiOrdine;
+import it.ltc.logica.database.model.sqlserver.cliente.TestataOrdini;
+import it.ltc.logica.database.orm.EntityManager;
+import it.ltc.logica.database.orm.TransactionManager;
+import it.ltc.model.interfaces.exception.ModelPersistenceException;
+import it.ltc.model.interfaces.exception.ModelValidationException;
+import it.ltc.model.interfaces.indirizzo.MIndirizzo;
+import it.ltc.model.interfaces.model.IControllerModel;
+import it.ltc.model.interfaces.ordine.Corriere;
+import it.ltc.model.interfaces.ordine.MContrassegno;
+import it.ltc.model.interfaces.ordine.MOrdine;
+import it.ltc.model.interfaces.ordine.ProdottoOrdinato;
+import it.ltc.model.interfaces.ordine.TipoIDProdotto;
+
+public class ControllerOrdiniSQLServer implements IControllerModel<MOrdine> {
+	
+	private static final Logger logger = Logger.getLogger(ControllerOrdiniSQLServer.class);
+	
+	private static HashMap<Commessa, ControllerOrdiniSQLServer> instances = new HashMap<Commessa, ControllerOrdiniSQLServer>();
+	
+	private Commessa cliente;
+	
+	private final LinkedList<ProdottoOrdinato> prodotti;
+	private final EntityManager<TestataOrdini> managerOrdini;
+	private final EntityManager<Articoli> managerArticoli;
+	private final EntityManager<ArtiBar> managerBarcode;
+	
+	private ControllerOrdiniSQLServer(Commessa c) {
+		logger.info("(Legacy) Creazione controller per " + c.getNome() + ".");
+		cliente = c;
+		Database db = Database.getDBByID(cliente.getId());
+		logger.info("(Legacy) Settaggio DB " + db + ".");
+		prodotti = new LinkedList<ProdottoOrdinato>();
+		managerOrdini = new EntityManager<TestataOrdini>(TestataOrdini.class, db);
+		managerArticoli = new EntityManager<Articoli>(Articoli.class, db);
+		managerBarcode = new EntityManager<ArtiBar>(ArtiBar.class, db);
+		logger.info("(Legacy) Controller creato.");
+	}
+	
+	public static ControllerOrdiniSQLServer getInstance(Commessa c) {
+		if (!instances.containsKey(c)) {
+			ControllerOrdiniSQLServer controller = new ControllerOrdiniSQLServer(c);
+			instances.put(c, controller);
+		}
+		return instances.get(c);
+	}
+
+	@Override
+	public void valida(MOrdine ordine) throws ModelValidationException {
+		logger.info("(Legacy) Comincio la validazione.");
+		//Verifica sullo stesso riferimento
+		TestataOrdini filtro = new TestataOrdini();
+		filtro.setRifOrdineCli(ordine.getRiferimentoordine());
+		TestataOrdini match = managerOrdini.getEntity(filtro);
+		if (match != null)
+			throw new ModelValidationException("(Legacy) E' gia' stato inserito un ordine con lo stesso riferimento.");
+		//Verifica sull'esistanza dei prodotti
+		TipoIDProdotto tipo = TipoIDProdotto.valueOf(ordine.getTipoidentificazioneprodotti());
+		prodotti.clear();
+		switch (tipo) {
+			case BARCODE : checkPerBarcode(ordine); break;
+			case CHIAVE : checkPerChiave(ordine); break;
+			case MODELLOTAGLIA : checkPerModelloTaglia(ordine); break;
+		}
+		if (prodotti.isEmpty())
+			throw new ModelValidationException("(Legacy) E' necessario inserire almeno un prodotto nell'ordine.");
+		logger.info("(Legacy) Validazione terminata correttamente.");
+	}
+	
+	private void checkPerModelloTaglia(MOrdine ordine) throws ModelValidationException {
+		for (ProdottoOrdinato prodotto : ordine.getProdotti()) {
+			Articoli filtro = new Articoli();
+			filtro.setCodiceArticolo(prodotto.getCodicemodello());
+			filtro.setTaglia(prodotto.getTaglia());
+			Articoli match = managerArticoli.getEntity(filtro, true);
+			if (match == null)
+				throw new ModelValidationException("(Legacy) La combinazione modello-taglia: '" + prodotto.getCodicemodello() + "-" + prodotto.getTaglia() + "' non è stato trovata. L'ordine non sarà importato.");
+			else {
+				prodotto.setChiavelegacy(match.getIdUnivocoArticolo());
+				prodotti.add(prodotto);
+			}	
+		}
+	}
+	
+	private void checkPerChiave(MOrdine ordine) throws ModelValidationException {
+		for (ProdottoOrdinato prodotto : ordine.getProdotti()) {
+			Articoli filtro = new Articoli();
+			filtro.setCodiceArticolo(prodotto.getCodicemodello());
+			Articoli match = managerArticoli.getEntity(filtro, true);
+			if (match == null)
+				throw new ModelValidationException("(Legacy) La chiave '" + prodotto.getChiave() + "' non è stato trovata. L'ordine non sarà importato.");
+			else {
+				prodotto.setChiavelegacy(match.getIdUnivocoArticolo());
+				prodotti.add(prodotto);
+			}	
+		}
+	}
+	
+	private void checkPerBarcode(MOrdine ordine) throws ModelValidationException {
+		for (ProdottoOrdinato prodotto : ordine.getProdotti()) {
+			ArtiBar filtro = new ArtiBar();
+			filtro.setBarcodeEAN(prodotto.getBarcode());
+			ArtiBar match = managerBarcode.getEntity(filtro, true);
+			if (match == null)
+				throw new ModelValidationException("(Legacy) Il barcode '" + prodotto.getBarcode() + "' non è stato trovato. L'ordine non sarà importato.");
+			else {
+				prodotto.setChiavelegacy(match.getIdUniArticolo());
+				prodotti.add(prodotto);
+			}	
+		}
+	}
+
+	@Override
+	public int inserisci(MOrdine ordine) throws ModelPersistenceException {
+		//Transaction
+		Database db = Database.getDBByID(cliente.getId());
+		TransactionManager<Destinatario> tManagerIndirizzi = new TransactionManager<Destinatario>(Destinatario.class, db);
+		TransactionManager<MagaSd> tManagerSaldi = new TransactionManager<MagaSd>(MagaSd.class, db);
+		TransactionManager<MagaMov> tManagerMovimenti = new TransactionManager<MagaMov>(MagaMov.class, db);
+		TransactionManager<TestataOrdini> tManagerTestate = new TransactionManager<TestataOrdini>(TestataOrdini.class, db);
+		TransactionManager<RighiOrdine> tManagerRighe = new TransactionManager<RighiOrdine>(RighiOrdine.class, db);
+		boolean successo = true;
+		String errorMessage = null;
+		int idTestata = -1;
+		try {
+			//Generazione valori
+			int nrListaArrivato = TestataOrdini.getProssimoNrListaArrivato(Database.getDBByID(cliente.getId()));
+			SimpleDateFormat sdfAnno = new SimpleDateFormat("yyMMddHHmmss");
+			String data = sdfAnno.format(new Date());
+			String nrLista = data.substring(0, 2); //Prendo l'anno
+			String riferimento = ordine.getRiferimentoordine();
+			if (riferimento.length() > 14)
+				nrLista += riferimento.substring(0, 14);
+			else {
+				nrLista += riferimento;
+				for (int i = 2; i < 16 - riferimento.length(); i++) {
+					nrLista += "0";
+				}
+			}
+			String codiceDestinatario = ordine.getRiferimentoordine(); //anno + nrListaArrivato;
+			GregorianCalendar oggi = new GregorianCalendar();
+			int year = oggi.get(Calendar.YEAR);
+			oggi.set(Calendar.HOUR_OF_DAY, 0);
+			oggi.set(Calendar.MINUTE, 0);
+			oggi.set(Calendar.SECOND, 0);
+			oggi.set(Calendar.MILLISECOND, 0);
+			Date dataOrdine = oggi.getTime();
+			String nomeFileArrivato = "INWS" + data + ".SER";
+			String note = ordine.getNote();
+			if (note == null || note.isEmpty()) {
+				note = " ";
+			}
+			//Indirizzi
+			Destinatario destinatario = new Destinatario();
+			MIndirizzo mDestinanatario = ordine.getDestinatario();
+			Nazione nazione = Nazione.getNazione(mDestinanatario.getNazione());
+			destinatario.setTipo("DES");
+			destinatario.setCodDestina(codiceDestinatario);
+			destinatario.setCodISO(nazione.getCodiceISO2());
+			destinatario.setCodNazione(nazione.getCodiceISO2());
+			destinatario.setNazione(nazione.getNome());
+			destinatario.setEmail(mDestinanatario.getEmail());
+			destinatario.setTelefono(mDestinanatario.getTelefono());
+			destinatario.setCap(mDestinanatario.getCap());
+			destinatario.setIndirizzo(mDestinanatario.getIndirizzo());
+			destinatario.setLocalita(mDestinanatario.getLocalita());
+			destinatario.setProvincia(mDestinanatario.getProvincia());
+			String ragioneSociale = mDestinanatario.getRagionesociale();
+			if (ragioneSociale.length() > 70) {
+				ragioneSociale = ragioneSociale.substring(0, 70);
+				destinatario.setRagioneSociale(ragioneSociale.substring(0, 35));
+				destinatario.setRagioneSocialeEstesa(ragioneSociale.substring(35));
+			} else if (ragioneSociale.length() > 35) {
+				destinatario.setRagioneSociale(ragioneSociale.substring(0, 35));
+				destinatario.setRagioneSocialeEstesa(ragioneSociale.substring(35));
+			} else {
+				destinatario.setRagioneSociale(ragioneSociale);
+				destinatario.setRagioneSocialeEstesa(" ");
+			}
+			boolean aggiuntiveDestinatario = inserisciInformazioniAggiuntiveIndirizzo(ordine, destinatario);
+			int idDestinatario = tManagerIndirizzi.insertAndReturnID(destinatario);
+			boolean inserimentoDestinatario = (idDestinatario != -1) && aggiuntiveDestinatario;
+			//Testata
+			TestataOrdini testata = new TestataOrdini();
+			testata.setLista(nrLista);
+			testata.setRagstampe(nrLista);
+			testata.setPriorita(ordine.getPriorita());
+			testata.setNrListaArrivato(nrListaArrivato);
+			testata.setRifOrdineCli(riferimento);
+			testata.setNrOrdine(riferimento);
+			testata.setDataOrdine(dataOrdine);
+			testata.setCodCliente(codiceDestinatario);
+			testata.setStato("IMPO");
+			testata.setQtaTotaleSpedire(prodotti.size());
+			testata.setOperatore("WS");
+			testata.setNomeFileArrivo(nomeFileArrivato);
+			testata.setIdDestinatario(idDestinatario);
+			testata.setAnnoOrdine(year);
+			testata.setTipoOrdine(ordine.getTipo());
+			testata.setNote(note);
+			testata.setValoreDoganale(ordine.getValoredoganale());
+			testata.setCodiceCorriere(ordine.getCorriere());
+			testata.setCodiceClienteCorriere(ordine.getCodicecorriere());
+			testata.setTipoTrasporto(ordine.getServiziocorriere());
+			try {
+				Corriere corriere = Corriere.valueOf(ordine.getCorriere());
+				testata.setCorriere(corriere.getNome());
+			} catch(Exception e) {
+				logger.info("(Legacy) Il corriere " + ordine.getCorriere() + " non è stato trovato. L'ordine verra comunque importato.");
+			}
+			String nrDoc = ordine.getRiferimentodocumentofiscale();
+			if (nrDoc != null && !nrDoc.isEmpty()) {
+				testata.setNrDoc(nrDoc);
+				testata.setDataDoc(dataOrdine);
+				testata.setTipoDoc("DDT");
+				testata.setAnnodoc(year);
+			}
+			String dataConsegna = ordine.getDataconsegna();
+			if (dataConsegna != null && !dataConsegna.isEmpty()) {
+				try {
+					SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+					testata.setDataConsegna(sdf.parse(dataConsegna));
+				} catch (ParseException e) {
+					throw new ModelPersistenceException("(Legacy) La data di consegna indicata non è valida.");
+				}
+			}
+			String membroUE;
+			if (nazione.getUe()) {
+				membroUE = "SI";
+			} else {
+				membroUE = "NO";
+			}
+			testata.setMembroUE(membroUE);
+			MContrassegno contrassegno = ordine.getContrassegno();
+			if (contrassegno != null) {
+				testata.setTipoContrassegno(contrassegno.getTipo());
+				testata.setValoreContrassegno(contrassegno.getValore());
+			} else {
+				testata.setTipoContrassegno(" ");
+				testata.setValoreContrassegno(0.0);
+			}
+			boolean aggiuntiveTestata = inserisciInformazioniAggiuntiveTestata(ordine, testata);
+			idTestata = tManagerTestate.insertAndReturnID(testata);
+			boolean inserimentoTestata = (idTestata != -1) && aggiuntiveTestata;
+			//Righe
+			boolean inserimentoRighe = true;
+			int nrRiga = 1;
+			for (ProdottoOrdinato prodotto : prodotti) {
+				Articoli filtro = new Articoli();
+				filtro.setIdUnivocoArticolo(prodotto.getChiavelegacy());
+				Articoli match = managerArticoli.getEntity(filtro, true);
+				if (match != null) {
+					ArtiBar filtroBarcode = new ArtiBar();
+					filtroBarcode.setIdUniArticolo(match.getIdUnivocoArticolo());
+					ArtiBar matchBarcode = managerBarcode.getEntity(filtroBarcode, true);
+					RighiOrdine riga = new RighiOrdine();
+					riga.setNrLista(nrLista);
+					riga.setDataOrdine(dataOrdine);
+					riga.setNumerata(match.getNumerata());
+					riga.setCodiceArticolo(match.getCodiceArticolo());
+					riga.setTaglia(match.getTaglia());
+					riga.setPosizione(match.getUmPos());
+					riga.setQtaSpedizione(prodotto.getQuantita());
+					riga.setQtaDaUbicare(prodotto.getQuantita());
+					riga.setDescrizione(match.getDescrizione());
+					riga.setNrRigo(nrRiga++);
+					riga.setNrOrdine(0);
+					riga.setIdDestina(idDestinatario);
+					riga.setIdUnicoArt(match.getIdUnivocoArticolo());
+					riga.setMagazzino(prodotto.getMagazzino());
+					riga.setRagstampe(nrLista);
+					riga.setTipoOrdine(ordine.getTipo());
+					riga.setColore(match.getColore());
+					if (matchBarcode != null) {
+						riga.setBarraEAN(matchBarcode.getBarcodeEAN());
+						riga.setBarraUPC(matchBarcode.getBarcodeUPC());
+					}
+					boolean aggiuntive = inserisciInformazioniAggiuntiveRigo(ordine, riga);
+					boolean inserimento = tManagerRighe.insert(riga);
+					inserimentoRighe = inserimento && aggiuntive;
+					//Saldi
+					boolean aggiornamentoSaldi;
+					int esistenza;
+					int disponibilita;
+					int impegnato;
+					MagaSd filtroSaldo = new MagaSd();
+					filtroSaldo.setIdUnivocoArticolo(match.getIdUnivocoArticolo());
+					filtroSaldo.setCodiceMagazzino(prodotto.getMagazzino());
+					MagaSd matchSaldi = tManagerSaldi.getEntity(filtroSaldo, true);
+					if (matchSaldi != null) {
+						esistenza = matchSaldi.getEsistenza();
+						disponibilita = matchSaldi.getDisponibilita() - prodotto.getQuantita();
+						impegnato = matchSaldi.getImpegnato() + prodotto.getQuantita();
+						matchSaldi.setDisponibilita(disponibilita);
+						matchSaldi.setImpegnato(impegnato);
+						inserisciInformazioniAggiuntiveSaldi(ordine, matchSaldi);
+						aggiornamentoSaldi = tManagerSaldi.update(matchSaldi);
+					} else {
+						esistenza = 0;
+						disponibilita = 0 - prodotto.getQuantita();
+						impegnato = prodotto.getQuantita();
+						MagaSd nuovoSaldo = new MagaSd();
+						nuovoSaldo.setCodiceMagazzino(prodotto.getMagazzino());
+						nuovoSaldo.setDisponibilita(disponibilita);
+						nuovoSaldo.setImpegnato(impegnato);
+						nuovoSaldo.setEsistenza(0);
+						nuovoSaldo.setTotIn(0);
+						nuovoSaldo.setTotOut(0);
+						nuovoSaldo.setIdUnivocoArticolo(prodotto.getChiavelegacy());
+						inserisciInformazioniAggiuntiveSaldi(ordine, nuovoSaldo);
+						aggiornamentoSaldi = tManagerSaldi.insert(nuovoSaldo);
+					}
+					if (!aggiornamentoSaldi)
+						inserimentoRighe = false;
+					//Movimenti
+					MagaMov movimento = new MagaMov();
+					movimento.setCausale("IOS");
+					movimento.setCodMaga(prodotto.getMagazzino());
+					movimento.setDocData(dataOrdine);
+					movimento.setDataMovMag(dataOrdine);
+					movimento.setOraMovMag(0);
+					movimento.setDocCat("O");
+					movimento.setDocTipo("ORD");
+					movimento.setDocNr(nrLista);
+					movimento.setDocNote("IMPEGNATO DA ORDINE WEB");
+					movimento.setQuantita(prodotto.getQuantita());
+					movimento.setSegno("+");
+					movimento.setTipo("IP");
+					movimento.setUtente("WS");
+					movimento.setTipoCollo("XXX");
+					movimento.setSegnoEsi("N");
+					movimento.setSegnoImp("+");
+					movimento.setSegnoDis("-");
+					movimento.setIncTotali("NO");
+					movimento.setEsistenzaMov(esistenza);
+					movimento.setDisponibileMov(disponibilita);
+					movimento.setImpegnatoMov(impegnato);
+					movimento.setIdUniArticolo(prodotto.getChiavelegacy());
+					boolean aggiuntiveMovimento = inserisciInformazioniAggiuntiveMovimenti(ordine, movimento);
+					boolean inserimentoMovimento = tManagerMovimenti.insert(movimento);
+					inserimentoRighe = inserimentoMovimento && aggiuntiveMovimento;
+				} else {
+					inserimentoRighe = false;
+				}
+			}
+			logger.info("Inserimento destinatario: " + inserimentoDestinatario);
+			logger.info("Inserimento testata: " + inserimentoTestata);
+			logger.info("Inserimento righe: " + inserimentoRighe);
+			successo = inserimentoDestinatario && inserimentoTestata && inserimentoRighe;
+		} catch (ModelPersistenceException e) {
+			successo = false;
+			errorMessage = e.getMessage();
+			logger.error(e);
+		} catch (Exception e) {
+			successo = false;
+			logger.error(e);
+		} finally {
+			//Commit o Rollback
+			if (successo) {
+				tManagerIndirizzi.commit();
+				tManagerTestate.commit();
+				tManagerRighe.commit();
+				tManagerSaldi.commit();
+				tManagerMovimenti.commit();
+			} else {
+				tManagerIndirizzi.rollback();
+				tManagerTestate.rollback();
+				tManagerRighe.rollback();
+				tManagerSaldi.rollback();
+				tManagerMovimenti.rollback();
+			}
+		}
+		if (!successo) {
+			errorMessage = "(Legacy) L'inserimento dell'ordine è fallito: " + errorMessage;
+			logger.info(errorMessage);
+			throw new ModelPersistenceException(errorMessage);
+		}
+		return idTestata;
+	}
+
+	@Override
+	public boolean modifica(MOrdine ordine) throws ModelPersistenceException {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean elimina(MOrdine ordine) throws ModelPersistenceException {
+		// TODO Auto-generated method stub
+		return false;
+	}
+	
+	/**
+	 * Da sovrascrivere nel caso in cui devono essere inserite informazioni addizionali nella testata
+	 * @param ordine
+	 * @param testata
+	 * @return true se si può procedere con la scrittura su DB, false altrimenti.
+	 */
+	public boolean inserisciInformazioniAggiuntiveTestata(MOrdine ordine, TestataOrdini testata) {
+		//DA ESTENDERE.
+		return true;
+	}
+	
+	/**
+	 * Da sovrascrivere nel caso in cui devono essere inserite informazioni addizionali nei righi
+	 * @param ordine
+	 * @param rigo
+	 * @return true se si può procedere con la scrittura su DB, false altrimenti.
+	 */
+	public boolean inserisciInformazioniAggiuntiveRigo(MOrdine ordine, RighiOrdine rigo) {
+		//DA ESTENDERE.
+		return true;
+	}
+	
+	/**
+	 * Da sovrascrivere nel caso in cui devono essere inserite informazioni addizionali nell'indirizzo
+	 * @param ordine
+	 * @param indirizzo
+	 * @return true se si può procedere con la scrittura su DB, false altrimenti.
+	 */
+	public boolean inserisciInformazioniAggiuntiveIndirizzo(MOrdine ordine, Destinatario indirizzo) {
+		//DA ESTENDERE.
+		return true;
+	}
+	
+	/**
+	 * Da sovrascrivere nel caso in cui devono essere inserite informazioni addizionali nei saldi
+	 * @param ordine
+	 * @param saldi
+	 * @return true se si può procedere con la scrittura su DB, false altrimenti.
+	 */
+	public boolean inserisciInformazioniAggiuntiveSaldi(MOrdine ordine, MagaSd saldi) {
+		//DA ESTENDERE.
+		return true;
+	}
+	
+	/**
+	 * Da sovrascrivere nel caso in cui devono essere inserite informazioni addizionali nei movimenti
+	 * @param ordine
+	 * @param movimenti
+	 * @return true se si può procedere con la scrittura su DB, false altrimenti.
+	 */
+	public boolean inserisciInformazioniAggiuntiveMovimenti(MOrdine ordine, MagaMov movimenti) {
+		//DA ESTENDERE.
+		return true;
+	}
+
+}
