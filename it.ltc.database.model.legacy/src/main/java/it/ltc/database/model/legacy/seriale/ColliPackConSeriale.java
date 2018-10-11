@@ -1,13 +1,19 @@
 package it.ltc.database.model.legacy.seriale;
 
 import java.io.Serializable;
+import java.sql.Timestamp;
+import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
 import javax.persistence.Table;
+
+import it.ltc.utility.miscellanea.time.DateConverter;
 
 @Entity
 @Table(name="ColliPack")
@@ -38,14 +44,14 @@ public class ColliPackConSeriale implements Serializable {
 //	@Column(name="Controllata", nullable=false, length=2)
 //	private String controllata;
 
-//	@Column(name="DataAgg")
-//	private Timestamp dataAgg;
+	@Column(name="DataAgg")
+	private Timestamp dataAgg;
 //
 //	@Column(name="DataMod")
 //	private Timestamp dataMod;
 
-//	@Column(name="Descrizione", length=50)
-//	private String descrizione;
+	@Column(name="Descrizione", length=50)
+	private String descrizione;
 
 	@Column(name="Flagimp", nullable=false, length=1)
 	private String flagimp;
@@ -53,8 +59,8 @@ public class ColliPackConSeriale implements Serializable {
 //	@Column(name="Flagpre", nullable=false, length=1)
 //	private String flagpre;
 
-//	@Column(name="Flagtc")
-//	private int flagtc;
+	@Column(name="Flagtc")
+	private int flagtc;
 
 	@Column(name="IdPakiarticolo")
 	private int idPakiarticolo;
@@ -70,9 +76,12 @@ public class ColliPackConSeriale implements Serializable {
 //
 //	@Column(name="Listapre", length=20)
 //	private String listapre;
-//
-//	@Column(name="Lotto", length=13)
-//	private String lotto;
+
+	/**
+	 * Riporta il campo NrPaki del packing list a cui è collegato
+	 */
+	@Column(name="Lotto", length=30)
+	private String lotto;
 
 	@Column(length=3, columnDefinition="CHAR")
 	private String magazzino;
@@ -89,12 +98,12 @@ public class ColliPackConSeriale implements Serializable {
 //	@Column(name="NrRiferimento")
 //	private int nrRiferimento;
 //
-//	@Column(name="Operatore", length=10)
-//	private String operatore;
-//
-//	@Column(name="OraAgg")
-//	private int oraAgg;
-//
+	@Column(name="Operatore", length=50)
+	private String operatore;
+
+	@Column(name="OraAgg")
+	private int oraAgg;
+
 //	private int oramod;
 //
 //	@Column(name="Posizione")
@@ -106,8 +115,8 @@ public class ColliPackConSeriale implements Serializable {
 	@Column(name="Qta")
 	private int qta;
 
-//	@Column(nullable=false)
-//	private int qtaimpegnata;
+	@Column(nullable=false)
+	private int qtaimpegnata;
 //
 //	private int qtaOrigine;
 //
@@ -120,8 +129,8 @@ public class ColliPackConSeriale implements Serializable {
 //	@Column(name="Stagcarico", length=20)
 //	private String stagcarico;
 //
-//	@Column(name="Taglia", length=15)
-//	private String taglia;
+	@Column(name="Taglia", length=15)
+	private String taglia;
 //
 //	@Column(name="Trasferito", nullable=false, length=2147483647)
 //	private String trasferito;
@@ -130,6 +139,28 @@ public class ColliPackConSeriale implements Serializable {
 	private String seriale;
 
 	public ColliPackConSeriale() {}
+	
+	@PrePersist
+	public void prePersist() {
+		if (operatore == null) operatore = "WS";
+		if (taglia == null) taglia = "";
+		if (descrizione == null) descrizione = "";
+		else if (descrizione.length() > 50) descrizione = descrizione.substring(0, 50);
+		dataAgg = new Timestamp(new Date().getTime());
+		oraAgg = DateConverter.getOraComeIntero(dataAgg);
+		dataAgg = DateConverter.ripulisciTimestap(dataAgg);
+	}
+	
+	@PreUpdate
+	public void preUpdate() {
+		if (operatore == null) operatore = "WS";
+		if (taglia == null) taglia = "";
+		if (descrizione == null) descrizione = "";
+		else if (descrizione.length() > 50) descrizione = descrizione.substring(0, 50);
+		dataAgg = new Timestamp(new Date().getTime());
+		oraAgg = DateConverter.getOraComeIntero(dataAgg);
+		dataAgg = DateConverter.ripulisciTimestap(dataAgg);
+	}
 
 	public int getIdColliPack() {
 		return this.idColliPack;
@@ -187,13 +218,13 @@ public class ColliPackConSeriale implements Serializable {
 //		this.controllata = controllata;
 //	}
 //
-//	public Timestamp getDataAgg() {
-//		return this.dataAgg;
-//	}
-//
-//	public void setDataAgg(Timestamp dataAgg) {
-//		this.dataAgg = dataAgg;
-//	}
+	public Timestamp getDataAgg() {
+		return this.dataAgg;
+	}
+
+	public void setDataAgg(Timestamp dataAgg) {
+		this.dataAgg = dataAgg;
+	}
 //
 //	public Timestamp getDataMod() {
 //		return this.dataMod;
@@ -203,14 +234,14 @@ public class ColliPackConSeriale implements Serializable {
 //		this.dataMod = dataMod;
 //	}
 
-//	public String getDescrizione() {
-//		return this.descrizione;
-//	}
-//
-//	public void setDescrizione(String descrizione) {
-//		this.descrizione = descrizione;
-//	}
-//
+	public String getDescrizione() {
+		return this.descrizione;
+	}
+
+	public void setDescrizione(String descrizione) {
+		this.descrizione = descrizione;
+	}
+
 	public String getFlagimp() {
 		return this.flagimp;
 	}
@@ -227,13 +258,13 @@ public class ColliPackConSeriale implements Serializable {
 //		this.flagpre = flagpre;
 //	}
 //
-//	public int getFlagtc() {
-//		return this.flagtc;
-//	}
-//
-//	public void setFlagtc(int flagtc) {
-//		this.flagtc = flagtc;
-//	}
+	public int getFlagtc() {
+		return this.flagtc;
+	}
+
+	public void setFlagtc(int flagtc) {
+		this.flagtc = flagtc;
+	}
 
 	public int getIdPakiarticolo() {
 		return this.idPakiarticolo;
@@ -274,14 +305,14 @@ public class ColliPackConSeriale implements Serializable {
 //	public void setListapre(String listapre) {
 //		this.listapre = listapre;
 //	}
-//
-//	public String getLotto() {
-//		return this.lotto;
-//	}
-//
-//	public void setLotto(String lotto) {
-//		this.lotto = lotto;
-//	}
+
+	public String getLotto() {
+		return this.lotto;
+	}
+
+	public void setLotto(String lotto) {
+		this.lotto = lotto;
+	}
 
 	public String getMagazzino() {
 		return this.magazzino;
@@ -323,21 +354,21 @@ public class ColliPackConSeriale implements Serializable {
 //		this.nrRiferimento = nrRiferimento;
 //	}
 //
-//	public String getOperatore() {
-//		return this.operatore;
-//	}
-//
-//	public void setOperatore(String operatore) {
-//		this.operatore = operatore;
-//	}
-//
-//	public int getOraAgg() {
-//		return this.oraAgg;
-//	}
-//
-//	public void setOraAgg(int oraAgg) {
-//		this.oraAgg = oraAgg;
-//	}
+	public String getOperatore() {
+		return this.operatore;
+	}
+
+	public void setOperatore(String operatore) {
+		this.operatore = operatore;
+	}
+
+	public int getOraAgg() {
+		return this.oraAgg;
+	}
+
+	public void setOraAgg(int oraAgg) {
+		this.oraAgg = oraAgg;
+	}
 //
 //	public int getOramod() {
 //		return this.oramod;
@@ -379,13 +410,13 @@ public class ColliPackConSeriale implements Serializable {
 		this.seriale = seriale;
 	}
 
-//	public int getQtaimpegnata() {
-//		return this.qtaimpegnata;
-//	}
-//
-//	public void setQtaimpegnata(int qtaimpegnata) {
-//		this.qtaimpegnata = qtaimpegnata;
-//	}
+	public int getQtaimpegnata() {
+		return this.qtaimpegnata;
+	}
+
+	public void setQtaimpegnata(int qtaimpegnata) {
+		this.qtaimpegnata = qtaimpegnata;
+	}
 //
 //	public int getQtaOrigine() {
 //		return this.qtaOrigine;
@@ -419,13 +450,13 @@ public class ColliPackConSeriale implements Serializable {
 //		this.stagcarico = stagcarico;
 //	}
 //
-//	public String getTaglia() {
-//		return this.taglia;
-//	}
-//
-//	public void setTaglia(String taglia) {
-//		this.taglia = taglia;
-//	}
+	public String getTaglia() {
+		return this.taglia;
+	}
+
+	public void setTaglia(String taglia) {
+		this.taglia = taglia;
+	}
 //
 //	public String getTrasferito() {
 //		return this.trasferito;

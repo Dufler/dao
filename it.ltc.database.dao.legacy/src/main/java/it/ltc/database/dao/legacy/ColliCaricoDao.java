@@ -1,14 +1,29 @@
 package it.ltc.database.dao.legacy;
 
+import java.util.HashMap;
+import java.util.List;
+
 import javax.persistence.EntityManager;
 
 import it.ltc.database.dao.CRUDDao;
 import it.ltc.database.model.legacy.ColliCarico;
 
 public class ColliCaricoDao extends CRUDDao<ColliCarico> {
+	
+	protected final HashMap<String, ColliCarico> mappaPerCodice;
+	protected final HashMap<Integer, ColliCarico> mappaPerID;
 
 	public ColliCaricoDao(String persistenceUnit) {
 		super(persistenceUnit, ColliCarico.class);
+		mappaPerCodice = new HashMap<>();
+		mappaPerID = new HashMap<>();
+	}
+	
+	protected void inserisciInMappe(ColliCarico entity) {
+		if (entity != null) {
+			mappaPerCodice.put(entity.getKeyColloCar(), entity);
+			mappaPerID.put(entity.getIdCollo(), entity);
+		}
 	}
 	
 	public int getProgressivoNrCollo() {
@@ -34,12 +49,12 @@ public class ColliCaricoDao extends CRUDDao<ColliCarico> {
 		oldEntity.setAnno(entity.getAnno());
 		oldEntity.setApertoSfuso(entity.getApertoSfuso());
 		oldEntity.setBarcode(entity.getBarcode());
-		oldEntity.setBloccato(entity.getBloccato());
+//		oldEntity.setBloccato(entity.getBloccato());
 		oldEntity.setCancellato(entity.getCancellato());
 		oldEntity.setDataDistruzione(entity.getDataDistruzione());
-		oldEntity.setDataRilImballo(entity.getDataRilImballo());
+//		oldEntity.setDataRilImballo(entity.getDataRilImballo());
 		oldEntity.setDataUbica(entity.getDataUbica());
-		oldEntity.setDistrutto(entity.getDistrutto());
+//		oldEntity.setDistrutto(entity.getDistrutto());
 		oldEntity.setFlagtc(entity.getFlagtc());
 		oldEntity.setId_Box(entity.getId_Box());
 		oldEntity.setIdDocumento(entity.getIdDocumento());
@@ -61,13 +76,24 @@ public class ColliCaricoDao extends CRUDDao<ColliCarico> {
 	}
 
 	public ColliCarico trovaDaID(int id) {
-		ColliCarico entity = findByID(id);
-		return entity;
+		if (!mappaPerID.containsKey(id)) {
+			ColliCarico entity = findByID(id);
+			inserisciInMappe(entity);
+		}
+		return mappaPerID.get(id);
 	}
 	
 	public ColliCarico trovaDaCodice(String codice) {
-		ColliCarico entity = findOnlyOneEqualTo("keyColloCar", codice);
-		return entity;
+		if (!mappaPerCodice.containsKey(codice)) {
+			ColliCarico entity = findOnlyOneEqualTo("keyColloCar", codice);
+			inserisciInMappe(entity);
+		}		
+		return mappaPerCodice.get(codice);
+	}
+	
+	public List<ColliCarico> trovaColliNonCancellati() {
+		List<ColliCarico> entities = findAllEqualTo("cancellato", "NO");
+		return entities;
 	}
 	
 	public ColliCarico inserisci(ColliCarico collo) {

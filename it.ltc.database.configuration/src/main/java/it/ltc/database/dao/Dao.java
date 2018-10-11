@@ -19,7 +19,16 @@ public abstract class Dao {
 	public static final String LOCAL_UTENTE_PERSISTENCE_UNIT_NAME = "locale-utente";
 	public static final String LOCAL_SEDE_PERSISTENCE_UNIT_NAME = "locale-sede";
 	
+	/**
+	 * Stringa che rappresenta la persistence unit da usare così come viene definita nel file persistence.xml
+	 */
 	protected final String persistenceUnit;
+	
+	/**
+	 * L'utente che compie le operazioni con il dao, in alcuni contesti potrebbe essere del tutto superfluo.<br>
+	 * Un caso d'uso pratico è l'impostare il nome utente di chi ha creato un collo chiamando il web service.
+	 */
+	protected String utente;
 	
 	/**
 	 * Costruttore di default.<br>
@@ -28,6 +37,14 @@ public abstract class Dao {
 	 */
 	public Dao(String persistenceUnit) {
 		this.persistenceUnit = persistenceUnit;
+	}
+	
+	/**
+	 * Imposta il nome utente di chi effettua le operazioni sul dao.
+	 * @param utente
+	 */
+	public void setUtente(String utente) {
+		this.utente = utente;
 	}
 	
 	/**

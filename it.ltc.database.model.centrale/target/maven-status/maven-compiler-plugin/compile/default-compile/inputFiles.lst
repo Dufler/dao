@@ -1,6 +1,5 @@
 C:\Users\Damiano\git-dao\it.ltc.database.model.centrale\src\main\java\it\ltc\database\model\centrale\CorriereServizioPK.java
 C:\Users\Damiano\git-dao\it.ltc.database.model.centrale\src\main\java\it\ltc\database\model\centrale\Provincia.java
-C:\Users\Damiano\git-dao\it.ltc.database.model.centrale\src\main\java\it\ltc\database\model\centrale\json\CdgCommessaEventoJSON.java
 C:\Users\Damiano\git-dao\it.ltc.database.model.centrale\src\main\java\it\ltc\database\model\centrale\CrmTagCategoriaMerceologica.java
 C:\Users\Damiano\git-dao\it.ltc.database.model.centrale\src\main\java\it\ltc\database\model\centrale\CoordinateBancarie.java
 C:\Users\Damiano\git-dao\it.ltc.database.model.centrale\src\main\java\it\ltc\database\model\centrale\ListinoCorriereVocePercentuale.java
@@ -56,7 +55,6 @@ C:\Users\Damiano\git-dao\it.ltc.database.model.centrale\src\main\java\it\ltc\dat
 C:\Users\Damiano\git-dao\it.ltc.database.model.centrale\src\main\java\it\ltc\database\model\centrale\SpedizioneGiacenza.java
 C:\Users\Damiano\git-dao\it.ltc.database.model.centrale\src\main\java\it\ltc\database\model\centrale\CdgBudgetPercentualiCosto.java
 C:\Users\Damiano\git-dao\it.ltc.database.model.centrale\src\main\java\it\ltc\database\model\centrale\Ingresso.java
-C:\Users\Damiano\git-dao\it.ltc.database.model.centrale\src\main\java\it\ltc\database\model\centrale\json\CdgPezzoEventoJSON.java
 C:\Users\Damiano\git-dao\it.ltc.database.model.centrale\src\main\java\it\ltc\database\model\centrale\CdgCostiRicaviCommesse.java
 C:\Users\Damiano\git-dao\it.ltc.database.model.centrale\src\main\java\it\ltc\database\model\centrale\Tracking.java
 C:\Users\Damiano\git-dao\it.ltc.database.model.centrale\src\main\java\it\ltc\database\model\centrale\UtenteSedeJoin.java
@@ -65,6 +63,7 @@ C:\Users\Damiano\git-dao\it.ltc.database.model.centrale\src\main\java\it\ltc\dat
 C:\Users\Damiano\git-dao\it.ltc.database.model.centrale\src\main\java\it\ltc\database\model\centrale\CdgCostiRicaviGenerici.java
 C:\Users\Damiano\git-dao\it.ltc.database.model.centrale\src\main\java\it\ltc\database\model\centrale\Azienda.java
 C:\Users\Damiano\git-dao\it.ltc.database.model.centrale\src\main\java\it\ltc\database\model\centrale\Regione.java
+C:\Users\Damiano\git-dao\it.ltc.database.model.centrale\src\main\java\it\ltc\database\model\centrale\CrmContattoRecapiti.java
 C:\Users\Damiano\git-dao\it.ltc.database.model.centrale\src\main\java\it\ltc\database\model\centrale\FatturaPreferenzeCommessaPK.java
 C:\Users\Damiano\git-dao\it.ltc.database.model.centrale\src\main\java\it\ltc\database\model\centrale\SpedizioneAssicurazione.java
 C:\Users\Damiano\git-dao\it.ltc.database.model.centrale\src\main\java\it\ltc\database\model\centrale\Operatore.java
@@ -81,8 +80,8 @@ C:\Users\Damiano\git-dao\it.ltc.database.model.centrale\src\main\java\it\ltc\dat
 C:\Users\Damiano\git-dao\it.ltc.database.model.centrale\src\main\java\it\ltc\database\model\centrale\SpedizioneServizio.java
 C:\Users\Damiano\git-dao\it.ltc.database.model.centrale\src\main\java\it\ltc\database\model\centrale\ListinoCommessaVoce.java
 C:\Users\Damiano\git-dao\it.ltc.database.model.centrale\src\main\java\it\ltc\database\model\centrale\ListinoCorriereVoceProporzionale.java
+C:\Users\Damiano\git-dao\it.ltc.database.model.centrale\src\main\java\it\ltc\database\model\centrale\enumcondivise\Fatturazione.java
 C:\Users\Damiano\git-dao\it.ltc.database.model.centrale\src\main\java\it\ltc\database\model\centrale\ListinoCommessaVocePercentuale.java
-C:\Users\Damiano\git-dao\it.ltc.database.model.centrale\src\main\java\it\ltc\database\model\centrale\json\PreferenzeFatturazioneJSON.java
 C:\Users\Damiano\git-dao\it.ltc.database.model.centrale\src\main\java\it\ltc\database\model\centrale\AziendaNote.java
 C:\Users\Damiano\git-dao\it.ltc.database.model.centrale\src\main\java\it\ltc\database\model\centrale\UtentePermessiJoin.java
 C:\Users\Damiano\git-dao\it.ltc.database.model.centrale\src\main\java\it\ltc\database\model\centrale\CdgPezzoEventoPK.java

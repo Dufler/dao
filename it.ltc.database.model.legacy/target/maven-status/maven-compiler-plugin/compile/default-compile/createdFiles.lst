@@ -15,6 +15,7 @@ it\ltc\database\model\legacy\coltorti\ArticoliColtorti.class
 it\ltc\database\model\legacy\Nazioni.class
 it\ltc\database\model\legacy\Colori.class
 it\ltc\database\model\legacy\PakiArticolo.class
+it\ltc\database\model\legacy\PakiTestaLogStato.class
 it\ltc\database\model\legacy\TestataOrdiniTipo.class
 it\ltc\database\model\legacy\ColliCarico.class
 it\ltc\database\model\legacy\ColliPack.class

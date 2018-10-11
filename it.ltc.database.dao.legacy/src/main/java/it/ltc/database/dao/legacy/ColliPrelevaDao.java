@@ -35,9 +35,11 @@ public class ColliPrelevaDao extends CRUDDao<ColliPreleva> {
 		oldEntity.setNrColloCliente(entity.getNrColloCliente());
 		oldEntity.setNrDistinta(entity.getNrDistinta());
 		oldEntity.setNrLista(entity.getNrLista());
-		oldEntity.setSpedito(entity.getSpedito());
 		oldEntity.setVet1(entity.getVet1());
 		oldEntity.setVet2(entity.getVet2());
+		oldEntity.setPoNumber(entity.getPoNumber());
+		if (entity.getSpedito() != null)
+			oldEntity.setSpedito(entity.getSpedito());
 	}
 
 	public ColliPreleva inserisci(ColliPreleva collo) {

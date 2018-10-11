@@ -191,7 +191,7 @@ public class PakiArticolo implements Serializable {
 		keyUbicaPre = "";
 		qtaPreDoc = 0;
 		qtaPrelevata = 0;
-		qtaVerificata = 0;
+		//qtaVerificata = 0;
 		//scelta = "";
 		dataModifica = new Timestamp(now.getTime());
 		if (utente == null) utente = "WSE";

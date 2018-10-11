@@ -156,7 +156,7 @@ public class TestaCorrConDocumento implements Serializable {
 //	@Column(name="Marchio")
 //	private int marchio;
 
-	@Column(name="MittenteAlfa", length=15)
+	@Column(name="MittenteAlfa", length=20)
 	private String mittenteAlfa;
 
 	@Column(name="MittenteNum")
@@ -1153,6 +1153,10 @@ public class TestaCorrConDocumento implements Serializable {
 		sb.append(utility.getFormattedString("", 25)); //25 - ragione sociale mittente
 		sb.append(utility.getFormattedString("", 9)); //9 - cap mittente
 		sb.append("   "); //3 - nazione mittente
+		if (sb.length() > 511) {
+			sb.delete(511, sb.length());
+			System.out.println("Anomalia generazione stringa. Lunghezza maggiore di 511 caratteri.");
+		}
 		return sb.toString();
 	}
 

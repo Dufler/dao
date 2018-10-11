@@ -381,10 +381,9 @@ public class TestataOrdini implements Serializable {
 		if (valContrassegno == null) valContrassegno = 0.0;
 		if (valoreDoganale == null)	valoreDoganale = 0.0;
 		// Corriere, se null imposto a stringa vuota.
-		if (corriere == null)
-			corriere = "";
+		if (corriere == null) corriere = "";
 		// Codice cliente per il corriere, se null imposto a stringa vuota.
-		if (codiceClienteCorriere == null)	codiceClienteCorriere = "";
+		if (codiceClienteCorriere == null) codiceClienteCorriere = "";
 		if (stato == null) stato = "INSE";
 	}
 

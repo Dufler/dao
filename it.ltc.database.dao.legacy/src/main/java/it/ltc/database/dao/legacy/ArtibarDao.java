@@ -1,5 +1,12 @@
 package it.ltc.database.dao.legacy;
 
+import java.util.List;
+
+import javax.persistence.EntityManager;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
+
 import it.ltc.database.dao.CRUDDao;
 import it.ltc.database.model.legacy.ArtiBar;
 
@@ -12,6 +19,23 @@ public class ArtibarDao extends CRUDDao<ArtiBar> {
 	public ArtiBar trovaDaSKU(String sku) {
         ArtiBar articolo = findFirstOneEqualTo("codiceArticolo", sku); //E' possibile che c'è ne sia più di uno.
 		return articolo;
+	}
+	
+	public ArtiBar trovaDaIDUnivoco(String idUniArticolo) {
+		ArtiBar articolo = findFirstOneEqualTo("idUniArticolo", idUniArticolo); //E' possibile che c'è ne sia più di uno.
+		return articolo;
+	}
+	
+	public ArtiBar trovaDaBarcode(String barcode) {
+		EntityManager em = getManager();
+		CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<ArtiBar> criteria = cb.createQuery(ArtiBar.class);
+        Root<ArtiBar> member = criteria.from(ArtiBar.class);
+        criteria.select(member).where(cb.or(cb.equal(member.get("barraUPC"), barcode), cb.equal(member.get("barraEAN"), barcode)));
+        List<ArtiBar> entities = em.createQuery(criteria).setMaxResults(1).getResultList();
+        em.close();
+        ArtiBar entity = entities.isEmpty() ? null : entities.get(0);
+        return entity;
 	}
 	
 	public ArtiBar inserisci(ArtiBar barcode) {

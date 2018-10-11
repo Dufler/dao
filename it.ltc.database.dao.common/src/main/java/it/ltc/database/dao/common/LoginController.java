@@ -26,6 +26,8 @@ public class LoginController {
 	
 	private static final Logger logger = Logger.getLogger("LoginController");
 	
+	private static final String USERNAME_SOLO_CIFRE = "^\\d+";
+	
 	private static final long durataRisorsa = 86400000; //24 ore
 	private static final String indirizzoRisorseTemporanee = "http://web.services.ltc-logistics.it/areaclienti/reimpostaPassword/";
 	private static final String indirizzoMail = "sysinfo@ltc-logistics.it";
@@ -203,7 +205,8 @@ public class LoginController {
 	}
 	
 	public Utente insertNewUser(Utente user) {
-		String password = "ltc" + user.getNome().toLowerCase();
+		String password = user.getNome().matches(USERNAME_SOLO_CIFRE) ? user.getNome() : "ltc" + user.getNome().toLowerCase();
+		logger.info(password);
 		password = getHash(password);
 		user.setPassword(password);
 		Utente inserito = userDao.inserisci(user);

@@ -166,7 +166,7 @@ public class PakiTesta implements Serializable {
 //	@Column(name="SiglaDocOri", length=2)
 //	private String siglaDocOri;
 
-	@Column(name="Stagione", length=1)
+	@Column(name="Stagione", length=4)
 	private String stagione;
 
 	/**
@@ -222,10 +222,6 @@ public class PakiTesta implements Serializable {
 		Timestamp stamp = new Timestamp(now.getTime());
 		SimpleDateFormat sdf = new SimpleDateFormat("yy");
 		qtaTotAre = 0;
-		if (flussoDichiarato == null) flussoDichiarato = "SI";
-		if (stagione == null) stagione = "";
-		if (tipoPack == null) tipoPack = "ART";
-		if (abilitaEccedenze == null) abilitaEccedenze = "NO";
 		//dataInizio = new Timestamp(now.getTime());
 		//oraInizio = DateConverter.getOraComeIntero(dataInizio);
 		//dataInizio = DateConverter.ripulisciTimestap(dataInizio);
@@ -237,6 +233,11 @@ public class PakiTesta implements Serializable {
 		generatoFile = "NO";
 		letto = "NO";
 		flagTra = "N";
+		if (flussoDichiarato == null) flussoDichiarato = "SI";
+		if (stagione == null) stagione = "";
+		if (tipoPack == null) tipoPack = "ART";
+		if (abilitaEccedenze == null) abilitaEccedenze = "NO";
+		if (stagione == null) stagione = "CO" + anno;
 	}
 	
 	public void setDataOraInizio(Timestamp time) {

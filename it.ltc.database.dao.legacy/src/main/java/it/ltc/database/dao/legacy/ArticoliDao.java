@@ -1,6 +1,7 @@
 package it.ltc.database.dao.legacy;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -17,47 +18,78 @@ import it.ltc.database.model.legacy.Articoli;
 
 public class ArticoliDao extends CRUDDao<Articoli> {
 	
+	protected final HashMap<Integer, Articoli> mappaPerID;
+	protected final HashMap<String, Articoli> mappaPerIDUnivoco;
+	protected final HashMap<String, Articoli> mappaPerCodiceArticolo;
+	
 	public ArticoliDao(String persistenceUnit) {
 		super(persistenceUnit, Articoli.class);
+		mappaPerID = new HashMap<>();
+		mappaPerIDUnivoco = new HashMap<>();
+		mappaPerCodiceArticolo = new HashMap<>();
 	}
 	
-	public Articoli trovaDaID(int id) {
-		Articoli entity = findByID(id);
-		return entity;
+	protected void inserisciInMappe(Articoli entity) {
+		if (entity != null) {
+			mappaPerID.put(entity.getIdArticolo(), entity);
+			mappaPerIDUnivoco.put(entity.getIdUniArticolo(), entity);
+			mappaPerCodiceArticolo.put(entity.getCodArtStr(), entity);
+		}
+		
 	}
-
+	
+	protected void rimuoveDaMappe(Articoli entity) {
+		if (entity != null) {
+			mappaPerID.remove(entity.getIdArticolo());
+			mappaPerIDUnivoco.remove(entity.getIdUniArticolo());
+			mappaPerCodiceArticolo.remove(entity.getCodArtStr());
+		}		
+	}
+	
 	public List<Articoli> trovaTutti() {
 		List<Articoli> entities = findAll();
 		return entities;
 	}
 	
-	public Articoli inserisci(Articoli articolo) {
-		Articoli entity = insert(articolo);
-		return entity;
-	}
-	
-	public Articoli aggiorna(Articoli articolo) {
-		Articoli entity = update(articolo, articolo.getIdArticolo());
-		return entity;
-	}
-	
-	public Articoli elimina(Articoli articolo) {
-		Articoli entity = delete(articolo.getIdArticolo());
-		return entity;
+	public Articoli trovaDaID(int id) {
+		if (!mappaPerID.containsKey(id)) {
+			Articoli entity = findByID(id);
+			inserisciInMappe(entity);
+		}		
+		return mappaPerID.get(id);
 	}
 	
 	public Articoli trovaDaIDUnivoco(String idUnivoco) {
-		Articoli entity = findOnlyOneEqualTo("idUniArticolo", idUnivoco);
-		return entity;
+		if (!mappaPerIDUnivoco.containsKey(idUnivoco)) {
+			Articoli entity = findOnlyOneEqualTo("idUniArticolo", idUnivoco);
+			inserisciInMappe(entity);
+		}		
+		return mappaPerIDUnivoco.get(idUnivoco);
 	}
 	
 	public Articoli trovaDaSKU(String sku) {
-		Articoli entity = findOnlyOneEqualTo("codArtStr", sku);
-		return entity;
+		if (!mappaPerCodiceArticolo.containsKey(sku)) {
+			Articoli entity = findOnlyOneEqualTo("codArtStr", sku);
+			inserisciInMappe(entity);
+		}		
+		return mappaPerCodiceArticolo.get(sku);
 	}
 	
 	public Articoli trovaDaSKUVecchio(String sku) {
 		Articoli entity = findFirstOneEqualTo("codArtOld", sku);
+		inserisciInMappe(entity);
+		return entity;
+	}
+	
+	/**
+	 * Restituisce il primo articolo con modello e taglia corrispondenti a quanto passato come argomento.
+	 */
+	public Articoli trovaDaModelloETaglia(String modello, String taglia) {
+		List<CondizioneWhere> condizioni = new LinkedList<>();
+		condizioni.add(new CondizioneWhere("modello", modello));
+		condizioni.add(new CondizioneWhere("taglia", taglia));
+		List<Articoli> entities = findAll(condizioni, 1);
+		Articoli entity = entities.isEmpty() ? null : entities.get(0);
 		return entity;
 	}
 	
@@ -71,6 +103,24 @@ public class ArticoliDao extends CRUDDao<Articoli> {
         em.close();
         Articoli articolo = articoli.isEmpty() ? null : articoli.get(0);
         return articolo;
+	}
+	
+	public Articoli inserisci(Articoli articolo) {
+		Articoli entity = insert(articolo);
+		inserisciInMappe(entity);
+		return entity;
+	}
+	
+	public Articoli aggiorna(Articoli articolo) {
+		Articoli entity = update(articolo, articolo.getIdArticolo());
+		inserisciInMappe(entity);
+		return entity;
+	}
+	
+	public Articoli elimina(Articoli articolo) {
+		Articoli entity = delete(articolo.getIdArticolo());
+		rimuoveDaMappe(entity);
+		return entity;
 	}
 
 	@Override

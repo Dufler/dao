@@ -36,7 +36,6 @@ it\ltc\database\model\centrale\SpedizioneGiacenza.class
 it\ltc\database\model\centrale\Azienda.class
 it\ltc\database\model\centrale\AziendaNote.class
 it\ltc\database\model\centrale\CdgPezzoEvento.class
-it\ltc\database\model\centrale\Spedizione$Fatturazione.class
 it\ltc\database\model\centrale\FatturaDocumento$Iva.class
 it\ltc\database\model\centrale\Documento$TipoDocumento.class
 it\ltc\database\model\centrale\GadgetInviati.class
@@ -59,7 +58,6 @@ it\ltc\database\model\centrale\CdgCostiRicaviGenericiFasePK.class
 it\ltc\database\model\centrale\UtenteCommessaJoin.class
 it\ltc\database\model\centrale\FatturaDocumento$Stato.class
 it\ltc\database\model\centrale\SpedizioneLight$Archiviazione.class
-it\ltc\database\model\centrale\SpedizioneGiacenza$Fatturazione.class
 it\ltc\database\model\centrale\CdgCostiRicaviGenericiFase.class
 it\ltc\database\model\centrale\AziendaContatti.class
 it\ltc\database\model\centrale\UtentePermessiJoinPK.class
@@ -73,15 +71,14 @@ it\ltc\database\model\centrale\SpedizioneParticolarita.class
 it\ltc\database\model\centrale\CorriereServizioPK.class
 it\ltc\database\model\centrale\SpedizioneContrassegnoTipo.class
 it\ltc\database\model\centrale\CdgCommessaEventoPK.class
+it\ltc\database\model\centrale\CrmContattoRecapiti$Tipo.class
 it\ltc\database\model\centrale\CapPK.class
 it\ltc\database\model\centrale\Gadget.class
-it\ltc\database\model\centrale\json\CdgCommessaEventoJSON.class
 it\ltc\database\model\centrale\Ordine.class
 it\ltc\database\model\centrale\Regione.class
 it\ltc\database\model\centrale\Commessa.class
 it\ltc\database\model\centrale\Ordine$TipoOrdine.class
 it\ltc\database\model\centrale\Cap.class
-it\ltc\database\model\centrale\json\CdgPezzoEventoJSON.class
 it\ltc\database\model\centrale\CdgBudgetPercentualiCosto.class
 it\ltc\database\model\centrale\Valuta.class
 it\ltc\database\model\centrale\ListinoCorriereVoceProporzionale.class
@@ -110,12 +107,13 @@ it\ltc\database\model\centrale\SpedizioneAssicurazione.class
 it\ltc\database\model\centrale\CategoriaMerceologica.class
 it\ltc\database\model\centrale\Azienda$Valutazione.class
 it\ltc\database\model\centrale\CdgCostiRicaviCommesse$Tipo.class
+it\ltc\database\model\centrale\CrmContattoRecapiti.class
 it\ltc\database\model\centrale\ListinoCommessaVoceScaglioni.class
 it\ltc\database\model\centrale\ListinoCommessaVoceScaglioniRipetuti.class
 it\ltc\database\model\centrale\CdgCostiRicaviCommesse.class
 it\ltc\database\model\centrale\FatturaSottoAmbito.class
 it\ltc\database\model\centrale\CoordinateBancarie.class
-it\ltc\database\model\centrale\json\PreferenzeFatturazioneJSON.class
+it\ltc\database\model\centrale\enumcondivise\Fatturazione.class
 it\ltc\database\model\centrale\UtenteFeaturesJoinPK.class
 it\ltc\database\model\centrale\CdgPezzoEventoPK.class
 it\ltc\database\model\centrale\SpedizioneLight.class

@@ -10,6 +10,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 
 import it.ltc.utility.miscellanea.time.DateConverter;
@@ -102,8 +103,8 @@ public class MagaMov implements Serializable {
 //	@Column(name="TipoCollo", length=3)
 //	private String tipoCollo;
 
-//	@Column(nullable=false, length=2)
-//	private String trasmesso;
+	@Column(nullable=false, length=2)
+	private String trasmesso;
 
 	@Column(name="Utente", length=20)
 	private String utente;
@@ -118,7 +119,15 @@ public class MagaMov implements Serializable {
 		dataMovMag = DateConverter.ripulisciTimestap(dataMovMag);
 		docData = DateConverter.ripulisciTimestap(dataMovMag);
 		if (keyCollo == null) keyCollo = "0000000000";
-		//if (trasmesso == null) trasmesso = "NO";
+		if (trasmesso == null) trasmesso = "NO";
+		if (cancellato == null) cancellato = "NO";
+		if (utente == null) utente = "SERVIZIO";
+	}
+	
+	@PreUpdate
+	public void preUpdate() {
+		if (keyCollo == null) keyCollo = "0000000000";
+		if (trasmesso == null) trasmesso = "NO";
 		if (cancellato == null) cancellato = "NO";
 		if (utente == null) utente = "SERVIZIO";
 	}
@@ -323,13 +332,13 @@ public class MagaMov implements Serializable {
 //		this.tipoCollo = tipoCollo;
 //	}
 
-//	public String getTrasmesso() {
-//		return this.trasmesso;
-//	}
-//
-//	public void setTrasmesso(String trasmesso) {
-//		this.trasmesso = trasmesso;
-//	}
+	public String getTrasmesso() {
+		return this.trasmesso;
+	}
+
+	public void setTrasmesso(String trasmesso) {
+		this.trasmesso = trasmesso;
+	}
 
 	public String getUtente() {
 		return this.utente;

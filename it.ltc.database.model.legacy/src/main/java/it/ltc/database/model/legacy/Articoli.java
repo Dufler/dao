@@ -282,6 +282,10 @@ public class Articoli implements Serializable {
 		if (umPos < 1) umPos = 1;
 		if (numerata == null) numerata = "001";
 		if (utente == null) utente = "SERVIZIO";
+		//Controlli su barcode mancanti, qualcosa ci metto comunque.
+		if (codBarre == null) codBarre = codArtStr;
+		if (barraEAN == null) barraEAN = codBarre;
+		if (barraUPC == null) barraUPC = codBarre;
 		dataModifica = new Timestamp(new Date().getTime());
 	}
 	

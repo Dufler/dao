@@ -52,11 +52,11 @@ public class ColliCarico implements Serializable {
 	@Column(name="Barcode", length=12)
 	private String barcode;
 
-	/**
-	 * default a NO nel prepersist.
-	 */
-	@Column(name="Bloccato", nullable=false, length=50)
-	private String bloccato;
+//	/**
+//	 * default a NO nel prepersist. EDIT 28/09/2018 : insieme ad Andrea e Palma si è deciso di usare solo il campo cancellato.
+//	 */
+//	@Column(name="Bloccato", nullable=false, length=50)
+//	private String bloccato;
 
 	/**
 	 * default a NO nel prepersist.
@@ -76,11 +76,11 @@ public class ColliCarico implements Serializable {
 	@Column(name="DataDistruzione")
 	private Timestamp dataDistruzione;
 
-	/**
-	 * Viene valorizzato quando viene prelevata la cassa per intero sparando il bollone esterno.
-	 */
-	@Column(name="DataRilImballo")
-	private Timestamp dataRilImballo;
+//	/**
+//	 * Viene valorizzato quando viene prelevata la cassa per intero sparando il bollone esterno. Su Date è un char(10) e fa casino, siccome non è rilevante è stato commentato.
+//	 */
+//	@Column(name="DataRilImballo")
+//	private Timestamp dataRilImballo;
 
 	/**
 	 * Giorno in cui viene ubicata senza l'ora.
@@ -91,11 +91,11 @@ public class ColliCarico implements Serializable {
 //	@Column(name="DataUMod")
 //	private Timestamp dataUMod;
 
-	/**
-	 * Default a NO nel prepersist
-	 */
-	@Column(name="Distrutto", length=2)
-	private String distrutto;
+//	/**
+//	 * Default a NO nel prepersist, EDIT 28/09/2018 : insieme ad Andrea e Palma si è deciso di usare solo il campo cancellato.
+//	 */
+//	@Column(name="Distrutto", length=2)
+//	private String distrutto;
 
 //	@Column(name="Fase", nullable=false, length=2)
 //	private String fase;
@@ -138,7 +138,7 @@ public class ColliCarico implements Serializable {
 	/**
 	 * Non va usato in inserimento, viene messo un default a NOUBICATO.
 	 */
-	@Column(name="KeyUbicaCar", length=15, insertable=false)
+	@Column(name="KeyUbicaCar", length=15)
 	private String keyUbicaCar;
 
 	/**
@@ -229,31 +229,40 @@ public class ColliCarico implements Serializable {
 	/**
 	 * Codice dell'operatore che ha distrutto il collo.
 	 */
-	@Column(name="UteDistruzione", length=20)
+	@Column(name="UteDistruzione", length=50)
 	private String uteDistruzione;
 
 	/**
 	 * Metto un default a stringa vuota.
 	 */
-	@Column(name="Utente", length=20, updatable=false)
+	@Column(name="Utente", length=50, updatable=false)
 	private String utente;
 
 	/**
 	 * Metto un default a stringa vuota.
 	 */
-	@Column(name="UtenteMod", length=20)
+	@Column(name="UtenteMod", length=50)
 	private String utenteMod;
 
 	/**
 	 * Metto un default a stringa vuota.
 	 */
-	@Column(name="UtenteUbica", nullable=false, length=20)
+	@Column(name="UtenteUbica", nullable=false, length=50)
 	private String utenteUbica;
 
 //	@Column(name="Volume", nullable=false)
 //	private int volume;
+	
+	/**
+	 * Valore transiente non salvato nel DB che deve essere iniettato prima dell'inserimento.<br>
+	 * Serve a valorizzare correttamente il barcode del collo. 
+	 */
+	@Transient
+	private String prefissoCollo;
 
-	public ColliCarico() {}
+	public ColliCarico() {
+		prefissoCollo = "CPX";
+	}
 	
 	@PrePersist
 	public void prePersist() {
@@ -265,19 +274,27 @@ public class ColliCarico implements Serializable {
 		String annoCollo = Integer.toString(anno).substring(2, 4);
 		String progressivoCollo = su.getFormattedString(nrCollo, 7);
 		keyColloCar = annoCollo + progressivoCollo;
-		barcode = "CPX" + keyColloCar;
+		barcode = prefissoCollo + keyColloCar;
 		if (id_Box == null)	id_Box = "";
 		if (tipoCassa == null) tipoCassa = "XXX";
 		if (utente == null) utente = "";
-		ubicato = "NO";
-		bloccato = "NO";
+		if (apertoSfuso == null) apertoSfuso = "N";
+		if (rilevataImballo == null) rilevataImballo = "N";
+		if (stato == null) stato = "APERTO";
+		//Controllo se mi è stata fornita un'ubicazione.
+		if (keyUbicaCar == null || keyUbicaCar.isEmpty()) {
+			keyUbicaCar = "NOUBICATO";
+			ubicato = "NO";
+		} else {
+			ubicato = "SI";
+		}		
+//		bloccato = "NO";
 		cancellato = "NO";
-		distrutto = "NO";
-		flagtc = "0";
+//		distrutto = "NO";
+//		flagtc = "0";
 		utenteMod = "";
 		utenteUbica = "";
-		uteDistruzione = "";
-		stato = "APERTO";
+		uteDistruzione = "";			
 	}
 
 	public int getIdCollo() {
@@ -320,13 +337,13 @@ public class ColliCarico implements Serializable {
 		this.barcode = barcode;
 	}
 
-	public String getBloccato() {
-		return this.bloccato;
-	}
-
-	public void setBloccato(String bloccato) {
-		this.bloccato = bloccato;
-	}
+//	public String getBloccato() {
+//		return this.bloccato;
+//	}
+//
+//	public void setBloccato(String bloccato) {
+//		this.bloccato = bloccato;
+//	}
 
 	public String getCancellato() {
 		return this.cancellato;
@@ -352,13 +369,13 @@ public class ColliCarico implements Serializable {
 		this.dataDistruzione = dataDistruzione;
 	}
 
-	public Timestamp getDataRilImballo() {
-		return this.dataRilImballo;
-	}
-
-	public void setDataRilImballo(Timestamp dataRilImballo) {
-		this.dataRilImballo = dataRilImballo;
-	}
+//	public Timestamp getDataRilImballo() {
+//		return this.dataRilImballo;
+//	}
+//
+//	public void setDataRilImballo(Timestamp dataRilImballo) {
+//		this.dataRilImballo = dataRilImballo;
+//	}
 
 	public Timestamp getDataUbica() {
 		return this.dataUbica;
@@ -376,13 +393,13 @@ public class ColliCarico implements Serializable {
 //		this.dataUMod = dataUMod;
 //	}
 
-	public String getDistrutto() {
-		return this.distrutto;
-	}
-
-	public void setDistrutto(String distrutto) {
-		this.distrutto = distrutto;
-	}
+//	public String getDistrutto() {
+//		return this.distrutto;
+//	}
+//
+//	public void setDistrutto(String distrutto) {
+//		this.distrutto = distrutto;
+//	}
 
 //	public String getFase() {
 //		return this.fase;
@@ -622,6 +639,14 @@ public class ColliCarico implements Serializable {
 
 	public void setUtenteUbica(String utenteUbica) {
 		this.utenteUbica = utenteUbica;
+	}
+
+	public String getPrefissoCollo() {
+		return prefissoCollo;
+	}
+
+	public void setPrefissoCollo(String prefissoCollo) {
+		this.prefissoCollo = prefissoCollo;
 	}
 
 //	public int getVolume() {

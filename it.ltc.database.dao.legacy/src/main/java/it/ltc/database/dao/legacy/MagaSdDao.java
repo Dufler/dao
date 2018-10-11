@@ -13,6 +13,11 @@ public class MagaSdDao extends CRUDDao<MagaSd> {
 		super(persistenceUnit, MagaSd.class);
 	}
 	
+	public List<MagaSd> trovaTutti() {
+		List<MagaSd> entities = findAll();
+		return entities;
+	}
+	
 	public List<MagaSd> trovaTuttiPerMagazzino(String magazzino) {
 		List<MagaSd> entities = findAllEqualTo("codMaga", magazzino);
 		return entities;
@@ -23,6 +28,13 @@ public class MagaSdDao extends CRUDDao<MagaSd> {
 		return entities;
 	}
 	
+	/**
+	 * Recupera il saldo di magazzino per l'articolo indicato.<br>
+	 * Nel caso in cui non sia presente oppure ce ne sia più di uno per lo stesso magazzino viene restituito <code>null</code>.
+	 * @param codiceUnivocoArticolo l'ID univoco dell'articolo.
+	 * @param magazzino il magazzino di cui si vuole il saldo.
+	 * @return il saldo di magazzino o <code>null</code> in caso di situazioni ambigue o errori.
+	 */
 	public MagaSd trovaDaArticoloEMagazzino(String codiceUnivocoArticolo, String magazzino) {
 		List<CondizioneWhere> condizioni = new LinkedList<>();
 		condizioni.add(new CondizioneWhere("idUniArticolo", codiceUnivocoArticolo));

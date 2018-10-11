@@ -44,7 +44,7 @@ public class ColliPack implements Serializable {
 	@Column(name="CodArtStr", length=50)
 	private String codArtStr;
 
-	@Column(name="CodiceArticolo", length=21)
+	@Column(name="CodiceArticolo", length=15)
 	private String codiceArticolo;
 
 //	@Column(name="Controllata", nullable=false, length=2)
@@ -107,7 +107,7 @@ public class ColliPack implements Serializable {
 //	@Column(name="NrRiferimento")
 //	private int nrRiferimento;
 //
-	@Column(name="Operatore", length=10)
+	@Column(name="Operatore", length=50)
 	private String operatore;
 
 	@Column(name="OraAgg")
@@ -151,6 +151,7 @@ public class ColliPack implements Serializable {
 	
 	@PrePersist
 	public void prePersist() {
+		if (operatore == null) operatore = "WS";
 		if (taglia == null) taglia = "";
 		if (descrizione == null) descrizione = "";
 		else if (descrizione.length() > 50) descrizione = descrizione.substring(0, 50);
@@ -161,6 +162,7 @@ public class ColliPack implements Serializable {
 	
 	@PreUpdate
 	public void preUpdate() {
+		if (operatore == null) operatore = "WS";
 		if (taglia == null) taglia = "";
 		if (descrizione == null) descrizione = "";
 		else if (descrizione.length() > 50) descrizione = descrizione.substring(0, 50);
