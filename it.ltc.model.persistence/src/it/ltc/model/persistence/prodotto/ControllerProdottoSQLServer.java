@@ -1,6 +1,6 @@
 package it.ltc.model.persistence.prodotto;
 
-import java.math.BigDecimal;
+import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -84,17 +84,23 @@ public class ControllerProdottoSQLServer extends Dao implements IControllerModel
 			articolo.setMadeIn(prodotto.getMadeIn());
 			articolo.setStagione(prodotto.getStagione());
 			if (prodotto.getPeso() != null) //null check
-				articolo.setArtPeso(new BigDecimal(prodotto.getPeso()));
+				articolo.setArtPeso(prodotto.getPeso().doubleValue());
 			articolo.setArtH(prodotto.getH());
 			articolo.setArtL(prodotto.getL());
 			articolo.setArtZ(prodotto.getZ());
 			if (prodotto.getValore() != null) //null check
-				articolo.setValVen(new BigDecimal(prodotto.getValore()));
+				articolo.setValVen(prodotto.getValore());
 			articolo.setBarraUPC(prodotto.getBarcodeFornitore());
 			articolo.setCodArtOld(prodotto.getSkuFornitore());
 			articolo.setDescAggiuntiva(prodotto.getDescrizioneAggiuntiva());
 			articolo.setNote(prodotto.getNote());
-			articolo.setTipoCassa(prodotto.getCassa());
+			articolo.setNumerata(prodotto.getNumerata());
+			articolo.setUmPos(prodotto.getPosizioneNumerata());
+			articolo.setUm(prodotto.getUnitaMisura());
+			articolo.setPezziCassa(prodotto.getPezziCassa());
+			articolo.setQtaConf(prodotto.getPezziConfezione());
+			articolo.setCassa(prodotto.getCassa().name());
+			articolo.setTipoCassa(prodotto.getTipoCassa());
 			articolo.setUtente(utente);
 		}
 		return articolo;
@@ -125,15 +131,15 @@ public class ControllerProdottoSQLServer extends Dao implements IControllerModel
 		//Controllo sul codice modello e taglia
 		Articoli checkModelloTaglia = daoArticoli.trovaDaModelloETaglia(prodotto.getCodiceModello(), prodotto.getTaglia());
 		if (checkModelloTaglia != null)
-			throw new ModelValidationException("(Legacy) E' gia' presente un prodotto con la stessa combinazione codice modello-taglia.");
+			throw new ModelValidationException("(Legacy) E' gia' presente un prodotto con la stessa combinazione codice modello-taglia. (modello: " + prodotto.getCodiceModello() + ", taglia: " + prodotto.getTaglia() + ")");
 		//Controllo barcode
 		Articoli checkBarcode = daoArticoli.trovaDaBarcode(prodotto.getBarcode());
 		if (checkBarcode != null)
-			throw new ModelValidationException("(Legacy) E' gia' presente un prodotto con lo stesso barcode.");
+			throw new ModelValidationException("(Legacy) E' gia' presente un prodotto con lo stesso barcode. (" + prodotto.getBarcode() + ")");
 		//Controllo chiave cliente
 		Articoli checkChiave = daoArticoli.trovaDaSKU(prodotto.getChiaveCliente());
 		if (checkChiave != null)
-			throw new ModelValidationException("(Legacy) E' gia' presente un prodotto con la stessa chiave identificativa.");
+			throw new ModelValidationException("(Legacy) E' gia' presente un prodotto con la stessa chiave identificativa. (" + prodotto.getChiaveCliente() + ")");
 		CatMercGruppi checkCategoria = daoCategoriaMerceologica.trovaDaCodice(prodotto.getCategoria());
 		if (checkCategoria == null)
 			throw new ModelValidationException("(Legacy) La categoria merceologica specificata non esiste. (" + prodotto.getCategoria() + ")");
@@ -149,6 +155,20 @@ public class ControllerProdottoSQLServer extends Dao implements IControllerModel
 	public MProdotto elimina(MProdotto model) throws ModelPersistenceException {
 		// TODO Auto-generated method stub
 		return null;
+	}
+	
+	/**
+	 * Sposta il file selezionato nella cartella specificata.
+	 * @param file il file da spostare.
+	 * @param pathCartella la cartella di destinazione.
+	 */
+	protected void spostaFile(File file, String pathCartella) {
+		String nomeFile = file.getName();
+		File fileDaSpostare = new File(pathCartella + nomeFile);
+		boolean spostato = file.renameTo(fileDaSpostare);
+		if (spostato) {
+			logger.info("Spostato il file '" + nomeFile + "' in '" + pathCartella + "'");
+		}
 	}
 
 }

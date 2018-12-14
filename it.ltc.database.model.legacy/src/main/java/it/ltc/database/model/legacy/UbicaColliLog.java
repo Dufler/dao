@@ -5,7 +5,6 @@ import javax.persistence.*;
 
 import it.ltc.utility.miscellanea.time.DateConverter;
 
-import java.sql.Timestamp;
 import java.util.Date;
 
 
@@ -25,8 +24,8 @@ public class UbicaColliLog implements Serializable {
 	@Column(name="Id", unique=true, nullable=false)
 	private int id;
 
-	@Column(name="DataUbicazione")
-	private Timestamp dataUbicazione;
+	@Column(name="DataUbicazione", columnDefinition="datetime")
+	private Date dataUbicazione;
 
 	@Column(name="KeyCollo", length=50)
 	private String keyCollo;
@@ -47,14 +46,14 @@ public class UbicaColliLog implements Serializable {
 	
 	@PrePersist
 	private void prePersist() {
-		dataUbicazione = new Timestamp(new Date().getTime());
+		dataUbicazione = new Date(new Date().getTime());
 		oraUbicazione = DateConverter.getOraComeIntero(dataUbicazione);
 		dataUbicazione = DateConverter.ripulisciTimestap(dataUbicazione);
 	}
 	
 	@PreUpdate
 	private void preUpdate() {
-		dataUbicazione = new Timestamp(new Date().getTime());
+		dataUbicazione = new Date(new Date().getTime());
 		oraUbicazione = DateConverter.getOraComeIntero(dataUbicazione);
 		dataUbicazione = DateConverter.ripulisciTimestap(dataUbicazione);
 	}
@@ -67,11 +66,11 @@ public class UbicaColliLog implements Serializable {
 		this.id = id;
 	}
 
-	public Timestamp getDataUbicazione() {
+	public Date getDataUbicazione() {
 		return this.dataUbicazione;
 	}
 
-	public void setDataUbicazione(Timestamp dataUbicazione) {
+	public void setDataUbicazione(Date dataUbicazione) {
 		this.dataUbicazione = dataUbicazione;
 	}
 

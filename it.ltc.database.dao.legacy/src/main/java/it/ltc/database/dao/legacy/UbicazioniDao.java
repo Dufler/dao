@@ -1,12 +1,27 @@
 package it.ltc.database.dao.legacy;
 
+import java.util.HashMap;
+
 import it.ltc.database.dao.CRUDDao;
 import it.ltc.database.model.legacy.Ubicazioni;
 
 public class UbicazioniDao extends CRUDDao<Ubicazioni> {
+	
+	private final HashMap<Integer, Ubicazioni> mappaPerID;
+	private final HashMap<String, Ubicazioni> mappaPerCodice;
 
 	public UbicazioniDao(String persistenceUnit) {
 		super(persistenceUnit, Ubicazioni.class);
+		mappaPerID = new HashMap<>();
+		mappaPerCodice = new HashMap<>();
+	}
+	
+	private Ubicazioni aggiungiMappa(Ubicazioni ubicazione) {
+		if (ubicazione != null) {
+			mappaPerID.put(ubicazione.getIdUbicazioni(), ubicazione);
+			mappaPerCodice.put(ubicazione.getKeyUbica(), ubicazione);
+		}
+		return ubicazione;
 	}
 
 	@Override
@@ -22,12 +37,12 @@ public class UbicazioniDao extends CRUDDao<Ubicazioni> {
 	}
 	
 	public Ubicazioni trovaDaID(int id) {
-		Ubicazioni entity = findByID(id);
+		Ubicazioni entity = mappaPerID.containsKey(id) ? mappaPerID.get(id) : aggiungiMappa(findByID(id));
 		return entity;
 	}
 	
 	public Ubicazioni trovaDaCodice(String codice) {
-		Ubicazioni entity = findOnlyOneEqualTo("keyUbica", codice);
+		Ubicazioni entity = mappaPerCodice.containsKey(codice) ? mappaPerCodice.get(codice) : aggiungiMappa(findOnlyOneEqualTo("keyUbica", codice));
 		return entity;
 	}
 	

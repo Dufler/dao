@@ -1,9 +1,9 @@
 package it.ltc.database.model.legacy;
 
 import java.io.Serializable;
-import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.GregorianCalendar;
 
 import javax.persistence.Column;
@@ -62,50 +62,50 @@ public class TestataOrdini implements Serializable {
 	// @Column(name="Cliparx", length=20)
 	// private String cliparx;
 
-	@Column(name = "CodCliente", length = 30)
+	@Column(name = "CodCliente", length = 30, nullable=false)
 	private String codCliente;
 
 	/**
 	 * Uso il valore di default in inserimento.
 	 */
-	@Column(name = "CodCorriere", insertable = false, nullable = false, length = 50)
+	@Column(name="CodCorriere", insertable=false, nullable=false, length=30)
 	private String codCorriere;
 
 	// @Column(name="CodFiliale", length=3)
 	// private String codFiliale;
 
-	@Column(name = "CodiceClienteCorriere", length = 20)
+	@Column(name="CodiceClienteCorriere", length=30)
 	private String codiceClienteCorriere;
 
 	// @Column(name="CodiceMittente", nullable=false, length=10)
 	// private String codiceMittente;
 
-	@Column(name = "Corriere", length = 50)
+	@Column(name="Corriere", length=30)
 	private String corriere;
 
 	// @Column(name="DaRigenerare", length=2)
 	// private String daRigenerare;
 
-	@Column(name = "DataArrivoFile")
-	private Timestamp dataArrivoFile;
+	@Column(name="DataArrivoFile", columnDefinition="datetime")
+	private Date dataArrivoFile;
 
-	@Column(name = "DataConsegna")
-	private Timestamp dataConsegna;
+	@Column(name="DataConsegna", columnDefinition="datetime")
+	private Date dataConsegna;
 
 	// @Column(name="DataCreazione")
-	// private Timestamp dataCreazione;
+	// private Date dataCreazione;
 
-	@Column(name = "DataDoc")
-	private Timestamp dataDoc;
+	@Column(name="DataDoc", columnDefinition="datetime")
+	private Date dataDoc;
 
 	// @Column(name="DataGeneraUscita")
-	// private Timestamp dataGeneraUscita;
+	// private Date dataGeneraUscita;
 
 	// @Column(name="DataIni")
-	// private Timestamp dataIni;
+	// private Date dataIni;
 
 	@Column(name = "DataOrdine")
-	private Timestamp dataOrdine;
+	private Date dataOrdine;
 
 	// @Column(name="DocPre", length=50)
 	// private String docPre;
@@ -122,7 +122,7 @@ public class TestataOrdini implements Serializable {
 	/**
 	 * Durante l'assegnazione viene impostato a "X" se è parziale, a " " se è completa.
 	 */
-	 @Column(name="Flag1", length=1, insertable=false)
+	 @Column(name="Flag1", length=1, insertable=false, nullable=false, columnDefinition="char(1)")
 	 private String flag1;
 
 	// @Column(name="GenMovUscita", length=2)
@@ -134,10 +134,10 @@ public class TestataOrdini implements Serializable {
 	// @Column(name="IdCliAtt")
 	// private int idCliAtt;
 
-	@Column(name = "IdDestina")
+	@Column(name = "IdDestina", nullable=false)
 	private int idDestina;
 
-	@Column(name = "IdTestaCorr")
+	@Column(name = "IdTestaCorr", nullable=false)
 	private int idTestaCorr;
 
 	// @Column(nullable=false, length=50, insertable=false)
@@ -173,7 +173,7 @@ public class TestataOrdini implements Serializable {
 	// @Column(name="NomeFileUscita", length=30)
 	// private String nomeFileUscita;
 
-	@Column(name = "Note", length = 100)
+	@Column(name = "Note", length=250)
 	private String note;
 
 	// @Column(name="NrColliAutoEti")
@@ -182,14 +182,14 @@ public class TestataOrdini implements Serializable {
 	@Column(name = "NrDoc", length = 40)
 	private String nrDoc;
 
-	@Column(name = "NrLetteraVettura", length = 100)
+	@Column(name="NrLetteraVettura", length=30)
 	private String nrLetteraVettura;
 
-	@Column(name = "NrLista", nullable = false, length = 21)
+	@Column(name="NrLista", nullable=false, length=21)
 	private String nrLista;
 
-	@Column(name = "NrListaArrivato")
-	private int nrListaArrivato;
+	@Column(name="NrListaArrivato")
+	private Integer nrListaArrivato;
 
 	/**
 	 * Come RifOrdineCli
@@ -200,7 +200,7 @@ public class TestataOrdini implements Serializable {
 	/**
 	 * PrePersist a 'WEBSERVICE'
 	 */
-	@Column(name = "Operatore", length = 30)
+	@Column(name = "Operatore", length = 50)
 	private String operatore;
 
 	// @Column(name="OraAggAS400")
@@ -218,7 +218,7 @@ public class TestataOrdini implements Serializable {
 	// @Column(name="Ordineweb", length=20) //Ha un default
 	// private String ordineweb;
 
-	 @Column(name="PercAssegnata", nullable=false, insertable=false)
+	 @Column(name="PercAssegnata", nullable=false, insertable=false, columnDefinition="money")
 	 private double percAssegnata;
 
 	// @Column(name="PesoTotale")
@@ -242,8 +242,8 @@ public class TestataOrdini implements Serializable {
 	// @Column(name="PrenotatoDa", length=10)
 	// private String prenotatoDa;
 
-	@Column(name = "Priorita")
-	private Integer priorita;
+	@Column(name="Priorita", nullable=false)
+	private int priorita;
 
 	 @Column(name="QtaAssegnata", nullable=false, insertable= false)
 	 private int qtaAssegnata;
@@ -254,13 +254,17 @@ public class TestataOrdini implements Serializable {
 	// @Column(name="Qtaerrata")
 	// private int qtaerrata;
 
+	@Column(name="qtaimballata", nullable=false)
 	private int qtaimballata;
 
-	// @Column(name="Qtaprelevata")
-	// private int qtaprelevata;
+	 @Column(name="Qtaprelevata", nullable=false)
+	 private int qtaprelevata;
 
-	@Column(name = "QtaTotaleSpedire")
+	@Column(name = "QtaTotaleSpedire", nullable=false)
 	private int qtaTotaleSpedire;
+	
+	@Column(name="RagioneSocialeDestinatario", length=100)
+	private String ragioneSocialeDestinatario;
 
 	@Column(name = "Ragstampe", length = 20)
 	private String ragstampe;
@@ -274,7 +278,7 @@ public class TestataOrdini implements Serializable {
 	// @Column(name="ResoMotivo", length=100)
 	// private String resoMotivo;
 
-	@Column(name = "RifOrdineCli", length = 20, unique = true)
+	@Column(name = "RifOrdineCli", length=20, unique = true, nullable=false)
 	private String rifOrdineCli;
 
 	// private int seqstampa;
@@ -303,13 +307,13 @@ public class TestataOrdini implements Serializable {
 	 * INSP: In spedizione
 	 * SPED: spedito
 	 */
-	@Column(name = "Stato", length = 4)
+	@Column(name = "Stato", length = 4, nullable=false)
 	private String stato;
 	
 	/**
 	 * UT (tutto assegnato) o UP (assegnazione parziale)
 	 */
-	 @Column(name="StatoUbicazione", nullable=false, insertable=false, length=2)
+	 @Column(name="StatoUbicazione", nullable=false, insertable=false, length=2, columnDefinition="char(2)")
 	 private String statoUbicazione;
 
 	// @Column(name="Tempo")
@@ -318,7 +322,10 @@ public class TestataOrdini implements Serializable {
 	// @Column(name="TipoAssegnazione", nullable=false, length=50)
 	// private String tipoAssegnazione;
 
-	@Column(name = "TipoDoc", length = 5) // e' stato messo un default a DDT
+	/**
+	 * Rappresenta il tipo di documento che accompagnera' la merce in uscita.
+	 */
+	@Column(name="TipoDoc", length=20, nullable=false) // e' stato messo un default a DDT
 	private String tipoDoc;
 
 	// @Column(name="TipoDocumento", nullable=false, length=50)
@@ -327,9 +334,12 @@ public class TestataOrdini implements Serializable {
 	// @Column(name="TipoGestione", nullable=false, length=30)
 	// private String tipoGestione;
 
-	@Column(name = "TipoIncasso", nullable = false, length = 50)
+	@Column(name="TipoIncasso", nullable=false, length=2)
 	private String tipoIncasso;
 
+	/**
+	 * Rappresenta la tipologia di ordine, è possibile trovare la lista completa dei tipi nella tabella TestataOrdiniTipo.
+	 */
 	@Column(name = "TipoOrdine", nullable = false, length = 30)
 	private String tipoOrdine;
 
@@ -339,19 +349,19 @@ public class TestataOrdini implements Serializable {
 	@Column(name = "TipoTrasporto", insertable = false, nullable = false, length = 10)
 	private String tipoTrasporto;
 
-	// @Column(name="TotaleColli")
-	// private int totaleColli;
+	 @Column(name="TotaleColli", nullable=false)
+	 private int totaleColli;
 
-	@Column(name = "ValContrassegno", nullable = false)
+	@Column(name = "ValContrassegno", nullable = false, columnDefinition="money")
 	private Double valContrassegno;
 
-	@Column(name = "ValoreDoganale")
+	@Column(name = "ValoreDoganale", columnDefinition="money")
 	private Double valoreDoganale;
 
 	// @Column(name="Verificato", length=2)
 	// private String verificato;
 
-	@Column(name = "IdMittente")
+	@Column(name = "IdMittente", nullable=false)
 	private int idMittente;
 
 	public TestataOrdini() {}
@@ -359,7 +369,7 @@ public class TestataOrdini implements Serializable {
 	@PrePersist
 	public void prePersist() {
 		GregorianCalendar now = new GregorianCalendar();
-		dataArrivoFile = new Timestamp(now.getTimeInMillis());
+		dataArrivoFile = new Date(now.getTimeInMillis());
 		annoOrdine = now.get(Calendar.YEAR);
 		annodoc = now.get(Calendar.YEAR);
 		nomeFileArrivo = sdf.format(now.getTime());
@@ -374,8 +384,8 @@ public class TestataOrdini implements Serializable {
 		nrListaArrivato = 0; // TODO, in teoria sarebbe come un autoincrement
 		// Se non ho specificato l'operatore assumo che sia un servizio.
 		if (operatore == null || operatore.isEmpty()) operatore = "SERVIZIO";
-		// Priorita', se null imposto il default.
-		if (priorita == null) priorita = 1;
+		// Priorita', se non valorizzata imposto il default.
+		if (priorita <= 0) priorita = 1;
 		// Contrassegno
 		if (tipoIncasso == null) tipoIncasso = "";
 		if (valContrassegno == null) valContrassegno = 0.0;
@@ -385,6 +395,8 @@ public class TestataOrdini implements Serializable {
 		// Codice cliente per il corriere, se null imposto a stringa vuota.
 		if (codiceClienteCorriere == null) codiceClienteCorriere = "";
 		if (stato == null) stato = "INSE";
+		if (sessioneLavoro == null) sessioneLavoro = "";
+		if (tipoDoc == null) tipoDoc = "ORDINE";
 	}
 
 	public int getIdTestaSped() {
@@ -531,59 +543,59 @@ public class TestataOrdini implements Serializable {
 	// this.daRigenerare = daRigenerare;
 	// }
 
-	public Timestamp getDataArrivoFile() {
+	public Date getDataArrivoFile() {
 		return this.dataArrivoFile;
 	}
 
-	public void setDataArrivoFile(Timestamp dataArrivoFile) {
+	public void setDataArrivoFile(Date dataArrivoFile) {
 		this.dataArrivoFile = dataArrivoFile;
 	}
 
-	public Timestamp getDataConsegna() {
+	public Date getDataConsegna() {
 		return this.dataConsegna;
 	}
 
-	public void setDataConsegna(Timestamp dataConsegna) {
+	public void setDataConsegna(Date dataConsegna) {
 		this.dataConsegna = dataConsegna;
 	}
 
-	// public Timestamp getDataCreazione() {
+	// public Date getDataCreazione() {
 	// return this.dataCreazione;
 	// }
 	//
-	// public void setDataCreazione(Timestamp dataCreazione) {
+	// public void setDataCreazione(Date dataCreazione) {
 	// this.dataCreazione = dataCreazione;
 	// }
 
-	public Timestamp getDataDoc() {
+	public Date getDataDoc() {
 		return this.dataDoc;
 	}
 
-	public void setDataDoc(Timestamp dataDoc) {
+	public void setDataDoc(Date dataDoc) {
 		this.dataDoc = dataDoc;
 	}
 
-	// public Timestamp getDataGeneraUscita() {
+	// public Date getDataGeneraUscita() {
 	// return this.dataGeneraUscita;
 	// }
 	//
-	// public void setDataGeneraUscita(Timestamp dataGeneraUscita) {
+	// public void setDataGeneraUscita(Date dataGeneraUscita) {
 	// this.dataGeneraUscita = dataGeneraUscita;
 	// }
 	//
-	// public Timestamp getDataIni() {
+	// public Date getDataIni() {
 	// return this.dataIni;
 	// }
 	//
-	// public void setDataIni(Timestamp dataIni) {
+	// public void setDataIni(Date dataIni) {
 	// this.dataIni = dataIni;
 	// }
 
-	public Timestamp getDataOrdine() {
+	public Date getDataOrdine() {
 		return this.dataOrdine;
 	}
 
-	public void setDataOrdine(Timestamp dataOrdine) {
+	public void setDataOrdine(Date dataOrdine) {
 		this.dataOrdine = dataOrdine;
 	}
 
@@ -787,11 +799,11 @@ public class TestataOrdini implements Serializable {
 		this.nrLista = nrLista;
 	}
 
-	public int getNrListaArrivato() {
+	public Integer getNrListaArrivato() {
 		return this.nrListaArrivato;
 	}
 
-	public void setNrListaArrivato(int nrListaArrivato) {
+	public void setNrListaArrivato(Integer nrListaArrivato) {
 		this.nrListaArrivato = nrListaArrivato;
 	}
 
@@ -915,11 +927,11 @@ public class TestataOrdini implements Serializable {
 	// this.prenotatoDa = prenotatoDa;
 	// }
 
-	public Integer getPriorita() {
+	public int getPriorita() {
 		return this.priorita;
 	}
 
-	public void setPriorita(Integer priorita) {
+	public void setPriorita(int priorita) {
 		this.priorita = priorita;
 	}
 
@@ -954,14 +966,14 @@ public class TestataOrdini implements Serializable {
 	public void setQtaimballata(int qtaimballata) {
 		this.qtaimballata = qtaimballata;
 	}
-	//
-	// public int getQtaprelevata() {
-	// return this.qtaprelevata;
-	// }
-	//
-	// public void setQtaprelevata(int qtaprelevata) {
-	// this.qtaprelevata = qtaprelevata;
-	// }
+	
+	 public int getQtaprelevata() {
+		 return this.qtaprelevata;
+	 }
+	
+	 public void setQtaprelevata(int qtaprelevata) {
+		 this.qtaprelevata = qtaprelevata;
+	 }
 
 	public int getQtaTotaleSpedire() {
 		return this.qtaTotaleSpedire;
@@ -969,6 +981,14 @@ public class TestataOrdini implements Serializable {
 
 	public void setQtaTotaleSpedire(int qtaTotaleSpedire) {
 		this.qtaTotaleSpedire = qtaTotaleSpedire;
+	}
+
+	public String getRagioneSocialeDestinatario() {
+		return ragioneSocialeDestinatario;
+	}
+
+	public void setRagioneSocialeDestinatario(String ragioneSocialeDestinatario) {
+		this.ragioneSocialeDestinatario = ragioneSocialeDestinatario;
 	}
 
 	public String getRagstampe() {
@@ -1139,13 +1159,13 @@ public class TestataOrdini implements Serializable {
 		this.tipoTrasporto = tipoTrasporto;
 	}
 
-	// public int getTotaleColli() {
-	// return this.totaleColli;
-	// }
-	//
-	// public void setTotaleColli(int totaleColli) {
-	// this.totaleColli = totaleColli;
-	// }
+	 public int getTotaleColli() {
+		 return this.totaleColli;
+	 }
+	
+	 public void setTotaleColli(int totaleColli) {
+		 this.totaleColli = totaleColli;
+	 }
 
 	public Double getValContrassegno() {
 		return this.valContrassegno;

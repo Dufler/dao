@@ -7,16 +7,14 @@ package it.ltc.database.model.legacy.model;
  */
 public enum CausaliMovimento {
 	
-	CPK("Carico", 1, 1, 0, "SI", 1, 0, "+", "+", "N"),
-	SPE("Scarico errori", -1, -1, 0, "SI", 0, 1, "-", "-", "N"),
-	RES("Carico da reso", 1, 1, 0, "SI", 1, 0, "+", "+", "N"),
-	CPR("Rettifica carico", 1, 1, 0, "SI", 1, 0, "+", "+", "N"),
-	//RIO("Rettifica impegno ordine"),
-	//ORD("Ordine"),
-	IOS("Impegno ordine", 0, -1, 1, "NO", 0, 0, "N", "-", "+"),
-	REO("Cancellazione ordine", 0, 1, -1, "NO", 0, 0, "N", "+", "-"),
-	IBO("Imballo ordine", -1, 0, -1, "SI", 0, 1, "-", "N", "-"),
-	REL("Rettifica non spedito", 0, 1, -1, "NO", 0, 0, "N", "+", "-");
+	CPK("Carico", 1, 1, 0, "SI", 1, 0, "+", "+", "N", "E", "CAR", "CR"),
+	SPE("Scarico errori", -1, -1, 0, "SI", 0, 1, "-", "-", "N", "_", "___", "__"),
+	RES("Carico da reso", 1, 1, 0, "SI", 1, 0, "+", "+", "N", "E", "CAR", "CR"),
+	CPR("Rettifica carico", 1, 1, 0, "SI", 1, 0, "+", "+", "N", "R", "RET", "CR"),
+	IOS("Impegno ordine", 0, -1, 1, "NO", 0, 0, "N", "-", "+", "O", "ORD", "IP"),
+	REO("Cancellazione ordine", 0, 1, -1, "NO", 0, 0, "N", "+", "-", "A", "PAK", "RO"),
+	IBO("Imballo ordine", -1, 0, -1, "SI", 0, 1, "-", "N", "-", "O", "ORD", "OR"),
+	REL("Rettifica non spedito", 0, 1, -1, "NO", 0, 0, "N", "+", "-", "O", "ORD", "OR");
 	
 	private final String descrizione;
 	
@@ -36,7 +34,7 @@ public enum CausaliMovimento {
 	private final String tipoDocumento; //l'equivalente di doctipo, 3 caratteri.
 	private final String tipoMovimento; //l'equivaliente di tipo, 2 caratteri.
 	
-	private CausaliMovimento(String descrizione, int e, int d, int i, String incremento, int in, int out, String se, String sd, String si) {
+	private CausaliMovimento(String descrizione, int e, int d, int i, String incremento, int in, int out, String se, String sd, String si, String cd, String td, String tm) {
 		this.descrizione = descrizione;
 		this.moltiplicatoreEsistenza = e;
 		this.moltiplicatoreDisponibile = d;
@@ -47,9 +45,9 @@ public enum CausaliMovimento {
 		this.segnoEsistenza = se;
 		this.segnoDisponibile = sd;
 		this.segnoImpegnato = si;
-		this.categoriaDocumento = "_";
-		this.tipoDocumento = "___";
-		this.tipoMovimento = "__";
+		this.categoriaDocumento = cd; //"_";
+		this.tipoDocumento = td; //"___";
+		this.tipoMovimento = tm; //"__";
 	}
 	
 	public String getDescrizione() {

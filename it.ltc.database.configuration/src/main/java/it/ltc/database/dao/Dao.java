@@ -48,6 +48,16 @@ public abstract class Dao {
 	}
 	
 	/**
+	 * Indica se il mappaggio dello schema è valido o meno.
+	 * @return
+	 */
+	public boolean isSchemaValid() {
+		EntityManager em = getManager();
+		em.close();
+		return true;
+	}
+	
+	/**
 	 * Restituisce un oggetto <code>EntityManager</code> da utilizzare per eseguire l'accesso ai dati.<br>
 	 * E' molto importante chiudere tramite il metodo <code>close</code> l'oggetto una volta concluso l'utilizzo.
 	 * @return L'oggetto utilizzabile per l'accesso ai dati.
@@ -74,6 +84,8 @@ public abstract class Dao {
 			result = true;
 		} catch (Exception e) {
 			logger.error(e);
+			for (StackTraceElement element : e.getStackTrace())
+				logger.error(element);
 			if (transaction != null && transaction.isActive())
 				transaction.rollback();
 			result = false;

@@ -5,7 +5,6 @@ import javax.persistence.*;
 
 import it.ltc.utility.miscellanea.time.DateConverter;
 
-import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -51,26 +50,26 @@ public class PakiTesta implements Serializable {
 //	@Column(name="CodCorriere", length=50)
 //	private String codCorriere;
 
-	@Column(name="CodFornitore", length=20)
+	@Column(name="CodFornitore", length=20, nullable=false)
 	private String codFornitore;
 
 //	@Column(name="Controllato", length=2)
 //	private String controllato;
 
-	@Column(name="Creazione", nullable=false, insertable=false)
-	private Timestamp creazione;
+	@Column(name="Creazione", nullable=false, insertable=false, columnDefinition="datetime")
+	private Date creazione;
 
-	@Column(name="DataArrivo")
-	private Timestamp dataArrivo;
+	@Column(name="DataArrivo", columnDefinition="datetime")
+	private Date dataArrivo;
 
-	@Column(name="DataGenFile")
-	private Timestamp dataGenFile;
+	@Column(name="DataGenFile", columnDefinition="datetime")
+	private Date dataGenFile;
 
-	@Column(name="DataInizio")
-	private Timestamp dataInizio;
+	@Column(name="DataInizio", columnDefinition="datetime")
+	private Date dataInizio;
 
-	@Column(name="DataPaki")
-	private Timestamp dataPaki;
+	@Column(name="DataPaki", columnDefinition="datetime")
+	private Date dataPaki;
 
 //	@Column(name="DescCorriere", length=50)
 //	private String descCorriere;
@@ -85,19 +84,19 @@ public class PakiTesta implements Serializable {
 	 * F: ordine regolare lavorato e chiuso
 	 * T: trasmesso al cliente, stato finale.
 	 */
-	@Column(name="FlagTra", length=1)
+	@Column(name="FlagTra", length=1, nullable=false, columnDefinition="char(1)")
 	private String flagTra;
 
 	/**
 	 * SI quando ce lo da il cliente, NO quando viene immesso dal customer care. Di default è SI.
 	 */
-	@Column(name="FlussoDichiarato", nullable=false, length=2)
+	@Column(name="FlussoDichiarato", nullable=false, length=2, columnDefinition="char(2)")
 	private String flussoDichiarato;
 
-	@Column(name="GeneratoFile", length=2)
+	@Column(name="GeneratoFile", length=2, nullable=false, columnDefinition="char(2)")
 	private String generatoFile;
 
-	@Column(name="GeneratoMov", length=2)
+	@Column(name="GeneratoMov", length=2, nullable=false, columnDefinition="char(2)")
 	private String generatoMov;
 
 //	@Column(name="GeneratoPack", length=2)
@@ -106,10 +105,13 @@ public class PakiTesta implements Serializable {
 //	@Column(name="IdAttCliente")
 //	private int idAttCliente;
 
-	@Column(name="IdFornitore")
+	@Column(name="IdFornitore", nullable=false)
 	private int idFornitore;
 
-	@Column(name="Letto", length=50)
+	/*
+	 * Default a NO, viene messo a SI quando passa ad ARRIVATO.
+	 */
+	@Column(name="Letto", length=2, nullable=false)
 	private String letto;
 
 //	@Column(name="NomeFileFlusso", length=50)
@@ -130,7 +132,7 @@ public class PakiTesta implements Serializable {
 	/**
 	 * Riferimento del cliente.
 	 */
-	@Column(name="NrPaki", length=30)
+	@Column(name="NrPaki", length=30, nullable=false)
 	private String nrPaki;
 
 	@Column(name="OraGenFile")
@@ -145,13 +147,13 @@ public class PakiTesta implements Serializable {
 	/**
 	 * Quantità totale del riscontrato.
 	 */
-	@Column(name="QtaTotAre")
+	@Column(name="QtaTotAre", nullable=false)
 	private int qtaTotAre;
 
 	/**
 	 * Quantità totale del dichiarato.
 	 */
-	@Column(name="QtaTotAto")
+	@Column(name="QtaTotAto", nullable=false)
 	private int qtaTotAto;
 //
 //	@Column(name="QtaTotDif")
@@ -160,7 +162,7 @@ public class PakiTesta implements Serializable {
 //	@Column(name="QtaTotPersa")
 //	private int qtaTotPersa;
 
-	@Column(name="RagSocFor", length=50)
+	@Column(name="RagSocFor", length=50, nullable=false)
 	private String ragSocFor;
 
 //	@Column(name="SiglaDocOri", length=2)
@@ -178,11 +180,14 @@ public class PakiTesta implements Serializable {
 	 * CHIUSO: indica che il carico è stato riscontrato e caricato a magazzino.
 	 * ANNULLATO: indica che il carico è stato annullato e non verrà più gestito, rimane per fini storici o di controllo dentro i nostri sistemi.
 	 */
-	@Column(name="Stato", length=15)
+	@Column(name="Stato", length=15, nullable=false)
 	private String stato;
 
-//	@Column(name="TipoCarico", length=50)
-//	private String tipoCarico;
+	/**
+	 * Campo doppione di Tipodocumento, indica la tipologia del carico. Il valore deve essere presente in pakiTestaTipo.
+	 */
+	@Column(name="TipoCarico", length=20, nullable=false)
+	private String tipoCarico;
 
 	/**
 	 * Tipologia del carico, viene verificata tramite i valori presenti nella tabella pakiTestaTipo.
@@ -193,7 +198,7 @@ public class PakiTesta implements Serializable {
 	/**
 	 * Tipo del documento che accompagna la merce in ingresso.
 	 */
-	@Column(name="TipoDoc", length=20)
+	@Column(name="TipoDoc", length=20, nullable=false)
 	private String tipoDoc;
 
 //	@Column(name="TipoGenFile", length=3)
@@ -205,7 +210,7 @@ public class PakiTesta implements Serializable {
 	/**
 	 * Può assumere i valori: "INS" o "ART" dove "INS" permette di inserire nuovi prodotti in fase di riscontro e "ART", il default, non lo consente. 
 	 */
-	@Column(name="TipoPack", length=3)
+	@Column(name="TipoPack", length=3, columnDefinition="char(3)")
 	private String tipoPack;
 
 //	@Column(name="TipoPacking", length=20)
@@ -219,10 +224,10 @@ public class PakiTesta implements Serializable {
 	@PrePersist
 	public void prePersist() {
 		Date now = new Date();
-		Timestamp stamp = new Timestamp(now.getTime());
+		Date stamp = new Date(now.getTime());
 		SimpleDateFormat sdf = new SimpleDateFormat("yy");
 		qtaTotAre = 0;
-		//dataInizio = new Timestamp(now.getTime());
+		//dataInizio = new Date(now.getTime());
 		//oraInizio = DateConverter.getOraComeIntero(dataInizio);
 		//dataInizio = DateConverter.ripulisciTimestap(dataInizio);
 		creazione = stamp;
@@ -238,18 +243,20 @@ public class PakiTesta implements Serializable {
 		if (tipoPack == null) tipoPack = "ART";
 		if (abilitaEccedenze == null) abilitaEccedenze = "NO";
 		if (stagione == null) stagione = "CO" + anno;
+		if (tipoCarico == null) tipoCarico = "CARICO";
+		if (tipodocumento == null) tipodocumento = tipoCarico;
 	}
 	
-	public void setDataOraInizio(Timestamp time) {
+	public void setDataOraInizio(Date time) {
 		if (time == null)
-			time = new Timestamp(new Date().getTime());
+			time = new Date(new Date().getTime());
 		oraInizio = DateConverter.getOraComeIntero(time);
 		dataInizio = DateConverter.ripulisciTimestap(time);
 	}
 	
-	public void setDataOraGenerazione(Timestamp time) {
+	public void setDataOraGenerazione(Date time) {
 		if (time == null)
-			time = new Timestamp(new Date().getTime());
+			time = new Date(new Date().getTime());
 		oraGenFile = DateConverter.getOraComeIntero(time);
 		dataGenFile = DateConverter.ripulisciTimestap(time);
 	}
@@ -363,43 +370,43 @@ public class PakiTesta implements Serializable {
 //		this.controllato = controllato;
 //	}
 
-	public Timestamp getCreazione() {
+	public Date getCreazione() {
 		return this.creazione;
 	}
 
-	public void setCreazione(Timestamp creazione) {
+	public void setCreazione(Date creazione) {
 		this.creazione = creazione;
 	}
 
-	public Timestamp getDataArrivo() {
+	public Date getDataArrivo() {
 		return this.dataArrivo;
 	}
 
-	public void setDataArrivo(Timestamp dataArrivo) {
+	public void setDataArrivo(Date dataArrivo) {
 		this.dataArrivo = dataArrivo;
 	}
 
-	public Timestamp getDataGenFile() {
+	public Date getDataGenFile() {
 		return this.dataGenFile;
 	}
 
-	public void setDataGenFile(Timestamp dataGenFile) {
+	public void setDataGenFile(Date dataGenFile) {
 		this.dataGenFile = dataGenFile;
 	}
 
-	public Timestamp getDataInizio() {
+	public Date getDataInizio() {
 		return this.dataInizio;
 	}
 
-	public void setDataInizio(Timestamp dataInizio) {
+	public void setDataInizio(Date dataInizio) {
 		this.dataInizio = dataInizio;
 	}
 
-	public Timestamp getDataPaki() {
+	public Date getDataPaki() {
 		return this.dataPaki;
 	}
 
-	public void setDataPaki(Timestamp dataPaki) {
+	public void setDataPaki(Date dataPaki) {
 		this.dataPaki = dataPaki;
 	}
 
@@ -547,18 +554,34 @@ public class PakiTesta implements Serializable {
 //		this.prenotato = prenotato;
 //	}
 
+	/**
+	 * Restituisce il riscontrato.
+	 * @return
+	 */
 	public int getQtaTotAre() {
 		return this.qtaTotAre;
 	}
 
+	/**
+	 * Imposta il riscontrato.
+	 * @param qtaTotAre
+	 */
 	public void setQtaTotAre(int qtaTotAre) {
 		this.qtaTotAre = qtaTotAre;
 	}
 
+	/**
+	 * Restituisce il dichiatato.
+	 * @return
+	 */
 	public int getQtaTotAto() {
 		return this.qtaTotAto;
 	}
-
+	
+	/**
+	 * Imposta il dichiarato.
+	 * @param qtaTotAto
+	 */
 	public void setQtaTotAto(int qtaTotAto) {
 		this.qtaTotAto = qtaTotAto;
 	}
@@ -610,14 +633,14 @@ public class PakiTesta implements Serializable {
 	public void setStato(String stato) {
 		this.stato = stato;
 	}
-//
-//	public String getTipoCarico() {
-//		return this.tipoCarico;
-//	}
-//
-//	public void setTipoCarico(String tipoCarico) {
-//		this.tipoCarico = tipoCarico;
-//	}
+
+	public String getTipoCarico() {
+		return this.tipoCarico;
+	}
+
+	public void setTipoCarico(String tipoCarico) {
+		this.tipoCarico = tipoCarico;
+	}
 
 	public String getTipodocumento() {
 		return this.tipodocumento;

@@ -21,7 +21,7 @@ public class MOrdine implements ModelInterface {
 	
 	private Date dataOrdine;
 	private Date dataConsegna;
-	private String tipo;
+	private TipoOrdine tipo;
 	private Integer priorita;
 	private String note;
 	private String riferimentoOrdine;
@@ -35,7 +35,7 @@ public class MOrdine implements ModelInterface {
 	private MContrassegno contrassegno;
 	private MAssicurazione assicurazione;
 	private MParticolarita particolarita;
-	private String tipoIdentificazioneProdotti;
+	private TipoIDProdotto tipoIdentificazioneProdotti;
 	private Double valoreDoganale;
 	private String codiceTracking;
 	
@@ -55,43 +55,15 @@ public class MOrdine implements ModelInterface {
 			if (dataConsegna.before(new Date()))
 				throw new ModelValidationException("La data indicata è precedente a oggi.");
 		}
-		if (tipo == null || tipo.isEmpty())
+		if (tipo == null) {
 			throw new ModelValidationException("Bisogna specificare un tipo di ordine.");
-		else {
-			//TODO - La lista completa deve essere ancora definita.
-			try {
-				TipoOrdine t = TipoOrdine.valueOf(tipo.toUpperCase());
-				//Per gli ordini in cui la spedizione è curata dal cliente mi assicuro di ricevere il loro codice di fatturazione
-				if (t == TipoOrdine.PRN || t == TipoOrdine.WEN) {
-					if (codiceCorriere == null || codiceCorriere.isEmpty())
-						throw new ModelValidationException("Bisogna specificare il vostro codice corriere per gli ordini di questo tipo.");
-				}
-			} catch (IllegalArgumentException e) {
-				//Il tipo di ordine non è valido
-				String errorMessage = "Il tipo di ordine indicato non è valido. L'elenco completo delle tipologie è: ";
-				for (TipoOrdine categoria : TipoOrdine.values()) {
-					errorMessage += categoria + " ";
-				}
-				errorMessage = errorMessage.trim();
-				throw new ModelValidationException(errorMessage);
-			}
+		} else if (tipo == TipoOrdine.PRN || tipo == TipoOrdine.WEN) {
+			//Per gli ordini in cui la spedizione è curata dal cliente mi assicuro di ricevere il loro codice di fatturazione
+			if (codiceCorriere == null || codiceCorriere.isEmpty())
+				throw new ModelValidationException("Bisogna specificare il vostro codice corriere per gli ordini di questo tipo.");
 		}
-		if (tipoIdentificazioneProdotti == null || tipoIdentificazioneProdotti.isEmpty())
+		if (tipoIdentificazioneProdotti == null)
 			throw new ModelValidationException("Bisogna specificare un tipo di identificazione per i prodotti.");
-		else {
-			//TODO - La lista completa deve essere ancora definita.
-			try {
-				TipoIDProdotto.valueOf(tipoIdentificazioneProdotti.toUpperCase());
-			} catch (IllegalArgumentException e) {
-				//Il tipo di ordine non è valido
-				String errorMessage = "Il tipo di identificazione per i prodotti indicato non è valido. L'elenco completo delle tipologie è: ";
-				for (TipoIDProdotto categoria : TipoIDProdotto.values()) {
-					errorMessage += categoria + " ";
-				}
-				errorMessage = errorMessage.trim();
-				throw new ModelValidationException(errorMessage);
-			}
-		}
 		if (riferimentoOrdine == null || riferimentoOrdine.isEmpty())
 			throw new ModelValidationException("Bisogna specificare un riferimento per l'ordine. Es. purchase order number");
 		if (destinatario == null) {
@@ -154,7 +126,7 @@ public class MOrdine implements ModelInterface {
 			throw new ModelValidationException("Bisogna elencare i prodotti.");
 		} else {
 			for (ProdottoOrdinato prodotto : prodotti) {
-				prodotto.valida(TipoIDProdotto.valueOf(tipoIdentificazioneProdotti.toUpperCase()));
+				prodotto.valida(tipoIdentificazioneProdotti);
 			}
 		}
 	}
@@ -183,11 +155,11 @@ public class MOrdine implements ModelInterface {
 		this.dataConsegna = dataConsegna;
 	}
 	
-	public String getTipo() {
+	public TipoOrdine getTipo() {
 		return tipo;
 	}
 	
-	public void setTipo(String tipo) {
+	public void setTipo(TipoOrdine tipo) {
 		this.tipo = tipo;
 	}
 	
@@ -287,11 +259,11 @@ public class MOrdine implements ModelInterface {
 		this.particolarita = particolarita;
 	}
 
-	public String getTipoIdentificazioneProdotti() {
+	public TipoIDProdotto getTipoIdentificazioneProdotti() {
 		return tipoIdentificazioneProdotti;
 	}
 
-	public void setTipoIdentificazioneProdotti(String tipoIdentificazioneProdotti) {
+	public void setTipoIdentificazioneProdotti(TipoIDProdotto tipoIdentificazioneProdotti) {
 		this.tipoIdentificazioneProdotti = tipoIdentificazioneProdotti;
 	}
 

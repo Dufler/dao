@@ -35,10 +35,10 @@ public class ColliPackConSeriale implements Serializable {
 //	@Column(name="CassaStd", nullable=false, length=50, insertable=false)
 //	private String cassaStd;
 
-	@Column(name="CodArtStr", length=50)
+	@Column(name="CodArtStr", length=50, nullable=false)
 	private String codArtStr;
 
-	@Column(name="CodiceArticolo", length=21)
+	@Column(name="CodiceArticolo", length=15, nullable=false, columnDefinition="varchar(15)")
 	private String codiceArticolo;
 
 //	@Column(name="Controllata", nullable=false, length=2)
@@ -50,10 +50,10 @@ public class ColliPackConSeriale implements Serializable {
 //	@Column(name="DataMod")
 //	private Timestamp dataMod;
 
-	@Column(name="Descrizione", length=50)
+	@Column(name="Descrizione", length=100)
 	private String descrizione;
 
-	@Column(name="Flagimp", nullable=false, length=1)
+	@Column(name="Flagimp", nullable=false, length=1, columnDefinition="char(1)")
 	private String flagimp;
 
 //	@Column(name="Flagpre", nullable=false, length=1)
@@ -62,10 +62,10 @@ public class ColliPackConSeriale implements Serializable {
 	@Column(name="Flagtc")
 	private int flagtc;
 
-	@Column(name="IdPakiarticolo")
+	@Column(name="IdPakiarticolo", nullable=false)
 	private int idPakiarticolo;
 
-	@Column(name="IdTestaPaki")
+	@Column(name="IdTestaPaki", nullable=false)
 	private int idTestaPaki;
 
 //	@Column(name="ImpScortaSL", nullable=false, length=50)
@@ -92,7 +92,7 @@ public class ColliPackConSeriale implements Serializable {
 //	@Column(name="Note", length=50)
 //	private String note;
 
-	@Column(name="NrIdColloPk", length=9)
+	@Column(name="NrIdColloPk", length=9, nullable=false, columnDefinition="char(9)")
 	private String nrIdColloPk;
 
 //	@Column(name="NrRiferimento")
@@ -129,7 +129,7 @@ public class ColliPackConSeriale implements Serializable {
 //	@Column(name="Stagcarico", length=20)
 //	private String stagcarico;
 //
-	@Column(name="Taglia", length=15)
+	@Column(name="Taglia", length=20)
 	private String taglia;
 //
 //	@Column(name="Trasferito", nullable=false, length=2147483647)

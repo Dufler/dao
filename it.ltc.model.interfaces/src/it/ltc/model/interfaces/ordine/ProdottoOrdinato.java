@@ -10,6 +10,8 @@ public class ProdottoOrdinato implements ModelInterface {
 	
 	private static final long serialVersionUID = 1L;
 	
+	private int id;
+	
 	private int numeroRiga;
 	private String chiavelegacy;
 	
@@ -33,7 +35,7 @@ public class ProdottoOrdinato implements ModelInterface {
 			throw new ModelValidationException("La quantita' specificata non è valida.");
 		}
 		if (magazzinoCliente == null || magazzinoCliente.isEmpty()) {
-			throw new ModelValidationException("Bisogna specificare un magazzino.");
+			throw new ModelValidationException("Bisogna specificare un magazzino cliente.");
 		}
 	}
 	
@@ -65,6 +67,14 @@ public class ProdottoOrdinato implements ModelInterface {
 			case CHIAVE: validaChiave(); break;
 			case MODELLOTAGLIA: validaModelloTaglia(); break;
 		}
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
 	}
 
 	public int getNumeroRiga() {

@@ -1,5 +1,7 @@
 package it.ltc.database.dao.legacy;
 
+import java.util.List;
+
 import it.ltc.database.dao.CRUDDao;
 import it.ltc.database.model.legacy.Colori;
 
@@ -7,6 +9,11 @@ public class ColoriDao extends CRUDDao<Colori> {
 
 	public ColoriDao(String persistenceUnit) {
 		super(persistenceUnit, Colori.class);
+	}
+	
+	public List<Colori> trovaTutti() {
+		List<Colori> entitites = findAll();
+		return entitites;
 	}
 	
 	public Colori trovaDaCodice(String codice) {

@@ -1,41 +1,48 @@
 package it.ltc.database.dao.legacy;
 
-import it.ltc.database.dao.CRUDDao;
-import it.ltc.database.model.legacy.Numerata;
+import java.util.List;
 
-public class NumerateDao extends CRUDDao<Numerata> {
+import it.ltc.database.dao.CRUDDao;
+import it.ltc.database.model.legacy.NumerataLegacy;
+
+public class NumerateDao extends CRUDDao<NumerataLegacy> {
 
 	public NumerateDao(String persistenceUnit) {
-		super(persistenceUnit, Numerata.class);
+		super(persistenceUnit, NumerataLegacy.class);
 	}
 	
-	public Numerata trovaDaID(int id) {
-		Numerata entity = findByID(id);
+	public List<NumerataLegacy> trovaTutte() {
+		List<NumerataLegacy> entities = findAll();
+		return entities;
+	}
+	
+	public NumerataLegacy trovaDaID(int id) {
+		NumerataLegacy entity = findByID(id);
 		return entity;
 	}
 	
-	public Numerata trovaDaCodice(String codice) {
-		Numerata entity = findOnlyOneEqualTo("codice", codice);
+	public NumerataLegacy trovaDaCodice(String codice) {
+		NumerataLegacy entity = findOnlyOneEqualTo("codice", codice);
 		return entity;
 	}
 	
-	public Numerata inserisci(Numerata numerata) {
-		Numerata entity = insert(numerata);
+	public NumerataLegacy inserisci(NumerataLegacy numerata) {
+		NumerataLegacy entity = insert(numerata);
 		return entity;
 	}
 	
-	public Numerata aggiorna(Numerata numerata) {
-		Numerata entity = update(numerata, numerata.getIdNumerata());
+	public NumerataLegacy aggiorna(NumerataLegacy numerata) {
+		NumerataLegacy entity = update(numerata, numerata.getIdNumerata());
 		return entity;
 	}
 	
-	public Numerata elimina(Numerata numerata) {
-		Numerata entity = delete(numerata.getIdNumerata());
+	public NumerataLegacy elimina(NumerataLegacy numerata) {
+		NumerataLegacy entity = delete(numerata.getIdNumerata());
 		return entity;
 	}
 
 	@Override
-	protected void updateValues(Numerata oldEntity, Numerata entity) {
+	protected void updateValues(NumerataLegacy oldEntity, NumerataLegacy entity) {
 		oldEntity.setCodice(entity.getCodice());
 		oldEntity.setTaglia1(entity.getTaglia1());
 	}

@@ -35,7 +35,6 @@ public class ArticoliDao extends CRUDDao<Articoli> {
 			mappaPerIDUnivoco.put(entity.getIdUniArticolo(), entity);
 			mappaPerCodiceArticolo.put(entity.getCodArtStr(), entity);
 		}
-		
 	}
 	
 	protected void rimuoveDaMappe(Articoli entity) {
@@ -151,6 +150,7 @@ public class ArticoliDao extends CRUDDao<Articoli> {
 		oldEntity.setTaglia(entity.getTaglia());
 		oldEntity.setTipoCassa(entity.getTipoCassa());
 		oldEntity.setValVen(entity.getValVen());
+		oldEntity.setCassa(entity.getCassa());
 	}
 
 	public List<Articoli> trova(String sku, String modello, String stagione, String descrizione, int maxResults) {

@@ -30,11 +30,18 @@ public class MProdotto implements ModelInterface {
 	private Integer z;
 	private Double valore;
 	
+	private String numerata;
+	private int posizioneNumerata;
+	private String unitaMisura;
+	private int pezziCassa;
+	private int pezziConfezione;
+	private String tipoCassa;
+	
 	private String barcodeFornitore;
 	private String skuFornitore;
 	private String descrizioneAggiuntiva;
 	private String note;
-	private String cassa;
+	private Cassa cassa;
 
 	public MProdotto() {}
 
@@ -245,6 +252,54 @@ public class MProdotto implements ModelInterface {
 		this.valore = valore;
 	}
 
+	public String getNumerata() {
+		return numerata;
+	}
+
+	public void setNumerata(String numerata) {
+		this.numerata = numerata;
+	}
+
+	public int getPosizioneNumerata() {
+		return posizioneNumerata;
+	}
+
+	public void setPosizioneNumerata(int posizioneNumerata) {
+		this.posizioneNumerata = posizioneNumerata;
+	}
+
+	public String getUnitaMisura() {
+		return unitaMisura;
+	}
+
+	public void setUnitaMisura(String unitaMisura) {
+		this.unitaMisura = unitaMisura;
+	}
+
+	public int getPezziCassa() {
+		return pezziCassa;
+	}
+
+	public void setPezziCassa(int pezziCassa) {
+		this.pezziCassa = pezziCassa;
+	}
+
+	public int getPezziConfezione() {
+		return pezziConfezione;
+	}
+
+	public void setPezziConfezione(int pezziConfezione) {
+		this.pezziConfezione = pezziConfezione;
+	}
+
+	public String getTipoCassa() {
+		return tipoCassa;
+	}
+
+	public void setTipoCassa(String tipoCassa) {
+		this.tipoCassa = tipoCassa;
+	}
+
 	public String getBarcodeFornitore() {
 		return barcodeFornitore;
 	}
@@ -277,11 +332,11 @@ public class MProdotto implements ModelInterface {
 		this.note = note;
 	}
 
-	public String getCassa() {
+	public Cassa getCassa() {
 		return cassa;
 	}
 
-	public void setCassa(String cassa) {
+	public void setCassa(Cassa cassa) {
 		this.cassa = cassa;
 	}
 

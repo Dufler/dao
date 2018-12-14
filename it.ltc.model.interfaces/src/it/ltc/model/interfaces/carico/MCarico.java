@@ -7,7 +7,6 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import it.ltc.model.interfaces.exception.ModelValidationException;
 import it.ltc.model.interfaces.model.ModelInterface;
-import it.ltc.model.interfaces.ordine.ProdottoOrdinato;
 import it.ltc.model.interfaces.ordine.TipoIDProdotto;
 
 @JsonIgnoreProperties(ignoreUnknown=true)
@@ -31,7 +30,7 @@ public class MCarico implements ModelInterface {
 	private String tipoDocumento;
 	
 	private String tipoIdentificazioneProdotti;
-	private List<ProdottoOrdinato> prodotti;
+	private List<MRigaCarico> prodotti;
 	private String note;
 
 	@Override
@@ -80,7 +79,7 @@ public class MCarico implements ModelInterface {
 		if (prodotti == null || prodotti.size() == 0) {
 			throw new ModelValidationException("Bisogna elencare i prodotti.");
 		} else {
-			for (ProdottoOrdinato prodotto : prodotti) {
+			for (MRigaCarico prodotto : prodotti) {
 				prodotto.valida(TipoIDProdotto.valueOf(tipoIdentificazioneProdotti.toUpperCase()));
 			}
 		}
@@ -174,11 +173,11 @@ public class MCarico implements ModelInterface {
 		this.stato = stato;
 	}
 
-	public List<ProdottoOrdinato> getProdotti() {
+	public List<MRigaCarico> getProdotti() {
 		return prodotti;
 	}
 
-	public void setProdotti(List<ProdottoOrdinato> prodotti) {
+	public void setProdotti(List<MRigaCarico> prodotti) {
 		this.prodotti = prodotti;
 	}
 
@@ -192,7 +191,7 @@ public class MCarico implements ModelInterface {
 
 	public int getPezziStimati() {
 		int totale = 0;
-		for (ProdottoOrdinato prodotto : prodotti) {
+		for (MRigaCarico prodotto : prodotti) {
 			totale += prodotto.getQuantita();
 		}
 		return totale;

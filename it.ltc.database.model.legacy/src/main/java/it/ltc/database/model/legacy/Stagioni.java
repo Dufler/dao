@@ -19,7 +19,7 @@ public class Stagioni implements Serializable {
 	@Column(unique=true, nullable=false)
 	private int idStagione;
 
-	@Column(name="Codice", length=10)
+	@Column(name="Codice", length=10, nullable=false)
 	private String codice;
 
 	@Column(name="Descrizione", length=50)

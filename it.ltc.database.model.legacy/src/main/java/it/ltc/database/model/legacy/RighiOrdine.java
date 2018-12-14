@@ -2,7 +2,8 @@ package it.ltc.database.model.legacy;
 
 import java.io.Serializable;
 import javax.persistence.*;
-import java.sql.Timestamp;
+
+import java.util.Date;
 import java.util.List;
 
 
@@ -12,7 +13,12 @@ import java.util.List;
  */
 @Entity
 @Table(name="RighiOrdine")
-//@NamedQuery(name="RighiOrdine.findAll", query="SELECT r FROM RighiOrdine r")
+@NamedQueries({
+	@NamedQuery(name="RighiOrdine.totaleOrdinatoPerOrdine", query="SELECT SUM(p.qtaSpedizione) FROM RighiOrdine p WHERE p.idTestataOrdine = :ordine"),
+	@NamedQuery(name="RighiOrdine.totaleImballatoPerOrdine", query="SELECT SUM(p.qtaImballata) FROM RighiOrdine p WHERE p.idTestataOrdine = :ordine"),
+	@NamedQuery(name="RighiOrdine.totaleAssegnatoPerOrdine", query="SELECT SUM(p.qtaAssegnata) FROM RighiOrdine p WHERE p.idTestataOrdine = :ordine"),
+	@NamedQuery(name="RighiOrdine.totaliPerOrdine", query="SELECT NEW it.ltc.database.model.legacy.model.TestataOrdiniTotali(SUM(p.qtaSpedizione), SUM(p.qtaImballata), SUM(p.qtaAssegnata)) FROM RighiOrdine p WHERE p.idTestataOrdine = :ordine")
+})
 public class RighiOrdine implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
@@ -25,7 +31,7 @@ public class RighiOrdine implements Serializable {
 	@Column(name="IdTestataOrdine", nullable=false)
 	private int idTestataOrdine;
 
-	@Column(name="Area", nullable=false, length=2)
+	@Column(name="Area", length=2, columnDefinition="char(2)")
 	private String area;
 
 	@Column(name="BarraEAN", length=50)
@@ -34,7 +40,7 @@ public class RighiOrdine implements Serializable {
 	@Column(name="BarraUPC", length=50)
 	private String barraUPC;
 
-	@Column(name="Box", length=2)
+	@Column(name="Box", length=2, columnDefinition="char(2)")
 	private String box;
 
 //	@Column(name="CasseDaUbicare", nullable=false)
@@ -64,14 +70,14 @@ public class RighiOrdine implements Serializable {
 	@Column(name="Composizione", length=100)
 	private String composizione;
 
-	@Column(name="Corsia", length=3)
+	@Column(name="Corsia", length=3, columnDefinition="char(3)")
 	private String corsia;
 
 //	@Column(name="Datagenmov")
-//	private Timestamp datagenmov;
+//	private Date datagenmov;
 
-	@Column(name="DataOrdine")
-	private Timestamp dataOrdine;
+	@Column(name="DataOrdine", columnDefinition="datetime")
+	private Date dataOrdine;
 
 	@Column(name="Descrizione", length=100)
 	private String descrizione;
@@ -88,16 +94,16 @@ public class RighiOrdine implements Serializable {
 //	@Column(nullable=false)
 //	private int idrigo;
 
-	@Column(name="IdUnicoArt", length=15)
+	@Column(name="IdUnicoArt", length=15, nullable=false, columnDefinition="varchar(15)")
 	private String idUnicoArt;
 
-	@Column(name="KeyUbiPre", length=15)
+	@Column(name="KeyUbiPre", length=15, columnDefinition="char(15)")
 	private String keyUbiPre;
 
 //	@Column(name="Listaorigine", nullable=false, length=21)
 //	private String listaorigine;
 
-	@Column(name="Magazzino", length=3)
+	@Column(name="Magazzino", length=3, nullable=false, columnDefinition="char(3)")
 	private String magazzino;
 
 //	@Column(name="Note", length=200)
@@ -109,10 +115,10 @@ public class RighiOrdine implements Serializable {
 //	@Column(name="NrCasse")
 //	private int nrCasse;
 
-	@Column(name="Nrcollo", length=10)
+	@Column(name="Nrcollo", length=10, columnDefinition="char(10)")
 	private String nrcollo;
 
-	@Column(name="NrLista", length=21)
+	@Column(name="NrLista", length=21, nullable=false)
 	private String nrLista;
 
 	@Column(name="NrOrdine", length=20)
@@ -127,7 +133,7 @@ public class RighiOrdine implements Serializable {
 //	@Column(name="Pezzieffet", nullable=false)
 //	private int pezzieffet;
 
-	@Column(name="Piano", length=2)
+	@Column(name="Piano", length=2, columnDefinition="char(2)")
 	private String piano;
 
 	@Column(length=20)
@@ -136,13 +142,13 @@ public class RighiOrdine implements Serializable {
 //	@Column(name="Posizione")
 //	private int posizione;
 
-	@Column(name="QtaAssegnata")
+	@Column(name="QtaAssegnata", nullable=false)
 	private int qtaAssegnata;
 
-	@Column(name="Qtadaubicare")
+	@Column(name="Qtadaubicare", nullable=false)
 	private int qtadaubicare;
 
-	@Column(name="QtaImballata")
+	@Column(name="QtaImballata", nullable=false)
 	private int qtaImballata;
 
 //	@Column(name="QtaPerCassa")
@@ -151,13 +157,13 @@ public class RighiOrdine implements Serializable {
 //	@Column(name="QtaPrelevata")
 //	private int qtaPrelevata;
 
-	@Column(name="QtaSpedizione")
+	@Column(name="QtaSpedizione", nullable=false)
 	private int qtaSpedizione;
 
 	@Column(name="Ragstampe1", length=20)
 	private String ragstampe1;
 
-	@Column(name="Scaffale", length=3)
+	@Column(name="Scaffale", length=3, columnDefinition="char(3)")
 	private String scaffale;
 
 //	@Column(name="Stampa", nullable=false, length=1)
@@ -174,6 +180,9 @@ public class RighiOrdine implements Serializable {
 
 	@Column(name="Ubicazione", length=100)
 	private String ubicazione;
+	
+	@Column(name="IdArticolo", nullable=false)
+	private int idArticolo;
 	
 	@Transient
 	private List<String> seriali;
@@ -323,19 +332,19 @@ public class RighiOrdine implements Serializable {
 		this.corsia = corsia;
 	}
 //
-//	public Timestamp getDatagenmov() {
+//	public Date getDatagenmov() {
 //		return this.datagenmov;
 //	}
 //
-//	public void setDatagenmov(Timestamp datagenmov) {
+//	public void setDatagenmov(Date datagenmov) {
 //		this.datagenmov = datagenmov;
 //	}
 
-	public Timestamp getDataOrdine() {
+	public Date getDataOrdine() {
 		return this.dataOrdine;
 	}
 
-	public void setDataOrdine(Timestamp dataOrdine) {
+	public void setDataOrdine(Date dataOrdine) {
 		this.dataOrdine = dataOrdine;
 	}
 
@@ -467,13 +476,13 @@ public class RighiOrdine implements Serializable {
 		this.nrRigo = nrRigo;
 	}
 
-//	public String getNumerata() {
-//		return this.numerata;
-//	}
-//
-//	public void setNumerata(String numerata) {
-//		this.numerata = numerata;
-//	}
+	public String getNumerata() {
+		return this.numerata;
+	}
+
+	public void setNumerata(String numerata) {
+		this.numerata = numerata;
+	}
 
 //	public int getPezzieffet() {
 //		return this.pezzieffet;
@@ -593,6 +602,14 @@ public class RighiOrdine implements Serializable {
 
 	public void setTaglia(String taglia) {
 		this.taglia = taglia;
+	}
+
+	public int getIdArticolo() {
+		return idArticolo;
+	}
+
+	public void setIdArticolo(int idArticolo) {
+		this.idArticolo = idArticolo;
 	}
 
 	public List<String> getSeriali() {

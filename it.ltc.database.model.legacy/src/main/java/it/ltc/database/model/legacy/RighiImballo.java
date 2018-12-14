@@ -1,8 +1,9 @@
 package it.ltc.database.model.legacy;
 
 import java.io.Serializable;
+import java.util.Date;
+
 import javax.persistence.*;
-import java.sql.Timestamp;
 
 
 /**
@@ -27,8 +28,8 @@ public class RighiImballo implements Serializable {
 	@Column(name="CodiceArticolo", length=50)
 	private String codiceArticolo;
 
-	@Column(name="DataImba")
-	private Timestamp dataImba;
+	@Column(name="DataImba", columnDefinition="datetime")
+	private Date dataImba;
 
 //	@Column(name="IdAttCliente")
 //	private int idAttCliente;
@@ -36,13 +37,13 @@ public class RighiImballo implements Serializable {
 //	@Column(name="IdDocumento")
 //	private int idDocumento;
 
-	@Column(name="IdUniArticolo", length=15)
+	@Column(name="IdUniArticolo", length=15, nullable=false, columnDefinition="varchar(15)")
 	private String idUniArticolo;
 
 	@Column(name="IdUnicoCollo")
 	private int idUnicoCollo;
 
-	@Column(name="KeyColloSpe", length=10)
+	@Column(name="KeyColloSpe", length=10, columnDefinition="char(10)")
 	private String keyColloSpe;
 
 //	@Column(name="NrCPX")
@@ -69,10 +70,10 @@ public class RighiImballo implements Serializable {
 	/**
 	 * pre persist a UNI
 	 */
-	@Column(name="Numerata", length=50)
+	@Column(name="Numerata", length=20)
 	private String numerata;
 
-	@Column(name="Operatore", length=20)
+	@Column(name="Operatore", length=50)
 	private String operatore;
 
 	@Column(name="OraImba")
@@ -108,13 +109,13 @@ public class RighiImballo implements Serializable {
 //	@Column(name="RilPzEventi", length=2)
 //	private String rilPzEventi;
 
-	@Column(name="Seriale", length=30)
+	@Column(name="Seriale", length=50)
 	private String seriale;
 
 //	@Column(name="Stato", length=4)
 //	private String stato;
 
-	@Column(name="TipoRif", length=3)
+	@Column(name="TipoRif", length=3, columnDefinition="char(3)")
 	private String tipoRif;
 
 	public RighiImballo() {}
@@ -143,11 +144,11 @@ public class RighiImballo implements Serializable {
 		this.codiceArticolo = codiceArticolo;
 	}
 
-	public Timestamp getDataImba() {
+	public Date getDataImba() {
 		return this.dataImba;
 	}
 
-	public void setDataImba(Timestamp dataImba) {
+	public void setDataImba(Date dataImba) {
 		this.dataImba = dataImba;
 	}
 

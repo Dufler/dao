@@ -23,10 +23,10 @@ public class Ubicazioni implements Serializable {
 //	@Column(name="Altezza")
 //	private int altezza;
 
-	@Column(name="Area", nullable=false, length=2)
+	@Column(name="Area", nullable=false, length=2, columnDefinition="char(2)")
 	private String area;
 
-	@Column(name="Box", nullable=false, length=2)
+	@Column(name="Box", nullable=false, length=2, columnDefinition="char(2)")
 	private String box;
 
 //	@Column(name="Chiave1", length=50)
@@ -35,7 +35,7 @@ public class Ubicazioni implements Serializable {
 //	@Column(name="CodBarreUbica", length=20)
 //	private String codBarreUbica;
 
-	@Column(name="Corsia", nullable=false, length=3)
+	@Column(name="Corsia", nullable=false, length=3, columnDefinition="char(3)")
 	private String corsia;
 
 //	@Column(name="DesUbica", length=20)
@@ -65,13 +65,13 @@ public class Ubicazioni implements Serializable {
 //	@Column(name="KeyMappa", length=10)
 //	private String keyMappa;
 
-	@Column(name="KeyUbica", nullable=false, length=15)
+	@Column(name="KeyUbica", nullable=false, length=15, columnDefinition="char(15)")
 	private String keyUbica;
 
 //	@Column(name="Larghezza")
 //	private int larghezza;
 
-	@Column(name="Magazzino", nullable=false, length=3)
+	@Column(name="Magazzino", nullable=false, length=3, columnDefinition="char(3)")
 	private String magazzino;
 
 //	@Column(name="MaxPeso", nullable=false)
@@ -80,19 +80,19 @@ public class Ubicazioni implements Serializable {
 //	@Column(name="MemArticolo")
 //	private short memArticolo;
 
-	@Column(name="Piano", nullable=false, length=2)
+	@Column(name="Piano", nullable=false, length=2, columnDefinition="char(2)")
 	private String piano;
 
 //	@Column(name="Profondità")
 //	private int profondità;
 
-	@Column(name="Scaffale", nullable=false, length=3)
+	@Column(name="Scaffale", nullable=false, length=3, columnDefinition="char(3)")
 	private String scaffale;
 
 //	@Column(name="Stato", length=2)
 //	private String stato;
 
-	@Column(name="TipoUbica", length=2)
+	@Column(name="TipoUbica", length=2, nullable=false, columnDefinition="char(2)")
 	private String tipoUbica;
 
 //	@Column(name="TipoUtilizzo", length=2)

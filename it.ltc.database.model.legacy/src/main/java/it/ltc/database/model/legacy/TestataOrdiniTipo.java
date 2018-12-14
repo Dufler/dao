@@ -21,7 +21,7 @@ public class TestataOrdiniTipo implements Serializable {
 	private String codice;
 
 	@Lob
-	@Column(nullable=false)
+	@Column(nullable=false, columnDefinition="text")
 	private String descrizione;
 
 	@Column(nullable=false, length=10)

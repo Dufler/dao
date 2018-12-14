@@ -26,7 +26,7 @@ public class MittentiOrdine implements Serializable {
 	@Column(name="IdMittente", unique=true, nullable=false)
 	private int idMittente;
 
-	@Column(name="Cap", nullable=false, length=10)
+	@Column(name="Cap", nullable=false, length=9)
 	private String cap;
 
 	@Column(name="Email", length=100)
@@ -49,6 +49,9 @@ public class MittentiOrdine implements Serializable {
 
 	@Column(name="Telefono", length=30)
 	private String telefono;
+	
+	@Column(name="Codice", length=30)
+	private String codice;
 
 	public MittentiOrdine() {}
 
@@ -122,6 +125,14 @@ public class MittentiOrdine implements Serializable {
 
 	public void setTelefono(String telefono) {
 		this.telefono = telefono;
+	}
+
+	public String getCodice() {
+		return codice;
+	}
+
+	public void setCodice(String codice) {
+		this.codice = codice;
 	}
 
 }

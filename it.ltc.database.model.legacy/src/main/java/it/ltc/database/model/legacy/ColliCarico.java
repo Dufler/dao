@@ -6,7 +6,6 @@ import javax.persistence.*;
 import it.ltc.utility.miscellanea.string.StringUtility;
 import it.ltc.utility.miscellanea.time.DateConverter;
 
-import java.sql.Timestamp;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -43,7 +42,7 @@ public class ColliCarico implements Serializable {
 	/**
 	 * default N, S quando viene aperto per rendere sfuso il prodotto all'interno.
 	 */
-	@Column(name="ApertoSfuso", length=1, insertable=false)
+	@Column(name="ApertoSfuso", length=1, nullable=false, insertable=false, columnDefinition="char(1)")
 	private String apertoSfuso;
 
 	/**
@@ -59,37 +58,37 @@ public class ColliCarico implements Serializable {
 //	private String bloccato;
 
 	/**
-	 * default a NO nel prepersist.
+	 * default a NO nel prepersist. Va a soppiantare il campo distrutto che non verrà più usato.
 	 */
-	@Column(name="Cancellato", length=2)
+	@Column(name="Cancellato", length=2, columnDefinition="char(2)")
 	private String cancellato;
 
 	/**
 	 * Giorno della creazione senza l'ora.
 	 */
-	@Column(name="DataCrea", updatable=false)
-	private Timestamp dataCrea;
+	@Column(name="DataCrea", updatable=false, columnDefinition="datetime")
+	private Date dataCrea;
 
 	/**
 	 * Giorno della distruzione senza l'ora.
 	 */
-	@Column(name="DataDistruzione")
-	private Timestamp dataDistruzione;
+	@Column(name="DataDistruzione", columnDefinition="datetime")
+	private Date dataDistruzione;
 
 //	/**
 //	 * Viene valorizzato quando viene prelevata la cassa per intero sparando il bollone esterno. Su Date è un char(10) e fa casino, siccome non è rilevante è stato commentato.
 //	 */
 //	@Column(name="DataRilImballo")
-//	private Timestamp dataRilImballo;
+//	private Date dataRilImballo;
 
 	/**
 	 * Giorno in cui viene ubicata senza l'ora.
 	 */
 	@Column(name="DataUbica")
-	private Timestamp dataUbica;
+	private Date dataUbica;
 
 //	@Column(name="DataUMod")
-//	private Timestamp dataUMod;
+//	private Date dataUMod;
 
 //	/**
 //	 * Default a NO nel prepersist, EDIT 28/09/2018 : insieme ad Andrea e Palma si è deciso di usare solo il campo cancellato.
@@ -103,7 +102,7 @@ public class ColliCarico implements Serializable {
 	/**
 	 * Default a 0, passa a 1 quando viene generato il carico.
 	 */
-	@Column(nullable=false, length=1)
+	@Column(nullable=false, length=1, columnDefinition="char(1)")
 	private String flagtc;
 	
 	//Il default su db è a SI, Andrea dice che non viene gestito.
@@ -120,9 +119,9 @@ public class ColliCarico implements Serializable {
 //	private int idAttCliente;
 
 	/**
-	 * ID del pakitesta.
+	 * ID del pakitesta. Esiste una FK.
 	 */
-	@Column(name="IdDocumento")
+	@Column(name="IdDocumento", nullable=false)
 	private int idDocumento;
 
 	//Ha un default a NO, non viene usato.
@@ -132,19 +131,19 @@ public class ColliCarico implements Serializable {
 	/**
 	 * Valore univoco fatto così: YY + padding di 0 + progressivo collo.
 	 */
-	@Column(name="KeyColloCar", length=9, updatable=false)
+	@Column(name="KeyColloCar", length=9, nullable=false, updatable=false, columnDefinition="char(9)")
 	private String keyColloCar;
 
 	/**
 	 * Non va usato in inserimento, viene messo un default a NOUBICATO.
 	 */
-	@Column(name="KeyUbicaCar", length=15)
+	@Column(name="KeyUbicaCar", length=15, columnDefinition="char(15)")
 	private String keyUbicaCar;
 
 	/**
 	 * Codifica del magazzino LTC
 	 */
-	@Column(name="Magazzino", length=10)
+	@Column(name="Magazzino", length=10, nullable=false)
 	private String magazzino;
 
 	@Column(name="Note", length=100, insertable=false)
@@ -214,7 +213,7 @@ public class ColliCarico implements Serializable {
 	/**
 	 * Il tipo della cassa, se non c'è l'ho inserisco 'XXX' nel prepersist
 	 */
-	@Column(name="TipoCassa", nullable=false, length=50)
+	@Column(name="TipoCassa", nullable=false, length=20)
 	private String tipoCassa;
 	
 //	@Column(name="TipoCollo", length=10)
@@ -223,7 +222,7 @@ public class ColliCarico implements Serializable {
 	/**
 	 * Default a NO, passa a SI quando viene ubicato.
 	 */
-	@Column(name="Ubicato", length=2)
+	@Column(name="Ubicato", length=2, nullable=false, columnDefinition="char(2)")
 	private String ubicato;
 
 	/**
@@ -247,7 +246,7 @@ public class ColliCarico implements Serializable {
 	/**
 	 * Metto un default a stringa vuota.
 	 */
-	@Column(name="UtenteUbica", nullable=false, length=50)
+	@Column(name="UtenteUbica", length=50)
 	private String utenteUbica;
 
 //	@Column(name="Volume", nullable=false)
@@ -268,7 +267,7 @@ public class ColliCarico implements Serializable {
 	public void prePersist() {
 		StringUtility su = new StringUtility();
 		anno = new GregorianCalendar().get(Calendar.YEAR);
-		dataCrea = new Timestamp(new Date().getTime());
+		dataCrea = new Date();
 		oraCrea = DateConverter.getOraComeIntero(dataCrea);
 		dataCrea = DateConverter.ripulisciTimestap(dataCrea);
 		String annoCollo = Integer.toString(anno).substring(2, 4);
@@ -353,43 +352,43 @@ public class ColliCarico implements Serializable {
 		this.cancellato = cancellato;
 	}
 
-	public Timestamp getDataCrea() {
+	public Date getDataCrea() {
 		return this.dataCrea;
 	}
 
-	public void setDataCrea(Timestamp dataCrea) {
+	public void setDataCrea(Date dataCrea) {
 		this.dataCrea = dataCrea;
 	}
 
-	public Timestamp getDataDistruzione() {
+	public Date getDataDistruzione() {
 		return this.dataDistruzione;
 	}
 
-	public void setDataDistruzione(Timestamp dataDistruzione) {
+	public void setDataDistruzione(Date dataDistruzione) {
 		this.dataDistruzione = dataDistruzione;
 	}
 
-//	public Timestamp getDataRilImballo() {
+//	public Date getDataRilImballo() {
 //		return this.dataRilImballo;
 //	}
 //
-//	public void setDataRilImballo(Timestamp dataRilImballo) {
+//	public void setDataRilImballo(Date dataRilImballo) {
 //		this.dataRilImballo = dataRilImballo;
 //	}
 
-	public Timestamp getDataUbica() {
+	public Date getDataUbica() {
 		return this.dataUbica;
 	}
 
-	public void setDataUbica(Timestamp dataUbica) {
+	public void setDataUbica(Date dataUbica) {
 		this.dataUbica = dataUbica;
 	}
 
-//	public Timestamp getDataUMod() {
+//	public Date getDataUMod() {
 //		return this.dataUMod;
 //	}
 //
-//	public void setDataUMod(Timestamp dataUMod) {
+//	public void setDataUMod(Date dataUMod) {
 //		this.dataUMod = dataUMod;
 //	}
 

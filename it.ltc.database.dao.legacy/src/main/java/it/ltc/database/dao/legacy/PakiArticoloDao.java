@@ -1,6 +1,5 @@
 package it.ltc.database.dao.legacy;
 
-import java.sql.Timestamp;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -12,7 +11,10 @@ import org.apache.log4j.Logger;
 
 import it.ltc.database.dao.CRUDDao;
 import it.ltc.database.dao.CondizioneWhere;
+import it.ltc.database.dao.CondizioneWhere.Condizione;
+import it.ltc.database.dao.CondizioneWhere.Operatore;
 import it.ltc.database.model.legacy.PakiArticolo;
+import it.ltc.database.model.legacy.model.PakiTestaTotali;
 
 public class PakiArticoloDao extends CRUDDao<PakiArticolo> {
 	
@@ -38,6 +40,18 @@ public class PakiArticoloDao extends CRUDDao<PakiArticolo> {
         return lista;
 	}
 	
+	public List<PakiArticolo> trovaRigheConInfoProdottoMancanti() {
+		List<CondizioneWhere> condizioni = new LinkedList<>();
+		condizioni.add(new CondizioneWhere("codBarre", null, Operatore.NULL, Condizione.OR));
+		condizioni.add(new CondizioneWhere("codBarre", "", Operatore.EQUAL, Condizione.OR));
+		condizioni.add(new CondizioneWhere("codArtStr", null, Operatore.NULL, Condizione.OR));
+		condizioni.add(new CondizioneWhere("codArtStr", "", Operatore.EQUAL, Condizione.OR));
+		condizioni.add(new CondizioneWhere("idArticolo", null, Operatore.NULL, Condizione.OR));
+		condizioni.add(new CondizioneWhere("idArticolo", 0, Operatore.EQUAL, Condizione.OR));
+		List<PakiArticolo> lista = findAll(condizioni);
+		return lista;
+	}
+	
 	public List<PakiArticolo> trovaRigheDaCaricoEProdotto(int idCarico, String idUnivocoProdotto) {
 		CondizioneWhere condizioneCarico = new CondizioneWhere("idPakiTesta", idCarico);
 		CondizioneWhere condizioneProdotto = new CondizioneWhere("codUnicoArt", idUnivocoProdotto);
@@ -54,6 +68,18 @@ public class PakiArticoloDao extends CRUDDao<PakiArticolo> {
 		List<CondizioneWhere> condizioni = new LinkedList<>();
 		condizioni.add(condizioneCarico);
 		condizioni.add(condizioneRiga);
+		List<PakiArticolo> lista = findAll(condizioni);
+        return lista;
+	}
+	
+	public List<PakiArticolo> trovaRigheDaCaricoNumeroRigaEProdotto(int idCarico, int numeroRiga, String idUnivocoProdotto) {
+		CondizioneWhere condizioneCarico = new CondizioneWhere("idPakiTesta", idCarico);
+		CondizioneWhere condizioneRiga = new CondizioneWhere("rigaPacki", numeroRiga);
+		CondizioneWhere condizioneProdotto = new CondizioneWhere("codUnicoArt", idUnivocoProdotto);
+		List<CondizioneWhere> condizioni = new LinkedList<>();
+		condizioni.add(condizioneCarico);
+		condizioni.add(condizioneRiga);
+		condizioni.add(condizioneProdotto);
 		List<PakiArticolo> lista = findAll(condizioni);
         return lista;
 	}
@@ -91,6 +117,20 @@ public class PakiArticoloDao extends CRUDDao<PakiArticolo> {
 		return totale;
 	}
 	
+	public PakiTestaTotali calcolaTotaliPerCarico(int idCarico) {
+		PakiTestaTotali totali;
+		EntityManager em = getManager();
+		try {
+			totali = em.createNamedQuery("PakiArticolo.totaliPerCarico", PakiTestaTotali.class).setParameter("carico", idCarico).getSingleResult();
+		} catch (Exception e) {
+			logger.error(e);
+			totali = null;
+		} finally {
+			em.close();
+		}
+		return totali;
+	}
+	
 	public PakiArticolo inserisci(PakiArticolo riga) {
 		PakiArticolo entity = insert(riga);
 		return entity;
@@ -121,7 +161,8 @@ public class PakiArticoloDao extends CRUDDao<PakiArticolo> {
 		oldEntity.setCodBarre(entity.getCodBarre());
 		oldEntity.setCodMotivo(entity.getCodMotivo());
 		oldEntity.setCodUnicoArt(entity.getCodUnicoArt());
-		oldEntity.setDataModifica(new Timestamp(new Date().getTime()));
+		oldEntity.setIdArticolo(entity.getIdArticolo());
+		oldEntity.setDataModifica(new Date());
 		//oldEntity.setIdPakiTesta(entity.getIdPakiTesta());
 		oldEntity.setKeyUbicaCar(entity.getKeyUbicaCar());
 		oldEntity.setKeyUbicaPre(entity.getKeyUbicaPre());

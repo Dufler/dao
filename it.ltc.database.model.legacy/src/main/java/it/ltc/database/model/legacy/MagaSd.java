@@ -26,11 +26,11 @@ public class MagaSd implements Serializable {
 	@Column(name="IdMagaSd", unique=true, nullable=false)
 	private int idMagaSd;
 
-	@Column(name="CodMaga", nullable=false, length=3)
+	@Column(name="CodMaga", nullable=false, length=3, columnDefinition="char(3)")
 	private String codMaga;
 
 //	@Column(name="DataInventario")
-//	private Timestamp dataInventario;
+//	private Date dataInventario;
 
 	@Column(name="Disponibile", nullable=false)
 	private int disponibile;
@@ -38,7 +38,7 @@ public class MagaSd implements Serializable {
 	@Column(name="Esistenza", nullable=false)
 	private int esistenza;
 
-	@Column(name="IdUniArticolo", nullable=false, length=25)
+	@Column(name="IdUniArticolo", nullable=false, length=15, columnDefinition="varchar(15)")
 	private String idUniArticolo;
 
 	@Column(name="Impegnato", nullable=false)
@@ -102,11 +102,11 @@ public class MagaSd implements Serializable {
 		this.codMaga = codMaga;
 	}
 
-//	public Timestamp getDataInventario() {
+//	public Date getDataInventario() {
 //		return this.dataInventario;
 //	}
 //
-//	public void setDataInventario(Timestamp dataInventario) {
+//	public void setDataInventario(Date dataInventario) {
 //		this.dataInventario = dataInventario;
 //	}
 

@@ -20,7 +20,7 @@ public class ScorteColli implements Serializable {
 	@Column(unique=true, nullable=false)
 	private int idScorteColli;
 
-	@Column(length=50)
+	@Column(nullable=false, length=15, columnDefinition="varchar(15)")
 	private String iduniarticolo;
 
 	@Column(name="KeyColloCar", length=50)
@@ -29,7 +29,7 @@ public class ScorteColli implements Serializable {
 	/**
 	 * Il totale dei pezzi contenuti nel collo.
 	 */
-	@Column(name="Pezzi")
+	@Column(name="Pezzi", nullable=false)
 	private int pezzi;
 
 	@Column(name="SessioneLavoro", length=50)

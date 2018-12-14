@@ -96,6 +96,11 @@ public class ColliCaricoDao extends CRUDDao<ColliCarico> {
 		return entities;
 	}
 	
+	public List<ColliCarico> trovaColliNelCarico(int idCarico) {
+		List<ColliCarico> entities = findAllEqualTo("idDocumento", idCarico);
+		return entities;
+	}
+	
 	public ColliCarico inserisci(ColliCarico collo) {
 		ColliCarico entity = insert(collo);
 		return entity;

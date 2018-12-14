@@ -20,7 +20,10 @@ public class Imballi implements Serializable {
 	@Column(name="IdImballo", unique=true, nullable=false)
 	private int idImballo;
 
-//	@Column(name="Attiva", nullable=false, length=2)
+	/**
+	 * SI o NO, può servire lato utente per presentare solo i formati da utilizzare al momento mantendo in archivio a NO quelli passati per motivi storici.
+	 */
+//	@Column(name="Attiva", nullable=false, length=2, , columnDefinition="char(2)")
 //	private String attiva;
 
 	@Column(name="CodImballo", length=2)
@@ -29,10 +32,10 @@ public class Imballi implements Serializable {
 	@Column(name="Descrizione", length=30)
 	private String descrizione;
 
-	@Column(name="H")
+	@Column(name="H", nullable=false, columnDefinition="money")
 	private double h;
 
-	@Column(name="L")
+	@Column(name="L", nullable=false, columnDefinition="money")
 	private double l;
 
 	@Column(name="PesoGr")
@@ -44,7 +47,7 @@ public class Imballi implements Serializable {
 	@Column(name="Volume")
 	private int volume;
 
-	@Column(name="Z")
+	@Column(name="Z", nullable=false, columnDefinition="money")
 	private double z;
 
 	public Imballi() {}

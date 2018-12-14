@@ -2,7 +2,6 @@ package it.ltc.database.model.legacy;
 
 import java.io.Serializable;
 import javax.persistence.*;
-import java.sql.Timestamp;
 import java.util.Date;
 
 
@@ -34,31 +33,34 @@ public class ArtiBar implements Serializable {
 //	@Column(name="Barra6", length=50)
 //	private String barra6;
 
-	@Column(name="BarraEAN", length=50)
+	@Column(name="BarraEAN", length=50, columnDefinition="varchar(50)")
 	private String barraEAN;
 
-	@Column(name="BarraUPC", length=50)
+	@Column(name="BarraUPC", length=50, columnDefinition="varchar(50)")
 	private String barraUPC;
 
-	@Column(name="CodiceArticolo", length=100)
+	@Column(name="CodiceArticolo", length=50, columnDefinition="varchar(50)", nullable=false)
 	private String codiceArticolo;
 
-	@Column(name="DataAgg", nullable=false)
-	private Timestamp dataAgg;
+	/**
+	 * Viene aggiornata automaticamente dal trigger dopo ogni modifica.
+	 */
+	@Column(name="DataAgg", nullable=false, columnDefinition="datetime")
+	private Date dataAgg;
 
 //	@Column(name="DataAss")
-//	private Timestamp dataAss;
+//	private Date dataAss;
 
-	@Column(name="IdUniArticolo", length=15)
+	@Column(name="IdUniArticolo", length=15, columnDefinition="varchar(15)", nullable=false)
 	private String idUniArticolo;
 
-	@Column(name="Numerata", length=50)
+	@Column(name="Numerata", length=20, columnDefinition="varchar(20)")
 	private String numerata;
 
 	@Column(name="Posizione")
 	private Integer posizione;
 
-	@Column(name="Taglia", length=20)
+	@Column(name="Taglia", length=20, columnDefinition="varchar(20)")
 	private String taglia;
 
 //	@Column(name="TipoAss", length=1)
@@ -71,7 +73,7 @@ public class ArtiBar implements Serializable {
 		if (numerata == null) numerata = "001";
 		if (posizione == null || posizione <= 0) posizione = 1;
 		if (taglia == null) taglia = "UNI";
-		dataAgg = new Timestamp(new Date().getTime());
+		dataAgg = new Date();
 	}
 	
 	@PreUpdate
@@ -79,7 +81,6 @@ public class ArtiBar implements Serializable {
 		if (numerata == null) numerata = "001";
 		if (posizione == null || posizione <= 0) posizione = 1;
 		if (taglia == null) taglia = "UNI";
-		dataAgg = new Timestamp(new Date().getTime());
 	}
 
 	public int getIdArtiBar() {
@@ -146,19 +147,19 @@ public class ArtiBar implements Serializable {
 		this.codiceArticolo = codiceArticolo;
 	}
 
-	public Timestamp getDataAgg() {
+	public Date getDataAgg() {
 		return this.dataAgg;
 	}
 
-	public void setDataAgg(Timestamp dataAgg) {
+	public void setDataAgg(Date dataAgg) {
 		this.dataAgg = dataAgg;
 	}
 
-//	public Timestamp getDataAss() {
+//	public Date getDataAss() {
 //		return this.dataAss;
 //	}
 //
-//	public void setDataAss(Timestamp dataAss) {
+//	public void setDataAss(Date dataAss) {
 //		this.dataAss = dataAss;
 //	}
 

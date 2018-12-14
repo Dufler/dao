@@ -1,7 +1,6 @@
 package it.ltc.database.model.legacy;
 
 import java.io.Serializable;
-import java.sql.Timestamp;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -41,28 +40,31 @@ public class ColliPack implements Serializable {
 //	@Column(name="CassaStd", nullable=false, length=50, insertable=false)
 //	private String cassaStd;
 
-	@Column(name="CodArtStr", length=50)
+	@Column(name="CodArtStr", length=50, nullable=false)
 	private String codArtStr;
 
-	@Column(name="CodiceArticolo", length=15)
+	@Column(name="CodiceArticolo", nullable=false, length=15, columnDefinition="varchar(15)")
 	private String codiceArticolo;
 
 //	@Column(name="Controllata", nullable=false, length=2)
 //	private String controllata;
 
-	@Column(name="DataAgg")
-	private Timestamp dataAgg;
+	@Column(name="DataAgg", columnDefinition="datetime")
+	private Date dataAgg;
 //
 //	@Column(name="DataMod")
-//	private Timestamp dataMod;
+//	private Date dataMod;
+	
+	@Column(name="DataScadenza", columnDefinition="datetime")
+	private Date dataScadenza;
 
-	@Column(name="Descrizione", length=50)
+	@Column(name="Descrizione", length=100)
 	private String descrizione;
 
 	/**
 	 * Descrive se il prodotto sia ancora disponibile o meno. N=OK, S=Finito.
 	 */
-	@Column(name="Flagimp", nullable=false, length=1)
+	@Column(name="Flagimp", nullable=false, length=1, columnDefinition="char(1)")
 	private String flagimp;
 
 //	@Column(name="Flagpre", nullable=false, length=1)
@@ -71,13 +73,13 @@ public class ColliPack implements Serializable {
 	/**
 	 * 0 quando non ancora disponibile, passa 1 quando viene generato il carico. 
 	 */
-	@Column(name="Flagtc")
+	@Column(name="Flagtc", nullable=false)
 	private int flagtc;
 
-	@Column(name="IdPakiarticolo")
+	@Column(name="IdPakiarticolo", nullable=false)
 	private int idPakiarticolo;
 
-	@Column(name="IdTestaPaki")
+	@Column(name="IdTestaPaki", nullable=false)
 	private int idTestaPaki;
 
 //	@Column(name="ImpScortaSL", nullable=false, length=50)
@@ -89,10 +91,13 @@ public class ColliPack implements Serializable {
 //	@Column(name="Listapre", length=20)
 //	private String listapre;
 //
-//	@Column(name="Lotto", length=13)
-//	private String lotto;
+	/**
+	 * Uso questo campo per memorizzare il fatto che ho già avvisato della scadenza o per indicare altri dati particolari (es. inventario Coltorti).
+	 */
+	@Column(name="Lotto", length=30)
+	private String lotto;
 
-	@Column(length=3, columnDefinition="CHAR")
+	@Column(length=3, columnDefinition="char(3)", nullable=false)
 	private String magazzino;
 
 //	@Column(length=2)
@@ -101,7 +106,7 @@ public class ColliPack implements Serializable {
 //	@Column(name="Note", length=50)
 //	private String note;
 
-	@Column(name="NrIdColloPk", length=9)
+	@Column(name="NrIdColloPk", nullable=false, length=9, columnDefinition="char(9)")
 	private String nrIdColloPk;
 
 //	@Column(name="NrRiferimento")
@@ -138,14 +143,14 @@ public class ColliPack implements Serializable {
 //	@Column(name="Stagcarico", length=20)
 //	private String stagcarico;
 //
-	@Column(name="Taglia", length=15)
+	@Column(name="Taglia", length=20)
 	private String taglia;
 //
 //	@Column(name="Trasferito", nullable=false, length=2147483647)
 //	private String trasferito;
 	
-//	@Column(name="Seriale", length=50)
-//	private String seriale;
+	@Column(name="Seriale", length=50)
+	private String seriale;
 
 	public ColliPack() {}
 	
@@ -155,7 +160,7 @@ public class ColliPack implements Serializable {
 		if (taglia == null) taglia = "";
 		if (descrizione == null) descrizione = "";
 		else if (descrizione.length() > 50) descrizione = descrizione.substring(0, 50);
-		dataAgg = new Timestamp(new Date().getTime());
+		dataAgg = new Date(new Date().getTime());
 		oraAgg = DateConverter.getOraComeIntero(dataAgg);
 		dataAgg = DateConverter.ripulisciTimestap(dataAgg);
 	}
@@ -166,7 +171,7 @@ public class ColliPack implements Serializable {
 		if (taglia == null) taglia = "";
 		if (descrizione == null) descrizione = "";
 		else if (descrizione.length() > 50) descrizione = descrizione.substring(0, 50);
-		dataAgg = new Timestamp(new Date().getTime());
+		dataAgg = new Date(new Date().getTime());
 		oraAgg = DateConverter.getOraComeIntero(dataAgg);
 		dataAgg = DateConverter.ripulisciTimestap(dataAgg);
 	}
@@ -227,21 +232,29 @@ public class ColliPack implements Serializable {
 //		this.controllata = controllata;
 //	}
 //
-	public Timestamp getDataAgg() {
+	public Date getDataAgg() {
 		return this.dataAgg;
 	}
 
-	public void setDataAgg(Timestamp dataAgg) {
+	public void setDataAgg(Date dataAgg) {
 		this.dataAgg = dataAgg;
 	}
 //
-//	public Timestamp getDataMod() {
+//	public Date getDataMod() {
 //		return this.dataMod;
 //	}
 //
-//	public void setDataMod(Timestamp dataMod) {
+//	public void setDataMod(Date dataMod) {
 //		this.dataMod = dataMod;
 //	}
+
+	public Date getDataScadenza() {
+		return dataScadenza;
+	}
+
+	public void setDataScadenza(Date dataScadenza) {
+		this.dataScadenza = dataScadenza;
+	}
 
 	public String getDescrizione() {
 		return this.descrizione;
@@ -315,13 +328,13 @@ public class ColliPack implements Serializable {
 //		this.listapre = listapre;
 //	}
 //
-//	public String getLotto() {
-//		return this.lotto;
-//	}
-//
-//	public void setLotto(String lotto) {
-//		this.lotto = lotto;
-//	}
+	public String getLotto() {
+		return this.lotto;
+	}
+
+	public void setLotto(String lotto) {
+		this.lotto = lotto;
+	}
 
 	public String getMagazzino() {
 		return this.magazzino;
@@ -411,13 +424,13 @@ public class ColliPack implements Serializable {
 		this.qta = qta;
 	}
 
-//	public String getSeriale() {
-//		return seriale;
-//	}
-//
-//	public void setSeriale(String seriale) {
-//		this.seriale = seriale;
-//	}
+	public String getSeriale() {
+		return seriale;
+	}
+
+	public void setSeriale(String seriale) {
+		this.seriale = seriale;
+	}
 
 	public int getQtaimpegnata() {
 		return this.qtaimpegnata;

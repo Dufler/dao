@@ -29,7 +29,7 @@ public class Magazzini implements Serializable {
 //	@Column(name="CalcoloGiacenza", nullable=false, length=2)
 //	private String calcoloGiacenza;
 
-	@Column(name="CodiceMag", nullable=false, length=3)
+	@Column(name="CodiceMag", nullable=false, length=3, columnDefinition="char(3)")
 	private String codiceMag;
 
 	@Column(name="DesMag", nullable=false, length=40)

@@ -1,8 +1,11 @@
 package it.ltc.model.persistence.ordine;
 
+import java.io.File;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -11,25 +14,32 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
 import org.apache.log4j.Logger;
 
 import it.ltc.database.dao.Dao;
+import it.ltc.database.dao.common.NazioneDao;
+import it.ltc.database.dao.common.ProvinciaDao;
 import it.ltc.database.dao.legacy.ArtibarDao;
 import it.ltc.database.dao.legacy.ArticoliDao;
 import it.ltc.database.dao.legacy.DestinatariDao;
+import it.ltc.database.dao.legacy.MagaMovDao;
 import it.ltc.database.dao.legacy.MagaSdDao;
 import it.ltc.database.dao.legacy.MagazzinoDao;
+import it.ltc.database.dao.legacy.MittentiOrdineDao;
+import it.ltc.database.model.centrale.Nazione;
+import it.ltc.database.model.centrale.Provincia;
 import it.ltc.database.model.legacy.ArtiBar;
 import it.ltc.database.model.legacy.Articoli;
 import it.ltc.database.model.legacy.Destinatari;
 import it.ltc.database.model.legacy.MagaMov;
 import it.ltc.database.model.legacy.MagaSd;
 import it.ltc.database.model.legacy.Magazzini;
+import it.ltc.database.model.legacy.MittentiOrdine;
 import it.ltc.database.model.legacy.RighiOrdine;
 import it.ltc.database.model.legacy.TestataOrdini;
+import it.ltc.database.model.legacy.model.CausaliMovimento;
 import it.ltc.model.interfaces.exception.ModelPersistenceException;
 import it.ltc.model.interfaces.exception.ModelValidationException;
 import it.ltc.model.interfaces.indirizzo.MIndirizzo;
@@ -39,12 +49,16 @@ import it.ltc.model.interfaces.ordine.MContrassegno;
 import it.ltc.model.interfaces.ordine.MOrdine;
 import it.ltc.model.interfaces.ordine.ProdottoOrdinato;
 import it.ltc.model.interfaces.ordine.TipoIDProdotto;
+import it.ltc.model.interfaces.ordine.TipoOrdine;
 
 public class ControllerOrdiniSQLServer extends Dao implements IControllerModel<MOrdine> {
 
 	private static final Logger logger = Logger.getLogger(ControllerOrdiniSQLServer.class);
+	
+	public static final String REGEX_EMAIL = "^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?";
+	public static final String REGEX_CAP_ITA = "^\\d{5}";
 
-	private final SimpleDateFormat sdf;
+	protected final SimpleDateFormat sdf;
 	
 	protected final HashMap<String, String> mappaIdentificazioneArticoli;
 	protected final HashMap<String, Articoli> mappaArticoliPerIDUnivoco;
@@ -53,8 +67,13 @@ public class ControllerOrdiniSQLServer extends Dao implements IControllerModel<M
 	protected final ArticoliDao daoArticoli;
 	protected final ArtibarDao daoBarcode;
 	protected final DestinatariDao daoDestinatari;
+	protected final MittentiOrdineDao daoMittenti;
 	protected final MagaSdDao daoSaldi;
-	protected final MagazzinoDao daoMagazzini;
+	protected final MagaMovDao daoMovimenti;
+	protected final MagazzinoDao daoMagazzini;	
+	
+	protected final ProvinciaDao daoProvince;
+	protected final NazioneDao daoNazioni;
 
 	public ControllerOrdiniSQLServer(String persistenceUnit) {
 		super(persistenceUnit);
@@ -65,21 +84,26 @@ public class ControllerOrdiniSQLServer extends Dao implements IControllerModel<M
 		daoArticoli = new ArticoliDao(persistenceUnit);
 		daoBarcode = new ArtibarDao(persistenceUnit);
 		daoDestinatari = new DestinatariDao(persistenceUnit);
+		daoMittenti = new MittentiOrdineDao(persistenceUnit);
 		daoSaldi = new MagaSdDao(persistenceUnit);
+		daoMovimenti = new MagaMovDao(persistenceUnit);
 		daoMagazzini = new MagazzinoDao(persistenceUnit);
+		daoProvince = new ProvinciaDao("produzione");
+		daoNazioni = new NazioneDao("produzione");
 		logger.info("(Legacy) Controller creato.");
 	}
 
 	@Override
 	public void valida(MOrdine ordine) throws ModelValidationException {
-		logger.info("(Legacy) Comincio la validazione.");
+		checkValiditaCampi(ordine);
+		logger.info("(Legacy) Comincio la validazione per l'ordine '" + ordine.getRiferimentoOrdine() + "'");
 		// Verifica sullo stesso riferimento
 		TestataOrdini match = trovaOrdineDaRiferimento(ordine.getRiferimentoOrdine());
 		if (match != null)
 			throw new ModelValidationException("(Legacy) E' gia' stato inserito un ordine con lo stesso riferimento. (" + ordine.getRiferimentoOrdine() + ")");
 		// Verifica sull'esistanza dei prodotti
 		if (ordine.getProdotti().isEmpty())
-			throw new ModelValidationException("(Legacy) E' necessario inserire almeno un prodotto nell'ordine.");
+			throw new ModelValidationException("(Legacy) E' necessario inserire almeno un prodotto nell'ordine. (" + ordine.getRiferimentoOrdine() + ")");
 		//Controllo i magazzini
 		for (ProdottoOrdinato prodotto : ordine.getProdotti()) {
 			checkMagazzino(prodotto);
@@ -88,13 +112,137 @@ public class ControllerOrdiniSQLServer extends Dao implements IControllerModel<M
 		mappaIdentificazioneArticoli.clear();
 		mappaArticoliPerIDUnivoco.clear();
 		mappaBarcodePerIDUnivoco.clear();
-		TipoIDProdotto tipo = TipoIDProdotto.valueOf(ordine.getTipoIdentificazioneProdotti());
+		TipoIDProdotto tipo = ordine.getTipoIdentificazioneProdotti();
 		switch (tipo) {
 			case BARCODE: checkPerBarcode(ordine); break;
 			case CHIAVE: checkPerChiave(ordine); break;
 			case MODELLOTAGLIA:	checkPerModelloTaglia(ordine); break;
 		}
 		logger.info("(Legacy) Validazione ordine terminata correttamente.");
+	}
+	
+	protected void checkValiditaCampi(MOrdine ordine) {
+		TipoOrdine tipo = ordine.getTipo();
+		if (tipo == null)
+			throw new ModelValidationException("E' necessario indicare un tipo di ordine. (" + ordine.getRiferimentoOrdine() + ")");
+		
+		String riferimentoOrdine = ordine.getRiferimentoOrdine();
+		if (riferimentoOrdine == null || riferimentoOrdine.isEmpty())
+			throw new ModelValidationException("E' necessario indicare un riferimento per l'ordine.");
+		else if (riferimentoOrdine.length() > 20)
+			throw new ModelValidationException("Il riferimento per l'ordine e' troppo lungo. (MAX 20 Caratteri, " + ordine.getRiferimentoOrdine() + ")");
+		
+		//opzionali
+		Integer priorita = ordine.getPriorita();
+		if (priorita != null && (priorita < 1 || priorita > 10))
+			throw new ModelValidationException("Il valore indicato per la priorita' non e' valido. (" + priorita + ", min 1 - MAX 10, " + ordine.getRiferimentoOrdine() + ")");
+		
+		String note = ordine.getNote();
+		if (note != null && note.length() > 250)
+			throw new ModelValidationException("La lunghezza delle note è eccessiva. (MAX 250 caratteri, " + ordine.getRiferimentoOrdine() + ")");
+		
+		MIndirizzo destinatario = ordine.getDestinatario();
+		if (destinatario == null)
+			throw new ModelValidationException("E' necessario indicare il destinatario. (" + ordine.getRiferimentoOrdine() + ")");
+		else
+			checkValiditaIndirizzo(destinatario, ordine);
+		
+		MIndirizzo mittente = ordine.getMittente();
+		if (mittente == null)
+			throw new ModelValidationException("E' necessario indicare il mittente. (" + ordine.getRiferimentoOrdine() + ")");
+		else
+			checkValiditaIndirizzo(mittente, ordine);
+		
+		checkValiditaContrassegno(ordine);
+	}
+	
+	protected void checkValiditaContrassegno(MOrdine ordine) {
+		MContrassegno contrassegno = ordine.getContrassegno();
+		if (contrassegno != null) {
+			if (contrassegno.getTipo() == null)
+				throw new ModelValidationException("E' necessario indicare un tipo di contrassegno valido. (" + ordine.getRiferimentoOrdine() + ")");
+			if (contrassegno.getValore() <= 0)
+				throw new ModelValidationException("E' necessario indicare un valore per il contrassegno maggiore di 0 euro. (" + ordine.getRiferimentoOrdine() + ")");
+		}
+	}
+	
+	protected void checkValiditaIndirizzo(MIndirizzo indirizzo, MOrdine ordine) {
+		// Controllo dei campi necessari
+		String ragioneSociale = indirizzo.getRagioneSociale();
+		if (ragioneSociale == null || ragioneSociale.isEmpty())
+			throw new ModelValidationException("E' necessario specificare una ragione sociale per l'indirizzo. (" + ordine.getRiferimentoOrdine() + ")");
+		else if (ragioneSociale.length() > 50)
+			throw new ModelValidationException("La ragione sociale indicata è troppo lunga. (MAX 50 caratteri, " + ordine.getRiferimentoOrdine() + ")");
+
+		String via = indirizzo.getIndirizzo();
+		if (via == null || via.isEmpty())
+			throw new ModelValidationException("E' necessario specificare una via per l'indirizzo. (" + ordine.getRiferimentoOrdine() + ")");
+		else if (via.length() > 250)
+			throw new ModelValidationException("L'indirizzo indicato è troppo lungo. (MAX 250 caratteri, " + ordine.getRiferimentoOrdine() + ")");
+
+		String localita = indirizzo.getLocalita();
+		if (localita == null || localita.isEmpty())
+			throw new ModelValidationException("E' necessario specificare una localita' per l'indirizzo. (" + ordine.getRiferimentoOrdine() + ")");
+		else if (localita.length() > 50)
+			throw new ModelValidationException("La località indicata è troppo lunga. (MAX 50 caratteri, " + ordine.getRiferimentoOrdine() + ")");
+
+		String provincia = indirizzo.getProvincia();
+		if (provincia == null || provincia.isEmpty())
+			throw new ModelValidationException("E' necessario specificare una provincia per l'indirizzo (" + ordine.getRiferimentoOrdine() + ")");
+		else {
+			Provincia p = daoProvince.trovaDaSigla(provincia);
+			if (p == null)
+				throw new ModelValidationException("E' necessario specificare una provincia esistente per l'indirizzo. (Provincia inserita :" + provincia + " su " + ordine.getRiferimentoOrdine() + ")");
+		}
+
+		String nazione = indirizzo.getNazione();
+		Nazione n;
+		if (nazione == null || nazione.isEmpty()) {
+			throw new ModelValidationException("E' necessario specificare un codice nazione ISO per l'indirizzo. (" + ordine.getRiferimentoOrdine() + ")");
+		} else {
+			switch (nazione.length()) {
+				case 2 : n = daoNazioni.trovaDaCodiceISO2(nazione); break;
+				case 3 : n = daoNazioni.trovaDaCodiceISO3(nazione); break;
+				default : n = null;
+			}			
+			if (n == null) {
+				throw new ModelValidationException("E' necessario specificare un codice nazione ISO esistente per l'indirizzo. (Nazione inserita: " + nazione + " su (" + ordine.getRiferimentoOrdine() + ")");
+			} else {
+				//Qualunque sia il modo il modo in cui l'ho trovata mi assicuro che venga salvata come ISO 3.
+				nazione = n.getCodiceIsoTre();
+				indirizzo.setNazione(nazione);
+			}				
+		}
+
+		String cap = indirizzo.getCap();
+		if (cap == null || cap.isEmpty())
+			throw new ModelValidationException("E' necessario specificare un cap per l'indirizzo. (" + ordine.getRiferimentoOrdine() + ")");
+		else if (n != null) {
+			// Controllo del CAP in base alla nazione.
+			boolean capValido;
+			switch (nazione) {
+			case "ITA":
+				capValido = cap.matches(REGEX_CAP_ITA);
+				break;
+			default:
+				capValido = cap.length() < 11; // 10 o meno caratteri.
+			}
+			if (!capValido)
+				throw new ModelValidationException("E' necessario specificare un cap valido per l'indirizzo. (Cap inserito: " + cap + " su (" + ordine.getRiferimentoOrdine() + ")");
+		}
+
+		// Campi facoltativi
+		String telefono = indirizzo.getTelefono();
+		if (telefono != null && telefono.length() > 20)
+			throw new ModelValidationException("Il numero telefonico specificato e' troppo lungo (MAX 20 Caratteri, " + ordine.getRiferimentoOrdine() + ")");
+
+		String email = indirizzo.getEmail();
+		if (email != null) {
+//			if (!email.matches(REGEX_EMAIL))
+//				logger.warn("L'indirizzo email indicato non e' valido. (" + email + ")");
+			if (email.length() > 100)
+				throw new ModelValidationException("L'indirizzo email specificato e' troppo lungo (MAX 100 Caratteri, " + ordine.getRiferimentoOrdine() + ")");
+		}
 	}
 
 	public TestataOrdini trovaOrdineDaRiferimento(String riferimento) {
@@ -128,7 +276,7 @@ public class ControllerOrdiniSQLServer extends Dao implements IControllerModel<M
 			if (!mappaIdentificazioneArticoli.containsKey(key)) {
 				Articoli articolo = daoArticoli.trovaDaModelloETaglia(prodotto.getCodicemodello(), prodotto.getTaglia());
 				if (articolo == null)
-					throw new ModelValidationException("(Legacy) La combinazione modello-taglia: '" + prodotto.getCodicemodello() + "-"	+ prodotto.getTaglia() + "' non è stato trovata. L'ordine non sarà importato.");
+					throw new ModelValidationException("(Legacy) La combinazione modello-taglia: '" + prodotto.getCodicemodello() + "-"	+ prodotto.getTaglia() + "' non è stato trovata. L'ordine " + ordine.getRiferimentoOrdine() + " non sarà importato.");
 				ArtiBar barcode = daoBarcode.trovaDaIDUnivoco(articolo.getIdUniArticolo());
 				if (barcode == null)
 					throw new ModelValidationException("(Legacy) nessun barcode collegato alla anagrafica ricavata dalla combinazione modello-taglia: '" + prodotto.getCodicemodello() + "-"	+ prodotto.getTaglia() + ", ID Univoco: '" + articolo.getIdUniArticolo() + "'");
@@ -146,7 +294,7 @@ public class ControllerOrdiniSQLServer extends Dao implements IControllerModel<M
 			if (!mappaIdentificazioneArticoli.containsKey(key)) {
 				Articoli articolo = daoArticoli.trovaDaSKU(key);
 				if (articolo == null)
-					throw new ModelValidationException("(Legacy) La chiave: '" + key + "' non è stato trovata. Il carico non sarà importato.");
+					throw new ModelValidationException("(Legacy) La chiave: '" + key + "' non è stato trovata. L'ordine " + ordine.getRiferimentoOrdine() + " non sarà importato.");
 				ArtiBar barcode = daoBarcode.trovaDaIDUnivoco(articolo.getIdUniArticolo());
 				if (barcode == null)
 					throw new ModelValidationException("(Legacy) nessun barcode collegato alla anagrafica ricavata dalla chiave: '" + key + "', ID Univoco: '" + articolo.getIdUniArticolo() + "'");
@@ -164,10 +312,10 @@ public class ControllerOrdiniSQLServer extends Dao implements IControllerModel<M
 			if (!mappaIdentificazioneArticoli.containsKey(key)) {
 				Articoli articolo = daoArticoli.trovaDaBarcode(key);
 				if (articolo == null)
-					throw new ModelValidationException("(Legacy) Il barcode '" + key + "' non è stato trovato. Il carico non sarà importato.");
+					throw new ModelValidationException("(Legacy) Il barcode '" + key + "' non è stato trovato. L'ordine " + ordine.getRiferimentoOrdine() + " non sarà importato.");
 				ArtiBar barcode = daoBarcode.trovaDaBarcode(key);
 				if (barcode == null)
-					throw new ModelValidationException("(Legacy) Il barcode '" + key + "' non è stato trovato. Il carico non sarà importato.");
+					throw new ModelValidationException("(Legacy) Il barcode '" + key + "' non è stato trovato. L'ordine " + ordine.getRiferimentoOrdine() + " non sarà importato.");
 				if (articolo.getIdUniArticolo() == null || barcode.getIdUniArticolo() == null || !articolo.getIdUniArticolo().equals(barcode.getIdUniArticolo()))
 					throw new ModelValidationException("(Legacy) Non è stata trovata corrispondenza tra Articoli e Artibar per l'ID Univoco tramite il barcode: '" + key + "'.");
 				mappaIdentificazioneArticoli.put(key, articolo.getIdUniArticolo());
@@ -180,7 +328,7 @@ public class ControllerOrdiniSQLServer extends Dao implements IControllerModel<M
 
 	public Destinatari ottieniDestinatario(MIndirizzo destinatario) throws ModelPersistenceException {
 		// Eseguo un controllo sulla ragione sociale
-		String ragioneSociale1 = destinatario.getRagionesociale();
+		String ragioneSociale1 = destinatario.getRagioneSociale();
 		String ragioneSociale2 = "";
 		// Se è più lunga di 70 vado a tagliare la parte eccedente.
 		if (ragioneSociale1.length() > 70) {
@@ -192,21 +340,9 @@ public class ControllerOrdiniSQLServer extends Dao implements IControllerModel<M
 			ragioneSociale1 = ragioneSociale1.substring(0, 35);
 		}
 		// Eseguo una ricerca per vedere se è già presente.
-		EntityManager em = getManager();
-		CriteriaBuilder cb = em.getCriteriaBuilder();
-		CriteriaQuery<Destinatari> criteria = cb.createQuery(Destinatari.class);
-		Root<Destinatari> member = criteria.from(Destinatari.class);
-		Predicate condizioneRagioneSociale = cb.equal(member.get("ragSoc1"), ragioneSociale1);
-		Predicate condizioneCap = cb.equal(member.get("cap"), destinatario.getCap());
-		Predicate condizioneIndirizzo = cb.equal(member.get("indirizzo"), destinatario.getIndirizzo());
-		Predicate condizioneLocalita = cb.equal(member.get("localita"), destinatario.getLocalita());
-		Predicate condizioneNazione = cb.equal(member.get("codIso"), destinatario.getNazione());
-		criteria.select(member).where(cb.and(condizioneRagioneSociale, condizioneCap, condizioneIndirizzo,
-				condizioneLocalita, condizioneNazione));
-		List<Destinatari> list = em.createQuery(criteria).setMaxResults(1).getResultList();
 		// Se ho trovato corrispondenza lo restituisco, altrimenti lo inserisco
-		Destinatari entity;
-		if (list.isEmpty()) {
+		Destinatari entity = daoDestinatari.trovaIndirizzo(ragioneSociale1, destinatario.getCap(), destinatario.getIndirizzo(), destinatario.getLocalita(), destinatario.getNazione());
+		if (entity == null) {
 			entity = new Destinatari();
 			entity.setCap(destinatario.getCap());
 			entity.setCodIso(destinatario.getNazione());
@@ -219,42 +355,38 @@ public class ControllerOrdiniSQLServer extends Dao implements IControllerModel<M
 			entity.setRagSoc1(ragioneSociale1);
 			entity.setRagSoc2(ragioneSociale2);
 			entity.setTel(destinatario.getTelefono());
-			EntityTransaction t = em.getTransaction();
-			try {
-				t.begin();
-				em.persist(entity);
-				t.commit();
-				logger.info("Inserito nuovo destinatario: " + entity);
-			} catch (Exception e) {
-				logger.error(e);
-				if (t != null && t.isActive())
-					t.rollback();
-				entity = null;
-			} finally {
-				em.close();
-			}
-		} else {
-			entity = list.get(0);
-			em.close();
+			entity = daoDestinatari.inserisci(entity);
+			if (entity == null)
+				throw new ModelPersistenceException("Impossibile recuperare il destinatario.");
 		}
-		if (entity == null)  throw new ModelPersistenceException("Impossibile recuperare il destinatario.");
+		return entity;
+	}
+	
+	public MittentiOrdine ottieniMittente(MIndirizzo mittente) {
+		// Eseguo una ricerca per vedere se è già presente.
+		// Se ho trovato corrispondenza lo restituisco, altrimenti lo inserisco
+		MittentiOrdine entity = daoMittenti.trovaIndirizzo(mittente.getRagioneSociale(), mittente.getCap(), mittente.getIndirizzo(), mittente.getLocalita(), mittente.getNazione());
+		if (entity == null) {
+			entity = new MittentiOrdine();
+			entity.setCap(mittente.getCap());
+			entity.setEmail(mittente.getEmail());
+			entity.setIndirizzo(mittente.getIndirizzo());
+			entity.setLocalita(mittente.getLocalita());
+			entity.setNazione(mittente.getNazione());
+			entity.setProvincia(mittente.getProvincia());
+			entity.setRagioneSociale(mittente.getRagioneSociale());
+			entity.setTelefono(mittente.getTelefono());
+			entity = daoMittenti.inserisci(entity);
+		}
 		return entity;
 	}
 
-	protected TestataOrdini ottieniTestata(MOrdine ordine, Destinatari destinatario) throws ModelPersistenceException {
+	protected TestataOrdini ottieniTestata(MOrdine ordine, Destinatari destinatario, MittentiOrdine mittente) throws ModelPersistenceException {
 		// Generazione valori
-		String data = sdf.format(new Date());
+		GregorianCalendar now = new GregorianCalendar();
+		String data = sdf.format(now.getTime());
 		int nrListaArrivato = 0; //FIXME - Qua dovrebbe essere un autoincrement. Es. Integer.parseInt(data);
-//		String nrLista = data.substring(0, 2);
 		String riferimento = ordine.getRiferimentoOrdine();
-//		if (riferimento.length() > 14)
-//			nrLista += riferimento.substring(0, 14);
-//		else {
-//			nrLista += riferimento;
-//			for (int i = 2; i < 16 - riferimento.length(); i++) {
-//				nrLista += "0";
-//			}
-//		}
 		Date dataOrdine = ordine.getDataOrdine();
 		String nomeFileArrivato = "INWS" + data + ".SER";
 		String note = ordine.getNote();
@@ -263,22 +395,24 @@ public class ControllerOrdiniSQLServer extends Dao implements IControllerModel<M
 		}
 		// Testata
 		TestataOrdini testata = new TestataOrdini();
-//		testata.setNrLista(nrLista);
-//		testata.setRagstampe(nrLista);
-		testata.setPriorita(ordine.getPriorita());
+		testata.setPriorita(ordine.getPriorita() != null ? ordine.getPriorita() : 1);
 		testata.setNrListaArrivato(nrListaArrivato);
 		testata.setRifOrdineCli(riferimento);
 		testata.setNrOrdine(riferimento);
 		testata.setDataOrdine(new Timestamp(dataOrdine.getTime()));
+		testata.setAnnoOrdine(now.get(Calendar.YEAR));
 		
 		testata.setIdDestina(destinatario.getIdDestina());
 		testata.setCodCliente(destinatario.getCodDestina());
+		testata.setRagioneSocialeDestinatario(destinatario.getRagSoc1());
+		
+		testata.setIdMittente(mittente.getIdMittente());
 		
 		testata.setStato("IMPO");
 		testata.setQtaTotaleSpedire(ordine.getQuantitaTotaleDaSpedire());
 		testata.setOperatore("SERVIZIO");
 		testata.setNomeFileArrivo(nomeFileArrivato);
-		testata.setTipoOrdine(ordine.getTipo());
+		testata.setTipoOrdine(ordine.getTipo().name());
 		testata.setNote(note);
 		testata.setValoreDoganale(ordine.getValoreDoganale());
 		testata.setCorriere(ordine.getCorriere());
@@ -290,7 +424,7 @@ public class ControllerOrdiniSQLServer extends Dao implements IControllerModel<M
 			Corriere corriere = Corriere.valueOf(ordine.getCorriere());
 			testata.setCorriere(corriere.getNome());
 		} catch (Exception e) {
-			logger.info("(Legacy) Il corriere " + ordine.getCorriere() + " non è stato trovato. L'ordine verra comunque importato.");
+			logger.info("(Legacy) Il corriere " + ordine.getCorriere() + " non è stato trovato. L'ordine " + ordine.getRiferimentoOrdine() + " verrà comunque importato.");
 		}
 		//Documento
 		String nrDoc = ordine.getRiferimentoDocumento();
@@ -299,6 +433,7 @@ public class ControllerOrdiniSQLServer extends Dao implements IControllerModel<M
 			testata.setNrDoc(nrDoc);
 			testata.setDataDoc(new Timestamp(ordine.getDataDocumento() != null ? ordine.getDataDocumento().getTime() : dataOrdine.getTime()));
 			testata.setTipoDoc(tipoDocumento == null || tipoDocumento.isEmpty() ? "ORDINE" : tipoDocumento);
+			testata.setAnnodoc(now.get(Calendar.YEAR));
 		}		
 		if (ordine.getDataConsegna() != null) {
 			testata.setDataConsegna(new Timestamp(ordine.getDataConsegna().getTime()));
@@ -306,7 +441,7 @@ public class ControllerOrdiniSQLServer extends Dao implements IControllerModel<M
 		//Contrassegno, se presente
 		MContrassegno contrassegno = ordine.getContrassegno();
 		if (contrassegno != null) {
-			testata.setTipoIncasso(contrassegno.getTipo());
+			testata.setTipoIncasso(contrassegno.getTipo().name());
 			testata.setValContrassegno(contrassegno.getValore());
 		} else {
 			testata.setTipoIncasso(" ");
@@ -334,6 +469,7 @@ public class ControllerOrdiniSQLServer extends Dao implements IControllerModel<M
 			ArtiBar matchBarcode = ottieniBarcodeDaIDUnivoco(prodotto.getChiavelegacy());
 			if (match != null && matchBarcode != null) {
 				RighiOrdine riga = new RighiOrdine();
+				riga.setIdArticolo(match.getIdArticolo());
 				riga.setNrLista(ordine.getNrLista());
 				riga.setDataOrdine(ordine.getDataOrdine());
 				riga.setCodiceArticolo(match.getCodArtStr());
@@ -352,6 +488,7 @@ public class ControllerOrdiniSQLServer extends Dao implements IControllerModel<M
 				riga.setNoteCliente(prodotto.getNote());
 				riga.setCodBarre(match.getCodBarre());
 				riga.setTipoord(ordine.getTipoOrdine());
+				riga.setNrOrdine(ordine.getRifOrdineCli());
 				inserisciInformazioniAggiuntiveRigo(model, riga);
 				righe.add(riga);
 			}
@@ -360,55 +497,33 @@ public class ControllerOrdiniSQLServer extends Dao implements IControllerModel<M
 	
 	protected void ottieniSaldiEMovimenti(List<MagaSd> saldiDaInserire, List<MagaSd> saldiDaAggiornare, List<MagaMov> movimenti, TestataOrdini testata, MOrdine ordine) {
 		for (ProdottoOrdinato prodotto : ordine.getProdotti()) {
-			int esistenza;
+			//int esistenza;
 			int disponibilita;
 			int impegnato;
-			MagaSd matchSaldi = ottieniSaldoDaIDUnivocoEMagazzino(prodotto.getChiavelegacy(), prodotto.getMagazzinoLTC());
-			if (matchSaldi != null) {
-				esistenza = matchSaldi.getEsistenza();
-				disponibilita = matchSaldi.getDisponibile() - prodotto.getQuantita();
-				impegnato = matchSaldi.getImpegnato() + prodotto.getQuantita();
-				matchSaldi.setDisponibile(disponibilita);
-				matchSaldi.setImpegnato(impegnato);
-				inserisciInformazioniAggiuntiveSaldi(ordine, matchSaldi);
-				saldiDaAggiornare.add(matchSaldi);
+			MagaSd saldo = ottieniSaldoDaIDUnivocoEMagazzino(prodotto.getChiavelegacy(), prodotto.getMagazzinoLTC());
+			if (saldo != null) {
+				//esistenza = saldo.getEsistenza();
+				disponibilita = saldo.getDisponibile() - prodotto.getQuantita();
+				impegnato = saldo.getImpegnato() + prodotto.getQuantita();
+				saldo.setDisponibile(disponibilita);
+				saldo.setImpegnato(impegnato);
+				inserisciInformazioniAggiuntiveSaldi(ordine, saldo);
+				saldiDaAggiornare.add(saldo);
 			} else {
-				esistenza = 0;
+				//esistenza = 0;
 				disponibilita = 0 - prodotto.getQuantita();
 				impegnato = prodotto.getQuantita();
-				MagaSd nuovoSaldo = new MagaSd();
-				nuovoSaldo.setCodMaga(prodotto.getMagazzinoLTC());
-				nuovoSaldo.setDisponibile(disponibilita);
-				nuovoSaldo.setImpegnato(impegnato);
-				nuovoSaldo.setEsistenza(0);
-				nuovoSaldo.setIdUniArticolo(prodotto.getChiavelegacy());
-				inserisciInformazioniAggiuntiveSaldi(ordine, nuovoSaldo);
-				saldiDaInserire.add(nuovoSaldo);
+				saldo = new MagaSd();
+				saldo.setCodMaga(prodotto.getMagazzinoLTC());
+				saldo.setDisponibile(disponibilita);
+				saldo.setImpegnato(impegnato);
+				saldo.setEsistenza(0);
+				saldo.setIdUniArticolo(prodotto.getChiavelegacy());
+				inserisciInformazioniAggiuntiveSaldi(ordine, saldo);
+				saldiDaInserire.add(saldo);
 			}
 			// Movimenti
-			MagaMov movimento = new MagaMov();
-			movimento.setCausale("IOS");
-			movimento.setCodMaga(prodotto.getMagazzinoLTC());
-			movimento.setDocData(testata.getDataOrdine());
-			movimento.setDataMovMag(testata.getDataOrdine());
-			movimento.setOraMovMag(0);
-			movimento.setDocCat("O");
-			movimento.setDocTipo("ORD");
-			movimento.setDocNr(testata.getNrLista());
-			movimento.setDocNote("IMPEGNATO DA ORDINE CLIENTE");
-			movimento.setQuantita(prodotto.getQuantita());
-			movimento.setSegno("+");
-			movimento.setTipo("IP");
-			movimento.setUtente("WS");
-			movimento.setSegnoEsi("N");
-			movimento.setSegnoImp("+");
-			movimento.setSegnoDis("-");
-			movimento.setIncTotali("NO");
-			movimento.setEsistenzamov(esistenza);
-			movimento.setDisponibilemov(disponibilita);
-			movimento.setImpegnatomov(impegnato);
-			movimento.setIdUniArticolo(prodotto.getChiavelegacy());
-			movimento.setIDdocum(testata.getIdTestaSped());
+			MagaMov movimento = daoMovimenti.getNuovoMovimento(CausaliMovimento.IOS, testata.getNrLista(), testata.getIdTestaSped(), testata.getDataOrdine(), saldo, prodotto.getChiavelegacy(), prodotto.getMagazzinoLTC(), prodotto.getQuantita());
 			inserisciInformazioniAggiuntiveMovimenti(ordine, movimento);
 			movimenti.add(movimento);
 		}
@@ -419,9 +534,13 @@ public class ControllerOrdiniSQLServer extends Dao implements IControllerModel<M
 		// Inserisco o recupero il destinatario dell'ordine.
 		Destinatari destinatario = ottieniDestinatario(ordine.getDestinatario());
 		// Aggiungo altre info specifiche del cliente, se necessario.
-		inserisciInformazioniAggiuntiveIndirizzo(ordine, destinatario);
+		inserisciInformazioniAggiuntiveDestinatario(ordine, destinatario);
+		// Inserisco o recupero il mittente dell'ordine
+		MittentiOrdine mittente = ottieniMittente(ordine.getMittente());
+		// Aggiungo altre info specifiche del mittente, se necessario.
+		inserisciInformazioniAggiuntiveMittente(ordine, mittente);
 		//Ottengo le info sull'ordine
-		TestataOrdini testata = ottieniTestata(ordine, destinatario);
+		TestataOrdini testata = ottieniTestata(ordine, destinatario, mittente);
 		//Informazioni aggiuntive specifiche del cliente, se necessario
 		inserisciInformazioniAggiuntiveTestata(ordine, testata);
 		//Preparo le liste che conterrano le righe, i saldi e i movimenti da scrivere nel DB
@@ -443,6 +562,7 @@ public class ControllerOrdiniSQLServer extends Dao implements IControllerModel<M
 			for (RighiOrdine riga : righe) {
 				riga.setIdTestataOrdine(testata.getIdTestaSped());
 				riga.setNrLista(testata.getNrLista());
+				riga.setRagstampe1(testata.getNrLista());
 				em.persist(riga);
 			}
 			//Saldi e movimenti
@@ -456,6 +576,8 @@ public class ControllerOrdiniSQLServer extends Dao implements IControllerModel<M
 				em.merge(s);
 			}
 			for (MagaMov movimento : movimenti) {
+				movimento.setDocNr(testata.getNrLista());
+				movimento.setIDdocum(testata.getIdTestaSped());
 				em.persist(movimento);
 			}
 			t.commit();
@@ -525,10 +647,22 @@ public class ControllerOrdiniSQLServer extends Dao implements IControllerModel<M
 	 * 
 	 * @param ordine
 	 * @param indirizzo
-	 * @return true se si può procedere con la scrittura su DB, false
-	 *         altrimenti.
+	 * @return true se si può procedere con la scrittura su DB, false altrimenti.
 	 */
-	public boolean inserisciInformazioniAggiuntiveIndirizzo(MOrdine ordine, Destinatari indirizzo) {
+	public boolean inserisciInformazioniAggiuntiveDestinatario(MOrdine ordine, Destinatari indirizzo) {
+		// DA ESTENDERE.
+		return true;
+	}
+	
+	/**
+	 * Da sovrascrivere nel caso in cui devono essere inserite informazioni
+	 * addizionali nell'indirizzo del mittente
+	 * 
+	 * @param ordine
+	 * @param indirizzo
+	 * @return true se si può procedere con la scrittura su DB, false altrimenti.
+	 */
+	public boolean inserisciInformazioniAggiuntiveMittente(MOrdine ordine, MittentiOrdine indirizzo) {
 		// DA ESTENDERE.
 		return true;
 	}
@@ -559,6 +693,20 @@ public class ControllerOrdiniSQLServer extends Dao implements IControllerModel<M
 	public boolean inserisciInformazioniAggiuntiveMovimenti(MOrdine ordine, MagaMov movimenti) {
 		// DA ESTENDERE.
 		return true;
+	}
+	
+	/**
+	 * Sposta il file selezionato nella cartella specificata.
+	 * @param file il file da spostare.
+	 * @param pathCartella la cartella di destinazione.
+	 */
+	protected void spostaFile(File file, String pathCartella) {
+		String nomeFile = file.getName();
+		File fileDaSpostare = new File(pathCartella + nomeFile);
+		boolean spostato = file.renameTo(fileDaSpostare);
+		if (spostato) {
+			logger.info("Spostato il file '" + nomeFile + "' in '" + pathCartella + "'");
+		}
 	}
 
 }

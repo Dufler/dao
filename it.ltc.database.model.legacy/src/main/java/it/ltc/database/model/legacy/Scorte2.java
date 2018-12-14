@@ -33,7 +33,7 @@ public class Scorte2 implements Serializable {
 	@Column(name="Collo", length=15)
 	private String collo;
 
-	@Column(length=50)
+	@Column(nullable=false, length=15, columnDefinition="varchar(15)")
 	private String iduniarticolo;
 
 	/**
@@ -45,7 +45,7 @@ public class Scorte2 implements Serializable {
 	/**
 	 * La quantità non ubicata presente all'interno del collo non ubicato.
 	 */
-	@Column(name="Quantita")
+	@Column(name="Quantita", nullable=false)
 	private int quantita;
 
 	@Column(name="SessioneLavoro", nullable=false, length=50)

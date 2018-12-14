@@ -27,7 +27,7 @@ public class Scorte implements Serializable {
 	@Column(name="IdScorta", unique=true, nullable=false)
 	private int idScorta;
 
-	@Column(length=2)
+	@Column(length=2, columnDefinition="char(2)")
 	private String area;
 
 	/**
@@ -36,22 +36,22 @@ public class Scorte implements Serializable {
 	@Column(name="BarcodeCassa", length=50)
 	private String barcodeCassa;
 
-	@Column(length=2)
+	@Column(length=2, columnDefinition="char(2)")
 	private String box;
 
 	/**
 	 * Se ce l'ho ubicato metto blank altrimenti metto il numero del collo non ubicato e scrivo un record su scorte2.
 	 */
-	@Column(length=15)
+	@Column(name="collonoubi", length=15, columnDefinition="varchar(15)")
 	private String collonoubi;
 
-	@Column(name="Corsia", length=3)
+	@Column(name="Corsia", length=3, columnDefinition="char(3)")
 	private String corsia;
 
 //	@Column(name="DataCreazione")
-//	private Timestamp dataCreazione;
+//	private Date dataCreazione;
 
-	@Column(length=50)
+	@Column(nullable=false, length=15, columnDefinition="varchar(15)")
 	private String iduniarticolo;
 
 //	@Column(name="IndicePercorrenza")
@@ -72,7 +72,7 @@ public class Scorte implements Serializable {
 	/**
 	 * Quando non lo trovo metto null qui e blank su area, box, ...
 	 */
-	@Column(name="KeyUbicPre", length=50)
+	@Column(name="KeyUbicPre", length=20)
 	private String keyUbicPre;
 
 	@Column(length=4)
@@ -90,17 +90,19 @@ public class Scorte implements Serializable {
 	@Column(name="Note", length=50)
 	private String note;
 
-	@Column(length=2)
+	@Column(length=2, columnDefinition="char(2)")
 	private String piano;
 
 	/**
 	 * La quantità che non è ubicata.
 	 */
+	@Column(name="qtanoubic", nullable=false)
 	private int qtanoubic;
 
 	/**
 	 * La quantità disponibile su quella determinata ubicazione
 	 */
+	@Column(name="qtascorta", nullable=false)
 	private int qtascorta;
 
 	/**
@@ -109,7 +111,7 @@ public class Scorte implements Serializable {
 	@Column(name="Quantita")
 	private int quantita;
 
-	@Column(length=3)
+	@Column(length=3, columnDefinition="char(3)")
 	private String scaffale;
 
 	@Column(name="SessioneLavoro", nullable=false, length=50)
@@ -184,11 +186,11 @@ public class Scorte implements Serializable {
 		this.corsia = corsia;
 	}
 
-//	public Timestamp getDataCreazione() {
+//	public Date getDataCreazione() {
 //		return this.dataCreazione;
 //	}
 //
-//	public void setDataCreazione(Timestamp dataCreazione) {
+//	public void setDataCreazione(Date dataCreazione) {
 //		this.dataCreazione = dataCreazione;
 //	}
 

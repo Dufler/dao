@@ -1,5 +1,6 @@
 package it.ltc.database.dao;
 
+import java.util.LinkedList;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -9,6 +10,8 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
 import org.apache.log4j.Logger;
+
+import it.ltc.database.dao.CondizioneWhere.Condizione;
 
 /**
  * Dao per leggere dal DB.
@@ -42,6 +45,8 @@ public class ReadOnlyDao<T> extends Dao {
 			lista = em.createQuery(criteria).getResultList();
 		} catch (Exception e) {
 			logger.error(e);
+			for (StackTraceElement element : e.getStackTrace())
+				logger.error(element);
 			lista = null;
 		} finally {
 			em.close();
@@ -60,11 +65,17 @@ public class ReadOnlyDao<T> extends Dao {
 			CriteriaBuilder cb = em.getCriteriaBuilder();
 	        CriteriaQuery<T> criteria = cb.createQuery(c);
 	        Root<T> member = criteria.from(c);
-	        criteria.select(member).where(getConditions(conditions, cb, member));
+	        if (conditions.isEmpty()) {
+	        	criteria.select(member);
+	        } else {
+	        	criteria.select(member).where(getConditions(conditions, cb, member));
+	        }	        
 	        List<T> lista = em.createQuery(criteria).getResultList();
 			entity = lista.size() == 1 ? lista.get(0) : null;
 		} catch (Exception e) {
 			logger.error(e);
+			for (StackTraceElement element : e.getStackTrace())
+				logger.error(element);
 			entity = null;
 		} finally {
 			em.close();
@@ -83,11 +94,17 @@ public class ReadOnlyDao<T> extends Dao {
 			CriteriaBuilder cb = em.getCriteriaBuilder();
 	        CriteriaQuery<T> criteria = cb.createQuery(c);
 	        Root<T> member = criteria.from(c);
-	        criteria.select(member).where(getConditions(conditions, cb, member));
+	        if (conditions.isEmpty()) {
+	        	criteria.select(member);
+	        } else {
+	        	criteria.select(member).where(getConditions(conditions, cb, member));
+	        }	        
 	        List<T> lista = em.createQuery(criteria).getResultList();
 			entity = lista.isEmpty() ? null : lista.get(0);
 		} catch (Exception e) {
 			logger.error(e);
+			for (StackTraceElement element : e.getStackTrace())
+				logger.error(element);
 			entity = null;
 		} finally {
 			em.close();
@@ -106,10 +123,16 @@ public class ReadOnlyDao<T> extends Dao {
 			CriteriaBuilder cb = em.getCriteriaBuilder();
 	        CriteriaQuery<T> criteria = cb.createQuery(c);
 	        Root<T> member = criteria.from(c);
-	        criteria.select(member).where(getConditions(conditions, cb, member));
+	        if (conditions.isEmpty()) {
+	        	criteria.select(member);
+	        } else {
+	        	criteria.select(member).where(getConditions(conditions, cb, member));
+	        }
 			lista = em.createQuery(criteria).getResultList();
 		} catch (Exception e) {
 			logger.error(e);
+			for (StackTraceElement element : e.getStackTrace())
+				logger.error(element);
 			lista = null;
 		} finally {
 			em.close();
@@ -128,10 +151,16 @@ public class ReadOnlyDao<T> extends Dao {
 			CriteriaBuilder cb = em.getCriteriaBuilder();
 	        CriteriaQuery<T> criteria = cb.createQuery(c);
 	        Root<T> member = criteria.from(c);
-	        criteria.select(member).where(getConditions(conditions, cb, member));
+	        if (conditions.isEmpty()) {
+	        	criteria.select(member);
+	        } else {
+	        	criteria.select(member).where(getConditions(conditions, cb, member));
+	        }
 			lista = em.createQuery(criteria).setMaxResults(maxResults).getResultList();
 		} catch (Exception e) {
 			logger.error(e);
+			for (StackTraceElement element : e.getStackTrace())
+				logger.error(element);
 			lista = null;
 		} finally {
 			em.close();
@@ -140,24 +169,67 @@ public class ReadOnlyDao<T> extends Dao {
 	}
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	protected Predicate[] getConditions(List<CondizioneWhere> conditions, CriteriaBuilder cb, Root<T> member) {
-		Predicate[] predicates = new Predicate[conditions.size()];
-		int index = 0;
+	protected Predicate getConditions(List<CondizioneWhere> conditions, CriteriaBuilder cb, Root<T> member) {
+		List<Predicate> predicatesAnd = new LinkedList<>();
+		List<Predicate> predicatesOr = new LinkedList<>();
 		for (CondizioneWhere condizione : conditions) {
+			Predicate predicate;
 			switch (condizione.getOperatore()) {
-				case EQUAL : predicates[index] = cb.equal(member.get(condizione.getColonna()), condizione.getValore()); break;
-				case LIKE : predicates[index] = cb.like(member.get(condizione.getColonna()), "%" + condizione.getValore().toString() + "%"); break;
-				case START_WITH : predicates[index] = cb.like(member.get(condizione.getColonna()), condizione.getValore().toString() + "%"); break;
-				case END_WITH : predicates[index] = cb.like(member.get(condizione.getColonna()), "%" + condizione.getValore().toString()); break;
-				case GREATER : predicates[index] = cb.greaterThan(member.get(condizione.getColonna()), (Comparable) condizione.getValore()); break;
-				case GREATER_OR_EQUAL : predicates[index] = cb.greaterThanOrEqualTo(member.get(condizione.getColonna()), (Comparable) condizione.getValore()); break;
-				case LESSER : predicates[index] = cb.lessThan(member.get(condizione.getColonna()), (Comparable) condizione.getValore()); break;
-				case LESSER_OR_EQUAL : predicates[index] = cb.lessThanOrEqualTo(member.get(condizione.getColonna()), (Comparable) condizione.getValore()); break;
+				case EQUAL : predicate = cb.equal(member.get(condizione.getColonna()), condizione.getValore()); break;
+				case LIKE : predicate = cb.like(member.get(condizione.getColonna()), "%" + condizione.getValore().toString() + "%"); break;
+				case START_WITH : predicate = cb.like(member.get(condizione.getColonna()), condizione.getValore().toString() + "%"); break;
+				case END_WITH : predicate = cb.like(member.get(condizione.getColonna()), "%" + condizione.getValore().toString()); break;
+				case GREATER : predicate = cb.greaterThan(member.get(condizione.getColonna()), (Comparable) condizione.getValore()); break;
+				case GREATER_OR_EQUAL : predicate = cb.greaterThanOrEqualTo(member.get(condizione.getColonna()), (Comparable) condizione.getValore()); break;
+				case LESSER : predicate = cb.lessThan(member.get(condizione.getColonna()), (Comparable) condizione.getValore()); break;
+				case LESSER_OR_EQUAL : predicate = cb.lessThanOrEqualTo(member.get(condizione.getColonna()), (Comparable) condizione.getValore()); break;
+				case NULL : predicate = cb.isNull(member.get(condizione.getColonna())); break;
+				case NOT_NULL : predicate = cb.isNotNull(member.get(condizione.getColonna())); break;
+				default : predicate = null;
 			}
-			index++;
+			if (predicate != null)
+			if (condizione.getCondizione() == Condizione.AND) predicatesAnd.add(predicate); else predicatesOr.add(predicate);
 		}
-		return predicates;
+		Predicate predicate = null;
+		if (!predicatesAnd.isEmpty()) {
+			Predicate[] predicates = new Predicate[predicatesAnd.size()];
+			predicates = predicatesAnd.toArray(predicates);
+			predicate = cb.and(predicates);
+		}
+		if (!predicatesOr.isEmpty()) {
+			Predicate[] predicates = new Predicate[predicatesOr.size()];
+			predicates = predicatesOr.toArray(predicates);
+			if (predicate == null) {
+				predicate = cb.or(predicates);
+			} else {
+				Predicate predicateOr = cb.or(predicates);
+				predicate = cb.and(predicate, predicateOr);
+			}
+		}
+		return predicate;
 	}
+	
+//	@SuppressWarnings({ "unchecked", "rawtypes" })
+//	protected Predicate[] getConditions(List<CondizioneWhere> conditions, CriteriaBuilder cb, Root<T> member) {
+//		Predicate[] predicates = new Predicate[conditions.size()];
+//		int index = 0;
+//		for (CondizioneWhere condizione : conditions) {
+//			switch (condizione.getOperatore()) {
+//				case EQUAL : predicates[index] = cb.equal(member.get(condizione.getColonna()), condizione.getValore()); break;
+//				case LIKE : predicates[index] = cb.like(member.get(condizione.getColonna()), "%" + condizione.getValore().toString() + "%"); break;
+//				case START_WITH : predicates[index] = cb.like(member.get(condizione.getColonna()), condizione.getValore().toString() + "%"); break;
+//				case END_WITH : predicates[index] = cb.like(member.get(condizione.getColonna()), "%" + condizione.getValore().toString()); break;
+//				case GREATER : predicates[index] = cb.greaterThan(member.get(condizione.getColonna()), (Comparable) condizione.getValore()); break;
+//				case GREATER_OR_EQUAL : predicates[index] = cb.greaterThanOrEqualTo(member.get(condizione.getColonna()), (Comparable) condizione.getValore()); break;
+//				case LESSER : predicates[index] = cb.lessThan(member.get(condizione.getColonna()), (Comparable) condizione.getValore()); break;
+//				case LESSER_OR_EQUAL : predicates[index] = cb.lessThanOrEqualTo(member.get(condizione.getColonna()), (Comparable) condizione.getValore()); break;
+//				case NULL : predicates[index] = cb.isNull(member.get(condizione.getColonna())); break;
+//				case NOT_NULL : predicates[index] = cb.isNotNull(member.get(condizione.getColonna())); break;
+//			}
+//			index++;
+//		}
+//		return predicates;
+//	}
 	
 	/**
 	 * Restituisce tutte le entity esistenti che hanno una certa proprietà.
@@ -174,6 +246,8 @@ public class ReadOnlyDao<T> extends Dao {
 			lista = em.createQuery(criteria).getResultList();
 		} catch (Exception e) {
 			logger.error(e);
+			for (StackTraceElement element : e.getStackTrace())
+				logger.error(element);
 			lista = null;
 		} finally {
 			em.close();
@@ -198,6 +272,8 @@ public class ReadOnlyDao<T> extends Dao {
 			entity = lista.isEmpty() ? null : lista.get(0);
 		} catch (Exception e) {
 			logger.error(e);
+			for (StackTraceElement element : e.getStackTrace())
+				logger.error(element);
 			entity = null;
 		} finally {
 			em.close();
@@ -222,6 +298,8 @@ public class ReadOnlyDao<T> extends Dao {
 			entity = lista.size() == 1 ? lista.get(0) : null;
 		} catch (Exception e) {
 			logger.error(e);
+			for (StackTraceElement element : e.getStackTrace())
+				logger.error(element);
 			entity = null;
 		} finally {
 			em.close();
@@ -241,6 +319,8 @@ public class ReadOnlyDao<T> extends Dao {
 			entity = em.find(c, id);
 		} catch (Exception e) {
 			logger.error(e);
+			for (StackTraceElement element : e.getStackTrace())
+				logger.error(element);
 			entity = null;
 		} finally {
 			em.close();

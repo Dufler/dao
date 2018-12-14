@@ -1,10 +1,16 @@
 package it.ltc.database.model.legacy;
 
 import java.io.Serializable;
-import javax.persistence.*;
-import java.math.BigDecimal;
-import java.sql.Timestamp;
 import java.util.Date;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
+import javax.persistence.Table;
 
 
 /**
@@ -36,8 +42,8 @@ public class Articoli implements Serializable {
 	@Column(name="ArtL")
 	private Integer artL;
 
-	@Column(name="ArtPeso")
-	private BigDecimal artPeso;
+	@Column(name="ArtPeso", columnDefinition="money")
+	private Double artPeso;
 
 	@Column(name="ArtZ")
 	private Integer artZ;
@@ -45,67 +51,79 @@ public class Articoli implements Serializable {
 //	@Column(name="Associato", nullable=false, length=2, insertable=false)
 //	private String associato;
 
-	@Column(name="BarraEAN", length=50)
+	@Column(name="BarraEAN", length=50, columnDefinition="varchar(50)")
 	private String barraEAN;
 
-	@Column(name="BarraUPC", length=50)
+	@Column(name="BarraUPC", length=50, columnDefinition="varchar(50)")
 	private String barraUPC;
+	
+	@Column(name="Cassa", nullable=false, length=10, columnDefinition="varchar(10)")
+	private String cassa;
 
-	@Column(name="Categoria", nullable=false, length=150)
+	/**
+	 * Default a 'NONVALORIZZATO'
+	 */
+	@Column(name="Categoria", nullable=false, length=50, columnDefinition="varchar(50)")
 	private String categoria;
 
-	@Column(name="CatMercDett", length=50)
+	@Column(name="CatMercDett", length=50, columnDefinition="varchar(50)")
 	private String catMercDett;
 
-	@Column(name="CatMercGruppo", nullable=false, length=50)
+	@Column(name="CatMercGruppo", nullable=false, length=50, columnDefinition="varchar(50)")
 	private String catMercGruppo;
 
 //	@Column(name="CodArtInt")
 //	private int codArtInt;
 
-	@Column(name="CodArtOld", length=100)
+	@Column(name="CodArtOld", length=50, columnDefinition="varchar(50)")
 	private String codArtOld;
 
-	@Column(name="CodArtStr", nullable=false, length=100)
+	@Column(name="CodArtStr", nullable=false, length=50, columnDefinition="varchar(50)")
 	private String codArtStr;
 
-	@Column(name="CodBarre", nullable=false, length=50)
+	@Column(name="CodBarre", nullable=false, length=50, columnDefinition="varchar(50)")
 	private String codBarre;
 
 //	@Column(name="Collezione", length=1)
 //	private String collezione;
 
-	@Column(name="Colore", length=40)
+	@Column(name="Colore", length=50, columnDefinition="varchar(50)")
 	private String colore;
 
-	@Column(name="Composizione", nullable=false, length=100)
+	/**
+	 * Default a 'NONVALORIZZATO'
+	 */
+	@Column(name="Composizione", nullable=false, length=100, columnDefinition="varchar(100)")
 	private String composizione;
 
 //	@Column(name="ConfImballo")
 //	private int confImballo;
 
 //	@Column(name="DataAssBarcode")
-//	private Timestamp dataAssBarcode;
+//	private Date dataAssBarcode;
 //
 //	@Column(name="DataAssCategoria")
-//	private Timestamp dataAssCategoria;
+//	private Date dataAssCategoria;
 //
 //	@Column(name="DataAssCompos")
-//	private Timestamp dataAssCompos;
+//	private Date dataAssCompos;
 //
 //	@Column(name="DataInvent")
-//	private Timestamp dataInvent;
+//	private Date dataInvent;
 
-	@Column(name="DataModifica")
-	private Timestamp dataModifica;
+	/**
+	 * Viene aggiornata automaticamente dal trigger alla modifica.
+	 */
+	@Column(name="DataModifica", nullable=false, columnDefinition="datetime")
+	private Date dataModifica;
 
 //	@Column(name="Desc_Colore", length=100)
 //	private String desc_Colore;
 
-	@Column(name="DescAggiuntiva", nullable=false, length=100)
+	@Column(name="DescAggiuntiva", nullable=false, length=100, columnDefinition="varchar(100)")
 	private String descAggiuntiva;
 
-	@Column(name="Descrizione", nullable=false, length=100)
+	@Column(name="Descrizione", nullable=false, length=100, columnDefinition="varchar(100)")
 	private String descrizione;
 
 //	@Column(name="DescrizioneAgg", columnDefinition="NVARCHAR")
@@ -121,12 +139,12 @@ public class Articoli implements Serializable {
 //	private int esistenza;
 //
 //	@Column(name="FinePromo")
-//	private Timestamp finePromo;
+//	private Date finePromo;
 
 //	@Column(name="IdAttCliente")
 //	private int idAttCliente;
 
-	@Column(name="IdUniArticolo", nullable=false, length=15)
+	@Column(name="IdUniArticolo", nullable=false, length=15, columnDefinition="varchar(15)")
 	private String idUniArticolo;
 
 //	@Column(name="ImbH")
@@ -148,12 +166,15 @@ public class Articoli implements Serializable {
 //	private int impegnato;
 //
 //	@Column(name="IniPromo")
-//	private Timestamp iniPromo;
+//	private Date iniPromo;
 
-	@Column(name="Linea", nullable=false, length=50)
+	@Column(name="Linea", nullable=false, length=50, columnDefinition="varchar(50)")
 	private String linea;
 
-	@Column(name="MadeIn", nullable=false, length=50)
+	/**
+	 * Default a 'NONVALORIZZATO'
+	 */
+	@Column(name="MadeIn", nullable=false, length=50, columnDefinition="varchar(50)")
 	private String madeIn;
 
 //	@Column(name="Marchio")
@@ -162,10 +183,13 @@ public class Articoli implements Serializable {
 //	@Column(length=30)
 //	private String mercpro;
 
-	@Column(name="Modello", nullable=false, length=40)
+	@Column(name="Modello", nullable=false, length=50, columnDefinition="varchar(50)")
 	private String modello;
 
-	@Column(name="Numerata", length=50)
+	/**
+	 * Default a '001'
+	 */
+	@Column(name="Numerata", nullable=false, length=20, columnDefinition="varchar(20)")
 	private String numerata;
 
 //	@Column(name="Obsoleto", nullable=false, length=20, insertable=false)
@@ -183,8 +207,8 @@ public class Articoli implements Serializable {
 //	@Column(name="PesoNetto")
 //	private BigDecimal pesoNetto;
 
-//	@Column(name="PezziCassa")
-//	private int pezziCassa;
+	@Column(name="PezziCassa", nullable=false)
+	private int pezziCassa;
 
 //	@Column(name="PezziCollo", nullable=false, insertable=false)
 //	private int pezziCollo;
@@ -195,7 +219,10 @@ public class Articoli implements Serializable {
 //	@Column(name="Pubb", nullable=false, length=2, insertable=false)
 //	private String pubb;
 
-	@Column(name="QtaConf")
+	/**
+	 * Default a 1
+	 */
+	@Column(name="QtaConf", nullable=false)
 	private int qtaConf;
 
 //	@Column(name="QtaImba", nullable=false, insertable=false)
@@ -216,13 +243,13 @@ public class Articoli implements Serializable {
 //	@Column(name="ScortaMin")
 //	private int scortaMin;
 
-	@Column(name="Stagione", length=30)
+	@Column(name="Stagione", length=30, columnDefinition="varchar(30)")
 	private String stagione;
 
-	@Column(name="Taglia", nullable=false, length=20)
+	@Column(name="Taglia", nullable=false, length=20, columnDefinition="varchar(20)")
 	private String taglia;
 
-	@Column(name="TipoCassa", length=20)
+	@Column(name="TipoCassa", length=20, columnDefinition="varchar(20)")
 	private String tipoCassa;
 
 //	@Column(name="TotIn")
@@ -237,13 +264,13 @@ public class Articoli implements Serializable {
 //	@Column(name="UbiScorta", length=50)
 //	private String ubiScorta;
 
-	@Column(name="Um", length=10)
+	@Column(name="Um", length=10, columnDefinition="varchar(10)")
 	private String um;
 
-	@Column(name="UmPos")
+	@Column(name="UmPos", nullable=false)
 	private int umPos;
 
-	@Column(name="Utente", length=15)
+	@Column(name="Utente", length=50, columnDefinition="varchar(50)")
 	private String utente;
 
 //	@Column(name="ValAcq")
@@ -252,8 +279,8 @@ public class Articoli implements Serializable {
 //	@Column(name="ValPromo")
 //	private BigDecimal valPromo;
 
-	@Column(name="ValVen")
-	private BigDecimal valVen;
+	@Column(name="ValVen", columnDefinition="money")
+	private Double valVen;
 
 //	@Column(name="Vecchia_Numerata", length=20)
 //	private String vecchia_Numerata;
@@ -261,7 +288,7 @@ public class Articoli implements Serializable {
 //	@Column(name="Volume")
 //	private BigDecimal volume;
 	
-	@Column(name="note", length=250)
+	@Column(name="note", length=250, columnDefinition="varchar(250)")
 	private String note;
 
 	public Articoli() {}
@@ -278,15 +305,17 @@ public class Articoli implements Serializable {
 		if (catMercDett == null) catMercDett = "";
 		if (codArtOld == null) codArtOld = "";
 		if (qtaConf <= 0) qtaConf = 1;
+		if (pezziCassa <= 0) pezziCassa = 1;
 		if (um == null) um = "Pz.";
 		if (umPos < 1) umPos = 1;
 		if (numerata == null) numerata = "001";
 		if (utente == null) utente = "SERVIZIO";
+		if (cassa == null || cassa.isEmpty()) cassa = "NO";
 		//Controlli su barcode mancanti, qualcosa ci metto comunque.
 		if (codBarre == null) codBarre = codArtStr;
 		if (barraEAN == null) barraEAN = codBarre;
 		if (barraUPC == null) barraUPC = codBarre;
-		dataModifica = new Timestamp(new Date().getTime());
+		dataModifica = new Date();
 	}
 	
 	/**
@@ -305,7 +334,7 @@ public class Articoli implements Serializable {
 		if (umPos < 1) umPos = 1;
 		if (numerata == null) numerata = "001";
 		if (utente == null) utente = "SERVIZIO";
-		dataModifica = new Timestamp(new Date().getTime());
+		if (cassa == null || cassa.isEmpty()) cassa = "NO";
 	}
 
 	public int getIdArticolo() {
@@ -348,11 +377,11 @@ public class Articoli implements Serializable {
 		this.artL = artL;
 	}
 
-	public BigDecimal getArtPeso() {
+	public Double getArtPeso() {
 		return this.artPeso;
 	}
 
-	public void setArtPeso(BigDecimal artPeso) {
+	public void setArtPeso(Double artPeso) {
 		this.artPeso = artPeso;
 	}
 
@@ -386,6 +415,14 @@ public class Articoli implements Serializable {
 
 	public void setBarraUPC(String barraUPC) {
 		this.barraUPC = barraUPC;
+	}
+
+	public String getCassa() {
+		return cassa;
+	}
+
+	public void setCassa(String cassa) {
+		this.cassa = cassa;
 	}
 
 	public String getCategoria() {
@@ -476,43 +513,43 @@ public class Articoli implements Serializable {
 //		this.confImballo = confImballo;
 //	}
 //
-//	public Timestamp getDataAssBarcode() {
+//	public Date getDataAssBarcode() {
 //		return this.dataAssBarcode;
 //	}
 //
-//	public void setDataAssBarcode(Timestamp dataAssBarcode) {
+//	public void setDataAssBarcode(Date dataAssBarcode) {
 //		this.dataAssBarcode = dataAssBarcode;
 //	}
 //
-//	public Timestamp getDataAssCategoria() {
+//	public Date getDataAssCategoria() {
 //		return this.dataAssCategoria;
 //	}
 //
-//	public void setDataAssCategoria(Timestamp dataAssCategoria) {
+//	public void setDataAssCategoria(Date dataAssCategoria) {
 //		this.dataAssCategoria = dataAssCategoria;
 //	}
 //
-//	public Timestamp getDataAssCompos() {
+//	public Date getDataAssCompos() {
 //		return this.dataAssCompos;
 //	}
 //
-//	public void setDataAssCompos(Timestamp dataAssCompos) {
+//	public void setDataAssCompos(Date dataAssCompos) {
 //		this.dataAssCompos = dataAssCompos;
 //	}
 //
-//	public Timestamp getDataInvent() {
+//	public Date getDataInvent() {
 //		return this.dataInvent;
 //	}
 //
-//	public void setDataInvent(Timestamp dataInvent) {
+//	public void setDataInvent(Date dataInvent) {
 //		this.dataInvent = dataInvent;
 //	}
 
-	public Timestamp getDataModifica() {
+	public Date getDataModifica() {
 		return this.dataModifica;
 	}
 
-	public void setDataModifica(Timestamp dataModifica) {
+	public void setDataModifica(Date dataModifica) {
 		this.dataModifica = dataModifica;
 	}
 
@@ -572,11 +609,11 @@ public class Articoli implements Serializable {
 //		this.esistenza = esistenza;
 //	}
 //
-//	public Timestamp getFinePromo() {
+//	public Date getFinePromo() {
 //		return this.finePromo;
 //	}
 //
-//	public void setFinePromo(Timestamp finePromo) {
+//	public void setFinePromo(Date finePromo) {
 //		this.finePromo = finePromo;
 //	}
 //
@@ -644,11 +681,11 @@ public class Articoli implements Serializable {
 //		this.impegnato = impegnato;
 //	}
 //
-//	public Timestamp getIniPromo() {
+//	public Date getIniPromo() {
 //		return this.iniPromo;
 //	}
 //
-//	public void setIniPromo(Timestamp iniPromo) {
+//	public void setIniPromo(Date iniPromo) {
 //		this.iniPromo = iniPromo;
 //	}
 
@@ -740,13 +777,13 @@ public class Articoli implements Serializable {
 //		this.pesoNetto = pesoNetto;
 //	}
 //
-//	public int getPezziCassa() {
-//		return this.pezziCassa;
-//	}
-//
-//	public void setPezziCassa(int pezziCassa) {
-//		this.pezziCassa = pezziCassa;
-//	}
+	public int getPezziCassa() {
+		return this.pezziCassa;
+	}
+
+	public void setPezziCassa(int pezziCassa) {
+		this.pezziCassa = pezziCassa;
+	}
 //
 //	public int getPezziCollo() {
 //		return this.pezziCollo;
@@ -924,11 +961,11 @@ public class Articoli implements Serializable {
 //		this.valPromo = valPromo;
 //	}
 
-	public BigDecimal getValVen() {
+	public Double getValVen() {
 		return this.valVen;
 	}
 
-	public void setValVen(BigDecimal valVen) {
+	public void setValVen(Double valVen) {
 		this.valVen = valVen;
 	}
 

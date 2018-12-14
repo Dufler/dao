@@ -1,7 +1,7 @@
 package it.ltc.database.model.legacy;
 
 import java.io.Serializable;
-import java.sql.Timestamp;
+import java.util.Date;
 import java.util.GregorianCalendar;
 
 import javax.persistence.Column;
@@ -32,26 +32,26 @@ public class MagaMov implements Serializable {
 	@Column(name="IdMagaMov", unique=true, nullable=false)
 	private int idMagaMov;
 
-	@Column(name="Cancellato", nullable=false, length=2)
+	@Column(name="Cancellato", nullable=false, length=2, columnDefinition="char(2)")
 	private String cancellato;
 
-	@Column(name="Causale", nullable=false, length=3)
+	@Column(name="Causale", nullable=false, length=3, columnDefinition="char(3)")
 	private String causale;
 
-	@Column(name="CodMaga", nullable=false, length=3)
+	@Column(name="CodMaga", nullable=false, length=3, columnDefinition="char(3)")
 	private String codMaga;
 
-	@Column(name="DataMovMag")
-	private Timestamp dataMovMag;
+	@Column(name="DataMovMag", columnDefinition="datetime")
+	private Date dataMovMag;
 
 	@Column(nullable=false)
 	private int disponibilemov;
 
-	@Column(name="DocCat", length=1)
+	@Column(name="DocCat", length=1, columnDefinition="char(1)")
 	private String docCat;
 
-	@Column(name="DocData")
-	private Timestamp docData;
+	@Column(name="DocData", columnDefinition="datetime")
+	private Date docData;
 
 	@Column(name="DocNote", length=50)
 	private String docNote;
@@ -59,25 +59,26 @@ public class MagaMov implements Serializable {
 	@Column(name="DocNr", length=40)
 	private String docNr;
 
-	@Column(name="DocTipo", length=3)
+	@Column(name="DocTipo", length=3, columnDefinition="char(3)")
 	private String docTipo;
 
 	@Column(name="Esistenzamov", nullable=false)
 	private int esistenzamov;
 
-	private Integer IDdocum;
+	@Column(name="IDdocum", nullable=false)
+	private int IDdocum;
 
-	@Column(name="IdUniArticolo", nullable=false, length=25)
+	@Column(name="IdUniArticolo", nullable=false, length=15, columnDefinition="varchar(15)")
 	private String idUniArticolo;
 
 	@Column(nullable=false)
 	private int impegnatomov;
 
-	@Column(name="IncTotali", length=2)
+	@Column(name="IncTotali", length=2, columnDefinition="char(2)")
 	private String incTotali;
 
-	@Column(name="KeyCollo", length=20)
-	private String keyCollo;
+//	@Column(name="KeyCollo", length=20)
+//	private String keyCollo;
 
 	@Column(name="OraMovMag")
 	private int oraMovMag;
@@ -85,28 +86,28 @@ public class MagaMov implements Serializable {
 	@Column(name="Quantita", nullable=false)
 	private int quantita;
 
-	@Column(name="Segno", length=1)
+	@Column(name="Segno", length=1, columnDefinition="char(1)")
 	private String segno;
 
-	@Column(name="SegnoDis", length=1)
+	@Column(name="SegnoDis", length=1, columnDefinition="char(1)")
 	private String segnoDis;
 
-	@Column(name="SegnoEsi", length=1)
+	@Column(name="SegnoEsi", length=1, columnDefinition="char(1)")
 	private String segnoEsi;
 
-	@Column(name="SegnoImp", length=1)
+	@Column(name="SegnoImp", length=1, columnDefinition="char(1)")
 	private String segnoImp;
 
-	@Column(name="Tipo", length=2)
+	@Column(name="Tipo", length=2, columnDefinition="char(2)")
 	private String tipo;
 
 //	@Column(name="TipoCollo", length=3)
 //	private String tipoCollo;
 
-	@Column(nullable=false, length=2)
+	@Column(nullable=false, length=2, columnDefinition="char(2)")
 	private String trasmesso;
 
-	@Column(name="Utente", length=20)
+	@Column(name="Utente", length=50)
 	private String utente;
 
 	public MagaMov() {}
@@ -114,11 +115,11 @@ public class MagaMov implements Serializable {
 	@PrePersist
 	public void prePersist() {
 		GregorianCalendar now = new GregorianCalendar();
-		dataMovMag = new Timestamp(now.getTimeInMillis());
+		dataMovMag = new Date(now.getTimeInMillis());
 		oraMovMag = DateConverter.getOraComeIntero(dataMovMag);
 		dataMovMag = DateConverter.ripulisciTimestap(dataMovMag);
 		docData = DateConverter.ripulisciTimestap(dataMovMag);
-		if (keyCollo == null) keyCollo = "0000000000";
+		//if (keyCollo == null) keyCollo = "0000000000";
 		if (trasmesso == null) trasmesso = "NO";
 		if (cancellato == null) cancellato = "NO";
 		if (utente == null) utente = "SERVIZIO";
@@ -126,7 +127,7 @@ public class MagaMov implements Serializable {
 	
 	@PreUpdate
 	public void preUpdate() {
-		if (keyCollo == null) keyCollo = "0000000000";
+		//if (keyCollo == null) keyCollo = "0000000000";
 		if (trasmesso == null) trasmesso = "NO";
 		if (cancellato == null) cancellato = "NO";
 		if (utente == null) utente = "SERVIZIO";
@@ -164,11 +165,11 @@ public class MagaMov implements Serializable {
 		this.codMaga = codMaga;
 	}
 
-	public Timestamp getDataMovMag() {
+	public Date getDataMovMag() {
 		return this.dataMovMag;
 	}
 
-	public void setDataMovMag(Timestamp dataMovMag) {
+	public void setDataMovMag(Date dataMovMag) {
 		this.dataMovMag = dataMovMag;
 	}
 
@@ -188,11 +189,11 @@ public class MagaMov implements Serializable {
 		this.docCat = docCat;
 	}
 
-	public Timestamp getDocData() {
+	public Date getDocData() {
 		return this.docData;
 	}
 
-	public void setDocData(Timestamp docData) {
+	public void setDocData(Date docData) {
 		this.docData = docData;
 	}
 
@@ -228,11 +229,11 @@ public class MagaMov implements Serializable {
 		this.esistenzamov = esistenzamov;
 	}
 
-	public Integer getIDdocum() {
+	public int getIDdocum() {
 		return this.IDdocum;
 	}
 
-	public void setIDdocum(Integer IDdocum) {
+	public void setIDdocum(int IDdocum) {
 		this.IDdocum = IDdocum;
 	}
 
@@ -260,13 +261,13 @@ public class MagaMov implements Serializable {
 		this.incTotali = incTotali;
 	}
 
-	public String getKeyCollo() {
-		return this.keyCollo;
-	}
-
-	public void setKeyCollo(String keyCollo) {
-		this.keyCollo = keyCollo;
-	}
+//	public String getKeyCollo() {
+//		return this.keyCollo;
+//	}
+//
+//	public void setKeyCollo(String keyCollo) {
+//		this.keyCollo = keyCollo;
+//	}
 
 	public int getOraMovMag() {
 		return this.oraMovMag;

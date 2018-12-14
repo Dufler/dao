@@ -19,13 +19,13 @@ public class Fornitori implements Serializable {
 	@Column(name="IdFornitore", unique=true, nullable=false)
 	private int idFornitore;
 
-	@Column(name="Cap", length=15)
+	@Column(name="Cap", length=10)
 	private String cap;
 
 //	@Column(length=50)
 //	private String capc;
 
-	@Column(name="Citta", length=30)
+	@Column(name="Citta", length=50)
 	private String citta;
 
 //	@Column(length=50)
@@ -40,16 +40,16 @@ public class Fornitori implements Serializable {
 //	@Column(name="CodiceDest", length=50)
 //	private String codiceDest;
 
-	@Column(name="CodiceFornitore", length=20)
+	@Column(name="CodiceFornitore", length=20, nullable=false)
 	private String codiceFornitore;
 
-	@Column(length=50)
+	@Column(length=3, nullable=false)
 	private String codnaz;
 
 //	@Column(length=50)
 //	private String codnazc;
 
-	@Column(length=30)
+	@Column(length=100)
 	private String EMail;
 
 	@Column(name="Fax", length=20)
@@ -79,7 +79,7 @@ public class Fornitori implements Serializable {
 //	@Column(name="RagC", length=50)
 //	private String ragC;
 
-	@Column(name="RagSoc", length=50)
+	@Column(name="RagSoc", length=50, nullable=false)
 	private String ragSoc;
 
 	@Column(name="Tel", length=20)

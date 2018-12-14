@@ -1,6 +1,5 @@
 package it.ltc.database.dao.legacy;
 
-import java.sql.Timestamp;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
@@ -9,6 +8,7 @@ import it.ltc.database.dao.CRUDDao;
 import it.ltc.database.dao.CondizioneWhere;
 import it.ltc.database.model.legacy.MagaMov;
 import it.ltc.database.model.legacy.MagaSd;
+import it.ltc.database.model.legacy.PakiTesta;
 import it.ltc.database.model.legacy.model.CausaliMovimento;
 
 public class MagaMovDao extends CRUDDao<MagaMov> {
@@ -48,7 +48,7 @@ public class MagaMovDao extends CRUDDao<MagaMov> {
 		oldEntity.setIdUniArticolo(entity.getIdUniArticolo());
 		oldEntity.setImpegnatomov(entity.getImpegnatomov());
 		oldEntity.setIncTotali(entity.getIncTotali());
-		oldEntity.setKeyCollo(entity.getKeyCollo());
+//		oldEntity.setKeyCollo(entity.getKeyCollo());
 		oldEntity.setQuantita(entity.getQuantita());
 		oldEntity.setSegno(entity.getSegno());
 		oldEntity.setSegnoDis(entity.getSegnoDis());
@@ -59,8 +59,11 @@ public class MagaMovDao extends CRUDDao<MagaMov> {
 		oldEntity.setUtente(entity.getUtente());
 	}
 
-	public List<MagaMov> trovaMovimentiCarico(String riferimentoCarico) {
-		List<MagaMov> entities = findAllEqualTo("docNr", riferimentoCarico);
+	public List<MagaMov> trovaMovimentiCarico(PakiTesta carico) {
+		List<CondizioneWhere> conditions = new LinkedList<>();
+		conditions.add(new CondizioneWhere("docNr", carico.getNrPaki()));
+		conditions.add(new CondizioneWhere("IDdocum", carico.getIdTestaPaki()));
+		List<MagaMov> entities = findAll(conditions);
 		return entities;
 	}
 	
@@ -87,7 +90,7 @@ public class MagaMovDao extends CRUDDao<MagaMov> {
 		MagaMov movimento = new MagaMov();
 		movimento.setCausale(causale.name());
 		movimento.setDocNr(riferimentoDocumento);
-		movimento.setDocData(new Timestamp(dataDocumento.getTime()));
+		movimento.setDocData(dataDocumento);
 		movimento.setIDdocum(idDocumento);
 		movimento.setDocCat(causale.getCategoriaDocumento());
 		movimento.setDocNote(causale.getDescrizione());

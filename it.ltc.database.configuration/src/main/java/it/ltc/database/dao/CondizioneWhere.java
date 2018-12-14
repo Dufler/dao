@@ -7,7 +7,7 @@ package it.ltc.database.dao;
  */
 public class CondizioneWhere {
 	
-	public enum Operatore { EQUAL, LIKE, START_WITH, END_WITH, GREATER, GREATER_OR_EQUAL, LESSER, LESSER_OR_EQUAL }
+	public enum Operatore { EQUAL, LIKE, START_WITH, END_WITH, GREATER, GREATER_OR_EQUAL, LESSER, LESSER_OR_EQUAL, NULL, NOT_NULL }
 	
 	public enum Condizione { AND, OR } 
 	
@@ -20,7 +20,7 @@ public class CondizioneWhere {
 		this.colonna = colonna;
 		this.valore = valore;
 		this.operatore = operatore;
-		this.condizione = Condizione.AND;
+		this.condizione = condizione;
 	}
 	
 	public CondizioneWhere(String colonna, Object valore) {

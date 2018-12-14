@@ -1,7 +1,6 @@
 package it.ltc.database.model.legacy;
 
 import java.io.Serializable;
-import java.sql.Timestamp;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -39,16 +38,16 @@ public class TempCorr implements Serializable {
 //	@Column(name="CodFiliale", length=3)
 //	private String codFiliale;
 
-	@Column(name="Creazione")
-	private Timestamp creazione;
+	@Column(name="Creazione", nullable=false, columnDefinition="datetime")
+	private Date creazione;
 
-	@Column(name="DataDocu")
-	private Timestamp dataDocu;
+	@Column(name="DataDocu", columnDefinition="datetime")
+	private Date dataDocu;
 
 	@Column(name="Divisa", length=3)
 	private String divisa;
 
-	@Column(name="Generato", nullable=false, length=2)
+	@Column(name="Generato", nullable=false, length=2, columnDefinition="char(2)")
 	private String generato;
 
 	@Column(name="Note", length=150)
@@ -66,7 +65,7 @@ public class TempCorr implements Serializable {
 	@Column(name="NrOrdine", length=30)
 	private String nrOrdine;
 
-	@Column(name="PesoKg")
+	@Column(name="PesoKg", columnDefinition="money")
 	private Double pesoKg;
 
 //	@Column(name="Siglaweb", length=15)
@@ -78,7 +77,7 @@ public class TempCorr implements Serializable {
 	@Column(name="TipoIncasso", length=2)
 	private String tipoIncasso;
 
-	@Column(name="ValContra")
+	@Column(name="ValContra", columnDefinition="money")
 	private Double valContra;
 
 	public TempCorr() {}
@@ -86,7 +85,7 @@ public class TempCorr implements Serializable {
 	@PrePersist
 	public void prePersist() {
 		if (generato == null) generato = "NO";
-		creazione = new Timestamp(new Date().getTime());
+		creazione = new Date();
 	}
 
 	public int getIdTempCor() {
@@ -121,19 +120,19 @@ public class TempCorr implements Serializable {
 //		this.codFiliale = codFiliale;
 //	}
 
-	public Timestamp getCreazione() {
+	public Date getCreazione() {
 		return this.creazione;
 	}
 
-	public void setCreazione(Timestamp creazione) {
+	public void setCreazione(Date creazione) {
 		this.creazione = creazione;
 	}
 
-	public Timestamp getDataDocu() {
+	public Date getDataDocu() {
 		return this.dataDocu;
 	}
 
-	public void setDataDocu(Timestamp dataDocu) {
+	public void setDataDocu(Date dataDocu) {
 		this.dataDocu = dataDocu;
 	}
 

@@ -3,11 +3,20 @@ package it.ltc.database.dao.legacy;
 import java.util.LinkedList;
 import java.util.List;
 
+import javax.persistence.EntityManager;
+
+import org.apache.log4j.Logger;
+
 import it.ltc.database.dao.CRUDDao;
 import it.ltc.database.dao.CondizioneWhere;
+import it.ltc.database.dao.CondizioneWhere.Condizione;
+import it.ltc.database.dao.CondizioneWhere.Operatore;
 import it.ltc.database.model.legacy.RighiOrdine;
+import it.ltc.database.model.legacy.model.TestataOrdiniTotali;
 
 public class RighiOrdineDao extends CRUDDao<RighiOrdine> {
+	
+	private static final Logger logger = Logger.getLogger("RighiOrdineDao");
 
 	public RighiOrdineDao(String persistenceUnit) {
 		super(persistenceUnit, RighiOrdine.class);
@@ -48,6 +57,11 @@ public class RighiOrdineDao extends CRUDDao<RighiOrdine> {
 		List<RighiOrdine> entities = findAllEqualTo("idTestataOrdine", idOrdine);
 		return entities;
 	}
+	
+	public List<RighiOrdine> trovaRigheSenzaInfoProdotto() {
+		List<RighiOrdine> entities = findAllEqualTo("idArticolo", 0);
+		return entities;
+	}
 
 	@Override
 	protected void updateValues(RighiOrdine oldEntity, RighiOrdine entity) {
@@ -69,6 +83,7 @@ public class RighiOrdineDao extends CRUDDao<RighiOrdine> {
 		oldEntity.setDescrizione(entity.getDescrizione());
 		oldEntity.setTaglia(entity.getTaglia());
 		oldEntity.setIdUnicoArt(entity.getIdUnicoArt());
+		oldEntity.setIdArticolo(entity.getIdArticolo());
 		
 		oldEntity.setDataOrdine(entity.getDataOrdine());
 		oldEntity.setIdDestina(entity.getIdDestina());
@@ -103,6 +118,44 @@ public class RighiOrdineDao extends CRUDDao<RighiOrdine> {
 		condizioni.add(new CondizioneWhere("idUnicoArt", idUnicoArt));
 		List<RighiOrdine> entities = findAll(condizioni);
 		return entities;
+	}
+	
+	/**
+	 * A partire dall'ordine passato nell'argomento restituisce tutte le righe che non sono state ancora completamente assegnate.<br>
+	 * Condizioni per la selezione: Quantità da ubicare > 0.
+	 * @param testata
+	 * @return
+	 */
+	public List<RighiOrdine> trovaRigheDaAssegnare(int idOrdine) {
+//		EntityManager em = getManager();
+//		CriteriaBuilder cb = em.getCriteriaBuilder();
+//		CriteriaQuery<RighiOrdine> criteria = cb.createQuery(RighiOrdine.class);
+//		Root<RighiOrdine> member = criteria.from(RighiOrdine.class);
+//		Predicate condizioneOrdine = cb.equal(member.get("idTestataOrdine"), idOrdine);
+//		Predicate condizionePezziAssegnati = cb.greaterThan(member.get("qtadaubicare"), 0);
+//		criteria.select(member).where(cb.and(condizioneOrdine, condizionePezziAssegnati));
+//		List<RighiOrdine> list = em.createQuery(criteria).getResultList();
+//		em.close();
+//		return list;
+		List<CondizioneWhere> condizioni = new LinkedList<>();
+		condizioni.add(new CondizioneWhere("idTestataOrdine", idOrdine));
+		condizioni.add(new CondizioneWhere("qtadaubicare", 0, Operatore.GREATER, Condizione.AND));
+		List<RighiOrdine> entities = findAll(condizioni);
+		return entities;
+	}
+	
+	public TestataOrdiniTotali calcolaTotali(int idOrdine) {
+		TestataOrdiniTotali totale;
+		EntityManager em = getManager();
+		try {
+			totale = em.createNamedQuery("RighiOrdine.totaliPerOrdine", TestataOrdiniTotali.class).setParameter("ordine", idOrdine).getSingleResult();
+		} catch (Exception e) {
+			logger.error(e);
+			totale = null;
+		} finally {
+			em.close();
+		}
+		return totale;
 	}
 
 }

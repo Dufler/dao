@@ -1,4 +1,5 @@
 it\ltc\database\dao\CondizioneWhere$Operatore.class
+it\ltc\database\dao\CriteriSelezione.class
 it\ltc\database\dao\CondizioneWhere.class
 it\ltc\database\dao\Dao.class
 it\ltc\database\dao\FactoryManager.class

@@ -19,20 +19,20 @@ public class Corrieri implements Serializable {
 	@Column(name="IdCorriere", unique=true, nullable=false)
 	private int idCorriere;
 
-	@Column(name="Codice", length=3)
+	@Column(name="Codice", length=3, nullable=false, columnDefinition="char(3)")
 	private String codice;
 
 	@Column(name="CodiceCliente", length=50)
 	private String codiceCliente;
 
-	@Column(name="CodiceTariffa")
-	private int codiceTariffa;
+//	@Column(name="CodiceTariffa")
+//	private int codiceTariffa;
 
 	@Column(name="Descrizione", length=50)
 	private String descrizione;
 
-	@Column(name="PuntoOperatorePartenza", length=10)
-	private String puntoOperatorePartenza;
+//	@Column(name="PuntoOperatorePartenza", length=10)
+//	private String puntoOperatorePartenza;
 
 	public Corrieri() {}
 
@@ -60,7 +60,7 @@ public class Corrieri implements Serializable {
 
 	@Override
 	public String toString() {
-		return "Corrieri [idCorriere=" + idCorriere + ", codice=" + codice + ", codiceCliente=" + codiceCliente + ", codiceTariffa=" + codiceTariffa + ", descrizione=" + descrizione + ", puntoOperatorePartenza=" + puntoOperatorePartenza + "]";
+		return "Corrieri [idCorriere=" + idCorriere + ", codice=" + codice + ", codiceCliente=" + codiceCliente + ", descrizione=" + descrizione + "]";
 	}
 
 	public int getIdCorriere() {
@@ -87,13 +87,13 @@ public class Corrieri implements Serializable {
 		this.codiceCliente = codiceCliente;
 	}
 
-	public int getCodiceTariffa() {
-		return this.codiceTariffa;
-	}
-
-	public void setCodiceTariffa(int codiceTariffa) {
-		this.codiceTariffa = codiceTariffa;
-	}
+//	public int getCodiceTariffa() {
+//		return this.codiceTariffa;
+//	}
+//
+//	public void setCodiceTariffa(int codiceTariffa) {
+//		this.codiceTariffa = codiceTariffa;
+//	}
 
 	public String getDescrizione() {
 		return this.descrizione;
@@ -103,12 +103,12 @@ public class Corrieri implements Serializable {
 		this.descrizione = descrizione;
 	}
 
-	public String getPuntoOperatorePartenza() {
-		return this.puntoOperatorePartenza;
-	}
-
-	public void setPuntoOperatorePartenza(String puntoOperatorePartenza) {
-		this.puntoOperatorePartenza = puntoOperatorePartenza;
-	}
+//	public String getPuntoOperatorePartenza() {
+//		return this.puntoOperatorePartenza;
+//	}
+//
+//	public void setPuntoOperatorePartenza(String puntoOperatorePartenza) {
+//		this.puntoOperatorePartenza = puntoOperatorePartenza;
+//	}
 
 }

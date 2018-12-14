@@ -41,7 +41,6 @@ package it.ltc.database.model.legacy.coltorti;
 import java.io.Serializable;
 import javax.persistence.*;
 import java.math.BigDecimal;
-import java.sql.Timestamp;
 import java.util.Date;
 
 
@@ -121,19 +120,22 @@ public class ArticoliColtorti implements Serializable {
 //	private int confImballo;
 
 //	@Column(name="DataAssBarcode")
-//	private Timestamp dataAssBarcode;
+//	private Date dataAssBarcode;
 //
 //	@Column(name="DataAssCategoria")
-//	private Timestamp dataAssCategoria;
+//	private Date dataAssCategoria;
 //
 //	@Column(name="DataAssCompos")
-//	private Timestamp dataAssCompos;
+//	private Date dataAssCompos;
 //
 //	@Column(name="DataInvent")
-//	private Timestamp dataInvent;
+//	private Date dataInvent;
 
-	@Column(name="DataModifica")
-	private Timestamp dataModifica;
+	/**
+	 * Viene aggiornata automaticamente dal trigger.
+	 */
+	@Column(name="DataModifica", columnDefinition="datetime")
+	private Date dataModifica;
 
 //	@Column(name="Desc_Colore", length=100)
 //	private String desc_Colore;
@@ -157,7 +159,7 @@ public class ArticoliColtorti implements Serializable {
 //	private int esistenza;
 //
 //	@Column(name="FinePromo")
-//	private Timestamp finePromo;
+//	private Date finePromo;
 
 //	@Column(name="IdAttCliente")
 //	private int idAttCliente;
@@ -184,7 +186,7 @@ public class ArticoliColtorti implements Serializable {
 //	private int impegnato;
 //
 //	@Column(name="IniPromo")
-//	private Timestamp iniPromo;
+//	private Date iniPromo;
 
 	@Column(name="Linea", nullable=false, length=50)
 	private String linea;
@@ -317,7 +319,7 @@ public class ArticoliColtorti implements Serializable {
 		if (catMercDett == null) catMercDett = "";
 		if (codArtOld == null) codArtOld = "";
 		if (utente == null) utente = "SERVIZIO";
-		dataModifica = new Timestamp(new Date().getTime());
+		dataModifica = new Date();
 	}
 	
 	/**
@@ -332,7 +334,6 @@ public class ArticoliColtorti implements Serializable {
 		if (catMercDett == null) catMercDett = "";
 		if (codArtOld == null) codArtOld = "";
 		if (utente == null) utente = "SERVIZIO";
-		dataModifica = new Timestamp(new Date().getTime());
 	}
 
 	public int getIdArticolo() {
@@ -503,43 +504,43 @@ public class ArticoliColtorti implements Serializable {
 //		this.confImballo = confImballo;
 //	}
 //
-//	public Timestamp getDataAssBarcode() {
+//	public Date getDataAssBarcode() {
 //		return this.dataAssBarcode;
 //	}
 //
-//	public void setDataAssBarcode(Timestamp dataAssBarcode) {
+//	public void setDataAssBarcode(Date dataAssBarcode) {
 //		this.dataAssBarcode = dataAssBarcode;
 //	}
 //
-//	public Timestamp getDataAssCategoria() {
+//	public Date getDataAssCategoria() {
 //		return this.dataAssCategoria;
 //	}
 //
-//	public void setDataAssCategoria(Timestamp dataAssCategoria) {
+//	public void setDataAssCategoria(Date dataAssCategoria) {
 //		this.dataAssCategoria = dataAssCategoria;
 //	}
 //
-//	public Timestamp getDataAssCompos() {
+//	public Date getDataAssCompos() {
 //		return this.dataAssCompos;
 //	}
 //
-//	public void setDataAssCompos(Timestamp dataAssCompos) {
+//	public void setDataAssCompos(Date dataAssCompos) {
 //		this.dataAssCompos = dataAssCompos;
 //	}
 //
-//	public Timestamp getDataInvent() {
+//	public Date getDataInvent() {
 //		return this.dataInvent;
 //	}
 //
-//	public void setDataInvent(Timestamp dataInvent) {
+//	public void setDataInvent(Date dataInvent) {
 //		this.dataInvent = dataInvent;
 //	}
 
-	public Timestamp getDataModifica() {
+	public Date getDataModifica() {
 		return this.dataModifica;
 	}
 
-	public void setDataModifica(Timestamp dataModifica) {
+	public void setDataModifica(Date dataModifica) {
 		this.dataModifica = dataModifica;
 	}
 
@@ -599,11 +600,11 @@ public class ArticoliColtorti implements Serializable {
 //		this.esistenza = esistenza;
 //	}
 //
-//	public Timestamp getFinePromo() {
+//	public Date getFinePromo() {
 //		return this.finePromo;
 //	}
 //
-//	public void setFinePromo(Timestamp finePromo) {
+//	public void setFinePromo(Date finePromo) {
 //		this.finePromo = finePromo;
 //	}
 //
@@ -671,11 +672,11 @@ public class ArticoliColtorti implements Serializable {
 //		this.impegnato = impegnato;
 //	}
 //
-//	public Timestamp getIniPromo() {
+//	public Date getIniPromo() {
 //		return this.iniPromo;
 //	}
 //
-//	public void setIniPromo(Timestamp iniPromo) {
+//	public void setIniPromo(Date iniPromo) {
 //		this.iniPromo = iniPromo;
 //	}
 

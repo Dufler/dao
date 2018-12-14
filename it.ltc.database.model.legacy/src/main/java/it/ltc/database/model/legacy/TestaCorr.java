@@ -50,10 +50,10 @@ public class TestaCorr implements Serializable {
 //	@Column(name="Bancpre", length=10)
 //	private String bancpre;
 
-	@Column(name="Cap", length=9)
+	@Column(name="Cap", length=10)
 	private String cap;
 
-	@Column(name="CapMitt", length=9)
+	@Column(name="CapMitt", length=10)
 	private String capMitt;
 
 //	@Column(name="Chiusura1", length=2)
@@ -68,7 +68,7 @@ public class TestaCorr implements Serializable {
 	/**
 	 * Codice cliente presso il corriere.
 	 */
-	@Column(name="CodMittente")
+	@Column(name="CodMittente", length=30)
 	private String codMittente;
 
 //	@Column(name="CodRaggruppamento")
@@ -77,26 +77,26 @@ public class TestaCorr implements Serializable {
 //	@Column(name="CodTariffa")
 //	private int codTariffa;
 
-	@Column(name="Contrassegno")
+	@Column(name="Contrassegno", columnDefinition="money")
 	private Double contrassegno;
 
-	@Column(name="Corriere", length=50)
+	@Column(name="Corriere", length=30)
 	private String corriere;
 
 //	@Column(name="Creazione", nullable=false, insertable=false)
-//	private Timestamp creazione;
+//	private Date creazione;
 
 	@Column(name="DataConsegna")
 	private int dataConsegna;
 
 //	@Column(name="DataConsegnaTassativa")
-//	private Timestamp dataConsegnaTassativa;
+//	private Date dataConsegnaTassativa;
 //
 //	@Column(name="DataEstrazione")
-//	private Timestamp dataEstrazione;
+//	private Date dataEstrazione;
 //
-//	@Column(name="DataGenerazione")
-//	private Timestamp dataGenerazione;
+	@Column(name="DataGenerazione", columnDefinition="datetime")
+	private Date dataGenerazione;
 
 	@Column(name="DataSpe")
 	private int dataSpe;
@@ -136,13 +136,13 @@ public class TestaCorr implements Serializable {
 //	@Column(name="ImpoAss")
 //	private BigDecimal impoAss;
 
-	@Column(name="Indirizzo", length=35)
+	@Column(name="Indirizzo", length=250)
 	private String indirizzo;
 
 //	@Column(name="Inserito", nullable=false, insertable=false)
 //	private int inserito;
 
-	@Column(name="Localita", length=35)
+	@Column(name="Localita", length=50)
 	private String localita;
 
 //	@Column(name="Magazzino", length=10)
@@ -151,10 +151,10 @@ public class TestaCorr implements Serializable {
 //	@Column(name="Marchio")
 //	private int marchio;
 
-	@Column(name="MittenteAlfa", length=15)
+	@Column(name="MittenteAlfa", length=20, nullable=false)
 	private String mittenteAlfa;
 
-	@Column(name="MittenteNum")
+	@Column(name="MittenteNum", nullable=false)
 	private int mittenteNum;
 
 //	@Column(name="Modificato", nullable=false, length=1, insertable=false)
@@ -169,8 +169,8 @@ public class TestaCorr implements Serializable {
 	@Column(name="NazioneMitt", length=3)
 	private String nazioneMitt;
 
-//	@Column(name="NomeFileCor", length=30)
-//	private String nomeFileCor;
+	@Column(name="NomeFileCor", length=30)
+	private String nomeFileCor;
 
 	@Column(name="Note1", length=35)
 	private String note1;
@@ -229,7 +229,7 @@ public class TestaCorr implements Serializable {
 //	@Column(name="PartVarie", length=2)
 //	private String partVarie;
 
-	@Column(name="Peso")
+	@Column(name="Peso", columnDefinition="money")
 	private Double peso;
 
 	@Column(name="Pezzi", nullable=false)
@@ -250,13 +250,13 @@ public class TestaCorr implements Serializable {
 //	@Column(name="QtaFatt")
 //	private BigDecimal qtaFatt;
 
-	@Column(name="RagSocDest", length=35)
+	@Column(name="RagSocDest", length=100)
 	private String ragSocDest;
 
-	@Column(name="RagSocEst", length=35)
+	@Column(name="RagSocEst", length=50)
 	private String ragSocEst;
 
-	@Column(name="RagSocMitt", length=25)
+	@Column(name="RagSocMitt", length=100)
 	private String ragSocMitt;
 
 //	@Column(name="Regione", length=50)
@@ -268,7 +268,7 @@ public class TestaCorr implements Serializable {
 //	@Column(name="Stato", nullable=false, length=30)
 //	private String stato;
 
-	@Column(name="StringaBartolini", nullable=false, length=511)
+	@Column(name="StringaBartolini", nullable=false, length=511, columnDefinition="char(511)")
 	private String stringaBartolini;
 
 //	@Column(name="TassMitt", length=1)
@@ -286,7 +286,7 @@ public class TestaCorr implements Serializable {
 //	@Column(name="TipoDoc", length=3)
 //	private String tipoDoc;
 
-	@Column(name="TipoIncasso", length=2)
+	@Column(name="TipoIncasso", length=2, columnDefinition="char(2)")
 	private String tipoIncasso;
 
 //	@Column(name="TraMerce", length=2)
@@ -295,7 +295,7 @@ public class TestaCorr implements Serializable {
 	@Column(name="Trasmesso", nullable=false)
 	private int trasmesso;
 
-	@Column(name="ValoreMerce")
+	@Column(name="ValoreMerce", columnDefinition="money")
 	private Double valoreMerce;
 
 //	@Column(name="ValutaAss", length=3)
@@ -307,7 +307,7 @@ public class TestaCorr implements Serializable {
 //	@Column(name="ValutaMerce", length=3)
 //	private String valutaMerce;
 
-	@Column(name="Volume")
+	@Column(name="Volume", columnDefinition="money")
 	private Double volume;
 
 //	@Column(name="VolumeOLD", nullable=false)
@@ -323,6 +323,7 @@ public class TestaCorr implements Serializable {
 		GregorianCalendar today = new GregorianCalendar();
 		annoSpe = today.get(Calendar.YEAR);
 		dataSpe = ((today.get(Calendar.MONTH) + 1) * 100) + today.get(Calendar.DAY_OF_MONTH);
+		dataGenerazione = new Date(today.getTimeInMillis());
 		//descrizione1 = "";
 		//descrizione2 = "";
 		nrSerie = 11;
@@ -455,11 +456,11 @@ public class TestaCorr implements Serializable {
 		this.corriere = corriere;
 	}
 
-//	public Timestamp getCreazione() {
+//	public Date getCreazione() {
 //		return this.creazione;
 //	}
 //
-//	public void setCreazione(Timestamp creazione) {
+//	public void setCreazione(Date creazione) {
 //		this.creazione = creazione;
 //	}
 
@@ -471,29 +472,29 @@ public class TestaCorr implements Serializable {
 		this.dataConsegna = dataConsegna;
 	}
 
-//	public Timestamp getDataConsegnaTassativa() {
+//	public Date getDataConsegnaTassativa() {
 //		return this.dataConsegnaTassativa;
 //	}
 //
-//	public void setDataConsegnaTassativa(Timestamp dataConsegnaTassativa) {
+//	public void setDataConsegnaTassativa(Date dataConsegnaTassativa) {
 //		this.dataConsegnaTassativa = dataConsegnaTassativa;
 //	}
 //
-//	public Timestamp getDataEstrazione() {
+//	public Date getDataEstrazione() {
 //		return this.dataEstrazione;
 //	}
 //
-//	public void setDataEstrazione(Timestamp dataEstrazione) {
+//	public void setDataEstrazione(Date dataEstrazione) {
 //		this.dataEstrazione = dataEstrazione;
 //	}
 //
-//	public Timestamp getDataGenerazione() {
-//		return this.dataGenerazione;
-//	}
-//
-//	public void setDataGenerazione(Timestamp dataGenerazione) {
-//		this.dataGenerazione = dataGenerazione;
-//	}
+	public Date getDataGenerazione() {
+		return this.dataGenerazione;
+	}
+
+	public void setDataGenerazione(Date dataGenerazione) {
+		this.dataGenerazione = dataGenerazione;
+	}
 
 	public int getDataSpe() {
 		return this.dataSpe;
@@ -687,13 +688,13 @@ public class TestaCorr implements Serializable {
 		this.nazioneMitt = nazioneMitt;
 	}
 
-//	public String getNomeFileCor() {
-//		return this.nomeFileCor;
-//	}
-//
-//	public void setNomeFileCor(String nomeFileCor) {
-//		this.nomeFileCor = nomeFileCor;
-//	}
+	public String getNomeFileCor() {
+		return this.nomeFileCor;
+	}
+
+	public void setNomeFileCor(String nomeFileCor) {
+		this.nomeFileCor = nomeFileCor;
+	}
 
 	public String getNote1() {
 		return this.note1;

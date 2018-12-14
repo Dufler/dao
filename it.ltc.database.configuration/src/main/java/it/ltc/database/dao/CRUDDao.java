@@ -25,6 +25,11 @@ public abstract class CRUDDao<T> extends ReadOnlyDao<T> {
 		super(persistenceUnit, c);
 	}
 	
+	protected boolean isValorizzato(String value) {
+		boolean valorizzato = value != null && !value.isEmpty();
+		return valorizzato;
+	}
+	
 	/**
 	 * Inserisce la entity passata come argomento nel db.
 	 * @param entity la entity da salvare.
@@ -40,6 +45,8 @@ public abstract class CRUDDao<T> extends ReadOnlyDao<T> {
 				t.commit();
 			} catch (Exception e) {
 				logger.error(e);
+				for (StackTraceElement element : e.getStackTrace())
+					logger.error(element);
 				if (t != null && t.isActive())
 					t.rollback();
 				entity = null;
@@ -66,6 +73,8 @@ public abstract class CRUDDao<T> extends ReadOnlyDao<T> {
 				t.commit();
 			} catch (Exception e) {
 				logger.error(e);
+				for (StackTraceElement element : e.getStackTrace())
+					logger.error(element);
 				if (t != null && t.isActive())
 					t.rollback();
 				entities = null;
@@ -119,6 +128,8 @@ public abstract class CRUDDao<T> extends ReadOnlyDao<T> {
 					t.commit();
 				} catch (Exception e) {
 					logger.error(e);
+					for (StackTraceElement element : e.getStackTrace())
+						logger.error(element);
 					if (t != null && t.isActive())
 						t.rollback();
 					entity = null;
@@ -164,6 +175,8 @@ public abstract class CRUDDao<T> extends ReadOnlyDao<T> {
 				t.commit();
 			} catch (Exception e) {
 				logger.error(e);
+				for (StackTraceElement element : e.getStackTrace())
+					logger.error(element);
 				if (t != null && t.isActive())
 					t.rollback();
 				updatedEntities = null;
@@ -203,6 +216,8 @@ public abstract class CRUDDao<T> extends ReadOnlyDao<T> {
 					t.commit();
 				} catch (Exception e) {
 					logger.error(e);
+					for (StackTraceElement element : e.getStackTrace())
+						logger.error(element);
 					if (t != null && t.isActive())
 						t.rollback();
 					entity = null;
@@ -245,6 +260,8 @@ public abstract class CRUDDao<T> extends ReadOnlyDao<T> {
 				t.commit();	
 			} catch (Exception e) {
 				logger.error(e);
+				for (StackTraceElement element : e.getStackTrace())
+					logger.error(element);
 				if (t != null && t.isActive())
 					t.rollback();
 				entities = null;

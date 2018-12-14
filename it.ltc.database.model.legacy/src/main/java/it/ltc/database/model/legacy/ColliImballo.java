@@ -1,7 +1,6 @@
 package it.ltc.database.model.legacy;
 
 import java.io.Serializable;
-import java.sql.Timestamp;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -40,9 +39,9 @@ public class ColliImballo implements Serializable {
 	private String barCodeImb;
 
 	/**
-	 * Devo filtrare imponendo che sia 'NO'
+	 * Devo filtrare imponendo che sia 'NO' (è il default, passa a 'SI' quando viene distrutto, questo campo ha rimpiazzato la colonna 'distrutto')
 	 */
-	@Column(name="Cancellato", length=2)
+	@Column(name="Cancellato", length=2, nullable=false)
 	private String cancellato;
 
 //	@Column(name="CaricoMag", length=1)
@@ -66,17 +65,17 @@ public class ColliImballo implements Serializable {
 //	@Column(name="CtrlEtic", length=2)
 //	private String ctrlEtic;
 
-	@Column(name="DataCrea")
-	private Timestamp dataCrea;
+	@Column(name="DataCrea", columnDefinition="datetime")
+	private Date dataCrea;
 
 //	@Column(name="DataDocArrivo")
-//	private Timestamp dataDocArrivo;
+//	private Date dataDocArrivo;
 
 //	@Column(name="DataGen")
-//	private Timestamp dataGen;
+//	private Date dataGen;
 
 //	@Column(name="DataUbica")
-//	private Timestamp dataUbica;
+//	private Date dataUbica;
 
 //	@Column(name="EticPiano", length=2)
 //	private String eticPiano;
@@ -102,7 +101,7 @@ public class ColliImballo implements Serializable {
 //	@Column(name="IdDestina")
 //	private int idDestina;
 
-	@Column(name="KeyColloSpe", nullable=false, length=10)
+	@Column(name="KeyColloSpe", nullable=false, length=10, columnDefinition="char(10)")
 	private String keyColloSpe;
 
 //	@Column(name="KeyUbica", length=15)
@@ -144,7 +143,7 @@ public class ColliImballo implements Serializable {
 //	@Column(name="Pancale", length=20)
 //	private String pancale;
 
-	@Column(name="PesoKg")
+	@Column(name="PesoKg", columnDefinition="money")
 	private Double pesoKg;
 
 	@Column(name="PezziCollo", nullable=false)
@@ -170,7 +169,7 @@ public class ColliImballo implements Serializable {
 //	@Column(name="Sessione", length=50)
 //	private String sessione;
 
-	@Column(name="Stato", length=2)
+	@Column(name="Stato", length=2, columnDefinition="char(2)")
 	private String stato;
 
 //	@Column(name="Tara")
@@ -182,8 +181,8 @@ public class ColliImballo implements Serializable {
 //	@Column(name="Ubicato", length=2)
 //	private String ubicato;
 
-//	@Column(name="Utente", length=20)
-//	private String utente;
+	@Column(name="Utente", length=50, nullable=false)
+	private String utente;
 
 //	@Column(name="UtenteUbica", length=50)
 //	private String utenteUbica;
@@ -194,7 +193,7 @@ public class ColliImballo implements Serializable {
 	public ColliImballo() {}
 	
 	public void prePersist() {
-		dataCrea = new Timestamp(new Date().getTime());
+		dataCrea = new Date();
 		oraCrea = DateConverter.getOraComeIntero(dataCrea);
 		dataCrea = DateConverter.ripulisciTimestap(dataCrea);
 	}
@@ -295,35 +294,35 @@ public class ColliImballo implements Serializable {
 //		this.ctrlEtic = ctrlEtic;
 //	}
 //
-	public Timestamp getDataCrea() {
+	public Date getDataCrea() {
 		return this.dataCrea;
 	}
 
-	public void setDataCrea(Timestamp dataCrea) {
+	public void setDataCrea(Date dataCrea) {
 		this.dataCrea = dataCrea;
 	}
 //
-//	public Timestamp getDataDocArrivo() {
+//	public Date getDataDocArrivo() {
 //		return this.dataDocArrivo;
 //	}
 //
-//	public void setDataDocArrivo(Timestamp dataDocArrivo) {
+//	public void setDataDocArrivo(Date dataDocArrivo) {
 //		this.dataDocArrivo = dataDocArrivo;
 //	}
 //
-//	public Timestamp getDataGen() {
+//	public Date getDataGen() {
 //		return this.dataGen;
 //	}
 //
-//	public void setDataGen(Timestamp dataGen) {
+//	public void setDataGen(Date dataGen) {
 //		this.dataGen = dataGen;
 //	}
 //
-//	public Timestamp getDataUbica() {
+//	public Date getDataUbica() {
 //		return this.dataUbica;
 //	}
 //
-//	public void setDataUbica(Timestamp dataUbica) {
+//	public void setDataUbica(Date dataUbica) {
 //		this.dataUbica = dataUbica;
 //	}
 //
@@ -607,13 +606,13 @@ public class ColliImballo implements Serializable {
 //		this.ubicato = ubicato;
 //	}
 //
-//	public String getUtente() {
-//		return this.utente;
-//	}
-//
-//	public void setUtente(String utente) {
-//		this.utente = utente;
-//	}
+	public String getUtente() {
+		return this.utente;
+	}
+
+	public void setUtente(String utente) {
+		this.utente = utente;
+	}
 //
 //	public String getUtenteUbica() {
 //		return this.utenteUbica;

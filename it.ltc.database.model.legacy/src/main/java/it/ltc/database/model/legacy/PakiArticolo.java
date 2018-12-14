@@ -1,7 +1,6 @@
 package it.ltc.database.model.legacy;
 
 import java.io.Serializable;
-import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -26,9 +25,9 @@ import javax.persistence.Transient;
 @Entity
 @Table(name="pakiArticolo")
 @NamedQueries({
-	//@NamedQuery(name="PakiArticolo.findAll", query="SELECT p FROM PakiArticolo p"),
 	@NamedQuery(name="PakiArticolo.totaleDichiaratoPerCarico", query="SELECT SUM(p.qtaPaki) FROM PakiArticolo p WHERE p.idPakiTesta = :carico"),
-	@NamedQuery(name="PakiArticolo.totaleVerificatoPerCarico", query="SELECT SUM(p.qtaVerificata) FROM PakiArticolo p WHERE p.idPakiTesta = :carico")
+	@NamedQuery(name="PakiArticolo.totaleVerificatoPerCarico", query="SELECT SUM(p.qtaVerificata) FROM PakiArticolo p WHERE p.idPakiTesta = :carico"),
+	@NamedQuery(name="PakiArticolo.totaliPerCarico", query="SELECT NEW it.ltc.database.model.legacy.model.PakiTestaTotali(SUM(p.qtaPaki), SUM(p.qtaVerificata)) FROM PakiArticolo p WHERE p.idPakiTesta = :carico")
 })
 
 public class PakiArticolo implements Serializable {
@@ -40,22 +39,22 @@ public class PakiArticolo implements Serializable {
 	@Column(unique=true, nullable=false)
 	private int idPakiArticolo;
 
-	@Column(name="BarcodeCollo", length=55)
+	@Column(name="BarcodeCollo", length=50)
 	private String barcodeCollo;
 
 //	@Column(name="Caricato", length=1)
 //	private String caricato;
 
-	@Column(name="CodBarre", length=20)
+	@Column(name="CodBarre", length=50)
 	private String codBarre;
 
 	/**
 	 * NONE è il default, va messo a INSE nel caso in cui non era presente nel dichiarato.
 	 */
-	@Column(name="CodMotivo", length=4, updatable=false)
+	@Column(name="CodMotivo", length=4, updatable=false, columnDefinition="char(4)")
 	private String codMotivo;
 
-	@Column(name="CodUnicoArt", length=15)
+	@Column(name="CodUnicoArt", length=15, nullable=false, columnDefinition="varchar(15)")
 	private String codUnicoArt;
 
 //	@Column(name="Collo")
@@ -65,10 +64,10 @@ public class PakiArticolo implements Serializable {
 //	private String controllato;
 
 //	@Column(name="DataAgg")
-//	private Timestamp dataAgg;
+//	private Date dataAgg;
 
-	@Column(name="DataModifica")
-	private Timestamp dataModifica;
+	@Column(name="DataModifica", columnDefinition="datetime")
+	private Date dataModifica;
 
 //	@Column(name="Eccede")
 //	private int eccede;
@@ -91,19 +90,19 @@ public class PakiArticolo implements Serializable {
 //	@Column(name="KeyColloCar", length=9)
 //	private String keyColloCar;
 
-	@Column(name="KeyUbicaCar", length=15)
+	@Column(name="KeyUbicaCar", length=15, columnDefinition="char(15)")
 	private String keyUbicaCar;
 
-	@Column(name="KeyUbicaPre", length=15)
+	@Column(name="KeyUbicaPre", length=15, columnDefinition="char(15)")
 	private String keyUbicaPre;
 	
 	@Column(name="MadeIn", length=3)
 	private String madeIn;
 
-	@Column(name="Magazzino", length=10)
+	@Column(name="Magazzino", length=5, nullable=false)
 	private String magazzino;
 
-	@Column(name="Magazzinoltc", length=5)
+	@Column(name="Magazzinoltc", length=5, nullable=false)
 	private String magazzinoltc;
 
 //	@Column(name="Manca")
@@ -136,7 +135,7 @@ public class PakiArticolo implements Serializable {
 //	@Column(name="QtaImba")
 //	private int qtaImba;
 
-	@Column(name="QtaPaki")
+	@Column(name="QtaPaki", nullable=false)
 	private int qtaPaki;
 
 	@Column(name="QtaPreDoc")
@@ -145,10 +144,10 @@ public class PakiArticolo implements Serializable {
 	@Column(name="QtaPrelevata")
 	private int qtaPrelevata;
 
-	@Column(name="QtaVerificata")
+	@Column(name="QtaVerificata", nullable=false)
 	private int qtaVerificata;
 
-	@Column(name="RigaPacki")
+	@Column(name="RigaPacki", nullable=false)
 	private int rigaPacki;
 
 //	@Column(name="Scelta", length=50)
@@ -169,14 +168,17 @@ public class PakiArticolo implements Serializable {
 //	@Column(name="Ubicato", length=2)
 //	private String ubicato;
 
-	@Column(name="Utente", length=20)
+	@Column(name="Utente", length=50)
 	private String utente;
 	
-	@Column(name="CodArtStr", length=50)
+	@Column(name="CodArtStr", nullable=false, length=50, columnDefinition="varchar(50)")
 	private String codArtStr;
 	
 	@Column(name="note", length=50)
 	private String note;
+	
+	@Column(name="IdArticolo", nullable=false)
+	private int idArticolo;
 	
 	@Transient
 	private List<String> seriali;
@@ -193,7 +195,7 @@ public class PakiArticolo implements Serializable {
 		qtaPrelevata = 0;
 		//qtaVerificata = 0;
 		//scelta = "";
-		dataModifica = new Timestamp(now.getTime());
+		dataModifica = new Date(now.getTime());
 		if (utente == null) utente = "WSE";
 		if (barcodeCollo == null || barcodeCollo.isEmpty())	barcodeCollo = Integer.toString(idPakiTesta);
 		//Se non lo valorizzo metto il default.
@@ -204,7 +206,7 @@ public class PakiArticolo implements Serializable {
 	
 	@PreUpdate
 	public void preUpdate() {
-		dataModifica = new Timestamp(new Date().getTime());
+		dataModifica = new Date(new Date().getTime());
 		if (keyUbicaCar == null) keyUbicaCar = "";
 		if (keyUbicaPre == null) keyUbicaPre = "";
 		//if (scelta == null) scelta = "";
@@ -274,19 +276,19 @@ public class PakiArticolo implements Serializable {
 //		this.controllato = controllato;
 //	}
 //
-//	public Timestamp getDataAgg() {
+//	public Date getDataAgg() {
 //		return this.dataAgg;
 //	}
 //
-//	public void setDataAgg(Timestamp dataAgg) {
+//	public void setDataAgg(Date dataAgg) {
 //		this.dataAgg = dataAgg;
 //	}
 
-	public Timestamp getDataModifica() {
+	public Date getDataModifica() {
 		return this.dataModifica;
 	}
 
-	public void setDataModifica(Timestamp dataModifica) {
+	public void setDataModifica(Date dataModifica) {
 		this.dataModifica = dataModifica;
 	}
 
@@ -560,6 +562,14 @@ public class PakiArticolo implements Serializable {
 
 	public void setNote(String note) {
 		this.note = note;
+	}
+
+	public int getIdArticolo() {
+		return idArticolo;
+	}
+
+	public void setIdArticolo(int idArticolo) {
+		this.idArticolo = idArticolo;
 	}
 
 	public List<String> getSeriali() {

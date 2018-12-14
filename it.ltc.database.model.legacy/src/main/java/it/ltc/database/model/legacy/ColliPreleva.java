@@ -2,7 +2,6 @@ package it.ltc.database.model.legacy;
 
 import java.io.Serializable;
 import javax.persistence.*;
-import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -55,20 +54,20 @@ public class ColliPreleva implements Serializable {
 //	private String corsia;
 
 //	@Column(name="DataCreazione")
-//	private Timestamp dataCreazione;
+//	private Date dataCreazione;
 
 	/**
 	 * Quando faccio la insert massiva devono avere tutte lo stesso valore. Nel valore indico solo la data con anno, mese e giorno tagliando via ore, minuti e secondi.
 	 * Forse conviene creare un Date tramite SimpleDateFormat.parse() ?
 	 */
-	@Column(name="DataDistinta")
-	private Timestamp dataDistinta;
+	@Column(name="DataDistinta", columnDefinition="datetime")
+	private Date dataDistinta;
 
 //	@Column(name="DataDocCheckOut", nullable=false)
-//	private Timestamp dataDocCheckOut;
+//	private Date dataDocCheckOut;
 
 //	@Column(name="DataSped")
-//	private Timestamp dataSped;
+//	private Date dataSped;
 
 //	@Column(name="Fattura", nullable=false, length=1)
 //	private String fattura;
@@ -85,7 +84,7 @@ public class ColliPreleva implements Serializable {
 	/**
 	 * KeyCollospe di colliImballo
 	 */
-	@Column(name="KeyColloPre", length=10)
+	@Column(name="KeyColloPre", length=10, columnDefinition="char(10)")
 	private String keyColloPre;
 
 //	@Column(name="Magazzino", length=3)
@@ -124,7 +123,7 @@ public class ColliPreleva implements Serializable {
 //	@Column(name="Scaffale", length=3)
 //	private String scaffale;
 
-	@Column(name="Spedito", nullable=false, length=2)
+	@Column(name="Spedito", nullable=false, length=2, columnDefinition="char(2)")
 	private String spedito;
 
 //	@Column(name="Stato", nullable=false, length=50)
@@ -153,9 +152,9 @@ public class ColliPreleva implements Serializable {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
 		String today = sdf.format(now);
 		try {
-			dataDistinta = new Timestamp(sdf.parse(today).getTime());
+			dataDistinta = new Date(sdf.parse(today).getTime());
 		} catch (ParseException e) {
-			dataDistinta = new Timestamp(now.getTime());
+			dataDistinta = new Date(now.getTime());
 		}
 		gruppo = today + "00000";
 		nrDistinta = Integer.parseInt(today);
@@ -237,35 +236,35 @@ public class ColliPreleva implements Serializable {
 //		this.corsia = corsia;
 //	}
 
-//	public Timestamp getDataCreazione() {
+//	public Date getDataCreazione() {
 //		return this.dataCreazione;
 //	}
 //
-//	public void setDataCreazione(Timestamp dataCreazione) {
+//	public void setDataCreazione(Date dataCreazione) {
 //		this.dataCreazione = dataCreazione;
 //	}
 
-	public Timestamp getDataDistinta() {
+	public Date getDataDistinta() {
 		return this.dataDistinta;
 	}
 
-	public void setDataDistinta(Timestamp dataDistinta) {
+	public void setDataDistinta(Date dataDistinta) {
 		this.dataDistinta = dataDistinta;
 	}
 
-//	public Timestamp getDataDocCheckOut() {
+//	public Date getDataDocCheckOut() {
 //		return this.dataDocCheckOut;
 //	}
 //
-//	public void setDataDocCheckOut(Timestamp dataDocCheckOut) {
+//	public void setDataDocCheckOut(Date dataDocCheckOut) {
 //		this.dataDocCheckOut = dataDocCheckOut;
 //	}
 //
-//	public Timestamp getDataSped() {
+//	public Date getDataSped() {
 //		return this.dataSped;
 //	}
 //
-//	public void setDataSped(Timestamp dataSped) {
+//	public void setDataSped(Date dataSped) {
 //		this.dataSped = dataSped;
 //	}
 //

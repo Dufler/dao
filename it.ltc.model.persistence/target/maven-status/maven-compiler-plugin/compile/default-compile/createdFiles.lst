@@ -1,7 +1,8 @@
 it\ltc\model\persistence\ordine\ControllerOrdiniMySQL.class
-it\ltc\model\persistence\carico\IControllerCaricoMySQL.class
 it\ltc\model\persistence\ordine\ControllerOrdiniSQLServer$1.class
 it\ltc\model\persistence\ordine\ControllerOrdiniSQLServer.class
+it\ltc\model\persistence\carico\ControllerCaricoSQLServer.class
 it\ltc\model\persistence\prodotto\ControllerProdottoMySQL.class
 it\ltc\model\persistence\prodotto\ControllerProdottoSQLServer.class
-it\ltc\model\persistence\carico\IControllerCaricoSQLServer.class
+it\ltc\model\persistence\carico\ControllerCaricoSQLServer$1.class
+it\ltc\model\persistence\carico\ControllerCaricoMySQL.class

@@ -13,7 +13,6 @@ import javax.persistence.*;
  */
 @Entity
 @Table(name="Destinatari")
-//@NamedQuery(name="Destinatari.findAll", query="SELECT d FROM Destinatari d")
 public class Destinatari implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
@@ -25,7 +24,7 @@ public class Destinatari implements Serializable {
 	@Column(name="IdDestina", unique=true, nullable=false)
 	private int idDestina;
 
-	@Column(name="Cap", length=10)
+	@Column(name="Cap", length=10, nullable=false)
 	private String cap;
 
 //	@Column(nullable=false, length=2)
@@ -37,7 +36,7 @@ public class Destinatari implements Serializable {
 	@Column(name="CodContabile", length=30)
 	private String codContabile;
 
-	@Column(name="CodDestina", length=30)
+	@Column(name="CodDestina", length=30, nullable=false)
 	private String codDestina;
 
 //	@Column(name="CodDestinaN")
@@ -46,16 +45,16 @@ public class Destinatari implements Serializable {
 //	@Column(name="CodFiliale", length=3)
 //	private String codFiliale;
 
-	@Column(name="CodIso", length=3)
+	@Column(name="CodIso", length=3, nullable=false)
 	private String codIso;
 
-	@Column(name="CodNaz", length=3)
+	@Column(name="CodNaz", length=3, nullable=false)
 	private String codNaz;
 
 	@Column(name="Email", length=100)
 	private String email;
 
-	@Column(name="Fax", length=50)
+	@Column(name="Fax", length=30)
 	private String fax;
 
 //	@Column(name="IdAttCliente")
@@ -63,10 +62,10 @@ public class Destinatari implements Serializable {
 
 //	private int idContabile;
 
-	@Column(name="Indirizzo", length=250)
+	@Column(name="Indirizzo", length=250, nullable=false)
 	private String indirizzo;
 
-	@Column(name="Località", length=40)
+	@Column(name="Località", length=50, nullable=false)
 	private String localita;
 
 	@Column(name="Nazione", length=50)
@@ -79,10 +78,10 @@ public class Destinatari implements Serializable {
 //	@Column(name="Priorass")
 //	private int priorass;
 
-	@Column(name="Provincia", length=20)
+	@Column(name="Provincia", length=2, nullable=false)
 	private String provincia;
 
-	@Column(name="RagSoc1", length=100)
+	@Column(name="RagSoc1", length=100, nullable=false)
 	private String ragSoc1;
 
 	@Column(name="RagSoc2", length=50)
@@ -91,13 +90,13 @@ public class Destinatari implements Serializable {
 //	@Column(name="Riferimento", length=100)
 //	private String riferimento;
 
-	@Column(name="Tel", length=50)
+	@Column(name="Tel", length=30)
 	private String tel;
 
 	/**
 	 * "DES" se è un destinatario fisico (normale), "CON" se è un destinatario contabile.
 	 */
-	@Column(name="TipoDestina", length=4)
+	@Column(name="TipoDestina", length=3, nullable=false)
 	private String tipoDestina;
 
 	public Destinatari() {}
@@ -106,7 +105,8 @@ public class Destinatari implements Serializable {
 	public void prePersist() {
 		if (codContabile == null) codContabile = "";
 		if (codDestina == null) codDestina = sdf.format(new Date());
-		if (tipoDestina == null) tipoDestina = "DES ";
+		if (tipoDestina == null) tipoDestina = "DES";
+		if (email == null) email = "";
 	}
 
 	public int getIdDestina() {

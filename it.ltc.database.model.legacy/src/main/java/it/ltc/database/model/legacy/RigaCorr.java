@@ -39,7 +39,7 @@ public class RigaCorr implements Serializable {
 //	@Column(name="Annullato", length=1)
 //	private String annullato;
 //
-	@Column(name="CodMittente", length=10)
+	@Column(name="CodMittente", length=30)
 	private String codMittente;
 
 	/**
@@ -49,7 +49,7 @@ public class RigaCorr implements Serializable {
 	private int codRaggruppamento;
 
 //	@Column(name="Creazione")
-//	private Timestamp creazione;
+//	private Date creazione;
 
 	/**
 	 * Da ColliImballo prendere CodFormato
@@ -87,7 +87,7 @@ public class RigaCorr implements Serializable {
 	/**
 	 * Da ColliImballo
 	 */
-	@Column(name="Peso")
+	@Column(name="Peso", columnDefinition="money")
 	private Double peso;
 
 	/**
@@ -99,7 +99,7 @@ public class RigaCorr implements Serializable {
 	/**
 	 * La compongo io al momento dell'inserimento.
 	 */
-	@Column(name="StringaBartolini", nullable=false, length=65)
+	@Column(name="StringaBartolini", nullable=false, length=65, columnDefinition="char(65)")
 	private String stringaBartolini;
 
 //	@Column(name="TipoRecord", length=1)
@@ -108,7 +108,7 @@ public class RigaCorr implements Serializable {
 	/**
 	 * Da ColliImballo
 	 */
-	@Column(name="Volume")
+	@Column(name="Volume", columnDefinition="money")
 	private Double volume;
 
 	public RigaCorr() {}
@@ -160,11 +160,11 @@ public class RigaCorr implements Serializable {
 		this.codRaggruppamento = codRaggruppamento;
 	}
 
-//	public Timestamp getCreazione() {
+//	public Date getCreazione() {
 //		return this.creazione;
 //	}
 //
-//	public void setCreazione(Timestamp creazione) {
+//	public void setCreazione(Date creazione) {
 //		this.creazione = creazione;
 //	}
 

@@ -26,10 +26,10 @@ public class RighiImballoLight implements Serializable {
 	@Column(name="CodiceArticolo", length=50)
 	private String codiceArticolo;
 	
-	@Column(name="IdUniArticolo", length=15)
+	@Column(name="IdUniArticolo", length=15, nullable=false, columnDefinition="varchar(15)")
 	private String idUniArticolo;
 	
-	@Column(name="KeyColloSpe", length=10)
+	@Column(name="KeyColloSpe", length=10, columnDefinition="char(10)")
 	private String keyColloSpe;
 	
 	@Column(name="NrLista", length=21)
@@ -44,7 +44,7 @@ public class RighiImballoLight implements Serializable {
 	@Column(name="QtaImballata")
 	private int qtaImballata;
 	
-	@Column(name="Seriale", length=30)
+	@Column(name="Seriale", length=50)
 	private String seriale;
 	
 	public RighiImballoLight() {}

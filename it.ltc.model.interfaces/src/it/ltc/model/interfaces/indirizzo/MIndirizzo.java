@@ -10,8 +10,10 @@ public class MIndirizzo implements ModelInterface {
 
 	private static final long serialVersionUID = 1L;
 	
+	private int id;
+	
 	private String codice;
-	private String ragionesociale;
+	private String ragioneSociale;
 	private String indirizzo;
 	private String cap;
 	private String localita;
@@ -25,9 +27,9 @@ public class MIndirizzo implements ModelInterface {
 	@Override
 	public void valida() throws ModelValidationException {
 		//Ragione sociale
-		if (ragionesociale == null || ragionesociale.isEmpty())
+		if (ragioneSociale == null || ragioneSociale.isEmpty())
 			throw new ModelValidationException("Bisogna specificare la ragione sociale.");
-		else if (ragionesociale.length() > 100) 
+		else if (ragioneSociale.length() > 100) 
 			throw new ModelValidationException("La ragione sociale specificata e' troppo lunga. (Max 100 caratteri)");
 		//Indirizzo
 		if (indirizzo == null || indirizzo.isEmpty())
@@ -62,6 +64,14 @@ public class MIndirizzo implements ModelInterface {
 			throw new ModelValidationException("L'indirizzo email specificato e' troppo lungo. (Max 100 caratteri) contattare il reparto IT di LTC");
 	}
 	
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
 	public String getCodice() {
 		return codice;
 	}
@@ -70,12 +80,12 @@ public class MIndirizzo implements ModelInterface {
 		this.codice = codice;
 	}
 
-	public String getRagionesociale() {
-		return ragionesociale;
+	public String getRagioneSociale() {
+		return ragioneSociale;
 	}
 	
-	public void setRagionesociale(String ragionesociale) {
-		this.ragionesociale = ragionesociale;
+	public void setRagioneSociale(String ragioneSociale) {
+		this.ragioneSociale = ragioneSociale;
 	}
 	
 	public String getIndirizzo() {
@@ -144,7 +154,7 @@ public class MIndirizzo implements ModelInterface {
 		result = prime * result + ((localita == null) ? 0 : localita.hashCode());
 		result = prime * result + ((nazione == null) ? 0 : nazione.hashCode());
 		result = prime * result + ((provincia == null) ? 0 : provincia.hashCode());
-		result = prime * result + ((ragionesociale == null) ? 0 : ragionesociale.hashCode());
+		result = prime * result + ((ragioneSociale == null) ? 0 : ragioneSociale.hashCode());
 		return result;
 	}
 
@@ -187,17 +197,17 @@ public class MIndirizzo implements ModelInterface {
 				return false;
 		} else if (!provincia.equals(other.provincia))
 			return false;
-		if (ragionesociale == null) {
-			if (other.ragionesociale != null)
+		if (ragioneSociale == null) {
+			if (other.ragioneSociale != null)
 				return false;
-		} else if (!ragionesociale.equals(other.ragionesociale))
+		} else if (!ragioneSociale.equals(other.ragioneSociale))
 			return false;
 		return true;
 	}
 
 	@Override
 	public String toString() {
-		return "MIndirizzo [codice=" + codice + ", ragionesociale=" + ragionesociale + ", indirizzo=" + indirizzo
+		return "MIndirizzo [codice=" + codice + ", ragionesociale=" + ragioneSociale + ", indirizzo=" + indirizzo
 				+ ", cap=" + cap + ", localita=" + localita + ", provincia=" + provincia + ", nazione=" + nazione
 				+ ", telefono=" + telefono + ", email=" + email + "]";
 	}

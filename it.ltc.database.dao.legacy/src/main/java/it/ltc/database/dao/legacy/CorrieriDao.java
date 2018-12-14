@@ -38,9 +38,9 @@ public class CorrieriDao extends CRUDDao<Corrieri> {
 	protected void updateValues(Corrieri oldEntity, Corrieri entity) {
 		oldEntity.setCodice(entity.getCodice());
 		oldEntity.setCodiceCliente(entity.getCodiceCliente());
-		oldEntity.setCodiceTariffa(entity.getCodiceTariffa());
+		//oldEntity.setCodiceTariffa(entity.getCodiceTariffa());
 		oldEntity.setDescrizione(entity.getDescrizione());
-		oldEntity.setPuntoOperatorePartenza(entity.getPuntoOperatorePartenza());
+		//oldEntity.setPuntoOperatorePartenza(entity.getPuntoOperatorePartenza());
 	}
 
 }

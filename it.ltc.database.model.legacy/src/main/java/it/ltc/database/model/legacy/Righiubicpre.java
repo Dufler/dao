@@ -1,7 +1,7 @@
 package it.ltc.database.model.legacy;
 
 import java.io.Serializable;
-import java.sql.Timestamp;
+import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -34,7 +34,7 @@ public class Righiubicpre implements Serializable {
 	@Column(name="Anomalie", length=200)
 	private String anomalie;
 
-	@Column(length=2)
+	@Column(length=2, columnDefinition="char(2)")
 	private String area;
 
 //	@Column(name="BarcodeCassa", length=50)
@@ -43,22 +43,23 @@ public class Righiubicpre implements Serializable {
 //	@Column(name="BarraEan", length=50)
 //	private String barraEan;
 
-	@Column(length=2)
+	@Column(length=2, columnDefinition="char(2)")
 	private String box;
 
 	/*Particolarità di Cuccuini, fare classe a parte.*/
 //	@Column(name="CodiceDoganale", nullable=false, length=50)
 //	private String codiceDoganale;
 
-	@Column(name="Corsia", length=3)
+	@Column(name="Corsia", length=3, columnDefinition="char(3)")
 	private String corsia;
 
 	/**
 	 * Generare in automatico
 	 **/
-	private Timestamp dataassegnazione;
+	@Column(name="dataassegnazione", columnDefinition="datetime")
+	private Date dataassegnazione;
 
-//	private Timestamp dataubicaz;
+//	private Date dataubicaz;
 
 	/**
 	 * Se non lo trovo metto il valore di disponibile su magasd
@@ -75,13 +76,19 @@ public class Righiubicpre implements Serializable {
 	/**
 	 * Metto l'ID della riga d'ordine.
 	 */
-	@Column(name="IdRigoOrdine")
+	@Column(name="IdRigoOrdine", nullable=false)
 	private int idRigoOrdine;
+	
+	/**
+	 * Metto l'ID della testata d'ordine.
+	 */
+	@Column(name="IdTestataOrdine", nullable=false)
+	private int idTestataOrdine;
 
 	/**
 	 * L'ID univoco dell'articolo.
 	 */
-	@Column(length=50)
+	@Column(nullable=false, length=15, columnDefinition="varchar(15)")
 	private String iduniarticolo;
 
 //	@Column(name="IndicePercorrenza")
@@ -102,18 +109,19 @@ public class Righiubicpre implements Serializable {
 	/**
 	 * codice del magazzino da cui ho trovato la disponibilità.
 	 */
-	@Column(name="MagaDisponibile", nullable=false, length=10)
+	@Column(name="MagaDisponibile", nullable=false, length=5)
 	private String magaDisponibile;
 
 	/**
 	 * Lo stesso magazzino di righiordine e collipack.
 	 */
-	@Column(length=4)
+	@Column(length=4, nullable=false)
 	private String magazzino;
 
 	/**
 	 * NrIdColliPk di collipack e collicarico. Se non c'è prodotto metto qui il 999999999
 	 */
+	@Column(name="nrcollo", nullable=false)
 	private int nrcollo;
 
 	@Column(length=20)
@@ -122,7 +130,7 @@ public class Righiubicpre implements Serializable {
 //	@Column(length=50)
 //	private String OLDUbicazione;
 
-	@Column(length=2)
+	@Column(length=2, columnDefinition="char(2)")
 	private String piano;
 
 //	@Column(name="QtaImballata")
@@ -131,7 +139,7 @@ public class Righiubicpre implements Serializable {
 	/**
 	 * Quantità che dovrò prelevare su quel collo.
 	 */
-	@Column(name="Quantita")
+	@Column(name="Quantita", nullable=false)
 	private int quantita;
 
 	/**
@@ -140,7 +148,7 @@ public class Righiubicpre implements Serializable {
 	@Column(length=20)
 	private String raggliste;
 
-	@Column(length=3)
+	@Column(length=3, columnDefinition="char(3)")
 	private String scaffale;
 
 	/**
@@ -158,7 +166,7 @@ public class Righiubicpre implements Serializable {
 	/**
 	 * PR o SC come riportato su Ubicazioni, in condizioni normali ci può finire solo PR. Nel caso del 999 ci metto SC.
 	 */
-	@Column(name="TipoUbicazione", nullable=false, length=50)
+	@Column(name="TipoUbicazione", nullable=false, length=2)
 	private String tipoUbicazione;
 
 //	@Column(name="TotaleElementi")
@@ -182,6 +190,7 @@ public class Righiubicpre implements Serializable {
 	/**
 	 * Impostare a 0 col prepersist
 	 */
+	@Column(nullable=false)
 	private int y;
 
 	public Righiubicpre() {}
@@ -256,19 +265,19 @@ public class Righiubicpre implements Serializable {
 		this.corsia = corsia;
 	}
 
-	public Timestamp getDataassegnazione() {
+	public Date getDataassegnazione() {
 		return this.dataassegnazione;
 	}
 
-	public void setDataassegnazione(Timestamp dataassegnazione) {
+	public void setDataassegnazione(Date dataassegnazione) {
 		this.dataassegnazione = dataassegnazione;
 	}
 
-//	public Timestamp getDataubicaz() {
+//	public Date getDataubicaz() {
 //		return this.dataubicaz;
 //	}
 //
-//	public void setDataubicaz(Timestamp dataubicaz) {
+//	public void setDataubicaz(Date dataubicaz) {
 //		this.dataubicaz = dataubicaz;
 //	}
 
@@ -294,6 +303,14 @@ public class Righiubicpre implements Serializable {
 
 	public void setIdRigoOrdine(int idRigoOrdine) {
 		this.idRigoOrdine = idRigoOrdine;
+	}
+
+	public int getIdTestataOrdine() {
+		return idTestataOrdine;
+	}
+
+	public void setIdTestataOrdine(int idTestataOrdine) {
+		this.idTestataOrdine = idTestataOrdine;
 	}
 
 	public String getIduniarticolo() {

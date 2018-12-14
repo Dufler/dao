@@ -4,6 +4,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import it.ltc.database.dao.CRUDDao;
+import it.ltc.database.dao.CondizioneWhere;
 import it.ltc.database.model.legacy.ColliPack;
 
 public class ColliPackDao extends CRUDDao<ColliPack> {
@@ -57,15 +58,32 @@ public class ColliPackDao extends CRUDDao<ColliPack> {
 		return entities;
 	}
 	
+	public List<ColliPack> trovaProdottiNellaRigaDiCarico(int idRigaCarico) {
+		List<ColliPack> entities = findAllEqualTo("idPakiarticolo", idRigaCarico);
+		return entities;
+	}
+	
 	public List<ColliPack> trovaProdottiNelCollo(String keyColloCar) {
 		List<ColliPack> entities = findAllEqualTo("nrIdColloPk", keyColloCar);
 		return entities;
 	}
 	
 	public boolean isProdottoPresenteInMagazzino(String sku) {
-		ColliPack entity = findOnlyOneEqualTo("codArtStr", sku);
+		ColliPack entity = findFirstOneEqualTo("codArtStr", sku);
         boolean presente = entity != null;
 		return presente;
+	}
+	
+	/**
+	 * Seleziona tutti i ColliPack disponibili con il prodotto specificato nel magazzino specificato.
+	 */
+	public List<ColliPack> trovaProdottiDisponibiliInMagazzino(String idUnivocoArticolo, String magazzino) {
+		List<CondizioneWhere> condizioni = new LinkedList<>();
+		condizioni.add(new CondizioneWhere("codiceArticolo", idUnivocoArticolo));
+		condizioni.add(new CondizioneWhere("magazzino", magazzino));
+		condizioni.add(new CondizioneWhere("flagimp", "N"));
+		List<ColliPack> entities = findAll(condizioni);
+		return entities;
 	}
 
 

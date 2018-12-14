@@ -1,5 +1,6 @@
 package it.ltc.model.persistence.carico;
 
+import java.io.File;
 import java.sql.Timestamp;
 import java.util.Date;
 import java.util.HashMap;
@@ -23,10 +24,10 @@ import it.ltc.database.model.legacy.Magazzini;
 import it.ltc.database.model.legacy.PakiArticolo;
 import it.ltc.database.model.legacy.PakiTesta;
 import it.ltc.model.interfaces.carico.MCarico;
+import it.ltc.model.interfaces.carico.MRigaCarico;
 import it.ltc.model.interfaces.exception.ModelPersistenceException;
 import it.ltc.model.interfaces.exception.ModelValidationException;
 import it.ltc.model.interfaces.model.IControllerModel;
-import it.ltc.model.interfaces.ordine.ProdottoOrdinato;
 import it.ltc.model.interfaces.ordine.TipoIDProdotto;
 
 public class ControllerCaricoSQLServer extends Dao implements IControllerModel<MCarico> {
@@ -71,7 +72,7 @@ public class ControllerCaricoSQLServer extends Dao implements IControllerModel<M
 		if (ingresso.getProdotti().isEmpty())
 			throw new ModelValidationException("(Legacy) E' necessario inserire almeno un prodotto nel carico.");
 		//check sui magazzini
-		for (ProdottoOrdinato prodotto : ingresso.getProdotti()) {
+		for (MRigaCarico prodotto : ingresso.getProdotti()) {
 			checkMagazzino(prodotto);
 		}
 		//Ripulisco le mappe
@@ -87,7 +88,7 @@ public class ControllerCaricoSQLServer extends Dao implements IControllerModel<M
 		logger.info("(Legacy) Validazione carico terminata correttamente.");
 	}
 	
-	private void checkMagazzino(ProdottoOrdinato prodotto) {
+	private void checkMagazzino(MRigaCarico prodotto) {
 		Magazzini magazzino = daoMagazzini.trovaDaCodificaCliente(prodotto.getMagazzinoCliente());
 		//Guardo se l'ho trovato, se così non fosse provo con la codifica LTC
 		if (magazzino == null) {
@@ -106,7 +107,7 @@ public class ControllerCaricoSQLServer extends Dao implements IControllerModel<M
 	}
 	
 	private void checkPerModelloTaglia(MCarico ingresso) throws ModelValidationException {
-		for (ProdottoOrdinato prodotto : ingresso.getProdotti()) {
+		for (MRigaCarico prodotto : ingresso.getProdotti()) {
 			String key = prodotto.getCodicemodello() + prodotto.getTaglia();
 			if (!mappaIdentificazioneArticoli.containsKey(key)) {
 				Articoli articolo = daoArticoli.trovaDaModelloETaglia(prodotto.getCodicemodello(), prodotto.getTaglia());
@@ -120,7 +121,7 @@ public class ControllerCaricoSQLServer extends Dao implements IControllerModel<M
 	}
 
 	private void checkPerChiave(MCarico ingresso) throws ModelValidationException {
-		for (ProdottoOrdinato prodotto : ingresso.getProdotti()) {
+		for (MRigaCarico prodotto : ingresso.getProdotti()) {
 			String key = prodotto.getChiave();
 			if (!mappaIdentificazioneArticoli.containsKey(key)) {
 				Articoli articolo = daoArticoli.trovaDaSKU(key);
@@ -134,7 +135,7 @@ public class ControllerCaricoSQLServer extends Dao implements IControllerModel<M
 	}
 
 	protected void checkPerBarcode(MCarico ingresso) throws ModelValidationException {
-		for (ProdottoOrdinato prodotto : ingresso.getProdotti()) {
+		for (MRigaCarico prodotto : ingresso.getProdotti()) {
 			String key = prodotto.getBarcode();
 			if (!mappaIdentificazioneArticoli.containsKey(key)) {
 				Articoli articolo = daoArticoli.trovaDaBarcode(key);
@@ -205,8 +206,7 @@ public class ControllerCaricoSQLServer extends Dao implements IControllerModel<M
 		if (ingresso != null) {
 			int idCarico = ingresso.getId(); //non usabile in inserimento.
 			String riferimento = ingresso.getRiferimento();
-			List<ProdottoOrdinato> prodotti = ingresso.getProdotti();
-			for (ProdottoOrdinato prodotto : prodotti) {
+			for (MRigaCarico prodotto : ingresso.getProdotti()) {
 				PakiArticolo dettaglio = deserializzaDettaglio(prodotto);
 				dettaglio.setIdPakiTesta(idCarico);
 				dettaglio.setNrOrdineFor(riferimento);
@@ -216,9 +216,10 @@ public class ControllerCaricoSQLServer extends Dao implements IControllerModel<M
 		return dettagli;
 	}
 
-	public PakiArticolo deserializzaDettaglio(ProdottoOrdinato riga) throws ModelPersistenceException {
+	public PakiArticolo deserializzaDettaglio(MRigaCarico riga) throws ModelPersistenceException {
 		Articoli prodotto = mappaArticoliPerIDUnivoco.get(riga.getChiavelegacy());
 		PakiArticolo dettaglio = new PakiArticolo();
+		dettaglio.setIdArticolo(prodotto.getIdArticolo());
 		dettaglio.setRigaPacki(riga.getNumeroRiga());
 		dettaglio.setCodBarre(prodotto.getIdUniArticolo());
 		dettaglio.setCodUnicoArt(prodotto.getIdUniArticolo());
@@ -240,6 +241,20 @@ public class ControllerCaricoSQLServer extends Dao implements IControllerModel<M
 	public MCarico elimina(MCarico model) throws ModelPersistenceException {
 		// TODO Auto-generated method stub
 		return null;
+	}
+	
+	/**
+	 * Sposta il file selezionato nella cartella specificata.
+	 * @param file il file da spostare.
+	 * @param pathCartella la cartella di destinazione.
+	 */
+	protected void spostaFile(File file, String pathCartella) {
+		String nomeFile = file.getName();
+		File fileDaSpostare = new File(pathCartella + nomeFile);
+		boolean spostato = file.renameTo(fileDaSpostare);
+		if (spostato) {
+			logger.info("Spostato il file '" + nomeFile + "' in '" + pathCartella + "'");
+		}
 	}
 
 }

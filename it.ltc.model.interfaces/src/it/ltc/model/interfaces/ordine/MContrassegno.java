@@ -10,24 +10,24 @@ public class MContrassegno implements ModelInterface {
 
 	private static final long serialVersionUID = 1L;
 	
-	private String tipo;
+	private TipoContrassegno tipo;
 	private double valore;
 	
 	public MContrassegno() {}
 	
 	@Override
 	public void valida() throws ModelValidationException {
-		if (tipo == null || tipo.isEmpty())
+		if (tipo == null)
 			throw new ModelValidationException("Bisogna specificare un tipo di contrassegno.");
 		if (valore <= 0)
 			throw new ModelValidationException("Il valore specificato per il contrassegno non è valido.");
 	}
 
-	public String getTipo() {
+	public TipoContrassegno getTipo() {
 		return tipo;
 	}
 
-	public void setTipo(String tipo) {
+	public void setTipo(TipoContrassegno tipo) {
 		this.tipo = tipo;
 	}
 
