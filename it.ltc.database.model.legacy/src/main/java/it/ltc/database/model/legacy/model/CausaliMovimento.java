@@ -14,7 +14,8 @@ public enum CausaliMovimento {
 	IOS("Impegno ordine", 0, -1, 1, "NO", 0, 0, "N", "-", "+", "O", "ORD", "IP"),
 	REO("Cancellazione ordine", 0, 1, -1, "NO", 0, 0, "N", "+", "-", "A", "PAK", "RO"),
 	IBO("Imballo ordine", -1, 0, -1, "SI", 0, 1, "-", "N", "-", "O", "ORD", "OR"),
-	REL("Rettifica non spedito", 0, 1, -1, "NO", 0, 0, "N", "+", "-", "O", "ORD", "OR");
+	REL("Rettifica non spedito", 0, 1, -1, "NO", 0, 0, "N", "+", "-", "O", "ORD", "OR"),
+	ANC("Annullamento collo", -1, -1, 0, "SI", 1, 0, "-", "-", "N", "O", "RET", "RT");
 	
 	private final String descrizione;
 	

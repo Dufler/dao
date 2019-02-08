@@ -14,6 +14,8 @@ import javax.persistence.Id;
 import javax.persistence.PrePersist;
 import javax.persistence.Table;
 
+import it.ltc.database.model.legacy.model.StatoOrdine;
+
 /**
  * The persistent class for the TestataOrdini database table.
  * 
@@ -368,6 +370,8 @@ public class TestataOrdini implements Serializable {
 
 	@PrePersist
 	public void prePersist() {
+		//Attendo un millisecondo per evitare liste duplicate.
+		try { Thread.sleep(1); } catch (Exception e) { System.out.println("Impossibile fermare il thread per 1 ms.");}
 		GregorianCalendar now = new GregorianCalendar();
 		dataArrivoFile = new Date(now.getTimeInMillis());
 		annoOrdine = now.get(Calendar.YEAR);
@@ -1077,6 +1081,20 @@ public class TestataOrdini implements Serializable {
 
 	public void setStato(String stato) {
 		this.stato = stato;
+	}
+	
+	/**
+	 * Converte lo stato dell'ordine in un valore enum.
+	 * @return
+	 */
+	public StatoOrdine getStatoOrdine() {
+		StatoOrdine eStato;
+		try {
+			eStato = StatoOrdine.valueOf(stato);
+		} catch (Exception e) {
+			eStato = StatoOrdine.NONE;
+		}
+		return eStato;
 	}
 
 	 public String getStatoUbicazione() {

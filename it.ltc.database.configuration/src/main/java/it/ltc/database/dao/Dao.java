@@ -83,9 +83,7 @@ public abstract class Dao {
 			transaction.commit();
 			result = true;
 		} catch (Exception e) {
-			logger.error(e);
-			for (StackTraceElement element : e.getStackTrace())
-				logger.error(element);
+			logger.error(e.getMessage(), e);
 			if (transaction != null && transaction.isActive())
 				transaction.rollback();
 			result = false;

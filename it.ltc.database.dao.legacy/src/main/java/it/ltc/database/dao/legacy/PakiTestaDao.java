@@ -21,6 +21,7 @@ public class PakiTestaDao extends CRUDDao<PakiTesta> {
 	public List<PakiTesta> trovaCarichiChiusiDaEsportare() {
 		List<CondizioneWhere> condizioni = new LinkedList<>();
 		condizioni.add(new CondizioneWhere("stato", "CHIUSO"));
+		condizioni.add(new CondizioneWhere("generatoMov", "SI"));
 		condizioni.add(new CondizioneWhere("flagTra", "F"));
 		List<PakiTesta> entities = findAll(condizioni);
 		return entities;

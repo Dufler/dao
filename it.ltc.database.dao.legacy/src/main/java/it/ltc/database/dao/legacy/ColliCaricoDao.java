@@ -1,5 +1,7 @@
 package it.ltc.database.dao.legacy;
 
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 
@@ -35,7 +37,8 @@ public class ColliCaricoDao extends CRUDDao<ColliCarico> {
 	protected static synchronized int getProgressivoNrCollo(EntityManager em) {
 		int progressivo;
 		try {
-			progressivo = em.createNamedQuery("ColliCarico.progressivoCollo", Integer.class).getSingleResult() + 1;
+			int anno = new GregorianCalendar().get(Calendar.YEAR);
+			progressivo = em.createNamedQuery("ColliCarico.progressivoCollo", Integer.class).setParameter("anno", anno).getSingleResult() + 1;
 		} catch (Exception e) {
 			progressivo = 1;
 		} finally {

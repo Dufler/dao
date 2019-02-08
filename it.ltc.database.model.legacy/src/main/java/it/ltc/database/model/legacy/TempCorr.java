@@ -84,7 +84,7 @@ public class TempCorr implements Serializable {
 	
 	@PrePersist
 	public void prePersist() {
-		if (generato == null) generato = "NO";
+		if (generato == null || generato.isEmpty()) generato = "NO";
 		creazione = new Date();
 	}
 

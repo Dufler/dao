@@ -16,14 +16,14 @@ public class ArtibarDao extends CRUDDao<ArtiBar> {
 		super(persistenceUnit, ArtiBar.class);
 	}
 	
-	public ArtiBar trovaDaSKU(String sku) {
-        ArtiBar articolo = findFirstOneEqualTo("codiceArticolo", sku); //E' possibile che c'è ne sia più di uno.
-		return articolo;
+	public List<ArtiBar> trovaDaSKU(String sku) {
+		List<ArtiBar> entities = findAllEqualTo("codiceArticolo", sku);
+		return entities;
 	}
 	
-	public ArtiBar trovaDaIDUnivoco(String idUniArticolo) {
-		ArtiBar articolo = findFirstOneEqualTo("idUniArticolo", idUniArticolo); //E' possibile che c'è ne sia più di uno.
-		return articolo;
+	public List<ArtiBar> trovaDaIDUnivoco(String idUniArticolo) {
+		List<ArtiBar> entities = findAllEqualTo("idUniArticolo", idUniArticolo);
+		return entities;
 	}
 	
 	public ArtiBar trovaDaBarcode(String barcode) {

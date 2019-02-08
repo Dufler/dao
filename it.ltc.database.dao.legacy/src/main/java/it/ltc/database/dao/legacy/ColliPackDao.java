@@ -3,11 +3,20 @@ package it.ltc.database.dao.legacy;
 import java.util.LinkedList;
 import java.util.List;
 
+import javax.persistence.EntityManager;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
+
+import org.apache.log4j.Logger;
+
 import it.ltc.database.dao.CRUDDao;
 import it.ltc.database.dao.CondizioneWhere;
 import it.ltc.database.model.legacy.ColliPack;
 
 public class ColliPackDao extends CRUDDao<ColliPack> {
+	
+	private static final Logger logger = Logger.getLogger("ColliPackDao");
 
 	public ColliPackDao(String persistenceUnit) {
 		super(persistenceUnit, ColliPack.class);
@@ -85,6 +94,29 @@ public class ColliPackDao extends CRUDDao<ColliPack> {
 		List<ColliPack> entities = findAll(condizioni);
 		return entities;
 	}
-
+	
+	/**
+	 * Trova il record di collipack con il seriale specificato, nel caso ce ne fosse più di uno restituisce il più recente.
+	 * @param seriale
+	 * @return
+	 */
+	public ColliPack trovaSeriale(String seriale) {
+		ColliPack entity;
+		EntityManager em = getManager();
+		try {
+			CriteriaBuilder cb = em.getCriteriaBuilder();
+	        CriteriaQuery<ColliPack> criteria = cb.createQuery(c);
+	        Root<ColliPack> member = criteria.from(c);
+	        criteria.select(member).where(cb.equal(member.get("seriale"), seriale)).orderBy(cb.desc(member.get("idColliPack")));
+			List<ColliPack> lista = em.createQuery(criteria).setMaxResults(1).getResultList();
+			entity = lista.size() == 1 ? lista.get(0) : null;
+		} catch (Exception e) {
+			logger.error(e.getMessage(), e);
+			entity = null;
+		} finally {
+			em.close();
+		}		
+        return entity;
+	}
 
 }

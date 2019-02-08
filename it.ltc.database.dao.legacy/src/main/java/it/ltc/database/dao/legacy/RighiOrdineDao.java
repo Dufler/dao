@@ -37,6 +37,11 @@ public class RighiOrdineDao extends CRUDDao<RighiOrdine> {
 		return entity;
 	}
 	
+	public RighiOrdine trovaDaID(int id) {
+		RighiOrdine entity = findByID(id);
+		return entity;
+	}
+	
 	/**
 	 * Controlla se un certo prodotto è presente o meno fra gli ordini esistenti.
 	 * @param sku il codice articolo del prodotto così come definito dal cliente.
@@ -127,16 +132,6 @@ public class RighiOrdineDao extends CRUDDao<RighiOrdine> {
 	 * @return
 	 */
 	public List<RighiOrdine> trovaRigheDaAssegnare(int idOrdine) {
-//		EntityManager em = getManager();
-//		CriteriaBuilder cb = em.getCriteriaBuilder();
-//		CriteriaQuery<RighiOrdine> criteria = cb.createQuery(RighiOrdine.class);
-//		Root<RighiOrdine> member = criteria.from(RighiOrdine.class);
-//		Predicate condizioneOrdine = cb.equal(member.get("idTestataOrdine"), idOrdine);
-//		Predicate condizionePezziAssegnati = cb.greaterThan(member.get("qtadaubicare"), 0);
-//		criteria.select(member).where(cb.and(condizioneOrdine, condizionePezziAssegnati));
-//		List<RighiOrdine> list = em.createQuery(criteria).getResultList();
-//		em.close();
-//		return list;
 		List<CondizioneWhere> condizioni = new LinkedList<>();
 		condizioni.add(new CondizioneWhere("idTestataOrdine", idOrdine));
 		condizioni.add(new CondizioneWhere("qtadaubicare", 0, Operatore.GREATER, Condizione.AND));
@@ -150,7 +145,7 @@ public class RighiOrdineDao extends CRUDDao<RighiOrdine> {
 		try {
 			totale = em.createNamedQuery("RighiOrdine.totaliPerOrdine", TestataOrdiniTotali.class).setParameter("ordine", idOrdine).getSingleResult();
 		} catch (Exception e) {
-			logger.error(e);
+			logger.error(e.getMessage(), e);
 			totale = null;
 		} finally {
 			em.close();

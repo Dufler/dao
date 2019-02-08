@@ -16,7 +16,8 @@ public class MRigaCarico implements ModelInterface {
 	private int numeroRiga;
 	private String chiavelegacy;
 	
-	private int quantita;
+	private int quantitaDichiarata;
+	private int quantitaRiscontrata;
 	private String magazzinoCliente;
 	private String magazzinoLTC;
 	
@@ -32,8 +33,8 @@ public class MRigaCarico implements ModelInterface {
 	
 	@Override
 	public void valida() throws ModelValidationException {
-		if (quantita <= 0) {
-			throw new ModelValidationException("La quantita' specificata non è valida.");
+		if (quantitaDichiarata <= 0) {
+			throw new ModelValidationException("La quantita' dichiarata specificata non è valida.");
 		}
 		if (magazzinoCliente == null || magazzinoCliente.isEmpty()) {
 			throw new ModelValidationException("Bisogna specificare un magazzino cliente.");
@@ -94,14 +95,22 @@ public class MRigaCarico implements ModelInterface {
 		this.chiavelegacy = chiavelegacy;
 	}
 
-	public int getQuantita() {
-		return quantita;
+	public int getQuantitaDichiarata() {
+		return quantitaDichiarata;
 	}
 
-	public void setQuantita(int quantita) {
-		this.quantita = quantita;
+	public void setQuantitaDichiarata(int quantita) {
+		this.quantitaDichiarata = quantita;
 	}
 	
+	public int getQuantitaRiscontrata() {
+		return quantitaRiscontrata;
+	}
+
+	public void setQuantitaRiscontrata(int quantitaRiscontrata) {
+		this.quantitaRiscontrata = quantitaRiscontrata;
+	}
+
 	public String getMagazzinoCliente() {
 		return magazzinoCliente;
 	}
@@ -174,7 +183,7 @@ public class MRigaCarico implements ModelInterface {
 		result = prime * result + ((codicemodello == null) ? 0 : codicemodello.hashCode());
 		result = prime * result + ((magazzinoCliente == null) ? 0 : magazzinoCliente.hashCode());
 		result = prime * result + numeroRiga;
-		result = prime * result + quantita;
+		result = prime * result + quantitaDichiarata;
 		result = prime * result + ((taglia == null) ? 0 : taglia.hashCode());
 		return result;
 	}
@@ -205,7 +214,7 @@ public class MRigaCarico implements ModelInterface {
 			return false;
 		if (numeroRiga != other.numeroRiga)
 			return false;
-		if (quantita != other.quantita)
+		if (quantitaDichiarata != other.quantitaDichiarata)
 			return false;
 		if (taglia == null) {
 			if (other.taglia != null)
@@ -217,7 +226,7 @@ public class MRigaCarico implements ModelInterface {
 
 	@Override
 	public String toString() {
-		return "MRigaCarico [numeroRiga=" + numeroRiga + ", quantita=" + quantita + ", magazzinoCliente="
+		return "MRigaCarico [numeroRiga=" + numeroRiga + ", quantita=" + quantitaDichiarata + ", magazzinoCliente="
 				+ magazzinoCliente + ", magazzinoLTC=" + magazzinoLTC + ", barcode=" + barcode + ", chiave=" + chiave
 				+ ", codicemodello=" + codicemodello + ", taglia=" + taglia + ", riferimentoCliente="
 				+ riferimentoCliente + "]";

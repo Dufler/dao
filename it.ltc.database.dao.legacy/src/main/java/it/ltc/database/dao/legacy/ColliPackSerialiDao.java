@@ -83,7 +83,7 @@ public class ColliPackSerialiDao extends CRUDDao<ColliPackConSeriale> {
 			List<ColliPackConSeriale> lista = em.createQuery(criteria).setMaxResults(1).getResultList();
 			entity = lista.size() == 1 ? lista.get(0) : null;
 		} catch (Exception e) {
-			logger.error(e);
+			logger.error(e.getMessage(), e);
 			entity = null;
 		} finally {
 			em.close();

@@ -11,6 +11,7 @@ public class MProdotto implements ModelInterface {
 	private static final long serialVersionUID = 1L;
 	
 	private int id;
+	private String idUnivocoLegacy;
 	
 	private String chiaveCliente;
 	private String codiceModello;
@@ -114,6 +115,14 @@ public class MProdotto implements ModelInterface {
 
 	public void setId(int id) {
 		this.id = id;
+	}
+
+	public String getIdUnivocoLegacy() {
+		return idUnivocoLegacy;
+	}
+
+	public void setIdUnivocoLegacy(String idUnivocoLegacy) {
+		this.idUnivocoLegacy = idUnivocoLegacy;
 	}
 
 	public String getChiaveCliente() {

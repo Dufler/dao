@@ -12,8 +12,12 @@ public class MContrassegno implements ModelInterface {
 	
 	private TipoContrassegno tipo;
 	private double valore;
+	private String valuta;
 	
-	public MContrassegno() {}
+	public MContrassegno() {
+		//Valuta di default.
+		valuta = "EUR";
+	}
 	
 	@Override
 	public void valida() throws ModelValidationException {
@@ -37,6 +41,14 @@ public class MContrassegno implements ModelInterface {
 
 	public void setValore(double valore) {
 		this.valore = valore;
+	}
+
+	public String getValuta() {
+		return valuta;
+	}
+
+	public void setValuta(String valuta) {
+		this.valuta = valuta;
 	}
 
 }

@@ -13,7 +13,9 @@ public enum Corriere {
 	UPS(4, "UPS"),
 	DHL(5, "DHL"),
 	RUT(6, "Rutilli"),
-	FED(7, "FedEx");
+	FED(7, "FedEx"),
+	LTC(11, "LTC"), 
+	ALTRO(10, "Altro");
 	
 	private final int id;
 	private final String nome;

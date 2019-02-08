@@ -86,63 +86,68 @@ public class ProdottoColtortiDAOImpl extends ProdottoDaoConVerifiche<ArticoliCol
 	public ProdottoJSON aggiorna(ProdottoJSON prodotto) {
 		//Controllo di avere già l'anagrafica basandomi sullo SKU
 		ArticoliColtorti articolo = daoProdotti.trovaDaSKU(prodotto.getChiaveCliente());
-		ArtiBar barcode = daoArtibar.trovaDaSKU(prodotto.getChiaveCliente());
-		if (articolo == null || barcode == null)
+		List<ArtiBar> barcodes = daoArtibar.trovaDaSKU(prodotto.getChiaveCliente());
+		if (articolo == null || barcodes == null || barcodes.isEmpty())
 			throw new CustomException("L'articolo che si sta tentando di aggiornare non esiste. Controlla la chiave cliente!");
 		//Se esiste controllo che non sia già arrivato in magazzino
 		//nel caso in cui sia gia' presente eseguo l'aggiornamento solo per alcuni campi.
 		boolean presente = daoColliPack.isProdottoPresenteInMagazzino(prodotto.getChiaveCliente());
 		//Recupero la entity
 		EntityManager em = getManager();
-		articolo = em.find(ArticoliColtorti.class, articolo.getIdArticolo());
-		barcode = em.find(ArtiBar.class, barcode.getIdArtiBar());
-		if (!presente) {
-			//update sul barcode
-			articolo.setCodBarre(prodotto.getBarcode());
-			barcode.setBarraEAN(prodotto.getBarcode());
-			//update sulla taglia
-			articolo.setTaglia(prodotto.getTaglia());
-			barcode.setTaglia(prodotto.getTaglia());
-			//update su tutto il resto
-			articolo.setCategoria(prodotto.getCategoria());
-			articolo.setCatMercGruppo(prodotto.getCategoria());
-			articolo.setLinea(prodotto.getBrand());
-			//null check sugli opzionali
-			if (prodotto.getBarcodeFornitore() != null && !prodotto.getBarcodeFornitore().isEmpty())
-				articolo.setBarraEAN(prodotto.getBarcodeFornitore());
-			if (prodotto.getSkuFornitore() != null && !prodotto.getSkuFornitore().isEmpty())
-				articolo.setCodArtOld(prodotto.getSkuFornitore());
-			if (prodotto.getMadeIn() != null && !prodotto.getMadeIn().isEmpty())
-				articolo.setMadeIn(prodotto.getMadeIn());
-			if (prodotto.getStagione() != null && !prodotto.getStagione().isEmpty())
-				articolo.setStagione(prodotto.getStagione());
-		}
-		//Aggiorno tutto il resto
-		//null check sugli opzionali.
-		if (prodotto.getComposizione() != null && !prodotto.getComposizione().isEmpty())
-			articolo.setComposizione(prodotto.getComposizione());
-		if (prodotto.getColore() != null && !prodotto.getColore().isEmpty())
-			articolo.setColore(prodotto.getColore());
-		if (prodotto.getDescrizione() != null && !prodotto.getDescrizione().isEmpty())
-			articolo.setDescrizione(prodotto.getDescrizione());
-		if (prodotto.getDescrizioneAggiuntiva() != null && !prodotto.getDescrizioneAggiuntiva().isEmpty())
-			articolo.setDescAggiuntiva(prodotto.getDescrizioneAggiuntiva());
-		if (prodotto.getNote() != null && !prodotto.getNote().isEmpty())
-			articolo.setNote(prodotto.getNote());
-		if (prodotto.getH() != null)
-			articolo.setArtH(prodotto.getH());
-		if (prodotto.getL() != null)
-			articolo.setArtL(prodotto.getL());
-		if (prodotto.getZ() != null)
-			articolo.setArtZ(prodotto.getZ());
-		if (prodotto.getPeso() != null)
-			articolo.setArtPeso(new BigDecimal(prodotto.getPeso()));
-		if (prodotto.getValore() != null)
-			articolo.setValVen(new BigDecimal(prodotto.getValore()));
 		//Update
 		EntityTransaction t = em.getTransaction();
 		try {
 			t.begin();
+			if (!presente) {
+				//Update sui barcodes
+				for (ArtiBar barcode : barcodes) {
+					barcode = em.find(ArtiBar.class, barcode.getIdArtiBar());
+					barcode.setBarraEAN(prodotto.getBarcode());
+					barcode.setTaglia(prodotto.getTaglia());
+					em.merge(barcode);
+				}
+				//Update sul prodotto
+				articolo = em.find(ArticoliColtorti.class, articolo.getIdArticolo());
+				//update sul barcode
+				articolo.setCodBarre(prodotto.getBarcode());
+				//update sulla taglia
+				articolo.setTaglia(prodotto.getTaglia());
+				//update su tutto il resto
+				articolo.setCategoria(prodotto.getCategoria());
+				articolo.setCatMercGruppo(prodotto.getCategoria());
+				articolo.setLinea(prodotto.getBrand());
+				//null check sugli opzionali
+				if (prodotto.getBarcodeFornitore() != null && !prodotto.getBarcodeFornitore().isEmpty())
+					articolo.setBarraEAN(prodotto.getBarcodeFornitore());
+				if (prodotto.getSkuFornitore() != null && !prodotto.getSkuFornitore().isEmpty())
+					articolo.setCodArtOld(prodotto.getSkuFornitore());
+				if (prodotto.getMadeIn() != null && !prodotto.getMadeIn().isEmpty())
+					articolo.setMadeIn(prodotto.getMadeIn());
+				if (prodotto.getStagione() != null && !prodotto.getStagione().isEmpty())
+					articolo.setStagione(prodotto.getStagione());
+			}
+			//Aggiorno tutto il resto
+			//null check sugli opzionali.
+			if (prodotto.getComposizione() != null && !prodotto.getComposizione().isEmpty())
+				articolo.setComposizione(prodotto.getComposizione());
+			if (prodotto.getColore() != null && !prodotto.getColore().isEmpty())
+				articolo.setColore(prodotto.getColore());
+			if (prodotto.getDescrizione() != null && !prodotto.getDescrizione().isEmpty())
+				articolo.setDescrizione(prodotto.getDescrizione());
+			if (prodotto.getDescrizioneAggiuntiva() != null && !prodotto.getDescrizioneAggiuntiva().isEmpty())
+				articolo.setDescAggiuntiva(prodotto.getDescrizioneAggiuntiva());
+			if (prodotto.getNote() != null && !prodotto.getNote().isEmpty())
+				articolo.setNote(prodotto.getNote());
+			if (prodotto.getH() != null)
+				articolo.setArtH(prodotto.getH());
+			if (prodotto.getL() != null)
+				articolo.setArtL(prodotto.getL());
+			if (prodotto.getZ() != null)
+				articolo.setArtZ(prodotto.getZ());
+			if (prodotto.getPeso() != null)
+				articolo.setArtPeso(new BigDecimal(prodotto.getPeso()));
+			if (prodotto.getValore() != null)
+				articolo.setValVen(new BigDecimal(prodotto.getValore()));
 			em.merge(articolo);
 			t.commit();
 		} catch (Exception e) {
@@ -173,16 +178,18 @@ public class ProdottoColtortiDAOImpl extends ProdottoDaoConVerifiche<ArticoliCol
 			throw new CustomException("Non e' possibile dismettere il prodotto, è attualmente presente in magazzino.");
 		}
 		//Elimino anche il barcode ad esso collegato.
-		ArtiBar barcode = daoArtibar.trovaDaSKU(prodotto.getChiaveCliente());
+		List<ArtiBar> barcodes = daoArtibar.trovaDaSKU(prodotto.getChiaveCliente());
 		//Delete
 		EntityManager em = getManager();
-		articolo = em.find(ArticoliColtorti.class, articolo.getIdArticolo());
-		barcode = em.find(ArtiBar.class, barcode.getIdArtiBar());
 		EntityTransaction t = em.getTransaction();
 		try {
 			t.begin();
+			articolo = em.find(ArticoliColtorti.class, articolo.getIdArticolo());
 			em.remove(articolo);
-			em.remove(barcode);
+			for (ArtiBar barcode : barcodes) {
+				barcode = em.find(ArtiBar.class, barcode.getIdArtiBar());
+				em.remove(barcode);
+			}
 			t.commit();
 		} catch(Exception e) {
 			logger.error(e);

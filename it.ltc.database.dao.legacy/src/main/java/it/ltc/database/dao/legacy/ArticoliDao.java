@@ -87,9 +87,13 @@ public class ArticoliDao extends CRUDDao<Articoli> {
 		List<CondizioneWhere> condizioni = new LinkedList<>();
 		condizioni.add(new CondizioneWhere("modello", modello));
 		condizioni.add(new CondizioneWhere("taglia", taglia));
-		List<Articoli> entities = findAll(condizioni, 1);
-		Articoli entity = entities.isEmpty() ? null : entities.get(0);
+		Articoli entity = findOne(condizioni); //findJustOne(condizioni); con questa istruzione se ce ne fossero più di uno restituerebbe null.
 		return entity;
+	}
+	
+	public List<Articoli> trovaDaModello(String modello) {
+		List<Articoli> entities = findAllEqualTo("modello", modello);
+		return entities;
 	}
 	
 	public Articoli trovaDaBarcode(String barcode) {

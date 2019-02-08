@@ -10,7 +10,6 @@ import it.ltc.database.model.legacy.Righiubicpre;
 import it.ltc.database.model.legacy.Scorte;
 import it.ltc.database.model.legacy.Scorte2;
 import it.ltc.database.model.legacy.ScorteColli;
-import it.ltc.database.model.legacy.TestataOrdini;
 import it.ltc.database.model.legacy.Ubicazioni;
 
 /**
@@ -27,9 +26,8 @@ public class AssegnazioneProdotto {
 	 * @author Damiano
 	 *
 	 */
-	public enum TipoAssegnazione { NORMALE, SCORTE, NON_UBICATA }
+	public enum TipoAssegnazione { NORMALE, SCORTE, NON_UBICATA, NON_PRESENTE }
 	
-	private final TestataOrdini testata;
 	private final RighiOrdine riga;
 	
 	private final Set<Righiubicpre> righeUbicazioni;
@@ -43,8 +41,7 @@ public class AssegnazioneProdotto {
 	
 	private TipoAssegnazione tipo;
 	
-	public AssegnazioneProdotto(TestataOrdini testata, RighiOrdine riga) {
-		this.testata = testata;
+	public AssegnazioneProdotto(RighiOrdine riga) {
 		this.riga = riga;
 		this.righeUbicazioni = new HashSet<>();
 		this.prodotti = new HashSet<>();
@@ -53,10 +50,6 @@ public class AssegnazioneProdotto {
 		this.scorteUbicate = new HashSet<>();
 		this.scorteNonUbicate = new HashSet<>();
 		this.colliConScorte = new HashSet<>();
-	}
-
-	public TestataOrdini getTestata() {
-		return testata;
 	}
 
 	public RighiOrdine getRiga() {

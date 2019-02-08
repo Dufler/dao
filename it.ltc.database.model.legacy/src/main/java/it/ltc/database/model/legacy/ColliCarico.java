@@ -19,7 +19,7 @@ import java.util.GregorianCalendar;
 @Table(name="ColliCarico")
 @NamedQueries({
 	@NamedQuery(name="ColliCarico.findAll", query="SELECT c FROM ColliCarico c"),
-	@NamedQuery(name="ColliCarico.progressivoCollo", query="SELECT MAX(c.nrCollo) FROM ColliCarico c")
+	@NamedQuery(name="ColliCarico.progressivoCollo", query="SELECT MAX(c.nrCollo) FROM ColliCarico c WHERE c.anno = :anno")
 })
 public class ColliCarico implements Serializable {
 	
@@ -131,7 +131,7 @@ public class ColliCarico implements Serializable {
 	/**
 	 * Valore univoco fatto così: YY + padding di 0 + progressivo collo.
 	 */
-	@Column(name="KeyColloCar", length=9, nullable=false, updatable=false, columnDefinition="char(9)")
+	@Column(name="KeyColloCar", length=9, nullable=false, updatable=false, columnDefinition="varchar(9)")
 	private String keyColloCar;
 
 	/**
@@ -207,7 +207,7 @@ public class ColliCarico implements Serializable {
 	/**
 	 * Valore di deafult sul db ATTE
 	 */
-	@Column(name="Stato", length=6)
+	@Column(name="Stato", length=6, nullable=false)
 	private String stato;
 
 	/**

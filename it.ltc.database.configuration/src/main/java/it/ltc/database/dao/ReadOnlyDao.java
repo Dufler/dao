@@ -44,9 +44,7 @@ public class ReadOnlyDao<T> extends Dao {
 	        criteria.select(member);
 			lista = em.createQuery(criteria).getResultList();
 		} catch (Exception e) {
-			logger.error(e);
-			for (StackTraceElement element : e.getStackTrace())
-				logger.error(element);
+			logger.error(e.getMessage(), e);
 			lista = null;
 		} finally {
 			em.close();
@@ -73,9 +71,7 @@ public class ReadOnlyDao<T> extends Dao {
 	        List<T> lista = em.createQuery(criteria).getResultList();
 			entity = lista.size() == 1 ? lista.get(0) : null;
 		} catch (Exception e) {
-			logger.error(e);
-			for (StackTraceElement element : e.getStackTrace())
-				logger.error(element);
+			logger.error(e.getMessage(), e);
 			entity = null;
 		} finally {
 			em.close();
@@ -102,9 +98,7 @@ public class ReadOnlyDao<T> extends Dao {
 	        List<T> lista = em.createQuery(criteria).getResultList();
 			entity = lista.isEmpty() ? null : lista.get(0);
 		} catch (Exception e) {
-			logger.error(e);
-			for (StackTraceElement element : e.getStackTrace())
-				logger.error(element);
+			logger.error(e.getMessage(), e);
 			entity = null;
 		} finally {
 			em.close();
@@ -130,9 +124,7 @@ public class ReadOnlyDao<T> extends Dao {
 	        }
 			lista = em.createQuery(criteria).getResultList();
 		} catch (Exception e) {
-			logger.error(e);
-			for (StackTraceElement element : e.getStackTrace())
-				logger.error(element);
+			logger.error(e.getMessage(), e);
 			lista = null;
 		} finally {
 			em.close();
@@ -158,9 +150,7 @@ public class ReadOnlyDao<T> extends Dao {
 	        }
 			lista = em.createQuery(criteria).setMaxResults(maxResults).getResultList();
 		} catch (Exception e) {
-			logger.error(e);
-			for (StackTraceElement element : e.getStackTrace())
-				logger.error(element);
+			logger.error(e.getMessage(), e);
 			lista = null;
 		} finally {
 			em.close();
@@ -245,9 +235,7 @@ public class ReadOnlyDao<T> extends Dao {
 	        criteria.select(member).where(cb.equal(member.get(columnName), value));
 			lista = em.createQuery(criteria).getResultList();
 		} catch (Exception e) {
-			logger.error(e);
-			for (StackTraceElement element : e.getStackTrace())
-				logger.error(element);
+			logger.error(e.getMessage(), e);
 			lista = null;
 		} finally {
 			em.close();
@@ -271,9 +259,7 @@ public class ReadOnlyDao<T> extends Dao {
 			List<T> lista = em.createQuery(criteria).setMaxResults(1).getResultList();
 			entity = lista.isEmpty() ? null : lista.get(0);
 		} catch (Exception e) {
-			logger.error(e);
-			for (StackTraceElement element : e.getStackTrace())
-				logger.error(element);
+			logger.error(e.getMessage(), e);
 			entity = null;
 		} finally {
 			em.close();
@@ -297,9 +283,7 @@ public class ReadOnlyDao<T> extends Dao {
 			List<T> lista = em.createQuery(criteria).setMaxResults(2).getResultList();
 			entity = lista.size() == 1 ? lista.get(0) : null;
 		} catch (Exception e) {
-			logger.error(e);
-			for (StackTraceElement element : e.getStackTrace())
-				logger.error(element);
+			logger.error(e.getMessage(), e);
 			entity = null;
 		} finally {
 			em.close();
@@ -318,9 +302,7 @@ public class ReadOnlyDao<T> extends Dao {
 		try {
 			entity = em.find(c, id);
 		} catch (Exception e) {
-			logger.error(e);
-			for (StackTraceElement element : e.getStackTrace())
-				logger.error(element);
+			logger.error(e.getMessage(), e);
 			entity = null;
 		} finally {
 			em.close();

@@ -84,6 +84,9 @@ public class Righiubicpre implements Serializable {
 	 */
 	@Column(name="IdTestataOrdine", nullable=false)
 	private int idTestataOrdine;
+	
+	@Column(name="IdArticolo", nullable=false)
+	private int idArticolo;
 
 	/**
 	 * L'ID univoco dell'articolo.
@@ -121,8 +124,8 @@ public class Righiubicpre implements Serializable {
 	/**
 	 * NrIdColliPk di collipack e collicarico. Se non c'è prodotto metto qui il 999999999
 	 */
-	@Column(name="nrcollo", nullable=false)
-	private int nrcollo;
+	@Column(name="nrcollo", length=9, nullable=false)
+	private String nrcollo;
 
 	@Column(length=20)
 	private String nrlista;
@@ -192,13 +195,22 @@ public class Righiubicpre implements Serializable {
 	 */
 	@Column(nullable=false)
 	private int y;
+	
+	@Column(name="TipoAssegnazione", length=20, nullable=false)
+	private String tipoAssegnazione;
 
 	public Righiubicpre() {}
 	
 	@PrePersist
 	public void prePersist() {
-		if (magaDisponibile == null)
-			magaDisponibile = "";
+		if (magaDisponibile == null) magaDisponibile = "";
+		if (area == null || area.isEmpty()) area = "  ";
+		if (box == null || box.isEmpty()) box = "  ";
+		if (corsia == null || corsia.isEmpty()) corsia = "   ";
+		if (piano == null || piano.isEmpty()) piano = "  ";
+		if (scaffale == null || scaffale.isEmpty()) scaffale = "   ";
+		if (ubicazione == null) ubicazione = "";
+		if (nrcollo == null) nrcollo = "999999999";
 	}
 
 	public int getIdubica() {
@@ -313,6 +325,14 @@ public class Righiubicpre implements Serializable {
 		this.idTestataOrdine = idTestataOrdine;
 	}
 
+	public int getIdArticolo() {
+		return idArticolo;
+	}
+
+	public void setIdArticolo(int idArticolo) {
+		this.idArticolo = idArticolo;
+	}
+
 	public String getIduniarticolo() {
 		return this.iduniarticolo;
 	}
@@ -361,11 +381,11 @@ public class Righiubicpre implements Serializable {
 		this.magazzino = magazzino;
 	}
 
-	public int getNrcollo() {
+	public String getNrcollo() {
 		return this.nrcollo;
 	}
 
-	public void setNrcollo(int nrcollo) {
+	public void setNrcollo(String nrcollo) {
 		this.nrcollo = nrcollo;
 	}
 
@@ -487,6 +507,14 @@ public class Righiubicpre implements Serializable {
 
 	public void setY(int y) {
 		this.y = y;
+	}
+
+	public String getTipoAssegnazione() {
+		return tipoAssegnazione;
+	}
+
+	public void setTipoAssegnazione(String tipoAssegnazione) {
+		this.tipoAssegnazione = tipoAssegnazione;
 	}
 
 }

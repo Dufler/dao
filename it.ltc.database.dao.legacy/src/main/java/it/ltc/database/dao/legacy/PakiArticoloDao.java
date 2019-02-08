@@ -95,7 +95,7 @@ public class PakiArticoloDao extends CRUDDao<PakiArticolo> {
 		try {
 			totale = em.createNamedQuery("PakiArticolo.totaleDichiaratoPerCarico", Long.class).setParameter("carico", idCarico).getSingleResult().intValue();
 		} catch (Exception e) {
-			logger.error(e);
+			logger.error(e.getMessage(), e);
 			totale = -1;
 		} finally {
 			em.close();
@@ -109,7 +109,7 @@ public class PakiArticoloDao extends CRUDDao<PakiArticolo> {
 		try {
 			totale = em.createNamedQuery("PakiArticolo.totaleVerificatoPerCarico", Long.class).setParameter("carico", idCarico).getSingleResult().intValue();
 		} catch (Exception e) {
-			logger.error(e);
+			logger.error(e.getMessage(), e);
 			totale = -1;
 		} finally {
 			em.close();
@@ -123,7 +123,7 @@ public class PakiArticoloDao extends CRUDDao<PakiArticolo> {
 		try {
 			totali = em.createNamedQuery("PakiArticolo.totaliPerCarico", PakiTestaTotali.class).setParameter("carico", idCarico).getSingleResult();
 		} catch (Exception e) {
-			logger.error(e);
+			logger.error(e.getMessage(), e);
 			totali = null;
 		} finally {
 			em.close();

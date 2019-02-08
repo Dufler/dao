@@ -75,7 +75,7 @@ public class Scorte implements Serializable {
 	@Column(name="KeyUbicPre", length=20)
 	private String keyUbicPre;
 
-	@Column(length=4)
+	@Column(length=4, nullable=false)
 	private String magazzino;
 
 	/**
@@ -108,7 +108,7 @@ public class Scorte implements Serializable {
 	/**
 	 * La quantità richiesta ma da mettere solo sul primo record inserito.
 	 */
-	@Column(name="Quantita")
+	@Column(name="Quantita", nullable=false)
 	private int quantita;
 
 	@Column(length=3, columnDefinition="char(3)")

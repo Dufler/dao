@@ -181,7 +181,7 @@ public class ColliImballo implements Serializable {
 //	@Column(name="Ubicato", length=2)
 //	private String ubicato;
 
-	@Column(name="Utente", length=50, nullable=false)
+	@Column(name="Utente", length=50)
 	private String utente;
 
 //	@Column(name="UtenteUbica", length=50)

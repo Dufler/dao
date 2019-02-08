@@ -49,6 +49,9 @@ public class ColliPack implements Serializable {
 //	@Column(name="Controllata", nullable=false, length=2)
 //	private String controllata;
 
+	@Column(name="Creazione", nullable=false, insertable=false, columnDefinition="datetime")
+	private Date creazione;
+	
 	@Column(name="DataAgg", columnDefinition="datetime")
 	private Date dataAgg;
 //
@@ -85,8 +88,8 @@ public class ColliPack implements Serializable {
 //	@Column(name="ImpScortaSL", nullable=false, length=50)
 //	private String impScortaSL;
 //
-//	@Column(name="Listaimp", nullable=false, length=20)
-//	private String listaimp;
+	@Column(name="Listaimp", insertable=false, nullable=false, length=20)
+	private String listaimp;
 //
 //	@Column(name="Listapre", length=20)
 //	private String listapre;
@@ -224,7 +227,15 @@ public class ColliPack implements Serializable {
 		this.codiceArticolo = codiceArticolo;
 	}
 
-//	public String getControllata() {
+public Date getCreazione() {
+		return creazione;
+	}
+
+	public void setCreazione(Date creazione) {
+		this.creazione = creazione;
+	}
+
+	//	public String getControllata() {
 //		return this.controllata;
 //	}
 //
@@ -312,13 +323,13 @@ public class ColliPack implements Serializable {
 //		this.impScortaSL = impScortaSL;
 //	}
 //
-//	public String getListaimp() {
-//		return this.listaimp;
-//	}
-//
-//	public void setListaimp(String listaimp) {
-//		this.listaimp = listaimp;
-//	}
+	public String getListaimp() {
+		return this.listaimp;
+	}
+
+	public void setListaimp(String listaimp) {
+		this.listaimp = listaimp;
+	}
 //
 //	public String getListapre() {
 //		return this.listapre;

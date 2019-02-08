@@ -193,7 +193,6 @@ public class RighiOrdine implements Serializable {
 	public void prePersist() {
 		qtadaubicare = qtaSpedizione;
 		qtaAssegnata = 0;
-		numerata = "-";
 		area = "  "; //2
 		box = "  "; //2
 		corsia = "   "; //3
@@ -201,6 +200,7 @@ public class RighiOrdine implements Serializable {
 		scaffale = "   "; //3
 		ubicazione = "";
 		nrcollo = "0         ";
+		if (numerata == null) numerata = "-";
 		if (PONumber == null) PONumber = "";
 	}
 

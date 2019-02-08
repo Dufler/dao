@@ -994,6 +994,28 @@ public class Articoli implements Serializable {
 	}
 
 	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + idArticolo;
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Articoli other = (Articoli) obj;
+		if (idArticolo != other.idArticolo)
+			return false;
+		return true;
+	}
+
+	@Override
 	public String toString() {
 		return "Articolo [idArticolo=" + idArticolo + ", barraEAN=" + barraEAN + ", catMercDett=" + catMercDett
 				+ ", codArtStr=" + codArtStr + ", codBarre=" + codBarre + ", descrizione=" + descrizione + "]";

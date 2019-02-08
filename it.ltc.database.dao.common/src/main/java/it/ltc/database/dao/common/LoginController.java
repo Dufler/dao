@@ -13,6 +13,7 @@ import org.jboss.logging.Logger;
 import it.ltc.database.model.centrale.Commessa;
 import it.ltc.database.model.utente.Utente;
 import it.ltc.utility.mail.Email;
+import it.ltc.utility.mail.MailConfiguration;
 import it.ltc.utility.mail.MailMan;
 import sun.misc.BASE64Decoder;
 
@@ -122,8 +123,7 @@ public class LoginController {
 			//bytes = new BASE64Decoder().decodeBuffer(authInfo);
 			bytes = decoder.decodeBuffer(authInfo);
 		} catch (IOException e) {
-			logger.error("Errore durante la decodifica delle info di auth. Stringa ricevuta: '" + authenticationString + "'");
-			logger.error(e);
+			logger.error("Errore durante la decodifica delle info di auth. Stringa ricevuta: '" + authenticationString + "'", e);
 		}
 		decodedAuth = new String(bytes);
 		String[] auth = decodedAuth.split(":");
@@ -189,7 +189,7 @@ public class LoginController {
 			hash = sb.toString();
 		} catch (NoSuchAlgorithmException e) {
 			hash = null;
-			logger.error(e);
+			logger.error(e.getMessage(), e);
 		}
 		return hash;
 	}
@@ -257,7 +257,8 @@ public class LoginController {
 		List<String> destinatari = new ArrayList<String>();
 		destinatari.add(indirizzoMailDestinario);
 		destinatari.add(account.getEmail());
-		MailMan postino = new MailMan(indirizzoMail, passwordMail, true);
+		MailConfiguration config = MailConfiguration.getArubaPopConfiguration(indirizzoMail, passwordMail);
+		MailMan postino = new MailMan(config);
 		Email email = new Email(oggettoMail, corpo);		
 		return postino.invia(destinatari, email);
 	}

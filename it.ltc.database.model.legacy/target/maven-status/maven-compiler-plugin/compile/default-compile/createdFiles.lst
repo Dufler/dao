@@ -37,6 +37,7 @@ it\ltc\database\model\legacy\ColliCarico.class
 it\ltc\database\model\legacy\ColliPack.class
 it\ltc\database\model\legacy\PakiTestaTipo.class
 it\ltc\database\model\legacy\Fornitori.class
+it\ltc\database\model\legacy\RighiPrelievo.class
 it\ltc\database\model\legacy\Corrieri.class
 it\ltc\database\model\legacy\MagaSd.class
 it\ltc\database\model\legacy\Stagioni.class

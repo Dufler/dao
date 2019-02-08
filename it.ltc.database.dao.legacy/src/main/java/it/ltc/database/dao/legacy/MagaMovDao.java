@@ -4,6 +4,11 @@ import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
+import javax.persistence.EntityManager;
+import javax.persistence.EntityTransaction;
+
+import org.apache.log4j.Logger;
+
 import it.ltc.database.dao.CRUDDao;
 import it.ltc.database.dao.CondizioneWhere;
 import it.ltc.database.model.legacy.MagaMov;
@@ -12,6 +17,8 @@ import it.ltc.database.model.legacy.PakiTesta;
 import it.ltc.database.model.legacy.model.CausaliMovimento;
 
 public class MagaMovDao extends CRUDDao<MagaMov> {
+	
+	private static final Logger logger = Logger.getLogger(MagaMovDao.class);
 
 	public MagaMovDao(String persistenceUnit) {
 		super(persistenceUnit, MagaMov.class);
@@ -72,6 +79,14 @@ public class MagaMovDao extends CRUDDao<MagaMov> {
 		return entities;
 	}
 	
+	public List<MagaMov> trovaMovimentiNonComunicati() {
+		List<CondizioneWhere> condizioni = new LinkedList<>();
+		condizioni.add(new CondizioneWhere("trasmesso", "NO"));
+		condizioni.add(new CondizioneWhere("cancellato", "NO"));
+		List<MagaMov> entities = findAll(condizioni);
+		return entities;
+	}
+	
 	public List<MagaMov> trovaMovimentiNonComunicatiPerCausale(String causale) {
 		List<CondizioneWhere> condizioni = new LinkedList<>();
 		condizioni.add(new CondizioneWhere("causale", causale));
@@ -79,6 +94,28 @@ public class MagaMovDao extends CRUDDao<MagaMov> {
 		condizioni.add(new CondizioneWhere("cancellato", "NO"));
 		List<MagaMov> entities = findAll(condizioni);
 		return entities;
+	}
+	
+	public boolean setStatoTrasmissione(List<MagaMov> movimenti, boolean trasmesso) {
+		boolean update;
+		String stato = trasmesso ? "SI" : "NO";
+		EntityManager em = getManager();
+		EntityTransaction t = em.getTransaction();
+		try {
+			t.begin();
+			for (MagaMov movimento : movimenti) {
+				movimento.setTrasmesso(stato);
+				em.merge(movimento);
+			}
+			t.commit();
+			update = true;
+		} catch (Exception e) {
+			logger.error(e.getMessage(), e);
+			update = false;
+			if (t != null && t.isActive())
+				t.rollback();
+		}
+		return update;
 	}
 	
 	public MagaMov trovaDaID(int id) {

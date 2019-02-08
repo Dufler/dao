@@ -112,7 +112,7 @@ public class TestaCorrDao extends CRUDDao<TestaCorr> {
 	        criteria.select(member).where(cb.and(condizioneAnno, condizioneTrasmesso, condizioneID, condizioneGLS));
 			lista = em.createQuery(criteria).getResultList();
 		} catch (Exception e) {
-			logger.error(e);
+			logger.error(e.getMessage(), e);
 			lista = null;
 		} finally {
 			em.close();

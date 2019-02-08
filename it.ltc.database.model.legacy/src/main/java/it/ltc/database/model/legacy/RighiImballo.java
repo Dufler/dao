@@ -5,6 +5,8 @@ import java.util.Date;
 
 import javax.persistence.*;
 
+import it.ltc.utility.miscellanea.time.DateConverter;
+
 
 /**
  * The persistent class for the RighiImballo database table.
@@ -40,7 +42,7 @@ public class RighiImballo implements Serializable {
 	@Column(name="IdUniArticolo", length=15, nullable=false, columnDefinition="varchar(15)")
 	private String idUniArticolo;
 
-	@Column(name="IdUnicoCollo")
+	@Column(name="IdUnicoCollo", nullable=false)
 	private int idUnicoCollo;
 
 	@Column(name="KeyColloSpe", length=10, columnDefinition="char(10)")
@@ -100,7 +102,7 @@ public class RighiImballo implements Serializable {
 	@Column(name="Postazione", length=20)
 	private String postazione;
 
-	@Column(name="ProgCollo")
+	@Column(name="ProgCollo", nullable=false)
 	private int progCollo;
 
 	@Column(name="QtaImballata")
@@ -119,6 +121,14 @@ public class RighiImballo implements Serializable {
 	private String tipoRif;
 
 	public RighiImballo() {}
+	
+	@PrePersist
+	public void prePersist() {
+		if (posTaglia <= 0) posTaglia = 1;
+		Date now = new Date();
+		oraImba =  DateConverter.getOraComeIntero(now);
+		dataImba = DateConverter.ripulisciTimestap(now);
+	}
 
 	public int getIdRighiImballo() {
 		return this.idRighiImballo;

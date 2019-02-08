@@ -1,6 +1,7 @@
 package it.ltc.model.interfaces.carico;
 
 import java.util.Date;
+import java.util.LinkedList;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -29,9 +30,13 @@ public class MCarico implements ModelInterface {
 	private Date dataDocumento;
 	private String tipoDocumento;
 	
-	private String tipoIdentificazioneProdotti;
-	private List<MRigaCarico> prodotti;
+	private TipoIDProdotto tipoIdentificazioneProdotti;
+	private final List<MRigaCarico> prodotti;
 	private String note;
+	
+	public MCarico() {
+		prodotti = new LinkedList<>();
+	}
 
 	@Override
 	public void valida() throws ModelValidationException {
@@ -41,46 +46,15 @@ public class MCarico implements ModelInterface {
 		}
 		if (tipo == null || tipo.isEmpty())
 			throw new ModelValidationException("Bisogna specificare un tipo di carico.");
-		else {
-			//TODO - La lista completa deve essere ancora definita.
-			try {
-				TipoCarico t = TipoCarico.valueOf(tipo.toUpperCase());
-				if (t == TipoCarico.RESO) {
-					
-				}
-			} catch (IllegalArgumentException e) {
-				//Il tipo di ordine non è valido
-				String errorMessage = "Il tipo di carico indicato non è valido. L'elenco completo delle tipologie è: ";
-				for (TipoCarico categoria : TipoCarico.values()) {
-					errorMessage += categoria + " ";
-				}
-				errorMessage = errorMessage.trim();
-				throw new ModelValidationException(errorMessage);
-			}
-		}
-		if (tipoIdentificazioneProdotti == null || tipoIdentificazioneProdotti.isEmpty())
+		if (tipoIdentificazioneProdotti == null)
 			throw new ModelValidationException("Bisogna specificare un tipo di identificazione per i prodotti.");
-		else {
-			//TODO - La lista completa deve essere ancora definita.
-			try {
-				TipoIDProdotto.valueOf(tipoIdentificazioneProdotti.toUpperCase());
-			} catch (IllegalArgumentException e) {
-				//Il tipo di ordine non è valido
-				String errorMessage = "Il tipo di identificazione per i prodotti indicato non è valido. L'elenco completo delle tipologie è: ";
-				for (TipoIDProdotto categoria : TipoIDProdotto.values()) {
-					errorMessage += categoria + " ";
-				}
-				errorMessage = errorMessage.trim();
-				throw new ModelValidationException(errorMessage);
-			}
-		}
 		if (riferimento == null || riferimento.isEmpty())
 			throw new ModelValidationException("Bisogna specificare un riferimento per il carico. Es. purchase order number");
 		if (prodotti == null || prodotti.size() == 0) {
 			throw new ModelValidationException("Bisogna elencare i prodotti.");
 		} else {
 			for (MRigaCarico prodotto : prodotti) {
-				prodotto.valida(TipoIDProdotto.valueOf(tipoIdentificazioneProdotti.toUpperCase()));
+				prodotto.valida(tipoIdentificazioneProdotti);
 			}
 		}
 	}
@@ -157,11 +131,11 @@ public class MCarico implements ModelInterface {
 		this.tipoDocumento = tipoDocumento;
 	}
 
-	public String getTipoIdentificazioneProdotti() {
+	public TipoIDProdotto getTipoIdentificazioneProdotti() {
 		return tipoIdentificazioneProdotti;
 	}
 
-	public void setTipoIdentificazioneProdotti(String tipoIdentificazioneProdotti) {
+	public void setTipoIdentificazioneProdotti(TipoIDProdotto tipoIdentificazioneProdotti) {
 		this.tipoIdentificazioneProdotti = tipoIdentificazioneProdotti;
 	}
 
@@ -177,8 +151,8 @@ public class MCarico implements ModelInterface {
 		return prodotti;
 	}
 
-	public void setProdotti(List<MRigaCarico> prodotti) {
-		this.prodotti = prodotti;
+	public void aggiungiProdotto(MRigaCarico prodotto) {
+		prodotti.add(prodotto);
 	}
 
 	public String getNote() {
@@ -192,7 +166,7 @@ public class MCarico implements ModelInterface {
 	public int getPezziStimati() {
 		int totale = 0;
 		for (MRigaCarico prodotto : prodotti) {
-			totale += prodotto.getQuantita();
+			totale += prodotto.getQuantitaDichiarata();
 		}
 		return totale;
 	}

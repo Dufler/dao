@@ -1,6 +1,9 @@
 package it.ltc.database.model.legacy;
 
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import javax.persistence.*;
 
 
@@ -12,7 +15,10 @@ import javax.persistence.*;
 @Table(name="Fornitori")
 //@NamedQuery(name="Fornitori.findAll", query="SELECT f FROM Fornitori f")
 public class Fornitori implements Serializable {
+	
 	private static final long serialVersionUID = 1L;
+	
+	private static final SimpleDateFormat sdf = new SimpleDateFormat("yyMMddHHmmssSSSu");
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
@@ -85,6 +91,12 @@ public class Fornitori implements Serializable {
 	@Column(name="Tel", length=20)
 	private String tel;
 
+	/**
+	 * Può assumere 3 valori:<br>
+	 * - CARICO : il default, indica un fornitore di produzione.<br>
+	 * - RESO : indica che fornisce resi.<br>
+	 * - INVENTARIO : fornitore "fittizio" usato per i carichi d'inventario.<br>
+	 */
 	@Column(name="Tipodocumento", length=10)
 	private String tipodocumento;
 	
@@ -96,7 +108,8 @@ public class Fornitori implements Serializable {
 	@PrePersist
 	public void prePersist() {
 		//Serve ad Andrea che si inserisca questo valore.
-		tipodocumento = "CARICO";
+		if (tipodocumento == null) tipodocumento = "CARICO";
+		if (codiceFornitore == null) codiceFornitore = sdf.format(new Date());
 	}
 
 	public int getIdFornitore() {

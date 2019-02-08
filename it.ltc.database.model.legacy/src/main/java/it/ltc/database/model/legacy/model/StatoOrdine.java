@@ -9,7 +9,12 @@ public enum StatoOrdine {
 	
 	INSE("INSERITO", "Appena inserito, va ancora assegnato."),
 	ERRO("ERRORE", "E' stata tentata l'assegnazione ma è fallita."),
-	IMPO("ASSEGNATO", "Ordine correttamente importato."),
+	IMPO("PRONTO", "Ordine correttamente importato e pronto per l'assegnazione."),
+	ASSE("ASSEGNATO", "Ordine assegnato e pronto per la lavorazione."),
+	INCQ("CONTROLLO QUALITA'", "Controllo Qualità"),
+	FNCQ("FINE CONTROLLO QUALITA'", "Fine Controllo Qualità"),
+	INPR("PRELIEVO", "Prelievo"),
+	FNPR("FINE PRELIEVO", "Fine Prelievo"),
 	INIB("PICKING", "In fase di imballo."),
 	COIB("IMBALLATO", "Imballo completato."),
 	DIIB("IMBALLATO_CON_DIFFERENZE", "Differenze di imballo."),

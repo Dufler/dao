@@ -46,7 +46,7 @@ public class FactoryManager {
 	}
 	
 	private EntityManagerFactory createFactory(String persistenceUnitName) {
-		logger.info("Istanzio una nuova factory per la persistence unit: '" + persistenceUnitName + "'");
+		logger.debug("Istanzio una nuova factory per la persistence unit: '" + persistenceUnitName + "'");
 		EntityManagerFactory emf = Persistence.createEntityManagerFactory(persistenceUnitName);
 		factories.put(persistenceUnitName, emf);
 		return emf;

@@ -44,9 +44,7 @@ public abstract class CRUDDao<T> extends ReadOnlyDao<T> {
 				em.persist(entity);
 				t.commit();
 			} catch (Exception e) {
-				logger.error(e);
-				for (StackTraceElement element : e.getStackTrace())
-					logger.error(element);
+				logger.error(e.getMessage(), e);
 				if (t != null && t.isActive())
 					t.rollback();
 				entity = null;
@@ -72,9 +70,7 @@ public abstract class CRUDDao<T> extends ReadOnlyDao<T> {
 					em.persist(entity);
 				t.commit();
 			} catch (Exception e) {
-				logger.error(e);
-				for (StackTraceElement element : e.getStackTrace())
-					logger.error(element);
+				logger.error(e.getMessage(), e);
 				if (t != null && t.isActive())
 					t.rollback();
 				entities = null;
@@ -127,9 +123,7 @@ public abstract class CRUDDao<T> extends ReadOnlyDao<T> {
 					em.merge(oldEntity); //C'era em.merge(entity); ma secondo me era un errore!
 					t.commit();
 				} catch (Exception e) {
-					logger.error(e);
-					for (StackTraceElement element : e.getStackTrace())
-						logger.error(element);
+					logger.error(e.getMessage(), e);
 					if (t != null && t.isActive())
 						t.rollback();
 					entity = null;
@@ -174,9 +168,7 @@ public abstract class CRUDDao<T> extends ReadOnlyDao<T> {
 				}
 				t.commit();
 			} catch (Exception e) {
-				logger.error(e);
-				for (StackTraceElement element : e.getStackTrace())
-					logger.error(element);
+				logger.error(e.getMessage(), e);
 				if (t != null && t.isActive())
 					t.rollback();
 				updatedEntities = null;
@@ -215,9 +207,7 @@ public abstract class CRUDDao<T> extends ReadOnlyDao<T> {
 					em.remove(entity);
 					t.commit();
 				} catch (Exception e) {
-					logger.error(e);
-					for (StackTraceElement element : e.getStackTrace())
-						logger.error(element);
+					logger.error(e.getMessage(), e);
 					if (t != null && t.isActive())
 						t.rollback();
 					entity = null;
@@ -259,9 +249,7 @@ public abstract class CRUDDao<T> extends ReadOnlyDao<T> {
 				}
 				t.commit();	
 			} catch (Exception e) {
-				logger.error(e);
-				for (StackTraceElement element : e.getStackTrace())
-					logger.error(element);
+				logger.error(e.getMessage(), e);
 				if (t != null && t.isActive())
 					t.rollback();
 				entities = null;

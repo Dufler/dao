@@ -10,20 +10,20 @@ public class MIndirizzo implements ModelInterface {
 
 	private static final long serialVersionUID = 1L;
 	
-	private int id;
+	protected int id;
 	
-	private String codice;
-	private String ragioneSociale;
-	private String indirizzo;
-	private String cap;
-	private String localita;
-	private String provincia;
-	private String nazione;
-	private String telefono;
-	private String email;
+	protected String codice;
+	protected String ragioneSociale;
+	protected String indirizzo;
+	protected String cap;
+	protected String localita;
+	protected String provincia;
+	protected String nazione;
+	protected String telefono;
+	protected String email;
 	
 	public MIndirizzo() {}
-	
+
 	@Override
 	public void valida() throws ModelValidationException {
 		//Ragione sociale
@@ -34,8 +34,8 @@ public class MIndirizzo implements ModelInterface {
 		//Indirizzo
 		if (indirizzo == null || indirizzo.isEmpty())
 			throw new ModelValidationException("Bisogna specificare l'indirizzo.");
-		else if (indirizzo.length() > 100)
-			throw new ModelValidationException("L'indirizzo specificato e' troppo lungo. (Max 100 caratteri)");
+		else if (indirizzo.length() > 250)
+			throw new ModelValidationException("L'indirizzo specificato e' troppo lungo. (Max 250 caratteri)");
 		//CAP
 		if (cap == null || cap.isEmpty()) 
 			throw new ModelValidationException("Bisogna specificare il cap.");
@@ -44,7 +44,7 @@ public class MIndirizzo implements ModelInterface {
 		//Localita
 		if (localita == null || localita.isEmpty())
 			throw new ModelValidationException("Bisogna specificare la localita'.");
-		else if (localita.length() > 40)
+		else if (localita.length() > 50)
 			throw new ModelValidationException("La localita' specificata e' troppo lunga. (Max 40 caratteri)");
 		//Provincia
 		if (provincia == null || provincia.isEmpty())

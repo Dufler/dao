@@ -6,6 +6,7 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import it.ltc.model.interfaces.exception.ModelSimpleValidationException;
 import it.ltc.model.interfaces.exception.ModelValidationException;
 import it.ltc.model.interfaces.indirizzo.MIndirizzo;
 import it.ltc.model.interfaces.model.ModelInterface;
@@ -15,35 +16,37 @@ public class MOrdine implements ModelInterface {
 	
 	private static final long serialVersionUID = 1L;
 	
-	//private static final SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+	protected int id;
 	
-	private int id;
+	protected Date dataOrdine;
+	protected Date dataConsegna;
+	protected String tipo;
+	protected Integer priorita;
+	protected String note;
+	protected String riferimentoOrdine;
 	
-	private Date dataOrdine;
-	private Date dataConsegna;
-	private TipoOrdine tipo;
-	private Integer priorita;
-	private String note;
-	private String riferimentoOrdine;
+	protected String stato;
+	protected MIndirizzo destinatario;
+	protected MIndirizzo mittente;
 	
-	private String stato;
-	private MIndirizzo destinatario;
-	private MIndirizzo mittente;
-	private String corriere;
-	private String codiceCorriere;
-	private String servizioCorriere;
-	private MContrassegno contrassegno;
-	private MAssicurazione assicurazione;
-	private MParticolarita particolarita;
-	private TipoIDProdotto tipoIdentificazioneProdotti;
-	private Double valoreDoganale;
-	private String codiceTracking;
+	protected MInfoSpedizione infoSpedizione;
 	
-	private final List<ProdottoOrdinato> prodotti;
+//	private String corriere;
+//	private String codiceCorriere;
+//	private String servizioCorriere;
+//	private MContrassegno contrassegno;
+//	private MAssicurazione assicurazione;
+//	private Double valoreDoganale;
+//	private String codiceTracking;
 	
-	private String riferimentoDocumento;
-	private Date dataDocumento;
-	private String tipoDocumento;
+	protected MParticolarita particolarita;
+	protected TipoIDProdotto tipoIdentificazioneProdotti;
+	
+	protected final List<ProdottoOrdinato> prodotti;
+	
+	protected String riferimentoDocumento;
+	protected Date dataDocumento;
+	protected String tipoDocumento;
 	
 	public MOrdine() {
 		prodotti = new LinkedList<>();
@@ -51,83 +54,57 @@ public class MOrdine implements ModelInterface {
 	
 	@Override
 	public void valida() throws ModelValidationException {
-		if (dataConsegna != null) {
-			if (dataConsegna.before(new Date()))
-				throw new ModelValidationException("La data indicata è precedente a oggi.");
-		}
-		if (tipo == null) {
+		//Riferimento ordine (può essere sovrascritto)
+		validaRiferimento();
+		//Data consegna
+//		if (dataConsegna != null) {
+//			if (dataConsegna.before(new Date())) throw new ModelValidationException("La data indicata per la consegna è precedente a oggi.");
+//		}
+		//Tipo ordine
+		if (tipo == null || tipo.isEmpty()) {
 			throw new ModelValidationException("Bisogna specificare un tipo di ordine.");
-		} else if (tipo == TipoOrdine.PRN || tipo == TipoOrdine.WEN) {
-			//Per gli ordini in cui la spedizione è curata dal cliente mi assicuro di ricevere il loro codice di fatturazione
-			if (codiceCorriere == null || codiceCorriere.isEmpty())
-				throw new ModelValidationException("Bisogna specificare il vostro codice corriere per gli ordini di questo tipo.");
 		}
+		//Identificazione dei prodotti
 		if (tipoIdentificazioneProdotti == null)
 			throw new ModelValidationException("Bisogna specificare un tipo di identificazione per i prodotti.");
-		if (riferimentoOrdine == null || riferimentoOrdine.isEmpty())
-			throw new ModelValidationException("Bisogna specificare un riferimento per l'ordine. Es. purchase order number");
+		
+		//Destinatario
 		if (destinatario == null) {
 			throw new ModelValidationException("Bisogna specificare un destinatario.");
-		} else {
-			destinatario.valida();
 		}
+		
+		//Mittente
 		if (mittente == null) {
 			throw new ModelValidationException("Bisogna specificare un mittente.");
-		} else {
-			mittente.valida();
 		}
-		if (corriere == null || corriere.isEmpty())
-			throw new ModelValidationException("Bisogna specificare un corriere.");
-		else {
-			try {
-				Corriere.valueOf(corriere.toUpperCase());
-			} catch (IllegalArgumentException e) {
-				//Il tipo di ordine non è valido
-				String errorMessage = "Il corriere indicato non è valido. L'elenco completo dei corrieri è: ";
-				for (Corriere corriere : Corriere.values()) {
-					errorMessage += corriere + " ";
-				}
-				errorMessage = errorMessage.trim();
-				throw new ModelValidationException(errorMessage);
-			}
-		}
-		if (servizioCorriere == null || servizioCorriere.isEmpty())
-			throw new ModelValidationException("Bisogna un tipo di servizio per la spedizione.");
-		else {
-			try {
-				ServizioCorriere.valueOf(servizioCorriere.toUpperCase());
-			} catch (IllegalArgumentException e) {
-				//Il tipo di ordine non è valido
-				String errorMessage = "Il servizio corriere indicato non è valido. L'elenco completo dei livelli di servizio è: ";
-				for (ServizioCorriere servizio : ServizioCorriere.values()) {
-					errorMessage += servizio + " ";
-				}
-				errorMessage = errorMessage.trim();
-				throw new ModelValidationException(errorMessage);
-			}
-		}
+		
 		if (priorita != null) {
 			if (priorita < 1 || priorita > 10)
 				throw new ModelValidationException("La priorita' può assumere solo valori compresi fra 1 e 10.");
 		}
-		if (valoreDoganale != null && valoreDoganale <= 0) {
-			throw new ModelValidationException("Il valore doganale non può essere minore o uguale a 0.00 euro");
-		}
-		if (contrassegno != null) {
-			contrassegno.valida();
-		}
-		if (assicurazione != null) {
-			assicurazione.valida();
-		}
+		
+		if (infoSpedizione == null) 
+			throw new ModelValidationException("Non sono state inserite informazioni sulla spedizione.");
+		else 
+			infoSpedizione.valida();
+		
 		if (particolarita != null) {
 			particolarita.valida();
 		}
 		if (prodotti == null || prodotti.size() == 0) {
-			throw new ModelValidationException("Bisogna elencare i prodotti.");
+			throw new ModelSimpleValidationException("Bisogna elencare i prodotti.");
 		} else {
 			for (ProdottoOrdinato prodotto : prodotti) {
 				prodotto.valida(tipoIdentificazioneProdotti);
 			}
+		}
+	}
+	
+	protected void validaRiferimento() throws ModelValidationException {
+		if (riferimentoOrdine == null || riferimentoOrdine.isEmpty())
+			throw new ModelValidationException("Bisogna specificare un riferimento per l'ordine. Es. purchase order number");
+		else if (riferimentoDocumento.length() > 20) {
+			throw new ModelValidationException("Il riferimento per l'ordine è troppo lungo (MAX 20 caratteri)");
 		}
 	}
 	
@@ -155,11 +132,11 @@ public class MOrdine implements ModelInterface {
 		this.dataConsegna = dataConsegna;
 	}
 	
-	public TipoOrdine getTipo() {
+	public String getTipo() {
 		return tipo;
 	}
 	
-	public void setTipo(TipoOrdine tipo) {
+	public void setTipo(String tipo) {
 		this.tipo = tipo;
 	}
 	
@@ -211,46 +188,56 @@ public class MOrdine implements ModelInterface {
 		this.mittente = mittente;
 	}
 	
-	public String getCorriere() {
-		return corriere;
-	}
+//	public String getCorriere() {
+//		return corriere;
+//	}
+//	
+//	public void setCorriere(String corriere) {
+//		this.corriere = corriere;
+//	}
+//	
+//	public String getCodiceCorriere() {
+//		return codiceCorriere;
+//	}
+//
+//	public void setCodiceCorriere(String codiceCorriere) {
+//		this.codiceCorriere = codiceCorriere;
+//	}
+//
+//	public String getServizioCorriere() {
+//		return servizioCorriere;
+//	}
+//
+//	public void setServizioCorriere(String servizioCorriere) {
+//		this.servizioCorriere = servizioCorriere;
+//	}
+//
+//	public MContrassegno getContrassegno() {
+//		return contrassegno;
+//	}
+//	
+//	public void setContrassegno(MContrassegno contrassegno) {
+//		this.contrassegno = contrassegno;
+//	}
+//	
+//	public MAssicurazione getAssicurazione() {
+//		return assicurazione;
+//	}
+//	
+//	public void setAssicurazione(MAssicurazione assicurazione) {
+//		this.assicurazione = assicurazione;
+//	}
 	
-	public void setCorriere(String corriere) {
-		this.corriere = corriere;
-	}
-	
-	public String getCodiceCorriere() {
-		return codiceCorriere;
+	public MInfoSpedizione getInfoSpedizione() {
+		return infoSpedizione;
 	}
 
-	public void setCodiceCorriere(String codiceCorriere) {
-		this.codiceCorriere = codiceCorriere;
+	public void setInfoSpedizione(MInfoSpedizione infoSpedizione) {
+		//Se mi hanno passato info valide vado ad aggiungere il riferimento di questo ordine.
+		if (infoSpedizione != null) infoSpedizione.aggiungiRiferimentoOrdine(riferimentoOrdine);
+		this.infoSpedizione = infoSpedizione;
 	}
 
-	public String getServizioCorriere() {
-		return servizioCorriere;
-	}
-
-	public void setServizioCorriere(String servizioCorriere) {
-		this.servizioCorriere = servizioCorriere;
-	}
-
-	public MContrassegno getContrassegno() {
-		return contrassegno;
-	}
-	
-	public void setContrassegno(MContrassegno contrassegno) {
-		this.contrassegno = contrassegno;
-	}
-	
-	public MAssicurazione getAssicurazione() {
-		return assicurazione;
-	}
-	
-	public void setAssicurazione(MAssicurazione assicurazione) {
-		this.assicurazione = assicurazione;
-	}
-	
 	public MParticolarita getParticolarita() {
 		return particolarita;
 	}
@@ -271,21 +258,21 @@ public class MOrdine implements ModelInterface {
 		return prodotti;
 	}
 
-	public Double getValoreDoganale() {
-		return valoreDoganale;
-	}
-
-	public void setValoreDoganale(Double valoreDoganale) {
-		this.valoreDoganale = valoreDoganale;
-	}
-
-	public String getCodiceTracking() {
-		return codiceTracking;
-	}
-
-	public void setCodiceTracking(String codiceTracking) {
-		this.codiceTracking = codiceTracking;
-	}
+//	public Double getValoreDoganale() {
+//		return valoreDoganale;
+//	}
+//
+//	public void setValoreDoganale(Double valoreDoganale) {
+//		this.valoreDoganale = valoreDoganale;
+//	}
+//
+//	public String getCodiceTracking() {
+//		return codiceTracking;
+//	}
+//
+//	public void setCodiceTracking(String codiceTracking) {
+//		this.codiceTracking = codiceTracking;
+//	}
 
 	public String getRiferimentoDocumento() {
 		return riferimentoDocumento;

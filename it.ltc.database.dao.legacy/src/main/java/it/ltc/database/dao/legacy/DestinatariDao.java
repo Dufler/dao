@@ -6,11 +6,15 @@ import java.util.List;
 import it.ltc.database.dao.CRUDDao;
 import it.ltc.database.dao.CondizioneWhere;
 import it.ltc.database.model.legacy.Destinatari;
+import it.ltc.utility.miscellanea.string.StringUtility;
 
 public class DestinatariDao extends CRUDDao<Destinatari> {
+	
+	protected final StringUtility su;
 
 	public DestinatariDao(String persistenceUnit) {
 		super(persistenceUnit, Destinatari.class);
+		su = new StringUtility();
 	}
 	
 	public Destinatari inserisci(Destinatari destinatario) {
@@ -28,6 +32,11 @@ public class DestinatariDao extends CRUDDao<Destinatari> {
 		return entity;
 	}
 	
+	public List<Destinatari> trovaTutti() {
+		List<Destinatari> entities = findAll();
+		return entities;
+	}
+	
 	public Destinatari trovaDaID(int id) {
 		Destinatari entity = findByID(id);
 		return entity;
@@ -36,6 +45,25 @@ public class DestinatariDao extends CRUDDao<Destinatari> {
 	public Destinatari trovaDaCodice(String codice) {
 		Destinatari entity = findOnlyOneEqualTo("codDestina", codice);
 		return entity;
+	}
+	
+	public Destinatari ripulisciCaratteri(Destinatari destinatario) {
+		//ragione sociale
+		String ragioneSociale1 = destinatario.getRagSoc1();
+		ragioneSociale1 = su.getVanilla(ragioneSociale1);
+		destinatario.setRagSoc1(ragioneSociale1);
+		String ragioneSociale2 = destinatario.getRagSoc2();
+		ragioneSociale2 = su.getVanilla(ragioneSociale2);
+		destinatario.setRagSoc2(ragioneSociale2);
+		//indirizzo
+		String indirizzo = destinatario.getIndirizzo();
+		indirizzo = su.getVanilla(indirizzo);
+		destinatario.setIndirizzo(indirizzo);
+		//localita
+		String localita = destinatario.getLocalita();
+		localita = su.getVanilla(localita);
+		destinatario.setLocalita(localita);
+		return destinatario;
 	}
 	
 	public Destinatari trovaIndirizzo(String ragioneSociale, String cap, String indirizzo, String localita, String nazione) {
