@@ -50,8 +50,9 @@ public abstract class ImportatoreFiles {
 			}
 			//Notifico quanto accaduto se è stato importato qualcosa.
 			if (!risultati.isEmpty())
-				inviaReportImportazione();
+				inviaReportImportazione(risultati);
 		} catch (Exception e) {
+			risultati.add(new RisultatoImportazioneErrore(e));
 			logger.error(e.getMessage(), e);
 		}
 	}
@@ -100,6 +101,6 @@ public abstract class ImportatoreFiles {
 	 * Metodo da implementare che invia una notifica sul risultato dell'importazione.<br>
 	 * E' possibile sfruttare il contenuto della lista <b>RisultatoImportazione</b>.
 	 */
-	protected abstract void inviaReportImportazione();
+	protected abstract void inviaReportImportazione(List<RisultatoImportazione> risultati);
 
 }

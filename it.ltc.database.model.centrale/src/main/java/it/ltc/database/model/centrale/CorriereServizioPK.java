@@ -12,10 +12,10 @@ public class CorriereServizioPK implements Serializable {
 	//default serial version id, required for serializable classes.
 	private static final long serialVersionUID = 1L;
 
-	@Column(insertable=false, updatable=false, unique=true, nullable=false, length=3, columnDefinition="CHAR")
+	//@Column(insertable=false, updatable=false, unique=true, nullable=false, length=3, columnDefinition="CHAR")
 	private String codice;
 
-	@Column(insertable=false, updatable=false, unique=true, nullable=false)
+	//@Column(insertable=false, updatable=false, unique=true, nullable=false)
 	private int corriere;
 
 	@Column(name="codifica_corriere", unique=true, nullable=false, length=10)

@@ -18,17 +18,20 @@ public class UtenteCommessaJoinPK implements Serializable {
 	@Column(name="id_commessa", insertable=false, updatable=false, unique=true, nullable=false)
 	private int idCommessa;
 
-	public UtenteCommessaJoinPK() {
-	}
+	public UtenteCommessaJoinPK() {}
+	
 	public String getUtente() {
 		return this.utente;
 	}
+	
 	public void setUtente(String utente) {
 		this.utente = utente;
 	}
+	
 	public int getIdCommessa() {
 		return this.idCommessa;
 	}
+	
 	public void setIdCommessa(int idCommessa) {
 		this.idCommessa = idCommessa;
 	}
@@ -54,4 +57,5 @@ public class UtenteCommessaJoinPK implements Serializable {
 		
 		return hash;
 	}
+	
 }

@@ -100,7 +100,7 @@ public class ControllerOrdiniSQLServer extends Dao implements IControllerModel<M
 		daoMagazzini = new MagazzinoDao(persistenceUnit);
 		daoProvince = new ProvinciaDao("produzione");
 		daoNazioni = new NazioneDao("produzione");
-		logger.info("(Legacy) Controller creato.");
+		logger.debug("(Legacy) Controller creato.");
 	}
 
 	@Override
@@ -118,7 +118,7 @@ public class ControllerOrdiniSQLServer extends Dao implements IControllerModel<M
 			case CHIAVE: checkPerChiave(ordine); break;
 			case MODELLOTAGLIA:	checkPerModelloTaglia(ordine); break;
 		}
-		logger.info("(Legacy) Validazione ordine terminata correttamente.");
+		logger.info("(Legacy) Validazione per l'ordine '" + ordine.getRiferimentoOrdine() + "' terminata correttamente.");
 	}
 	
 	protected void checkValiditaCampi(MOrdine ordine) {
@@ -176,41 +176,9 @@ public class ControllerOrdiniSQLServer extends Dao implements IControllerModel<M
 				throw new ModelValidationException("E' necessario specificare una provincia esistente per l'indirizzo. (Provincia inserita : " + provincia + " su " + ordine.getRiferimentoOrdine() + ")");
 		}
 
-		String nazione = indirizzo.getNazione();
-		Nazione n;
-		if (nazione == null || nazione.isEmpty()) {
-			throw new ModelValidationException("E' necessario specificare un codice nazione ISO per l'indirizzo. (" + ordine.getRiferimentoOrdine() + ")");
-		} else {
-			switch (nazione.length()) {
-				case 2 : n = daoNazioni.trovaDaCodiceISO2(nazione); break;
-				case 3 : n = daoNazioni.trovaDaCodiceISO3(nazione); break;
-				default : n = null;
-			}			
-			if (n == null) {
-				throw new ModelValidationException("E' necessario specificare un codice nazione ISO esistente per l'indirizzo. (Nazione inserita: " + nazione + " su (" + ordine.getRiferimentoOrdine() + ")");
-			} else {
-				//Qualunque sia il modo il modo in cui l'ho trovata mi assicuro che venga salvata come ISO 3.
-				nazione = n.getCodiceIsoTre();
-				indirizzo.setNazione(nazione);
-			}				
-		}
+		Nazione n = checkValiditaNazione(indirizzo, ordine);
 
-		String cap = indirizzo.getCap();
-		if (cap == null || cap.isEmpty())
-			throw new ModelValidationException("E' necessario specificare un cap per l'indirizzo. (" + ordine.getRiferimentoOrdine() + ")");
-		else if (n != null) {
-			// Controllo del CAP in base alla nazione.
-			boolean capValido;
-			switch (nazione) {
-			case "ITA":
-				capValido = cap.matches(REGEX_CAP_ITA);
-				break;
-			default:
-				capValido = cap.length() < 11; // 10 o meno caratteri.
-			}
-			if (!capValido)
-				throw new ModelValidationException("E' necessario specificare un cap valido per l'indirizzo. (Cap inserito: " + cap + " su (" + ordine.getRiferimentoOrdine() + ")");
-		}
+		checkValiditaCap(indirizzo, ordine, n);
 
 		// Campi facoltativi
 		String telefono = indirizzo.getTelefono();
@@ -223,6 +191,57 @@ public class ControllerOrdiniSQLServer extends Dao implements IControllerModel<M
 //				logger.warn("L'indirizzo email indicato non e' valido. (" + email + ")");
 			if (email.length() > 100)
 				throw new ModelValidationException("L'indirizzo email specificato e' troppo lungo (MAX 100 Caratteri, " + ordine.getRiferimentoOrdine() + ")");
+		}
+	}
+	
+	/**
+	 * Controlla la validità della nazione indicata e recupera i campi ISO2, ISO3 e Nome collegati alla nazione indicata.
+	 */
+	protected Nazione checkValiditaNazione(MIndirizzo indirizzo, MOrdine ordine) {
+		String nazione = indirizzo.getNazione();
+		Nazione n;
+		if (nazione == null || nazione.isEmpty()) {
+			throw new ModelValidationException("E' necessario specificare un codice nazione ISO per l'indirizzo. (" + ordine.getRiferimentoOrdine() + ")");
+		} else {
+			//Ricerco la nazione in base alla lunghezza del campo.
+			switch (nazione.length()) {
+				case 2 : n = daoNazioni.trovaDaCodiceISO2(nazione); break;
+				case 3 : n = daoNazioni.trovaDaCodiceISO3(nazione); break;
+				default : n = daoNazioni.trovaDaNome(nazione); break;
+			}
+			//Se non l'ho trovata lancio un'eccezione.
+			if (n == null) {
+				throw new ModelValidationException("E' necessario specificare un codice nazione ISO esistente per l'indirizzo. (Nazione inserita: " + nazione + " su " + ordine.getRiferimentoOrdine() + ")");
+			} else {
+				//Qualunque sia il modo il modo in cui l'ho trovata mi assicuro che venga salvata come ISO 3.
+				nazione = n.getCodiceIsoTre();
+				indirizzo.setNazione(n.getCodiceIsoTre());
+				indirizzo.setNazioneCodiceISO2(n.getCodiceIsoDue());
+				indirizzo.setNazioneCodiceISO3(n.getCodiceIsoTre());
+				indirizzo.setNazioneNome(n.getNome());
+			}				
+		}
+		return n;
+	}
+	
+	/**
+	 * Controlla la validità del CAP indicato in base alla nazione di destinazione.
+	 */
+	protected void checkValiditaCap(MIndirizzo indirizzo, MOrdine ordine, Nazione n) {
+		String cap = indirizzo.getCap();
+		if (cap == null || cap.isEmpty())
+			throw new ModelValidationException("E' necessario specificare un cap per l'indirizzo. (" + ordine.getRiferimentoOrdine() + ")");
+		else if (n != null) {
+			// Controllo del CAP in base alla nazione.
+			boolean capValido;
+			switch (n.getCodiceIsoTre()) {
+			case "ITA":
+				capValido = cap.matches(REGEX_CAP_ITA);	break;
+			default:
+				capValido = cap.length() < 11; // 10 o meno caratteri.
+			}
+			if (!capValido)
+				throw new ModelValidationException("E' necessario specificare un cap valido per l'indirizzo. (Cap inserito: " + cap + " su (" + ordine.getRiferimentoOrdine() + ")");
 		}
 	}
 
@@ -253,7 +272,7 @@ public class ControllerOrdiniSQLServer extends Dao implements IControllerModel<M
 					throw new ModelValidationException("(Legacy) La combinazione modello-taglia: '" + prodotto.getCodicemodello() + "-"	+ prodotto.getTaglia() + "' non è stato trovata. L'ordine " + ordine.getRiferimentoOrdine() + " non sarà importato.");
 				List<ArtiBar> barcodes = daoBarcode.trovaDaIDUnivoco(articolo.getIdUniArticolo());
 				if (barcodes == null || barcodes.isEmpty())
-					throw new ModelValidationException("(Legacy) nessun barcode collegato alla anagrafica ricavata dalla combinazione modello-taglia: '" + prodotto.getCodicemodello() + "-"	+ prodotto.getTaglia() + ", ID Univoco: '" + articolo.getIdUniArticolo() + "'");
+					throw new ModelValidationException("(Legacy) nessun barcode collegato alla anagrafica ricavata dalla combinazione modello-taglia: '" + prodotto.getCodicemodello() + "-"	+ prodotto.getTaglia() + ", ID Univoco: '" + articolo.getIdUniArticolo() + "'. L'ordine " + ordine.getRiferimentoOrdine() + " non sarà importato.");
 				mappaIdentificazioneArticoli.put(key, articolo.getIdUniArticolo());
 				mappaArticoliPerIDUnivoco.put(articolo.getIdUniArticolo(), articolo);
 				mappaBarcodePerIDUnivoco.put(articolo.getIdUniArticolo(), barcodes.get(0));
@@ -271,7 +290,7 @@ public class ControllerOrdiniSQLServer extends Dao implements IControllerModel<M
 					throw new ModelValidationException("(Legacy) La chiave: '" + key + "' non è stato trovata. L'ordine " + ordine.getRiferimentoOrdine() + " non sarà importato.");
 				List<ArtiBar> barcodes = daoBarcode.trovaDaIDUnivoco(articolo.getIdUniArticolo());
 				if (barcodes == null || barcodes.isEmpty())
-					throw new ModelValidationException("(Legacy) nessun barcode collegato alla anagrafica ricavata dalla chiave: '" + key + "', ID Univoco: '" + articolo.getIdUniArticolo() + "'");
+					throw new ModelValidationException("(Legacy) nessun barcode collegato alla anagrafica ricavata dalla chiave: '" + key + "', ID Univoco: '" + articolo.getIdUniArticolo() + "'. L'ordine " + ordine.getRiferimentoOrdine() + " non sarà importato.");
 				mappaIdentificazioneArticoli.put(key, articolo.getIdUniArticolo());
 				mappaArticoliPerIDUnivoco.put(articolo.getIdUniArticolo(), articolo);
 				mappaBarcodePerIDUnivoco.put(articolo.getIdUniArticolo(), barcodes.get(0));
@@ -291,7 +310,7 @@ public class ControllerOrdiniSQLServer extends Dao implements IControllerModel<M
 				if (barcode == null)
 					throw new ModelValidationException("(Legacy) Il barcode '" + key + "' non è stato trovato. L'ordine " + ordine.getRiferimentoOrdine() + " non sarà importato.");
 				if (articolo.getIdUniArticolo() == null || barcode.getIdUniArticolo() == null || !articolo.getIdUniArticolo().equals(barcode.getIdUniArticolo()))
-					throw new ModelValidationException("(Legacy) Non è stata trovata corrispondenza tra Articoli e Artibar per l'ID Univoco tramite il barcode: '" + key + "'.");
+					throw new ModelValidationException("(Legacy) Non è stata trovata corrispondenza tra Articoli e Artibar per l'ID Univoco tramite il barcode: '" + key + "'. L'ordine " + ordine.getRiferimentoOrdine() + " non sarà importato.");
 				mappaIdentificazioneArticoli.put(key, articolo.getIdUniArticolo());
 				mappaArticoliPerIDUnivoco.put(articolo.getIdUniArticolo(), articolo);
 				mappaBarcodePerIDUnivoco.put(articolo.getIdUniArticolo(), barcode);
@@ -319,12 +338,12 @@ public class ControllerOrdiniSQLServer extends Dao implements IControllerModel<M
 		if (entity == null) {
 			entity = new Destinatari();
 			entity.setCap(destinatario.getCap());
-			entity.setCodIso(destinatario.getNazione());
-			entity.setCodNaz(destinatario.getNazione());
+			entity.setCodIso(destinatario.getNazioneCodiceISO3());
+			entity.setCodNaz(destinatario.getNazioneCodiceISO2());
 			entity.setEmail(destinatario.getEmail());
 			entity.setIndirizzo(destinatario.getIndirizzo());
 			entity.setLocalita(destinatario.getLocalita());
-			entity.setNazione(destinatario.getNazione());
+			entity.setNazione(destinatario.getNazioneNome());
 			entity.setProvincia(destinatario.getProvincia());
 			entity.setRagSoc1(ragioneSociale1);
 			entity.setRagSoc2(ragioneSociale2);

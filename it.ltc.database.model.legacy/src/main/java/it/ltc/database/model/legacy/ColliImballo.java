@@ -35,7 +35,7 @@ public class ColliImballo implements Serializable {
 //	@Column(name="Anno")
 //	private int anno;
 
-	@Column(name="BarCodeImb", length=50)
+	@Column(name="BarCodeImb", nullable=false, length=35)
 	private String barCodeImb;
 
 	/**
@@ -59,7 +59,10 @@ public class ColliImballo implements Serializable {
 //	@Column(name="CodFornitore")
 //	private int codFornitore;
 
-//	@Column(name="ColloUoC", length=1)
+	/**
+	 * C = Collo qualsiasi, U = Ultimo collo dell'ordine.
+	 */
+//	@Column(name="ColloUoC", nullable=false, length=1)
 //	private String colloUoC;
 
 //	@Column(name="CtrlEtic", length=2)

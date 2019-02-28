@@ -5,6 +5,7 @@ C:\Users\Damiano\git-dao\it.ltc.model.interfaces\src\it\ltc\model\interfaces\imp
 C:\Users\Damiano\git-dao\it.ltc.model.interfaces\src\it\ltc\model\interfaces\ordine\TipoIDProdotto.java
 C:\Users\Damiano\git-dao\it.ltc.model.interfaces\src\it\ltc\model\interfaces\importatore\RisultatoImportazione.java
 C:\Users\Damiano\git-dao\it.ltc.model.interfaces\src\it\ltc\model\interfaces\ordine\MAssicurazione.java
+C:\Users\Damiano\git-dao\it.ltc.model.interfaces\src\it\ltc\model\interfaces\importatore\RisultatoImportazioneErrore.java
 C:\Users\Damiano\git-dao\it.ltc.model.interfaces\src\it\ltc\model\interfaces\esportatore\EsportatoreFiles.java
 C:\Users\Damiano\git-dao\it.ltc.model.interfaces\src\it\ltc\model\interfaces\ordine\ServizioCorriere.java
 C:\Users\Damiano\git-dao\it.ltc.model.interfaces\src\it\ltc\model\interfaces\prodotto\Stagione.java

@@ -102,8 +102,8 @@ public class MInfoSpedizione implements ModelInterface {
 			throw new ModelValidationException("E' necessario indicare la data del documento che accompagnerà la merce.");
 		}
 		//Valore doganale
-		if (valoreDoganale != null && valoreDoganale <= 0) {
-			throw new ModelValidationException("Il valore doganale non può essere minore o uguale a 0.00 euro");
+		if (valoreDoganale != null && valoreDoganale < 0) {
+			throw new ModelValidationException("Il valore doganale non può essere minore di 0.00 euro");
 		}
 		//Contrassegno
 		if (contrassegno != null) contrassegno.valida();

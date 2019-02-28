@@ -87,6 +87,7 @@ it\ltc\database\model\centrale\Brand.class
 it\ltc\database\model\centrale\TrackingStatoCodificaCorrierePK.class
 it\ltc\database\model\centrale\CdgPeriodico$Tipo.class
 it\ltc\database\model\centrale\CdgCostoAssociazione.class
+it\ltc\database\model\centrale\Funzione.class
 it\ltc\database\model\centrale\Nazione.class
 it\ltc\database\model\centrale\ListinoCommessaVoce.class
 it\ltc\database\model\centrale\TrackingPK.class

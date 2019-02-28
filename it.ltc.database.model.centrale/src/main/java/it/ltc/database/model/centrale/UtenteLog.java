@@ -13,6 +13,7 @@ import java.util.Date;
 @Table(name="utente_log")
 @NamedQuery(name="UtenteLog.findAll", query="SELECT u FROM UtenteLog u")
 public class UtenteLog implements Serializable {
+	
 	private static final long serialVersionUID = 1L;
 
 	@Id
@@ -33,8 +34,7 @@ public class UtenteLog implements Serializable {
 	@Column(nullable=false, length=50)
 	private String utente;
 
-	public UtenteLog() {
-	}
+	public UtenteLog() {}
 
 	public int getId() {
 		return this.id;

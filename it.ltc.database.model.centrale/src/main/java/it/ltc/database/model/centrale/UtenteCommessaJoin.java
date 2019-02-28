@@ -10,23 +10,47 @@ import javax.persistence.*;
  */
 @Entity
 @Table(name="utente_commessa_join")
+@IdClass(UtenteCommessaJoinPK.class)
 @NamedQuery(name="UtenteCommessaJoin.findAll", query="SELECT u FROM UtenteCommessaJoin u")
 public class UtenteCommessaJoin implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
 
-	@EmbeddedId
-	private UtenteCommessaJoinPK id;
+//	@EmbeddedId
+//	private UtenteCommessaJoinPK id;
+	
+	@Id
+	@Column(nullable=false, length=50)
+	private String utente;
 
-	public UtenteCommessaJoin() {
+	@Id
+	@Column(name="id_commessa", updatable=false, nullable=false)
+	private int idCommessa;
+
+	public UtenteCommessaJoin() {}
+
+//	public UtenteCommessaJoinPK getId() {
+//		return this.id;
+//	}
+//
+//	public void setId(UtenteCommessaJoinPK id) {
+//		this.id = id;
+//	}
+	
+	public String getUtente() {
+		return this.utente;
 	}
-
-	public UtenteCommessaJoinPK getId() {
-		return this.id;
+	
+	public void setUtente(String utente) {
+		this.utente = utente;
 	}
-
-	public void setId(UtenteCommessaJoinPK id) {
-		this.id = id;
+	
+	public int getIdCommessa() {
+		return this.idCommessa;
+	}
+	
+	public void setIdCommessa(int idCommessa) {
+		this.idCommessa = idCommessa;
 	}
 
 }

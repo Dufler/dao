@@ -18,17 +18,20 @@ public class UtentePermessiJoinPK implements Serializable {
 	@Column(name="id_permesso", insertable=false, updatable=false, unique=true, nullable=false)
 	private int idPermesso;
 
-	public UtentePermessiJoinPK() {
-	}
+	public UtentePermessiJoinPK() {}
+	
 	public String getUtente() {
 		return this.utente;
 	}
+	
 	public void setUtente(String utente) {
 		this.utente = utente;
 	}
+	
 	public int getIdPermesso() {
 		return this.idPermesso;
 	}
+	
 	public void setIdPermesso(int idPermesso) {
 		this.idPermesso = idPermesso;
 	}
@@ -54,4 +57,5 @@ public class UtentePermessiJoinPK implements Serializable {
 		
 		return hash;
 	}
+	
 }

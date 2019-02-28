@@ -52,6 +52,10 @@ public class Utente implements Serializable {
 	@JsonIgnore
 	private Date scadenzaRisorsa;
 	
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name="data_ultima_modifica", nullable=false, insertable=false)
+	private Date dataUltimaModifica;
+	
 	//Aggiunte
 	@JsonInclude(JsonInclude.Include.NON_NULL)
 	@Transient
@@ -166,6 +170,14 @@ public class Utente implements Serializable {
 
 	public void setNuovaPassword(String nuovaPassword) {
 		this.nuovaPassword = nuovaPassword;
+	}
+	
+	public Date getDataUltimaModifica() {
+		return dataUltimaModifica;
+	}
+
+	public void setDataUltimaModifica(Date dataUltimaModifica) {
+		this.dataUltimaModifica = dataUltimaModifica;
 	}
 	
 	/**

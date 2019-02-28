@@ -19,6 +19,7 @@
 		<class>it.ltc.database.model.centrale.FatturaSottoAmbito</class>
 		<class>it.ltc.database.model.centrale.FatturaVoce</class>
 		<class>it.ltc.database.model.centrale.Feature</class>
+		<class>it.ltc.database.model.centrale.Funzione</class>
 		<class>it.ltc.database.model.centrale.Indirizzo</class>
 		<class>it.ltc.database.model.centrale.Ingresso</class>
 		<class>it.ltc.database.model.centrale.JoinCommessaCorriere</class>
@@ -159,6 +160,7 @@
 		<class>it.ltc.database.model.centrale.FatturaSottoAmbito</class>
 		<class>it.ltc.database.model.centrale.FatturaVoce</class>
 		<class>it.ltc.database.model.centrale.Feature</class>
+		<class>it.ltc.database.model.centrale.Funzione</class>
 		<class>it.ltc.database.model.centrale.Indirizzo</class>
 		<class>it.ltc.database.model.centrale.Ingresso</class>
 		<class>it.ltc.database.model.centrale.JoinCommessaCorriere</class>

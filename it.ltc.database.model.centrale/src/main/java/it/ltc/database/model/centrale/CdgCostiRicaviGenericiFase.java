@@ -23,11 +23,11 @@ public class CdgCostiRicaviGenericiFase implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@Column(insertable=false, updatable=false, unique=true, nullable=false)
+	@Column(updatable=false, unique=true, nullable=false)
 	private int generico;
 
 	@Id
-	@Column(insertable=false, updatable=false, unique=true, nullable=false)
+	@Column(updatable=false, unique=true, nullable=false)
 	private int fase;
 
 	@Column(nullable=false, precision=10, scale=2)

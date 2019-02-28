@@ -18,6 +18,7 @@ public abstract class Dao {
 	public static final String LOCAL_CENTRALE_PERSISTENCE_UNIT_NAME = "locale-centrale";
 	public static final String LOCAL_UTENTE_PERSISTENCE_UNIT_NAME = "locale-utente";
 	public static final String LOCAL_SEDE_PERSISTENCE_UNIT_NAME = "locale-sede";
+	public static final String LOCAL_COSTANTI_PERSISTENCE_UNIT_NAME = "locale-costanti";
 	
 	/**
 	 * Stringa che rappresenta la persistence unit da usare così come viene definita nel file persistence.xml

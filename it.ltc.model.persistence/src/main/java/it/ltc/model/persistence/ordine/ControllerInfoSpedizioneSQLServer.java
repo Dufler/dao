@@ -173,7 +173,7 @@ public class ControllerInfoSpedizioneSQLServer extends Dao implements IControlle
 		spedizione.setCap(destinatario.getCap());
 		spedizione.setIndirizzo(destinatario.getIndirizzo());
 		spedizione.setLocalita(destinatario.getLocalita());
-		spedizione.setNazione(destinatario.getNazione());
+		spedizione.setNazione(destinatario.getCodIso());
 		spedizione.setProvincia(destinatario.getProvincia());
 		spedizione.setRagSocDest(destinatario.getRagSoc1());
 		spedizione.setRagSocEst(destinatario.getRagSoc2());
@@ -358,7 +358,8 @@ public class ControllerInfoSpedizioneSQLServer extends Dao implements IControlle
 		rigaSpedizione.setCodRaggruppamento(progressivoSpedizione);
 		rigaSpedizione.setFormato(colloImballato.getCodFormato());
 		rigaSpedizione.setNrCollo(colloImballato.getNrIdCollo());
-		rigaSpedizione.setNrColloStr(df.format(progressivoSpedizione));
+		//rigaSpedizione.setNrColloStr(df.format(progressivoSpedizione));
+		rigaSpedizione.setNrColloStr(colloImballato.getBarCodeImb());
 		rigaSpedizione.setNrLista(ordine.getNrLista());
 		rigaSpedizione.setNrSpedi(progressivoSpedizione);
 		rigaSpedizione.setPeso(colloImballato.getPesoKg());

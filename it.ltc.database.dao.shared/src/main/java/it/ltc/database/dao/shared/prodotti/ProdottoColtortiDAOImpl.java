@@ -100,12 +100,17 @@ public class ProdottoColtortiDAOImpl extends ProdottoDaoConVerifiche<ArticoliCol
 			t.begin();
 			if (!presente) {
 				//Update sui barcodes
-				for (ArtiBar barcode : barcodes) {
-					barcode = em.find(ArtiBar.class, barcode.getIdArtiBar());
-					barcode.setBarraEAN(prodotto.getBarcode());
-					barcode.setTaglia(prodotto.getTaglia());
-					em.merge(barcode);
-				}
+//				for (ArtiBar barcode : barcodes) {
+//					barcode = em.find(ArtiBar.class, barcode.getIdArtiBar());
+//					barcode.setBarraEAN(prodotto.getBarcode()); 
+//					barcode.setTaglia(prodotto.getTaglia());
+//					em.merge(barcode);
+//				}
+				ArtiBar barcode = barcodes.get(0);
+				barcode = em.find(ArtiBar.class, barcode.getIdArtiBar());
+				barcode.setBarraEAN(prodotto.getBarcode()); 
+				barcode.setTaglia(prodotto.getTaglia());
+				em.merge(barcode);
 				//Update sul prodotto
 				articolo = em.find(ArticoliColtorti.class, articolo.getIdArticolo());
 				//update sul barcode

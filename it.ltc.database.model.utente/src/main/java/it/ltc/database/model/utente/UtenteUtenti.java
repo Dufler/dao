@@ -1,0 +1,185 @@
+package it.ltc.database.model.utente;
+
+import java.io.Serializable;
+import javax.persistence.*;
+
+import org.hibernate.validator.constraints.Length;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
+
+import java.util.Date;
+import java.util.Set;
+
+/**
+ * The persistent class for the utente database table.
+ * 
+ */
+@Entity
+@Table(name = "utente")
+@NamedQuery(name = "UtenteUtenti.findAll", query = "SELECT u FROM UtenteUtenti u")
+public class UtenteUtenti implements Serializable {
+	
+	private static final long serialVersionUID = 1L;
+
+	@Id
+	@Column(length = 50)
+	private String username;
+
+	@Column(nullable = false, length = 45)
+	@Length(max = 45, message = "Max 45 caratteri")
+	private String cognome;
+
+	@Column(length = 150)
+	@Length(max = 150, message = "Max 150 caratteri")
+	private String email;
+
+	@Column(nullable = false, length = 45)
+	@Length(max = 45, message = "Max 45 caratteri")
+	private String nome;
+
+	@Column(name = "password", nullable = false, columnDefinition = "TEXT")
+	@JsonIgnore
+	private String password;
+
+	@Column(name = "risorsa_temporanea", columnDefinition = "TEXT")
+	@JsonIgnore
+	private String risorsaTemporanea;
+
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name = "scadenza_risorsa")
+	@JsonIgnore
+	private Date scadenzaRisorsa;
+
+	// Aggiunte
+	@JsonInclude(JsonInclude.Include.NON_NULL)
+	@Transient
+	private Set<Integer> sedi;
+	@JsonInclude(JsonInclude.Include.NON_NULL)
+	@Transient
+	private Set<Integer> commesse;
+	@JsonInclude(JsonInclude.Include.NON_NULL)
+	@Transient
+	private Set<Integer> permessi;
+	@JsonInclude(JsonInclude.Include.NON_NULL)
+	@Transient
+	private Set<String> features;
+	@JsonInclude(JsonInclude.Include.NON_NULL)
+	@Transient
+	private String nuovaPassword;
+	// Fine
+
+	public UtenteUtenti() {}
+
+	public String getUsername() {
+		return this.username;
+	}
+
+	public void setUsername(String username) {
+		this.username = username;
+	}
+
+	public String getCognome() {
+		return this.cognome;
+	}
+
+	public void setCognome(String cognome) {
+		this.cognome = cognome;
+	}
+
+	public String getEmail() {
+		return this.email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public String getNome() {
+		return this.nome;
+	}
+
+	public void setNome(String nome) {
+		this.nome = nome;
+	}
+
+	public String getPassword() {
+		return this.password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
+	public String getRisorsaTemporanea() {
+		return this.risorsaTemporanea;
+	}
+
+	public void setRisorsaTemporanea(String risorsaTemporanea) {
+		this.risorsaTemporanea = risorsaTemporanea;
+	}
+
+	public Date getScadenzaRisorsa() {
+		return this.scadenzaRisorsa;
+	}
+
+	public void setScadenzaRisorsa(Date scadenzaRisorsa) {
+		this.scadenzaRisorsa = scadenzaRisorsa;
+	}
+
+	public Set<Integer> getSedi() {
+		return sedi;
+	}
+
+	public void setSedi(Set<Integer> sedi) {
+		this.sedi = sedi;
+	}
+
+	public Set<Integer> getCommesse() {
+		return commesse;
+	}
+
+	public void setCommesse(Set<Integer> commesse) {
+		this.commesse = commesse;
+	}
+
+	public Set<Integer> getPermessi() {
+		return permessi;
+	}
+
+	public void setPermessi(Set<Integer> permessi) {
+		this.permessi = permessi;
+	}
+
+	public Set<String> getFeatures() {
+		return features;
+	}
+
+	public void setFeatures(Set<String> features) {
+		this.features = features;
+	}
+
+	public String getNuovaPassword() {
+		return nuovaPassword;
+	}
+
+	public void setNuovaPassword(String nuovaPassword) {
+		this.nuovaPassword = nuovaPassword;
+	}
+
+	/**
+	 * Restituisce true soltanto se: - l'oggetto ha i permessi caricati - il
+	 * permesso dichiarato è contenuto fra questi oppure i tra i permessi
+	 * caricati è contenuto il permesso di test.
+	 * 
+	 * @param idPermesso
+	 *            l'ID del permesso come sulla tabella <code>permesso</code>.
+	 * @return true se i permessi sono stati caricati e all'utente è stato dato
+	 *         quel permesso.
+	 */
+	public boolean isAllowedTo(int idPermesso) {
+		boolean permesso = permessi != null ? (permessi.contains(idPermesso) || permessi.contains(1)) : false;
+		return permesso;
+	}
+
+}

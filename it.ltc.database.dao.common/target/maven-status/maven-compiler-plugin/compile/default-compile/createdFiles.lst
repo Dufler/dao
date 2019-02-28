@@ -22,4 +22,5 @@ it\ltc\database\dao\common\FeatureDao.class
 it\ltc\database\dao\common\NazioneDao.class
 it\ltc\database\dao\common\PermessoDao.class
 it\ltc\database\dao\common\ClienteDao.class
+it\ltc\database\dao\common\FunzioneDao.class
 it\ltc\database\dao\common\CategoriaMerceologicaDao.class

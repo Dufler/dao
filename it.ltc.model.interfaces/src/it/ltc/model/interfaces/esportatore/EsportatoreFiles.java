@@ -21,7 +21,8 @@ public abstract class EsportatoreFiles {
 			//guardo se ci sono nuovi files da produrre
 			List<RisultatoEsportazione> risultatiEsportazione = getRisultatiEsportazione();
 			//Notifico quanto accaduto
-			inviaReportEsportazione(risultatiEsportazione);
+			if (risultatiEsportazione != null && !risultatiEsportazione.isEmpty())
+				inviaReportEsportazione(risultatiEsportazione);
 		} catch (Exception e) {
 			logger.error(e.getMessage(), e);
 		}

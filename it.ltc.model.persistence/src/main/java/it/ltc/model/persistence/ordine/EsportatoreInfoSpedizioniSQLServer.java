@@ -29,6 +29,8 @@ public abstract class EsportatoreInfoSpedizioniSQLServer {
 	public void esportaInfoSpedizioni() {
 		//Trovo tutti gli ordini spediti
 		List<TestataOrdini> testate = trovaOrdiniSpediti();
+		if (!testate.isEmpty())
+			logger.info("Sono stati trovati " + testate.size() + " ordini pronti per l'esportazione dati sulla spedizione.");
 		for (TestataOrdini testata : testate) {
 			boolean generazione = esportaOrdine(testata);
 			if (generazione) {

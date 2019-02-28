@@ -24,12 +24,15 @@ public class CdgCostiRicaviGenericiFasePK implements Serializable {
 	public int getGenerico() {
 		return this.generico;
 	}
+	
 	public void setGenerico(int generico) {
 		this.generico = generico;
 	}
+	
 	public int getFase() {
 		return this.fase;
 	}
+	
 	public void setFase(int fase) {
 		this.fase = fase;
 	}
@@ -52,7 +55,7 @@ public class CdgCostiRicaviGenericiFasePK implements Serializable {
 		int hash = 17;
 		hash = hash * prime + this.generico;
 		hash = hash * prime + this.fase;
-		
 		return hash;
 	}
+	
 }

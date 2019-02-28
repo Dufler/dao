@@ -10,22 +10,47 @@ import javax.persistence.*;
  */
 @Entity
 @Table(name="utente_features_join")
+@IdClass(UtenteFeaturesJoinPK.class)
 @NamedQuery(name="UtenteFeaturesJoin.findAll", query="SELECT u FROM UtenteFeaturesJoin u")
 public class UtenteFeaturesJoin implements Serializable {
+	
 	private static final long serialVersionUID = 1L;
 
-	@EmbeddedId
-	private UtenteFeaturesJoinPK id;
+//	@EmbeddedId
+//	private UtenteFeaturesJoinPK id;
+	
+	@Id
+	@Column(updatable=false, nullable=false, length=50)
+	private String utente;
 
-	public UtenteFeaturesJoin() {
+	@Id
+	@Column(nullable=false, length=250)
+	private String feature;
+
+	public UtenteFeaturesJoin() {}
+
+//	public UtenteFeaturesJoinPK getId() {
+//		return this.id;
+//	}
+//
+//	public void setId(UtenteFeaturesJoinPK id) {
+//		this.id = id;
+//	}
+	
+	public String getUtente() {
+		return this.utente;
 	}
-
-	public UtenteFeaturesJoinPK getId() {
-		return this.id;
+	
+	public void setUtente(String utente) {
+		this.utente = utente;
 	}
-
-	public void setId(UtenteFeaturesJoinPK id) {
-		this.id = id;
+	
+	public String getFeature() {
+		return this.feature;
+	}
+	
+	public void setFeature(String feature) {
+		this.feature = feature;
 	}
 
 }

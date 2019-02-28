@@ -17,11 +17,11 @@ public class CorriereServizio implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@Column(insertable=false, updatable=false, unique=true, nullable=false, length=3, columnDefinition="CHAR")
+	@Column(updatable=false, unique=true, nullable=false, length=3, columnDefinition="CHAR")
 	private String codice;
 
 	@Id
-	@Column(insertable=false, updatable=false, unique=true, nullable=false)
+	@Column(updatable=false, unique=true, nullable=false)
 	private int corriere;
 
 	@Id

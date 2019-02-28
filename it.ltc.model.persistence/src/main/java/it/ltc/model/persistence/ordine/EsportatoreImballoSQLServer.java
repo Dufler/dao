@@ -42,6 +42,8 @@ public abstract class EsportatoreImballoSQLServer {
 	public void esportaOrdiniImballati() {
 		//Trovo tutti gli ordini imballati e pronti per essere esportati
 		List<TestataOrdini> testate = trovaOrdiniImballati();
+		if (!testate.isEmpty())
+			logger.info("Sono stati trovati " + testate.size() + " ordini pronti per l'esportazione dati sull'imballo.");
 		for (TestataOrdini testata : testate) {
 			//Recupero le info collegate all'ordine: righe, imballi e colli.
 			List<RighiOrdine> righe = trovaRigheOrdine(testata);

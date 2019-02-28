@@ -18,17 +18,20 @@ public class UtenteFeaturesJoinPK implements Serializable {
 	@Column(unique=true, nullable=false, length=250)
 	private String feature;
 
-	public UtenteFeaturesJoinPK() {
-	}
+	public UtenteFeaturesJoinPK() {}
+	
 	public String getUtente() {
 		return this.utente;
 	}
+	
 	public void setUtente(String utente) {
 		this.utente = utente;
 	}
+	
 	public String getFeature() {
 		return this.feature;
 	}
+	
 	public void setFeature(String feature) {
 		this.feature = feature;
 	}
@@ -54,4 +57,5 @@ public class UtenteFeaturesJoinPK implements Serializable {
 		
 		return hash;
 	}
+	
 }

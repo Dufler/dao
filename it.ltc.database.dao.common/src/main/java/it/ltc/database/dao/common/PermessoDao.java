@@ -3,7 +3,7 @@ package it.ltc.database.dao.common;
 import java.util.List;
 
 import it.ltc.database.dao.CRUDDao;
-import it.ltc.database.model.utente.Permesso;
+import it.ltc.database.model.centrale.Permesso;
 
 /**
  * Dao per la gestione dei permessi.
@@ -13,7 +13,7 @@ import it.ltc.database.model.utente.Permesso;
 public class PermessoDao extends CRUDDao<Permesso> {
 
 	public PermessoDao() {
-		this(LOCAL_UTENTE_PERSISTENCE_UNIT_NAME);
+		this(LOCAL_CENTRALE_PERSISTENCE_UNIT_NAME);
 	}
 	
 	public PermessoDao(String persistenceUnit) {

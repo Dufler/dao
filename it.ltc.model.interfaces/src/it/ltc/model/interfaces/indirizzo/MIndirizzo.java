@@ -22,6 +22,10 @@ public class MIndirizzo implements ModelInterface {
 	protected String telefono;
 	protected String email;
 	
+	protected String nazioneCodiceISO2;
+	protected String nazioneCodiceISO3;
+	protected String nazioneNome;
+	
 	public MIndirizzo() {}
 
 	@Override
@@ -132,6 +136,30 @@ public class MIndirizzo implements ModelInterface {
 		return telefono;
 	}
 
+	public String getNazioneCodiceISO2() {
+		return nazioneCodiceISO2;
+	}
+
+	public void setNazioneCodiceISO2(String nazioneCodiceISO2) {
+		this.nazioneCodiceISO2 = nazioneCodiceISO2;
+	}
+
+	public String getNazioneCodiceISO3() {
+		return nazioneCodiceISO3;
+	}
+
+	public void setNazioneCodiceISO3(String nazioneCodiceISO3) {
+		this.nazioneCodiceISO3 = nazioneCodiceISO3;
+	}
+
+	public String getNazioneNome() {
+		return nazioneNome;
+	}
+
+	public void setNazioneNome(String nazioneNome) {
+		this.nazioneNome = nazioneNome;
+	}
+
 	public void setTelefono(String telefono) {
 		this.telefono = telefono;
 	}
@@ -152,7 +180,7 @@ public class MIndirizzo implements ModelInterface {
 		result = prime * result + ((codice == null) ? 0 : codice.hashCode());
 		result = prime * result + ((indirizzo == null) ? 0 : indirizzo.hashCode());
 		result = prime * result + ((localita == null) ? 0 : localita.hashCode());
-		result = prime * result + ((nazione == null) ? 0 : nazione.hashCode());
+		//result = prime * result + ((nazione == null) ? 0 : nazione.hashCode());
 		result = prime * result + ((provincia == null) ? 0 : provincia.hashCode());
 		result = prime * result + ((ragioneSociale == null) ? 0 : ragioneSociale.hashCode());
 		return result;
@@ -187,11 +215,11 @@ public class MIndirizzo implements ModelInterface {
 				return false;
 		} else if (!localita.equals(other.localita))
 			return false;
-		if (nazione == null) {
-			if (other.nazione != null)
-				return false;
-		} else if (!nazione.equals(other.nazione))
-			return false;
+//		if (nazione == null) {
+//			if (other.nazione != null)
+//				return false;
+//		} else if (!nazione.equals(other.nazione))
+//			return false;
 		if (provincia == null) {
 			if (other.provincia != null)
 				return false;
@@ -208,8 +236,7 @@ public class MIndirizzo implements ModelInterface {
 	@Override
 	public String toString() {
 		return "MIndirizzo [codice=" + codice + ", ragionesociale=" + ragioneSociale + ", indirizzo=" + indirizzo
-				+ ", cap=" + cap + ", localita=" + localita + ", provincia=" + provincia + ", nazione=" + nazione
-				+ ", telefono=" + telefono + ", email=" + email + "]";
+				+ ", cap=" + cap + ", localita=" + localita + ", provincia=" + provincia + ", telefono=" + telefono + ", email=" + email + "]";
 	}
 	
 }

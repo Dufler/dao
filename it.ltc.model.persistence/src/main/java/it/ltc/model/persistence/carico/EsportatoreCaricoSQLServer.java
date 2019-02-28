@@ -36,6 +36,8 @@ public abstract class EsportatoreCaricoSQLServer {
 	public void esportaCarichi() {
 		//Trovo tutti i carichi pronti per essere esportati
 		List<PakiTesta> carichi = trovaCarichiPronti();
+		if (!carichi.isEmpty())
+			logger.info("Sono stati trovati " + carichi.size() + " carichi pronti per l'esportazione dati.");
 		//Recupero il contenuto per ognuno di questi e elaboro i file di riga
 		for (PakiTesta carico : carichi) {
 			List<PakiArticolo> righe = daoRighe.trovaRigheDaCarico(carico.getIdTestaPaki());

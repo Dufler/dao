@@ -1105,7 +1105,7 @@ public class TestaCorr implements Serializable {
 		sb.append(utility.getFormattedString(servizio, 1)); //1 - tipo servizio bolle
 		sb.append(utility.getFormattedString(0.0, 13, 3)); //13 (3 decimali) - importo da assicurare
 		sb.append("EUR"); //3 - divisa importo da assicurare
-		sb.append(utility.getFormattedString("COLLI", 15)); //15 - natura merce
+		sb.append(utility.getFormattedString("COLLI", 15)); //15 - natura merce, lo fisso alla stringa COLLI
 		sb.append(utility.getFormattedString(nrColli, 5)); //5 - colli
 		sb.append(utility.getFormattedString(peso, 7, 1)); //7 (1 decimale) - peso
 		sb.append(utility.getFormattedString(volume, 5, 3)); //5 (3 decimali) - volume

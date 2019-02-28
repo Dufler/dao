@@ -9,26 +9,30 @@ import javax.persistence.*;
  */
 @Embeddable
 public class UtenteSedeJoinPK implements Serializable {
+	
 	//default serial version id, required for serializable classes.
 	private static final long serialVersionUID = 1L;
 
-	@Column(insertable=false, updatable=false, unique=true, nullable=false, length=50)
+	//@Column(insertable=false, updatable=false, unique=true, nullable=false, length=50)
 	private String utente;
 
-	@Column(name="id_sede", insertable=false, updatable=false, unique=true, nullable=false)
+	//@Column(name="id_sede", insertable=false, updatable=false, unique=true, nullable=false)
 	private int idSede;
 
-	public UtenteSedeJoinPK() {
-	}
+	public UtenteSedeJoinPK() {}
+	
 	public String getUtente() {
 		return this.utente;
 	}
+	
 	public void setUtente(String utente) {
 		this.utente = utente;
 	}
+	
 	public int getIdSede() {
 		return this.idSede;
 	}
+	
 	public void setIdSede(int idSede) {
 		this.idSede = idSede;
 	}
@@ -54,4 +58,5 @@ public class UtenteSedeJoinPK implements Serializable {
 		
 		return hash;
 	}
+	
 }

@@ -17,11 +17,11 @@ public class CdgBudgetPercentualiCosto implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@Column(insertable=false, updatable=false, unique=true, nullable=false)
+	@Column(updatable=false, unique=true, nullable=false)
 	private int budget;
 
 	@Id
-	@Column(name="costo_generico", insertable=false, updatable=false, unique=true, nullable=false)
+	@Column(name="costo_generico", updatable=false, unique=true, nullable=false)
 	private int costoGenerico;
 
 	@Column(nullable=false, precision=10, scale=2)

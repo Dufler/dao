@@ -17,6 +17,7 @@ it\ltc\model\interfaces\model\IControllerModel.class
 it\ltc\model\interfaces\prodotto\Stagione.class
 it\ltc\model\interfaces\carico\IControllerCaricoMySQL.class
 it\ltc\model\interfaces\ordine\MParticolarita.class
+it\ltc\model\interfaces\importatore\RisultatoImportazioneErrore.class
 it\ltc\model\interfaces\prodotto\MCassa.class
 it\ltc\model\interfaces\ordine\MContrassegno.class
 it\ltc\model\interfaces\ordine\Corriere.class
