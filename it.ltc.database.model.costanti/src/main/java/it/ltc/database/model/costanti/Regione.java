@@ -10,7 +10,6 @@ import javax.persistence.*;
  */
 @Entity
 @Table(name="regione")
-@NamedQuery(name="Regione.findAll", query="SELECT r FROM Regione r")
 public class Regione implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
@@ -26,8 +25,7 @@ public class Regione implements Serializable {
 	@Column(nullable=false, length=6)
 	private String zona;
 
-	public Regione() {
-	}
+	public Regione() {}
 
 	public String getCodice() {
 		return this.codice;
@@ -51,6 +49,36 @@ public class Regione implements Serializable {
 
 	public void setZona(String zona) {
 		this.zona = zona;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((codice == null) ? 0 : codice.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Regione other = (Regione) obj;
+		if (codice == null) {
+			if (other.codice != null)
+				return false;
+		} else if (!codice.equals(other.codice))
+			return false;
+		return true;
+	}
+
+	@Override
+	public String toString() {
+		return nome;
 	}
 
 }

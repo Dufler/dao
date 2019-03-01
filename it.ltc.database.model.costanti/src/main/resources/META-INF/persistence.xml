@@ -3,10 +3,10 @@
 	
 	<!-- localhost centrale test o produzione -->
 	<persistence-unit name="locale-costanti" transaction-type="RESOURCE_LOCAL">
-		<class>it.ltc.database.model.centrale.Nazione</class>
-		<class>it.ltc.database.model.centrale.Provincia</class>
-		<class>it.ltc.database.model.centrale.Regione</class>
-		<class>it.ltc.database.model.centrale.Valuta</class>
+		<class>it.ltc.database.model.costanti.Nazione</class>
+		<class>it.ltc.database.model.costanti.Provincia</class>
+		<class>it.ltc.database.model.costanti.Regione</class>
+		<class>it.ltc.database.model.costanti.Valuta</class>
 		<properties>
 			<property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver" />
 			<property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/ltc_costanti" />
@@ -34,16 +34,16 @@
 			<property name="hibernate.c3p0.timeout" value="100" />
 			<property name="hibernate.c3p0.preferredTestQuery" value="SELECT 1"/>
 			<property name="hibernate.c3p0.testConnectionOnCheckout" value="true"/>
-			<property name="hibernate.ejb.entitymanager_factory_name" value="locale-centrale"/>
+			<property name="hibernate.ejb.entitymanager_factory_name" value="locale-costanti"/>
 		</properties>
 	</persistence-unit>
 	
 	<!-- localhost centrale test o produzione -->
 	<persistence-unit name="produzione-costanti" transaction-type="RESOURCE_LOCAL">
-		<class>it.ltc.database.model.centrale.Nazione</class>
-		<class>it.ltc.database.model.centrale.Provincia</class>
-		<class>it.ltc.database.model.centrale.Regione</class>
-		<class>it.ltc.database.model.centrale.Valuta</class>
+		<class>it.ltc.database.model.costanti.Nazione</class>
+		<class>it.ltc.database.model.costanti.Provincia</class>
+		<class>it.ltc.database.model.costanti.Regione</class>
+		<class>it.ltc.database.model.costanti.Valuta</class>
 		<properties>
 			<property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver" />
 			<property name="javax.persistence.jdbc.url" value="jdbc:mysql://192.168.0.12:3306/ltc_costanti" />
@@ -71,7 +71,7 @@
 			<property name="hibernate.c3p0.timeout" value="100" />
 			<property name="hibernate.c3p0.preferredTestQuery" value="SELECT 1"/>
 			<property name="hibernate.c3p0.testConnectionOnCheckout" value="true"/>
-			<property name="hibernate.ejb.entitymanager_factory_name" value="produzione"/>
+			<property name="hibernate.ejb.entitymanager_factory_name" value="produzione-costanti"/>
 		</properties>
 	</persistence-unit>
 	

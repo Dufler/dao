@@ -10,7 +10,6 @@ import javax.persistence.*;
  */
 @Entity
 @Table(name="nazione")
-@NamedQuery(name="Nazione.findAll", query="SELECT n FROM Nazione n")
 public class Nazione implements Serializable, Comparable<Nazione> {
 	
 	private static final long serialVersionUID = 1L;
@@ -35,8 +34,7 @@ public class Nazione implements Serializable, Comparable<Nazione> {
 	@Column(name="zona_tnt", nullable=false, length=1, columnDefinition="CHAR")
 	private String zonaTnt;
 
-	public Nazione() {
-	}
+	public Nazione() {}
 
 	public String getCodiceIsoTre() {
 		return this.codiceIsoTre;
@@ -89,6 +87,36 @@ public class Nazione implements Serializable, Comparable<Nazione> {
 	public int compareTo(Nazione o) {
 		int compare = nome.compareTo(o.getNome());
 		return compare;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((codiceIsoTre == null) ? 0 : codiceIsoTre.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Nazione other = (Nazione) obj;
+		if (codiceIsoTre == null) {
+			if (other.codiceIsoTre != null)
+				return false;
+		} else if (!codiceIsoTre.equals(other.codiceIsoTre))
+			return false;
+		return true;
+	}
+
+	@Override
+	public String toString() {
+		return nome;
 	}
 
 }

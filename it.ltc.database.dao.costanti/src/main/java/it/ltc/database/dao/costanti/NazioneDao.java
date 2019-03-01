@@ -18,7 +18,7 @@ public class NazioneDao extends ReadOnlyDao<Nazione> {
 	private final HashMap<String, Nazione> mappaISO2;
 
 	public NazioneDao() {
-		this(LOCAL_CENTRALE_PERSISTENCE_UNIT_NAME);
+		this(LOCAL_COSTANTI_PERSISTENCE_UNIT_NAME);
 	}
 	
 	public NazioneDao(String persistenceUnit) {

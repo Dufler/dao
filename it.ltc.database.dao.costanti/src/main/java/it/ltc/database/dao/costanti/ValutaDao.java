@@ -8,7 +8,7 @@ import it.ltc.database.model.costanti.Valuta;
 public class ValutaDao extends ReadOnlyDao<Valuta> {
 
 	public ValutaDao() {
-		super(LOCAL_CENTRALE_PERSISTENCE_UNIT_NAME, Valuta.class);
+		super(LOCAL_COSTANTI_PERSISTENCE_UNIT_NAME, Valuta.class);
 	}
 	
 	public Valuta trovaDaCodice(String codice) {

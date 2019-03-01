@@ -10,8 +10,8 @@ import javax.persistence.*;
  */
 @Entity
 @Table(name="valuta")
-@NamedQuery(name="Valuta.findAll", query="SELECT v FROM Valuta v")
 public class Valuta implements Serializable {
+	
 	private static final long serialVersionUID = 1L;
 
 	@Id
@@ -22,8 +22,7 @@ public class Valuta implements Serializable {
 	@Column(nullable=false, length=45)
 	private String nome;
 
-	public Valuta() {
-	}
+	public Valuta() {}
 
 	public String getCodice() {
 		return this.codice;
@@ -39,6 +38,36 @@ public class Valuta implements Serializable {
 
 	public void setNome(String nome) {
 		this.nome = nome;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((codice == null) ? 0 : codice.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Valuta other = (Valuta) obj;
+		if (codice == null) {
+			if (other.codice != null)
+				return false;
+		} else if (!codice.equals(other.codice))
+			return false;
+		return true;
+	}
+
+	@Override
+	public String toString() {
+		return nome;
 	}
 
 }

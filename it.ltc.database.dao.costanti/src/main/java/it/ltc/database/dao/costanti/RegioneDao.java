@@ -8,7 +8,7 @@ import it.ltc.database.model.costanti.Regione;
 public class RegioneDao extends ReadOnlyDao<Regione> {
 
 	public RegioneDao() {
-		this(LOCAL_CENTRALE_PERSISTENCE_UNIT_NAME);
+		this(LOCAL_COSTANTI_PERSISTENCE_UNIT_NAME);
 	}
 	
 	public RegioneDao(String persistenceUnit) {

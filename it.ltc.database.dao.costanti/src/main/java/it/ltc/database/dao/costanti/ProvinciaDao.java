@@ -14,7 +14,7 @@ import it.ltc.database.model.costanti.Provincia;
 public class ProvinciaDao extends ReadOnlyDao<Provincia> {
 
 	public ProvinciaDao() {
-		this(LOCAL_CENTRALE_PERSISTENCE_UNIT_NAME);
+		this(LOCAL_COSTANTI_PERSISTENCE_UNIT_NAME);
 	}
 	
 	public ProvinciaDao(String persistenceUnit) {
