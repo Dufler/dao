@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import it.ltc.database.dao.common.PermessoDao;
-import it.ltc.database.dao.common.utente.PermessoUtentiDao;
+import it.ltc.database.dao.utente.PermessoUtentiDao;
 import it.ltc.database.model.centrale.Permesso;
 import it.ltc.database.model.utente.PermessoUtenti;
 import it.ltc.database.sincronizza.TableSync;

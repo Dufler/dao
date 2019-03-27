@@ -29,10 +29,10 @@ it\ltc\database\model\legacy\RighiImballoLight.class
 it\ltc\database\model\legacy\Destinatari.class
 it\ltc\database\model\legacy\seriale\ColliPackConSeriale.class
 it\ltc\database\model\legacy\ColliImballo.class
-it\ltc\database\model\legacy\centrale\CorrieriPerCliente.class
 it\ltc\database\model\legacy\MittentiOrdine.class
 it\ltc\database\model\legacy\ScorteColli.class
 it\ltc\database\model\legacy\coltorti\ArticoliColtorti.class
+it\ltc\database\model\legacy\bundle\CasseStandard.class
 it\ltc\database\model\legacy\ColliCarico.class
 it\ltc\database\model\legacy\ColliPack.class
 it\ltc\database\model\legacy\PakiTestaTipo.class

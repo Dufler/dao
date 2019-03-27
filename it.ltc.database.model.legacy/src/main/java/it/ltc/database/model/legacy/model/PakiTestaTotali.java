@@ -15,6 +15,11 @@ public class PakiTestaTotali {
 		this.totaleRiscontrato = totaleRiscontrato;
 	}
 	
+	public PakiTestaTotali(Integer totaleDichiarato, Integer totaleRiscontrato) {
+		this.totaleDichiarato = (long) totaleDichiarato;
+		this.totaleRiscontrato = (long) totaleRiscontrato;
+	}
+	
 	public int getTotaleDichiarato() {
 		return totaleDichiarato != null ? totaleDichiarato.intValue() : -1;
 	}

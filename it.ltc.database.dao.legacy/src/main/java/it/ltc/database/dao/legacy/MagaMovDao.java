@@ -14,6 +14,7 @@ import it.ltc.database.dao.CondizioneWhere;
 import it.ltc.database.model.legacy.MagaMov;
 import it.ltc.database.model.legacy.MagaSd;
 import it.ltc.database.model.legacy.PakiTesta;
+import it.ltc.database.model.legacy.TestataOrdini;
 import it.ltc.database.model.legacy.model.CausaliMovimento;
 
 public class MagaMovDao extends CRUDDao<MagaMov> {
@@ -70,6 +71,14 @@ public class MagaMovDao extends CRUDDao<MagaMov> {
 		List<CondizioneWhere> conditions = new LinkedList<>();
 		conditions.add(new CondizioneWhere("docNr", carico.getNrPaki()));
 		conditions.add(new CondizioneWhere("IDdocum", carico.getIdTestaPaki()));
+		List<MagaMov> entities = findAll(conditions);
+		return entities;
+	}
+	
+	public List<MagaMov> trovaMovimentiOrdine(TestataOrdini ordine) {
+		List<CondizioneWhere> conditions = new LinkedList<>();
+		conditions.add(new CondizioneWhere("docNr", ordine.getNrLista()));
+		conditions.add(new CondizioneWhere("IDdocum", ordine.getIdTestaSped()));
 		List<MagaMov> entities = findAll(conditions);
 		return entities;
 	}

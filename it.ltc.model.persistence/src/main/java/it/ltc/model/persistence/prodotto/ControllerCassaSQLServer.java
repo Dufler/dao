@@ -77,8 +77,10 @@ public class ControllerCassaSQLServer extends Dao implements IControllerModel<MC
 			elementoCassa.setModello(prodotto.getCodiceModello());
 			elementoCassa.setTipo(model.getTipoCassa().name());
 			elementoCassa.setCodiceCassa(model.getCodiceCassa());
-			elementoCassa.setSkuBundle(model.getCassa().getIdUnivocoLegacy());
-			elementoCassa.setSkuProdotto(prodotto.getIdUnivocoLegacy());
+//			elementoCassa.setIdUnivocoCassa(model.getCassa().getIdUnivocoLegacy());
+//			elementoCassa.setIdUnivocoProdotto(prodotto.getIdUnivocoLegacy());
+			elementoCassa.setIdCassa(model.getCassa().getId());
+			elementoCassa.setIdProdotto(prodotto.getId());
 			elementoCassa.setQuantitaProdotto(prodotti.get(prodotto));
 			contenutoCassa.add(elementoCassa);
 		}

@@ -20,6 +20,11 @@ public class AziendaBrandPK implements Serializable {
 
 	public AziendaBrandPK() {}
 	
+	public AziendaBrandPK(AziendaBrand associazione) {
+		this.azienda = associazione.getAzienda();
+		this.brand = associazione.getBrand();
+	}
+	
 	public int getAzienda() {
 		return this.azienda;
 	}

@@ -73,8 +73,8 @@ public class RighiOrdine implements Serializable {
 	@Column(name="Corsia", length=3, columnDefinition="char(3)")
 	private String corsia;
 
-//	@Column(name="Datagenmov")
-//	private Date datagenmov;
+	@Column(name="Datagenmov", columnDefinition="datetime")
+	private Date datagenmov;
 
 	@Column(name="DataOrdine", columnDefinition="datetime")
 	private Date dataOrdine;
@@ -115,7 +115,7 @@ public class RighiOrdine implements Serializable {
 //	@Column(name="NrCasse")
 //	private int nrCasse;
 
-	@Column(name="Nrcollo", length=10, columnDefinition="char(10)")
+	@Column(name="Nrcollo", length=9, columnDefinition="varchar(9)")
 	private String nrcollo;
 
 	@Column(name="NrLista", length=21, nullable=false)
@@ -130,8 +130,8 @@ public class RighiOrdine implements Serializable {
 	@Column(name="Numerata", length=20)
 	private String numerata;
 
-//	@Column(name="Pezzieffet", nullable=false)
-//	private int pezzieffet;
+	@Column(name="Pezzieffet", nullable=false)
+	private int pezzieffet;
 
 	@Column(name="Piano", length=2, columnDefinition="char(2)")
 	private String piano;
@@ -154,8 +154,8 @@ public class RighiOrdine implements Serializable {
 //	@Column(name="QtaPerCassa")
 //	private int qtaPerCassa;
 
-//	@Column(name="QtaPrelevata")
-//	private int qtaPrelevata;
+	@Column(name="QtaPrelevata")
+	private int qtaPrelevata;
 
 	@Column(name="QtaSpedizione", nullable=false)
 	private int qtaSpedizione;
@@ -331,14 +331,14 @@ public class RighiOrdine implements Serializable {
 	public void setCorsia(String corsia) {
 		this.corsia = corsia;
 	}
-//
-//	public Date getDatagenmov() {
-//		return this.datagenmov;
-//	}
-//
-//	public void setDatagenmov(Date datagenmov) {
-//		this.datagenmov = datagenmov;
-//	}
+
+	public Date getDatagenmov() {
+		return this.datagenmov;
+	}
+
+	public void setDatagenmov(Date datagenmov) {
+		this.datagenmov = datagenmov;
+	}
 
 	public Date getDataOrdine() {
 		return this.dataOrdine;
@@ -484,13 +484,13 @@ public class RighiOrdine implements Serializable {
 		this.numerata = numerata;
 	}
 
-//	public int getPezzieffet() {
-//		return this.pezzieffet;
-//	}
-//
-//	public void setPezzieffet(int pezzieffet) {
-//		this.pezzieffet = pezzieffet;
-//	}
+	public int getPezzieffet() {
+		return this.pezzieffet;
+	}
+
+	public void setPezzieffet(int pezzieffet) {
+		this.pezzieffet = pezzieffet;
+	}
 
 	public String getPiano() {
 		return this.piano;
@@ -548,13 +548,13 @@ public class RighiOrdine implements Serializable {
 //		this.qtaPerCassa = qtaPerCassa;
 //	}
 //
-//	public int getQtaPrelevata() {
-//		return this.qtaPrelevata;
-//	}
-//
-//	public void setQtaPrelevata(int qtaPrelevata) {
-//		this.qtaPrelevata = qtaPrelevata;
-//	}
+	public int getQtaPrelevata() {
+		return this.qtaPrelevata;
+	}
+
+	public void setQtaPrelevata(int qtaPrelevata) {
+		this.qtaPrelevata = qtaPrelevata;
+	}
 
 	public int getQtaSpedizione() {
 		return this.qtaSpedizione;

@@ -86,16 +86,19 @@ public class TestaCorr implements Serializable {
 //	@Column(name="Creazione", nullable=false, insertable=false)
 //	private Date creazione;
 
+	/**
+	 * Non sembra che venga usato.
+	 */
 	@Column(name="DataConsegna")
 	private int dataConsegna;
 
-//	@Column(name="DataConsegnaTassativa")
-//	private Date dataConsegnaTassativa;
+	@Column(name="DataConsegnaTassativa")
+	private Date dataConsegnaTassativa;
 //
 //	@Column(name="DataEstrazione")
 //	private Date dataEstrazione;
 //
-	@Column(name="DataGenerazione", columnDefinition="datetime")
+	@Column(name="DataGenerazione", columnDefinition="datetime", nullable=false)
 	private Date dataGenerazione;
 
 	@Column(name="DataSpe")
@@ -114,6 +117,15 @@ public class TestaCorr implements Serializable {
 	//FIXME: Ripristinarlo appena possibile
 //	@Column(name="DocumentoBase64", columnDefinition="varbinary(MAX)", length=Integer.MAX_VALUE)
 //	private byte[] documentoBase64;
+	
+	@Column(name="DocumentoData", columnDefinition="datetime")
+	private Date documentoData;
+	
+	@Column(name="DocumentoRiferimento", length=50)
+	private String documentoRiferimento;
+	
+	@Column(name="DocumentoTipo", length=20)
+	private String documentoTipo;
 
 //	@Column(name="Estratto", nullable=false, length=2)
 //	private String estratto;
@@ -130,8 +142,8 @@ public class TestaCorr implements Serializable {
 //	@Column(name="IdCorriere")
 //	private int idCorriere;
 
-//	@Column(length=50)
-//	private String IDTracking;
+	@Column(name="TrackingNumber", length=50)
+	private String trackingNumber;
 
 //	@Column(name="ImpoAss")
 //	private BigDecimal impoAss;
@@ -423,7 +435,7 @@ public class TestaCorr implements Serializable {
 	public void setCodMittente(String codMittente) {
 		this.codMittente = codMittente;
 	}
-//
+
 //	public int getCodRaggruppamento() {
 //		return this.codRaggruppamento;
 //	}
@@ -472,13 +484,13 @@ public class TestaCorr implements Serializable {
 		this.dataConsegna = dataConsegna;
 	}
 
-//	public Date getDataConsegnaTassativa() {
-//		return this.dataConsegnaTassativa;
-//	}
-//
-//	public void setDataConsegnaTassativa(Date dataConsegnaTassativa) {
-//		this.dataConsegnaTassativa = dataConsegnaTassativa;
-//	}
+	public Date getDataConsegnaTassativa() {
+		return this.dataConsegnaTassativa;
+	}
+
+	public void setDataConsegnaTassativa(Date dataConsegnaTassativa) {
+		this.dataConsegnaTassativa = dataConsegnaTassativa;
+	}
 //
 //	public Date getDataEstrazione() {
 //		return this.dataEstrazione;
@@ -560,13 +572,13 @@ public class TestaCorr implements Serializable {
 //		this.idCorriere = idCorriere;
 //	}
 //
-//	public String getIDTracking() {
-//		return this.IDTracking;
-//	}
-//
-//	public void setIDTracking(String IDTracking) {
-//		this.IDTracking = IDTracking;
-//	}
+	public String getTrackingNumber() {
+		return trackingNumber;
+	}
+
+	public void setTrackingNumber(String tracking) {
+		this.trackingNumber = tracking;
+	}
 //
 //	public BigDecimal getImpoAss() {
 //		return this.impoAss;
@@ -599,6 +611,30 @@ public class TestaCorr implements Serializable {
 //	public void setDocumentoBase64(byte[] documentoBase64) {
 //		this.documentoBase64 = documentoBase64;
 //	}
+	
+	public Date getDocumentoData() {
+		return documentoData;
+	}
+
+	public void setDocumentoData(Date documentoData) {
+		this.documentoData = documentoData;
+	}
+
+	public String getDocumentoRiferimento() {
+		return documentoRiferimento;
+	}
+
+	public void setDocumentoRiferimento(String documentoRiferimento) {
+		this.documentoRiferimento = documentoRiferimento;
+	}
+
+	public String getDocumentoTipo() {
+		return documentoTipo;
+	}
+
+	public void setDocumentoTipo(String documentoTipo) {
+		this.documentoTipo = documentoTipo;
+	}
 
 	public String getIndirizzo() {
 		return this.indirizzo;

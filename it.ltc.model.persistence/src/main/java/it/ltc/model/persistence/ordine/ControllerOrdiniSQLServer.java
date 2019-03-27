@@ -98,8 +98,8 @@ public class ControllerOrdiniSQLServer extends Dao implements IControllerModel<M
 		daoSaldi = new MagaSdDao(persistenceUnit);
 		daoMovimenti = new MagaMovDao(persistenceUnit);
 		daoMagazzini = new MagazzinoDao(persistenceUnit);
-		daoProvince = new ProvinciaDao("produzione");
-		daoNazioni = new NazioneDao("produzione");
+		daoProvince = new ProvinciaDao("produzione-costanti");
+		daoNazioni = new NazioneDao("produzione-costanti");
 		logger.debug("(Legacy) Controller creato.");
 	}
 
@@ -407,7 +407,11 @@ public class ControllerOrdiniSQLServer extends Dao implements IControllerModel<M
 		int nrListaArrivato = 0; //FIXME - Qua dovrebbe essere un autoincrement. Es. Integer.parseInt(data);
 		String riferimento = ordine.getRiferimentoOrdine();
 		Date dataOrdine = ordine.getDataOrdine();
-		String nomeFileArrivato = "INWS" + data + ".SER";
+		String nomeFileArrivato = ordine.getNomeFile();
+		if (nomeFileArrivato == null || nomeFileArrivato.isEmpty())
+			nomeFileArrivato = "INWS" + data + ".SER";
+		if (nomeFileArrivato.length() > 50)
+			nomeFileArrivato = nomeFileArrivato.substring(0, 50);
 		String note = ordine.getNote();
 		if (note == null || note.isEmpty()) {
 			note = " ";
@@ -428,7 +432,6 @@ public class ControllerOrdiniSQLServer extends Dao implements IControllerModel<M
 		testata.setIdMittente(mittente.getIdMittente());
 		
 		testata.setStato("IMPO");
-		testata.setQtaTotaleSpedire(ordine.getQuantitaTotaleDaSpedire());
 		testata.setOperatore("SERVIZIO");
 		testata.setNomeFileArrivo(nomeFileArrivato);
 		testata.setTipoOrdine(ordine.getTipo());
@@ -470,17 +473,27 @@ public class ControllerOrdiniSQLServer extends Dao implements IControllerModel<M
 	}
 	
 	protected void ottieniRighe(List<RighiOrdine> righe, TestataOrdini ordine, MOrdine model) {
+		int totale = 0;
+		int totaleEffettivo = 0;
 		for (ProdottoOrdinato prodotto : model.getProdotti()) {
 			Articoli match = ottieniArticoloDaIDUnivoco(prodotto.getChiavelegacy());
 			ArtiBar matchBarcode = ottieniBarcodeDaIDUnivoco(prodotto.getChiavelegacy());
 			if (match != null && matchBarcode != null) {
+				//aggiorno i totali
+				int quantità = prodotto.getQuantita();
+				int quantitàEffetiva = prodotto.getQuantita() * match.getPezziCassa();
+				totale += quantità;
+				totaleEffettivo += quantitàEffetiva;
+				//creo la riga
 				RighiOrdine riga = new RighiOrdine();
 				riga.setIdArticolo(match.getIdArticolo());
 				riga.setNrLista(ordine.getNrLista());
 				riga.setDataOrdine(ordine.getDataOrdine());
 				riga.setCodiceArticolo(match.getCodArtStr());
 				riga.setTaglia(match.getTaglia());
-				riga.setQtaSpedizione(prodotto.getQuantita());
+				riga.setNumerata(match.getNumerata());
+				riga.setQtaSpedizione(quantità);
+				riga.setPezzieffet(quantitàEffetiva);
 				riga.setDescrizione(match.getDescrizione());
 				riga.setNrRigo(prodotto.getNumeroRiga());
 				riga.setIdDestina(ordine.getIdDestina());
@@ -499,6 +512,9 @@ public class ControllerOrdiniSQLServer extends Dao implements IControllerModel<M
 				righe.add(riga);
 			}
 		}
+		//Imposto i totali
+		ordine.setQtaTotaleSpedire(totale);
+		ordine.setPezzieffet(totaleEffettivo);
 	}
 	
 	protected void ottieniSaldiEMovimenti(List<MagaSd> saldiDaInserire, List<MagaSd> saldiDaAggiornare, List<MagaMov> movimenti, TestataOrdini testata, MOrdine ordine) {

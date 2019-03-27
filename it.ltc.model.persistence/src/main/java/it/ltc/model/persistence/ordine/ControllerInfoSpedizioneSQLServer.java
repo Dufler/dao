@@ -107,14 +107,14 @@ public class ControllerInfoSpedizioneSQLServer extends Dao implements IControlle
 			// Se non trovo corrispondenza o non sono in uno stato congruo
 			// lancio un'eccezione.
 			if (ordine == null) {
-				CustomErrorCause problema = new CustomErrorCause("Non esiste alcun ordine a sistema con il riferimento indicato.", riferimento);
+				CustomErrorCause problema = new CustomErrorCause(riferimento, "Non esiste alcun ordine a sistema con il riferimento indicato. (" + riferimento + ")");
 				problemiRiscontrati.add(problema);
 				continue; //Passo al riferimento successivo.
 			} else {
 				ordiniDaSpedire.add(ordine);
 				StatoOrdine stato = ordine.getStatoOrdine();
 				if (!(stato == StatoOrdine.ELAB || stato == StatoOrdine.INSP)) {
-					CustomErrorCause problema = new CustomErrorCause("Non è possibile indicare informazioni per la spedizione dell'ordine indicato.", riferimento + " (Stato: " + stato.getNome() + ")");
+					CustomErrorCause problema = new CustomErrorCause(riferimento, "Non è possibile indicare informazioni per la spedizione dell'ordine indicato. (Riferimento: " + riferimento + ", Stato: " + stato.getNome() + ")");
 					problemiRiscontrati.add(problema);
 				}
 			}
@@ -123,7 +123,7 @@ public class ControllerInfoSpedizioneSQLServer extends Dao implements IControlle
 			if (idTestaCorr == -1) {
 				idTestaCorr = ordine.getIdTestaCorr();
 			} else if (idTestaCorr != ordine.getIdTestaCorr()) {
-				CustomErrorCause problema = new CustomErrorCause("Non è possibile raggruppare ordini per cui sono già state indicate spedizioni diverse.", riferimento);
+				CustomErrorCause problema = new CustomErrorCause(riferimento, "Non è possibile raggruppare ordini per cui sono già state indicate spedizioni diverse. (" + riferimento + ")");
 				problemiRiscontrati.add(problema);
 			}
 			// Controllo che il destinatario sia lo stesso per tutti
@@ -131,7 +131,7 @@ public class ControllerInfoSpedizioneSQLServer extends Dao implements IControlle
 				if (idDestina == -1) {
 					idDestina = ordine.getIdDestina();
 				} else if (idDestina != ordine.getIdDestina()) {
-					CustomErrorCause problema = new CustomErrorCause("Non è possibile raggruppare in una sola spedizione ordini con destinatari diversi.", riferimento);
+					CustomErrorCause problema = new CustomErrorCause(riferimento, "Non è possibile raggruppare in una sola spedizione ordini con destinatari diversi. (" + riferimento + ")");
 					problemiRiscontrati.add(problema);
 				}
 			}
@@ -139,15 +139,21 @@ public class ControllerInfoSpedizioneSQLServer extends Dao implements IControlle
 			if (idTestaCorr > 0) {
 				TestaCorr testataSpedizione = daoTestaCorr.trovaDaID(idTestaCorr);
 				if (testataSpedizione != null && testataSpedizione.getTrasmesso() != 0) {
-					CustomErrorCause problema = new CustomErrorCause("I documenti relativi alla spedizione sono stati già stampati e allegati ai colli. Non è possibile aggiornare le informazioni sulla spedizione.", riferimento);
+					CustomErrorCause problema = new CustomErrorCause(riferimento, "I documenti relativi alla spedizione sono stati già stampati e allegati ai colli. Non è possibile aggiornare le informazioni sulla spedizione. (" + riferimento + ")");
 					problemiRiscontrati.add(problema);
 				}
 			}
 		}
 		// Se ho trovato dei problemi sollevo l'eccezione altrimenti restituisco
 		// le testate ordini trovate e proseguo con l'inserimento.
-		if (!problemiRiscontrati.isEmpty())
-			throw new ModelPersistenceException("Sono stati riscontrati problemi con gli ordini indicati");
+		if (!problemiRiscontrati.isEmpty()) {
+			StringBuilder errorMessage = new StringBuilder("Sono stati riscontrati problemi con gli ordini indicati: ");
+			for (CustomErrorCause error : problemiRiscontrati) {
+				errorMessage.append("\r\n");
+				errorMessage.append(error.getCause());
+			}
+			throw new ModelPersistenceException(errorMessage.toString());
+		}
 		return ordiniDaSpedire;
 	}
 	
@@ -209,6 +215,14 @@ public class ControllerInfoSpedizioneSQLServer extends Dao implements IControlle
 		spedizione.setServizio(infoSpedizione.getServizioCorriere());
 		spedizione.setValoreMerce(infoSpedizione.getValoreDoganale());
 		spedizione.setMittenteAlfa(ordine.getNrOrdine());
+		//Aggiunta recente per i ws su logica 2.0
+		int trasmesso;
+		if (infoSpedizione.isAbilitaPartenza()) {
+			trasmesso = infoSpedizione.getRiferimentiOrdini().size() > 1 ? 2 : 1;
+		} else {
+			trasmesso = 0;
+		}
+		spedizione.setTrasmesso(trasmesso);
 	}
 	
 	protected MInfoSpedizione aggiornaInfoSpedizione(List<TestataOrdini> ordiniDaSpedire, MInfoSpedizione infoSpedizione) {
@@ -226,6 +240,12 @@ public class ControllerInfoSpedizioneSQLServer extends Dao implements IControlle
 
 		// Contrassegno
 		setInfoContrassegno(spedizione, infoSpedizione);
+		
+		//Aggiorno le info sul model
+		infoSpedizione.setPeso(spedizione.getPeso());
+		infoSpedizione.setVolume(spedizione.getVolume());
+		infoSpedizione.setColli(spedizione.getNrColli());
+		infoSpedizione.setPezzi(spedizione.getPezzi());
 
 		// Vado in scrittura in maniera transazionale.
 		EntityTransaction transaction = em.getTransaction();
@@ -311,6 +331,11 @@ public class ControllerInfoSpedizioneSQLServer extends Dao implements IControlle
 		spedizione.setVolume(volume);
 		spedizione.setNrColli(colli);
 		spedizione.setPezzi(pezzi);
+		// aggiorno le info sul model
+		infoSpedizione.setPeso(peso);
+		infoSpedizione.setVolume(volume);
+		infoSpedizione.setColli(colli);
+		infoSpedizione.setPezzi(pezzi);
 		// Vado in scrittura in maniera transazionale.
 		EntityManager em = getManager();
 		EntityTransaction transaction = em.getTransaction();

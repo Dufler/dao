@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import it.ltc.database.dao.common.SedeDao;
-import it.ltc.database.dao.common.utente.SedeUtentiDao;
+import it.ltc.database.dao.utente.SedeUtentiDao;
 import it.ltc.database.model.centrale.Sede;
 import it.ltc.database.model.utente.SedeUtenti;
 import it.ltc.database.sincronizza.TableSync;
@@ -40,6 +40,8 @@ public class SedeSync extends TableSync<Sede, SedeUtenti> {
 	@Override
 	protected boolean updateSlave(Sede master, SedeUtenti slave) {
 		slave.setSede(master.getSede());
+		slave.setIndirizzoWeb(master.getIndirizzoWeb());
+		slave.setPrefissoCollo(master.getPrefissoCollo());
 		boolean update = daoSlave.aggiorna(slave) != null;
 		return update;
 	}
@@ -49,6 +51,8 @@ public class SedeSync extends TableSync<Sede, SedeUtenti> {
 		SedeUtenti slave = new SedeUtenti();
 		slave.setId(master.getId());
 		slave.setSede(master.getSede());
+		slave.setIndirizzoWeb(master.getIndirizzoWeb());
+		slave.setPrefissoCollo(master.getPrefissoCollo());
 		boolean insert = daoSlave.inserisci(slave) != null;
 		return insert;
 	}

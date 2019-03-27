@@ -42,7 +42,9 @@ public class SedeUtentiDao extends CRUDDao<SedeUtenti> {
 
 	@Override
 	protected void updateValues(SedeUtenti oldEntity, SedeUtenti entity) {
-		oldEntity.setSede(entity.getSede());		
+		oldEntity.setSede(entity.getSede());
+		oldEntity.setIndirizzoWeb(entity.getIndirizzoWeb());
+		oldEntity.setPrefissoCollo(entity.getPrefissoCollo());
 	}
 
 }

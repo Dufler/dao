@@ -57,6 +57,14 @@ public class Articoli implements Serializable {
 	@Column(name="BarraUPC", length=50, columnDefinition="varchar(50)")
 	private String barraUPC;
 	
+	/**
+	 * Indica come viene gestito il prodotto, i possibili valori sono:<br>
+	 * <ul>
+	 * <li>STANDARD: una cassa di prodotto con una sua composizione ben definita in taglie e quantità, il prodotto arriva già così.</li>
+	 * <li>BUNDLE: un insieme di prodotti sfusi che viene composto in uscita.</li>
+	 * <li>NO: un prodotto sfuso, non è in cassa.</li>
+	 * </ul>
+	 */
 	@Column(name="Cassa", nullable=false, length=10, columnDefinition="varchar(10)")
 	private String cassa;
 
@@ -249,6 +257,10 @@ public class Articoli implements Serializable {
 	@Column(name="Taglia", nullable=false, length=20, columnDefinition="varchar(20)")
 	private String taglia;
 
+	/**
+	 * Indica la tipologia di cassa come definito nella tabella <strong>CasseStandard</strong>.<br>
+	 * Viene valorizzato solo quando la variabile <code>cassa</code> assume il valore <code>STANDARD</code>.
+	 */
 	@Column(name="TipoCassa", length=20, columnDefinition="varchar(20)")
 	private String tipoCassa;
 

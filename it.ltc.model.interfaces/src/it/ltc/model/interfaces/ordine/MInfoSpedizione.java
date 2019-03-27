@@ -16,6 +16,11 @@ public class MInfoSpedizione implements ModelInterface {
 	
 	private int id;
 	
+	private int pezzi;
+	private int colli;
+	private double peso;
+	private double volume;
+	
 	private String note;
 	private final Set<String> riferimentiOrdini;
 	
@@ -36,9 +41,12 @@ public class MInfoSpedizione implements ModelInterface {
 	
 	private boolean forzaAccoppiamentoDestinatari;
 	
+	private boolean abilitaPartenza;
+	
 	public MInfoSpedizione() {
 		riferimentiOrdini = new HashSet<>();
 		tipoDocumento = "DDT";
+		servizioCorriere = "DEF";
 		dataDocumento = new Date();
 	}
 
@@ -59,24 +67,6 @@ public class MInfoSpedizione implements ModelInterface {
 		//Corriere
 		if (corriere == null || corriere.isEmpty()) {
 			throw new ModelValidationException("E' necessario indicare un corriere con cui spedire la merce.");
-		} else {
-			//Qui sarebbe possibile validare il codice del corriere con la enum ma non è una buona idea.
-//			try {
-//				Corriere c = Corriere.valueOf(corriere.toUpperCase());
-//				if (c == Corriere.ALTRO) {
-//					if (codiceCorriere == null || codiceCorriere.isEmpty()) {
-//						throw new ModelValidationException("Se si indica ALTRO come corriere è necessario specificare il corriere nel campo codiceCorriere.");
-//					}
-//				}
-//			} catch (IllegalArgumentException e) {
-//				//Il tipo di ordine non è valido
-//				String errorMessage = "Il corriere indicato non è valido. L'elenco completo dei corrieri è: ";
-//				for (Corriere corriere : Corriere.values()) {
-//					errorMessage += corriere + " ";
-//				}
-//				errorMessage = errorMessage.trim();
-//				throw new ModelValidationException(errorMessage);
-//			}
 		}
 		//Livello di servizio
 		if (servizioCorriere == null || servizioCorriere.isEmpty())
@@ -117,6 +107,38 @@ public class MInfoSpedizione implements ModelInterface {
 
 	public void setId(int id) {
 		this.id = id;
+	}
+
+	public int getPezzi() {
+		return pezzi;
+	}
+
+	public void setPezzi(int pezzi) {
+		this.pezzi = pezzi;
+	}
+
+	public int getColli() {
+		return colli;
+	}
+
+	public void setColli(int colli) {
+		this.colli = colli;
+	}
+
+	public double getPeso() {
+		return peso;
+	}
+
+	public void setPeso(double peso) {
+		this.peso = peso;
+	}
+
+	public double getVolume() {
+		return volume;
+	}
+
+	public void setVolume(double volume) {
+		this.volume = volume;
 	}
 
 	public String getNote() {
@@ -229,6 +251,14 @@ public class MInfoSpedizione implements ModelInterface {
 
 	public void setRiferimentoDocumento(String riferimentoDocumento) {
 		this.riferimentoDocumento = riferimentoDocumento;
+	}
+
+	public boolean isAbilitaPartenza() {
+		return abilitaPartenza;
+	}
+
+	public void setAbilitaPartenza(boolean abilitaPartenza) {
+		this.abilitaPartenza = abilitaPartenza;
 	}
 
 }

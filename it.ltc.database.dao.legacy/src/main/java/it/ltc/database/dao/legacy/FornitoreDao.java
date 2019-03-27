@@ -1,5 +1,7 @@
 package it.ltc.database.dao.legacy;
 
+import java.util.List;
+
 import it.ltc.database.dao.CRUDDao;
 import it.ltc.database.model.legacy.Fornitori;
 
@@ -17,6 +19,11 @@ public class FornitoreDao extends CRUDDao<Fornitori> {
 	public Fornitori trovaDaCodice(String codiceFornitore) {
         Fornitori fornitore = findFirstOneEqualTo("codiceFornitore", codiceFornitore);
 		return fornitore;
+	}
+	
+	public List<Fornitori> trovaTutte() {
+		List<Fornitori> entities = findAll();
+		return entities;
 	}
 	
 	public Fornitori inserisci(Fornitori fornitore) {

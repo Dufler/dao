@@ -27,8 +27,13 @@ public class PakiTestaDao extends CRUDDao<PakiTesta> {
 		return entities;
 	}
 	
-	public List<PakiTesta> trovaCarichiSenzaQuantita() {
+	public List<PakiTesta> trovaCarichiSenzaQuantitaDichiarata() {
 		List<PakiTesta> entities = findAllEqualTo("qtaTotAto", 0);
+		return entities;
+	}
+	
+	public List<PakiTesta> trovaCarichiSenzaQuantitaRiscontrata() {
+		List<PakiTesta> entities = findAllEqualTo("qtaTotAre", 0);
 		return entities;
 	}
 	

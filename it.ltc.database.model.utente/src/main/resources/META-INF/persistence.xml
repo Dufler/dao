@@ -51,7 +51,7 @@
 	</persistence-unit>
 	
 	<!-- localhost centrale test o produzione -->
-	<persistence-unit name="produzione-utenti" transaction-type="RESOURCE_LOCAL">
+	<persistence-unit name="produzione-utenti-pg" transaction-type="RESOURCE_LOCAL">
 		<class>it.ltc.database.model.utente.Commessa</class>
 		<class>it.ltc.database.model.utente.FeatureUtente</class>
 		<class>it.ltc.database.model.utente.Permesso</class>
@@ -75,7 +75,6 @@
 			<property name="hibernate.connection.useUnicode" value="true" />
 			<property name="hibernate.connection.useJDBCCompliantTimezoneShift"	value="true" />
 			<property name="hibernate.connection.useLegacyDatetimeCode"	value="false" />
-<!-- 			<property name="hibernate.connection.serverTimezone" value="UTC" /> -->
 			<property name="hibernate.connection.serverTimezone" value="CET" />
 			<property name="hibernate.connection.autoReconnect" value="true" />
 			<property name="hibernate.connection.useSSL" value="false" />
@@ -93,7 +92,53 @@
 			<property name="hibernate.c3p0.timeout" value="100" />
 			<property name="hibernate.c3p0.preferredTestQuery" value="SELECT 1"/>
 			<property name="hibernate.c3p0.testConnectionOnCheckout" value="true"/>
-			<property name="hibernate.ejb.entitymanager_factory_name" value="produzione-utenti"/>
+			<property name="hibernate.ejb.entitymanager_factory_name" value="produzione-utenti-pg"/>
+		</properties>
+	</persistence-unit>
+	
+	<!-- localhost centrale test o produzione -->
+	<persistence-unit name="produzione-utenti-po" transaction-type="RESOURCE_LOCAL">
+		<class>it.ltc.database.model.utente.Commessa</class>
+		<class>it.ltc.database.model.utente.FeatureUtente</class>
+		<class>it.ltc.database.model.utente.Permesso</class>
+		<class>it.ltc.database.model.utente.Sede</class>
+		<class>it.ltc.database.model.utente.Utente</class>
+		<class>it.ltc.database.model.utente.UtenteCommessaJoin</class>
+		<class>it.ltc.database.model.utente.UtenteCommessaJoinPK</class>
+		<class>it.ltc.database.model.utente.UtenteFeaturesJoin</class>
+		<class>it.ltc.database.model.utente.UtenteFeaturesJoinPK</class>
+		<class>it.ltc.database.model.utente.UtentePermessiJoin</class>
+		<class>it.ltc.database.model.utente.UtentePermessiJoinPK</class>
+		<class>it.ltc.database.model.utente.UtenteSedeJoin</class>
+		<class>it.ltc.database.model.utente.UtenteSedeJoinPK</class>		
+		<properties>
+			<property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver" />
+			<property name="javax.persistence.jdbc.url" value="jdbc:mysql://192.168.5.11:3306/ltc_utenti" />
+			<property name="javax.persistence.jdbc.user" value="ltc" />
+			<property name="javax.persistence.jdbc.password" value="myltcpsw1087" />
+			<property name="hibernate.hbm2ddl.auto" value="none" />
+			<property name="hibernate.dialect" value="org.hibernate.dialect.MySQLDialect" />
+			<property name="hibernate.connection.useUnicode" value="true" />
+			<property name="hibernate.connection.useJDBCCompliantTimezoneShift"	value="true" />
+			<property name="hibernate.connection.useLegacyDatetimeCode"	value="false" />
+			<property name="hibernate.connection.serverTimezone" value="CET" />
+			<property name="hibernate.connection.autoReconnect" value="true" />
+			<property name="hibernate.connection.useSSL" value="false" />
+			<property name="hibernate.connection.password" value="myltcpsw1087"/>
+			<property name="hibernate.connection.username" value="ltc"/>
+			<property name="hibernate.connection.url" value="jdbc:mysql://192.168.5.11:3306/ltc_utenti"/>
+			<property name="hibernate.connection.driver_class" value="com.mysql.jdbc.Driver"/>
+			<property name="hibernate.connection.provider_class" value="org.hibernate.connection.C3P0ConnectionProvider" />
+			<property name="hibernate.c3p0.max_size" value="3" />
+			<property name="hibernate.c3p0.min_size" value="0" />
+			<property name="hibernate.c3p0.acquire_increment" value="1" />
+			<property name="hibernate.c3p0.idle_test_period" value="300" />
+			<property name="hibernate.c3p0.checkoutTimeout" value="5000" />
+			<property name="hibernate.c3p0.max_statements" value="0" />
+			<property name="hibernate.c3p0.timeout" value="100" />
+			<property name="hibernate.c3p0.preferredTestQuery" value="SELECT 1"/>
+			<property name="hibernate.c3p0.testConnectionOnCheckout" value="true"/>
+			<property name="hibernate.ejb.entitymanager_factory_name" value="produzione-utenti-po"/>
 		</properties>
 	</persistence-unit>
 	

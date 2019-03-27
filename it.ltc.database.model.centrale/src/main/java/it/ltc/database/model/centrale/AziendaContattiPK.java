@@ -20,6 +20,11 @@ public class AziendaContattiPK implements Serializable {
 
 	public AziendaContattiPK() {}
 	
+	public AziendaContattiPK(AziendaContatti associazione) {
+		this.azienda = associazione.getAzienda();
+		this.contatto = associazione.getContatto();
+	}
+	
 	public int getAzienda() {
 		return this.azienda;
 	}

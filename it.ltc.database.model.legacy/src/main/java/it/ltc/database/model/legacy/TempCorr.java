@@ -41,6 +41,9 @@ public class TempCorr implements Serializable {
 	@Column(name="Creazione", nullable=false, columnDefinition="datetime")
 	private Date creazione;
 
+	@Column(name="DataConsegna", columnDefinition="datetime")
+	private Date dataConsegna;
+	
 	@Column(name="DataDocu", columnDefinition="datetime")
 	private Date dataDocu;
 
@@ -53,7 +56,7 @@ public class TempCorr implements Serializable {
 	@Column(name="Note", length=150)
 	private String note;
 
-	@Column(name="NrColli")
+	@Column(name="NrColli", nullable=false)
 	private int nrColli;
 
 	@Column(name="NrDoc", length=30)
@@ -65,7 +68,7 @@ public class TempCorr implements Serializable {
 	@Column(name="NrOrdine", length=30)
 	private String nrOrdine;
 
-	@Column(name="PesoKg", columnDefinition="money")
+	@Column(name="PesoKg", columnDefinition="money", nullable=false)
 	private Double pesoKg;
 
 //	@Column(name="Siglaweb", length=15)
@@ -79,6 +82,21 @@ public class TempCorr implements Serializable {
 
 	@Column(name="ValContra", columnDefinition="money")
 	private Double valContra;
+	
+	@Column(name="Servizio", length=10)
+	private String servizio;
+	
+	@Column(name="Riferimento", length=30)
+	private String riferimento;
+	
+	@Column(name="ValoreDoganale", columnDefinition="money")
+	private Double valoreDoganale;
+	
+	@Column(name="Volume", columnDefinition="money", nullable=false)
+	private Double volume;
+	
+	@Column(name="Pezzi", nullable=false)
+	private int pezzi;
 
 	public TempCorr() {}
 	
@@ -126,6 +144,14 @@ public class TempCorr implements Serializable {
 
 	public void setCreazione(Date creazione) {
 		this.creazione = creazione;
+	}
+
+	public Date getDataConsegna() {
+		return dataConsegna;
+	}
+
+	public void setDataConsegna(Date dataConsegna) {
+		this.dataConsegna = dataConsegna;
 	}
 
 	public Date getDataDocu() {
@@ -230,6 +256,46 @@ public class TempCorr implements Serializable {
 
 	public void setValContra(Double valContra) {
 		this.valContra = valContra;
+	}
+
+	public String getServizio() {
+		return servizio;
+	}
+
+	public void setServizio(String servizio) {
+		this.servizio = servizio;
+	}
+
+	public String getRiferimento() {
+		return riferimento;
+	}
+
+	public void setRiferimento(String riferimento) {
+		this.riferimento = riferimento;
+	}
+
+	public Double getValoreDoganale() {
+		return valoreDoganale;
+	}
+
+	public void setValoreDoganale(Double valoreDoganale) {
+		this.valoreDoganale = valoreDoganale;
+	}
+
+	public Double getVolume() {
+		return volume;
+	}
+
+	public void setVolume(Double volume) {
+		this.volume = volume;
+	}
+
+	public int getPezzi() {
+		return pezzi;
+	}
+
+	public void setPezzi(int pezzi) {
+		this.pezzi = pezzi;
 	}
 
 }

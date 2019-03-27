@@ -1,7 +1,6 @@
 package it.ltc.database.model.legacy.documento;
 
 import java.io.Serializable;
-import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -111,8 +110,8 @@ public class TestaCorrConDocumento implements Serializable {
 	@Column(name="DocumentoBase64", columnDefinition="varbinary(MAX)", length=Integer.MAX_VALUE)
 	private byte[] documentoBase64;
 	
-	@Column(name="DocumentoData")
-	private Timestamp documentoData;
+	@Column(name="DocumentoData", columnDefinition="datetime")
+	private Date documentoData;
 	
 	@Column(name="DocumentoRiferimento", length=50)
 	private String documentoRiferimento;
@@ -588,11 +587,11 @@ public class TestaCorrConDocumento implements Serializable {
 		this.documentoBase64 = documentoBase64;
 	}
 
-	public Timestamp getDocumentoData() {
+	public Date getDocumentoData() {
 		return documentoData;
 	}
 
-	public void setDocumentoData(Timestamp documentoData) {
+	public void setDocumentoData(Date documentoData) {
 		this.documentoData = documentoData;
 	}
 

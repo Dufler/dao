@@ -1,37 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <persistence version="2.1" xmlns="http://xmlns.jcp.org/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd">
 	
-	
-	<!-- DB Centrale di sede LTC Legacy -->
-	<persistence-unit name="legacy-centrale" transaction-type="RESOURCE_LOCAL">
-		<class>it.ltc.database.model.legacy.centrale.CorrieriPerCliente</class>
-		<exclude-unlisted-classes>true</exclude-unlisted-classes>
-		<properties>
-			<property name="javax.persistence.jdbc.driver" value="com.microsoft.sqlserver.jdbc.SQLServerDriver" />
-			<property name="javax.persistence.jdbc.url" value="jdbc:sqlserver://localhost:1433;databaseName=DBLtc" />
-			<property name="javax.persistence.jdbc.user" value="ltc" />
-			<property name="javax.persistence.jdbc.password" value="ltcpsw" />
-			<property name="hibernate.hbm2ddl.auto" value="none" />
-			<property name="hibernate.show_sql" value="true" />
-			<property name="hibernate.dialect" value="org.hibernate.dialect.SQLServer2008Dialect" />
-			<property name="hibernate.default_schema" value="dbo"/>
-			<property name="hibernate.ejb.entitymanager_factory_name" value="legacy-centrale"/>
-			<property name="hibernate.id.new_generator_mappings" value="false"/>
-			<property name="hibernate.connection.password" value="ltcpsw"/>
-			<property name="hibernate.connection.username" value="ltc"/>
-			<property name="hibernate.connection.url" value="jdbc:sqlserver://localhost:1433;databaseName=DBLtc"/>
-			<property name="hibernate.connection.driver_class" value="com.microsoft.sqlserver.jdbc.SQLServerDriver"/>
-			<property name="hibernate.connection.provider_class" value="org.hibernate.connection.C3P0ConnectionProvider" />
-			<property name="hibernate.c3p0.max_size" value="3" />
-			<property name="hibernate.c3p0.min_size" value="0" />
-			<property name="hibernate.c3p0.acquire_increment" value="1" />
-			<property name="hibernate.c3p0.idle_test_period" value="300" />
-			<property name="hibernate.c3p0.checkoutTimeout" value="5000" />
-			<property name="hibernate.c3p0.max_statements" value="0" />
-			<property name="hibernate.c3p0.timeout" value="100" />
-		</properties>
-	</persistence-unit>
-	
 	<!-- Stringa di connessione JTDS: jdbc:jtds:<server_type>://<server>[:<port>][/<database>][;<property>=<value>[;...]] -->
 	<!-- 			<property name="javax.persistence.jdbc.driver" value="net.sourceforge.jtds.jdbc.Driver" /> -->
 	<!-- 			<property name="javax.persistence.jdbc.url" value="jdbc:jtds:sqlserver://192.168.0.16:1433/DBTest" /> -->
@@ -49,6 +18,7 @@
 		<class>it.ltc.database.model.legacy.ArtiBar</class>
 		<class>it.ltc.database.model.legacy.Articoli</class>
 		<class>it.ltc.database.model.legacy.bundle.Casse</class>
+		<class>it.ltc.database.model.legacy.bundle.CasseStandard</class>
 		<class>it.ltc.database.model.legacy.Numerate</class>
 		<class>it.ltc.database.model.legacy.CatMercGruppi</class>
 		<class>it.ltc.database.model.legacy.MagaMov</class>
@@ -774,39 +744,37 @@
 	</persistence-unit>
 	
 	<!-- DB Chio -->
-	<persistence-unit name="legacy-chio" transaction-type="RESOURCE_LOCAL">
-		<!--Gestione Articoli (Inizio) -->
-		<class>it.ltc.database.model.legacy.ArtiBar</class>
-		<class>it.ltc.database.model.legacy.Articoli</class>
-		<class>it.ltc.database.model.legacy.Numerata</class>
-		<class>it.ltc.database.model.legacy.CatMercGruppi</class>
-		<class>it.ltc.database.model.legacy.MagaMov</class>
-		<class>it.ltc.database.model.legacy.MagaSd</class>
-		<!-- Gestione Articoli (Fine) -->
-		<properties>
-			<property name="javax.persistence.jdbc.driver" value="com.microsoft.sqlserver.jdbc.SQLServerDriver" />
-			<property name="javax.persistence.jdbc.url" value="jdbc:sqlserver://192.168.6.10:1433;databaseName=DBChio" />
-			<property name="javax.persistence.jdbc.user" value="ltc" />
-			<property name="javax.persistence.jdbc.password" value="ltcpsw" />
-			<property name="hibernate.hbm2ddl.auto" value="none" />
-			<property name="hibernate.show_sql" value="false" />
-			<property name="hibernate.dialect" value="org.hibernate.dialect.SQLServer2012Dialect" />
-			<property name="hibernate.default_schema" value="dbo"/>
-			<property name="hibernate.ejb.entitymanager_factory_name" value="legacy-chio"/> <!-- Aggiunta per evitare che vengano create 2 PU -->
-			<property name="hibernate.connection.password" value="ltcpsw"/>
-			<property name="hibernate.connection.username" value="ltc"/>
-			<property name="hibernate.connection.url" value="jdbc:sqlserver://192.168.6.10:1433;databaseName=DBChio"/>
-			<property name="hibernate.connection.driver_class" value="com.microsoft.sqlserver.jdbc.SQLServerDriver"/>
-			<property name="hibernate.connection.provider_class" value="org.hibernate.connection.C3P0ConnectionProvider" />
-			<property name="hibernate.c3p0.max_size" value="3" />
-			<property name="hibernate.c3p0.min_size" value="0" />
-			<property name="hibernate.c3p0.acquire_increment" value="1" />
-			<property name="hibernate.c3p0.idle_test_period" value="300" />
-			<property name="hibernate.c3p0.checkoutTimeout" value="5000" />
-			<property name="hibernate.c3p0.max_statements" value="0" />
-			<property name="hibernate.c3p0.timeout" value="100" />
-		</properties>
-	</persistence-unit>
+<!-- 	<persistence-unit name="legacy-chio" transaction-type="RESOURCE_LOCAL"> -->
+<!-- 		<class>it.ltc.database.model.legacy.ArtiBar</class> -->
+<!-- 		<class>it.ltc.database.model.legacy.Articoli</class> -->
+<!-- 		<class>it.ltc.database.model.legacy.Numerata</class> -->
+<!-- 		<class>it.ltc.database.model.legacy.CatMercGruppi</class> -->
+<!-- 		<class>it.ltc.database.model.legacy.MagaMov</class> -->
+<!-- 		<class>it.ltc.database.model.legacy.MagaSd</class> -->
+<!-- 		<properties> -->
+<!-- 			<property name="javax.persistence.jdbc.driver" value="com.microsoft.sqlserver.jdbc.SQLServerDriver" /> -->
+<!-- 			<property name="javax.persistence.jdbc.url" value="jdbc:sqlserver://192.168.6.10:1433;databaseName=DBChio" /> -->
+<!-- 			<property name="javax.persistence.jdbc.user" value="ltc" /> -->
+<!-- 			<property name="javax.persistence.jdbc.password" value="ltcpsw" /> -->
+<!-- 			<property name="hibernate.hbm2ddl.auto" value="none" /> -->
+<!-- 			<property name="hibernate.show_sql" value="false" /> -->
+<!-- 			<property name="hibernate.dialect" value="org.hibernate.dialect.SQLServer2012Dialect" /> -->
+<!-- 			<property name="hibernate.default_schema" value="dbo"/> -->
+<!-- 			<property name="hibernate.ejb.entitymanager_factory_name" value="legacy-chio"/> -->
+<!-- 			<property name="hibernate.connection.password" value="ltcpsw"/> -->
+<!-- 			<property name="hibernate.connection.username" value="ltc"/> -->
+<!-- 			<property name="hibernate.connection.url" value="jdbc:sqlserver://192.168.6.10:1433;databaseName=DBChio"/> -->
+<!-- 			<property name="hibernate.connection.driver_class" value="com.microsoft.sqlserver.jdbc.SQLServerDriver"/> -->
+<!-- 			<property name="hibernate.connection.provider_class" value="org.hibernate.connection.C3P0ConnectionProvider" /> -->
+<!-- 			<property name="hibernate.c3p0.max_size" value="3" /> -->
+<!-- 			<property name="hibernate.c3p0.min_size" value="0" /> -->
+<!-- 			<property name="hibernate.c3p0.acquire_increment" value="1" /> -->
+<!-- 			<property name="hibernate.c3p0.idle_test_period" value="300" /> -->
+<!-- 			<property name="hibernate.c3p0.checkoutTimeout" value="5000" /> -->
+<!-- 			<property name="hibernate.c3p0.max_statements" value="0" /> -->
+<!-- 			<property name="hibernate.c3p0.timeout" value="100" /> -->
+<!-- 		</properties> -->
+<!-- 	</persistence-unit> -->
 	
 	<!-- DB ZeS Zucchero&Scimmie -->
 	<persistence-unit name="legacy-zes" transaction-type="RESOURCE_LOCAL">
@@ -939,7 +907,6 @@
 		<class>it.ltc.database.model.legacy.NumerataLegacy</class>
 		<class>it.ltc.database.model.legacy.Colori</class>
 		<class>it.ltc.database.model.legacy.bundle.Casse</class>
-		<!-- Gestione Specifica (Fine) -->
 		<exclude-unlisted-classes>true</exclude-unlisted-classes>
 		<properties>
 			<property name="javax.persistence.jdbc.driver" value="com.microsoft.sqlserver.jdbc.SQLServerDriver" />
@@ -950,7 +917,7 @@
 			<property name="hibernate.show_sql" value="false" />
 			<property name="hibernate.dialect" value="org.hibernate.dialect.SQLServer2008Dialect" />
 			<property name="hibernate.default_schema" value="dbo"/>
-			<property name="hibernate.ejb.entitymanager_factory_name" value="legacy-ciesse"/> <!-- Aggiunta per evitare che vengano create 2 PU -->
+			<property name="hibernate.ejb.entitymanager_factory_name" value="legacy-ciesse"/>
 			<property name="hibernate.connection.password" value="ltcpsw"/>
 			<property name="hibernate.connection.username" value="ltc"/>
 			<property name="hibernate.connection.url" value="jdbc:sqlserver://192.168.10.10:1433;databaseName=DBCiesse"/>

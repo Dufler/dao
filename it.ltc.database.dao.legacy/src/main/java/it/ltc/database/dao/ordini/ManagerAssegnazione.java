@@ -145,7 +145,7 @@ public class ManagerAssegnazione extends Dao {
 		return ubicazione;
 	}
 	
-	protected Righiubicpre generaRigaPrelievo(ColliPack prodotto, ColliCarico collo, RighiOrdine riga, Ubicazioni ubicazione, TestataOrdini testata, int quantitàRichiesta, StatoAssegnazioneRiga tipoAssegnazione) {
+	protected Righiubicpre generaRigaPrelievo(ColliPack prodotto, ColliCarico collo, RighiOrdine riga, Ubicazioni ubicazione, TestataOrdini testata, int quantità, StatoAssegnazioneRiga tipoAssegnazione) {
 		Righiubicpre rigaUbicazione = new Righiubicpre();
 		rigaUbicazione.setIDcollipack(prodotto.getIdColliPack());
 		rigaUbicazione.setIdArticolo(riga.getIdArticolo());
@@ -155,7 +155,7 @@ public class ManagerAssegnazione extends Dao {
 		rigaUbicazione.setMagazzino(riga.getMagazzino());		
 		rigaUbicazione.setNrlista(riga.getNrLista());
 		rigaUbicazione.setRaggliste(riga.getNrLista());
-		rigaUbicazione.setQuantita(quantitàRichiesta);		
+		rigaUbicazione.setQuantita(quantità);		
 		rigaUbicazione.setSessioneLavoro(testata.getSessioneLavoro());
 		rigaUbicazione.setIdTestataOrdine(testata.getIdTestaSped());
 		rigaUbicazione.setTipoUbicazione(ubicazione.getTipoUbica());
@@ -205,10 +205,12 @@ public class ManagerAssegnazione extends Dao {
 		if (quantitàTotaleAssegnata < quantitàTotaleOrdinata) {
 			testata.setStatoUbicazione("UP");
 			testata.setFlag1("X");
+			testata.setStampato("NO");
 		} else {
 			testata.setStatoUbicazione("UT");
 			testata.setFlag1(" ");
 			testata.setStato("ASSE");
+			testata.setStampato("SI");
 		}
 	}
 	
@@ -216,67 +218,93 @@ public class ManagerAssegnazione extends Dao {
 		Iterator<ColliPack> iteratorPrelievo = prodotti.iterator();
 		while (iteratorPrelievo.hasNext()) {
 			ColliPack prodotto = iteratorPrelievo.next();
-			logger.info("Esamino il collipack ID " + prodotto.getIdColliPack());
-			//Trovo il collo e l'ubicazione corrispondente.
-			ColliCarico collo = trovoColloProdotto(prodotto);
-			Ubicazioni ubicazione = trovaUbicazioneCollo(collo);
-			//Condizioni: Collo ubicato e Ubicazione a prelievo.
-			if (collo != null && collo.getUbicato().equals("SI") && ubicazione != null && ubicazione.getTipoUbica().equals("PR")) {
-				logger.info("Il collipack è ubicato su un punto a prelievo quindi procedo.");
-				//Trovo quanti pezzi ci sono e li scalo dalla riga e dal collipack.
-				int quantitàGiàAssegnata = testata.getQtaAssegnata();
-				int quantitàRigaGiàAssegnata = riga.getQtaAssegnata();
-				int quantitàRichiesta = riga.getQtadaubicare();
-				int quantitàGiàImpegnata = prodotto.getQtaimpegnata();
-				int quantitàOriginale = prodotto.getQta();
-				int quantitàDisponibile = quantitàOriginale - quantitàGiàImpegnata;
-				//Se basta questa aggiorno gli oggetti e termino l'assegnazione della riga altrimenti scalo quello che è possibile scalare.
-				logger.info("Valuto le quantità: quantità richiesta: " + quantitàRichiesta + ", quantità disponibile: " + quantitàDisponibile);
-				if (quantitàRichiesta < quantitàDisponibile) {
-					//Aggiorno testata, riga e prodotto disponibile
-					logger.info("Mi basta questo collipack.");
-					testata.setQtaAssegnata(quantitàGiàAssegnata + quantitàRichiesta);
-					riga.setQtadaubicare(0);
-					riga.setQtaAssegnata(riga.getQtaAssegnata() + quantitàRichiesta);
-					prodotto.setQtaimpegnata(quantitàGiàImpegnata + quantitàRichiesta);
-				} else {
-					//Aggiorno testata, riga e prodotto disponibile
-					logger.info("Non mi basta questo collipack ma lo prendo comunque e lo rendo non disponibile.");
-					testata.setQtaAssegnata(quantitàGiàAssegnata + quantitàDisponibile);
-					riga.setQtadaubicare(quantitàRichiesta - quantitàDisponibile);
-					riga.setQtaAssegnata(quantitàRigaGiàAssegnata + quantitàDisponibile);
-					prodotto.setQtaimpegnata(quantitàGiàImpegnata + quantitàDisponibile);
-					prodotto.setFlagimp("S");
-				}
-				//Creo la riga d'ubicazione per prelievo
-				Righiubicpre rigaUbicazione = generaRigaPrelievo(prodotto, collo, riga, ubicazione, testata, quantitàRichiesta, StatoAssegnazioneRiga.PRELIEVO);
-				//Aggiungo le info all'assegnazione.
-				assegnazione.aggiungiRigaUbicazione(rigaUbicazione);
-				assegnazione.aggiungiProdotto(prodotto);
-				assegnazione.aggiungiColli(collo);
-				assegnazione.aggiungiUbicazione(ubicazione);
-				assegnazione.setTipo(TipoAssegnazione.NORMALE);
-				//Copio le informazioni di ubicazione sulla riga, eventualmente sovrascrivendo.
-				riga.setNrcollo(collo.getKeyColloCar());
-				copiaUbicazione(riga, ubicazione);
-				//Rimuovo l'elemento corrente dalle successive iterazioni della lista se non è più disponibile.
-				if (prodotto.getFlagimp().equals("S")) {
-					logger.info("Rimuovo il collipack dalla lista dato che non è più disponibile.");
-					iteratorPrelievo.remove();
-				}
-				//Se la quantità richiesta è scesa a 0 procedo con la prossima riga.
-				if (riga.getQtadaubicare() == 0) {
-					logger.info("La quantità da ubicare è 0, significa che per questa riga d'ordine ho finito.");
-					break;
-				} else if (riga.getQtadaubicare() < 0) {
-					logger.error("La quantità da ubicare è scesa sotto 0.");
-					break;
-				}
-			} else {
-				String tipoUbicazione = ubicazione != null ? ubicazione.getTipoUbica() : "NESSUNA";
-				logger.info("Il collipack non è valido, passo al successivo. Ubicato: " + collo.getUbicato() + ", tipo: " + tipoUbicazione);
+			//Assegno la specifica riga sul determinato collipack, se il collipack finisce lo elimino dalla lista.
+			boolean esaurito = assegnaSuColliAPrelievo(prodotto, assegnazione, testata, riga);
+			if (esaurito)
+				iteratorPrelievo.remove();
+			//Se la quantità richiesta è scesa a 0 procedo con la prossima riga.
+			if (riga.getQtadaubicare() == 0) {
+				logger.info("La quantità da ubicare è 0, significa che per questa riga d'ordine ho finito.");
+				break;
+			} else if (riga.getQtadaubicare() < 0) {
+				logger.error("La quantità da ubicare è scesa sotto 0.");
+				break;
 			}
 		}
+	}
+	
+	protected boolean assegnaSuColliAPrelievo(ColliPack prodotto, AssegnazioneProdotto assegnazione, TestataOrdini testata, RighiOrdine riga) {
+		boolean esaurito = false;
+		logger.info("Esamino il collipack ID " + prodotto.getIdColliPack());
+		// Trovo il collo e l'ubicazione corrispondente.
+		ColliCarico collo = trovoColloProdotto(prodotto);
+		Ubicazioni ubicazione = trovaUbicazioneCollo(collo);
+		// Condizioni: Collo ubicato e Ubicazione a prelievo.
+		if (collo != null && collo.getUbicato().equals("SI") && ubicazione != null && ubicazione.getTipoUbica().equals("PR")) {
+			logger.info("Il collipack è ubicato su un punto a prelievo quindi procedo.");
+			// Trovo quanti pezzi ci sono e li scalo dalla riga e dal collipack.
+			int quantitàGiàAssegnata = testata.getQtaAssegnata();
+			int quantitàRigaGiàAssegnata = riga.getQtaAssegnata();
+			int quantitàRichiesta = riga.getQtadaubicare();
+			int quantitàGiàImpegnata = prodotto.getQtaimpegnata();
+			int quantitàOriginale = prodotto.getQta();
+			int quantitàDisponibile = quantitàOriginale - quantitàGiàImpegnata;
+			int quantitàEffettivamentePresa;
+			// Se basta questa aggiorno gli oggetti e termino l'assegnazione della riga
+			// altrimenti scalo quello che è possibile scalare.
+			logger.info("Valuto le quantità: quantità richiesta: " + quantitàRichiesta + ", quantità disponibile: "	+ quantitàDisponibile);
+			if (quantitàRichiesta < quantitàDisponibile) {
+				// Aggiorno testata, riga e prodotto disponibile
+				logger.info("Mi basta questo collipack.");
+				testata.setQtaAssegnata(quantitàGiàAssegnata + quantitàRichiesta);
+				riga.setQtadaubicare(0);
+				riga.setQtaAssegnata(riga.getQtaAssegnata() + quantitàRichiesta);
+				prodotto.setQtaimpegnata(quantitàGiàImpegnata + quantitàRichiesta);
+				prodotto.setListaimp(testata.getNrLista());
+				quantitàEffettivamentePresa = quantitàRichiesta;
+			} else if (quantitàRichiesta == quantitàDisponibile) {
+				logger.info("Uso tutto questo collipack.");
+				testata.setQtaAssegnata(quantitàGiàAssegnata + quantitàRichiesta);
+				riga.setQtadaubicare(0);
+				riga.setQtaAssegnata(riga.getQtaAssegnata() + quantitàRichiesta);
+				prodotto.setQtaimpegnata(quantitàGiàImpegnata + quantitàRichiesta);
+				prodotto.setFlagimp("S");
+				prodotto.setListaimp(testata.getNrLista());
+				quantitàEffettivamentePresa = quantitàRichiesta;
+			} else {
+				// Aggiorno testata, riga e prodotto disponibile
+				logger.info("Non mi basta questo collipack ma lo prendo comunque e lo rendo non disponibile.");
+				testata.setQtaAssegnata(quantitàGiàAssegnata + quantitàDisponibile);
+				riga.setQtadaubicare(quantitàRichiesta - quantitàDisponibile);
+				riga.setQtaAssegnata(quantitàRigaGiàAssegnata + quantitàDisponibile);
+				prodotto.setQtaimpegnata(quantitàGiàImpegnata + quantitàDisponibile);
+				prodotto.setFlagimp("S");
+				prodotto.setListaimp(testata.getNrLista());
+				quantitàEffettivamentePresa = quantitàDisponibile;
+			}
+			// Creo la riga d'ubicazione per prelievo
+			Righiubicpre rigaUbicazione = generaRigaPrelievo(prodotto, collo, riga, ubicazione, testata, quantitàEffettivamentePresa, StatoAssegnazioneRiga.PRELIEVO);
+			// Aggiungo le info all'assegnazione.
+			assegnazione.aggiungiRigaUbicazione(rigaUbicazione);
+			assegnazione.aggiungiProdotto(prodotto);
+			assegnazione.aggiungiColli(collo);
+			assegnazione.aggiungiUbicazione(ubicazione);
+			assegnazione.setTipo(TipoAssegnazione.NORMALE);
+			// Copio le informazioni di ubicazione sulla riga, eventualmente sovrascrivendo.
+			riga.setNrcollo(collo.getKeyColloCar());
+			copiaUbicazione(riga, ubicazione);
+			// Rimuovo l'elemento corrente dalle successive iterazioni della lista se non è
+			// più disponibile.
+			if (prodotto.getFlagimp().equals("S")) {
+				logger.info("Rimuovo il collipack dalla lista dato che non è più disponibile.");
+				// iteratorPrelievo.remove();
+				esaurito = true;
+			}
+		} else {
+			String tipoUbicazione = ubicazione != null ? ubicazione.getTipoUbica() : "NESSUNA";
+			logger.info("Il collipack non è valido, passo al successivo. Ubicato: " + collo.getUbicato() + ", tipo: " + tipoUbicazione);
+		}
+		return esaurito;
 	}
 	
 	protected int assegnaSuColliAScorta(List<ColliPack> prodotti, AssegnazioneProdotto assegnazione, TestataOrdini testata, RighiOrdine riga, String sessioneLavoro, int quantitàRichiesta) {
@@ -581,6 +609,104 @@ public class ManagerAssegnazione extends Dao {
 		entity.setStatoUbicazione(testata.getStatoUbicazione());
 		entity.setFlag1(testata.getFlag1());
 		entity.setStato(testata.getStato());
+		entity.setStampato(testata.getStampato());
+	}
+	
+	protected void assegnaSuColliSpecifici(List<ColliPack> prodotti, AssegnazioneProdotto assegnazione, TestataOrdini testata, RighiOrdine riga) {
+		Iterator<ColliPack> iteratorPrelievo = prodotti.iterator();
+		while (iteratorPrelievo.hasNext()) {
+			ColliPack prodotto = iteratorPrelievo.next();
+			//Assegno la specifica riga sul determinato collipack, se il collipack finisce lo elimino dalla lista.
+			boolean esaurito = assegnaSuColloSpecifico(prodotto, assegnazione, testata, riga);
+			if (esaurito)
+				iteratorPrelievo.remove();
+			//Se la quantità richiesta è scesa a 0 procedo con la prossima riga.
+			if (riga.getQtadaubicare() == 0) {
+				logger.info("La quantità da ubicare è 0, significa che per questa riga d'ordine ho finito.");
+				break;
+			} else if (riga.getQtadaubicare() < 0) {
+				logger.error("La quantità da ubicare è scesa sotto 0.");
+				break;
+			}
+		}
+	}
+	
+	protected boolean assegnaSuColloSpecifico(ColliPack prodotto, AssegnazioneProdotto assegnazione, TestataOrdini testata, RighiOrdine riga) {
+		boolean esaurito = false;
+		logger.info("Esamino il collipack ID " + prodotto.getIdColliPack());
+		// Trovo il collo e l'ubicazione corrispondente.
+		ColliCarico collo = trovoColloProdotto(prodotto);
+		Ubicazioni ubicazione = trovaUbicazioneCollo(collo);
+		if (ubicazione == null) {
+			logger.info("Il collipack non è ubicato quindi ne creo una fittizia.");
+			ubicazione = new Ubicazioni();
+			ubicazione.setArea("  ");
+			ubicazione.setBox("  ");
+			ubicazione.setCorsia("   ");
+			ubicazione.setIdUbicazioni(-1);
+			ubicazione.setKeyUbica("NOUBICATO");
+			ubicazione.setMagazzino("   ");
+			ubicazione.setPiano("  ");
+			ubicazione.setScaffale("   ");
+			ubicazione.setTipoUbica("PR");
+		}		
+		// Trovo quanti pezzi ci sono e li scalo dalla riga e dal collipack.
+		int quantitàGiàAssegnata = testata.getQtaAssegnata();
+		int quantitàRigaGiàAssegnata = riga.getQtaAssegnata();
+		int quantitàRichiesta = riga.getQtadaubicare();
+		int quantitàGiàImpegnata = prodotto.getQtaimpegnata();
+		int quantitàOriginale = prodotto.getQta();
+		int quantitàDisponibile = quantitàOriginale - quantitàGiàImpegnata;
+		int quantitàEffettivamentePresa;
+		// Se basta questa aggiorno gli oggetti e termino l'assegnazione della riga
+		// altrimenti scalo quello che è possibile scalare.
+		logger.info("Valuto le quantità: quantità richiesta: " + quantitàRichiesta + ", quantità disponibile: "	+ quantitàDisponibile);
+		if (quantitàRichiesta < quantitàDisponibile) {
+			// Aggiorno testata, riga e prodotto disponibile
+			logger.info("Mi basta questo collipack.");
+			testata.setQtaAssegnata(quantitàGiàAssegnata + quantitàRichiesta);
+			riga.setQtadaubicare(0);
+			riga.setQtaAssegnata(riga.getQtaAssegnata() + quantitàRichiesta);
+			prodotto.setQtaimpegnata(quantitàGiàImpegnata + quantitàRichiesta);
+			prodotto.setListaimp(testata.getNrLista());
+			quantitàEffettivamentePresa = quantitàRichiesta;
+		} else if (quantitàRichiesta == quantitàDisponibile) {
+			logger.info("Uso tutto questo collipack.");
+			testata.setQtaAssegnata(quantitàGiàAssegnata + quantitàRichiesta);
+			riga.setQtadaubicare(0);
+			riga.setQtaAssegnata(riga.getQtaAssegnata() + quantitàRichiesta);
+			prodotto.setQtaimpegnata(quantitàGiàImpegnata + quantitàRichiesta);
+			prodotto.setFlagimp("S");
+			prodotto.setListaimp(testata.getNrLista());
+			quantitàEffettivamentePresa = quantitàRichiesta;
+		} else {
+			// Aggiorno testata, riga e prodotto disponibile
+			logger.info("Non mi basta questo collipack ma lo prendo comunque e lo rendo non disponibile.");
+			testata.setQtaAssegnata(quantitàGiàAssegnata + quantitàDisponibile);
+			riga.setQtadaubicare(quantitàRichiesta - quantitàDisponibile);
+			riga.setQtaAssegnata(quantitàRigaGiàAssegnata + quantitàDisponibile);
+			prodotto.setQtaimpegnata(quantitàGiàImpegnata + quantitàDisponibile);
+			prodotto.setFlagimp("S");
+			prodotto.setListaimp(testata.getNrLista());
+			quantitàEffettivamentePresa = quantitàDisponibile;
+		}
+		// Creo la riga d'ubicazione per prelievo
+		Righiubicpre rigaUbicazione = generaRigaPrelievo(prodotto, collo, riga, ubicazione, testata, quantitàEffettivamentePresa, StatoAssegnazioneRiga.PRELIEVO);
+		// Aggiungo le info all'assegnazione.
+		assegnazione.aggiungiRigaUbicazione(rigaUbicazione);
+		assegnazione.aggiungiProdotto(prodotto);
+		assegnazione.aggiungiColli(collo);
+		assegnazione.aggiungiUbicazione(ubicazione);
+		assegnazione.setTipo(TipoAssegnazione.NORMALE);
+		// Copio le informazioni di ubicazione sulla riga, eventualmente sovrascrivendo.
+		riga.setNrcollo(collo.getKeyColloCar());
+		copiaUbicazione(riga, ubicazione);
+		// Rimuovo l'elemento corrente dalle successive iterazioni della lista se non è più disponibile.
+		if (prodotto.getFlagimp().equals("S")) {
+			logger.info("Rimuovo il collipack dalla lista dato che non è più disponibile.");
+			esaurito = true;
+		}
+		return esaurito;
 	}
 	
 }

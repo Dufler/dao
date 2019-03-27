@@ -20,15 +20,24 @@ public class Casse implements Serializable {
 	@Column(name="id", unique=true, nullable=false)
 	private int id;
 	
-	@Column(name="IdBundle", nullable=false, length=15)
-	private String skuBundle;
+//	@Column(name="idUnivocoCassa", nullable=false, length=15)
+//	private String idUnivocoCassa;
+//	
+//	@Column(name="idUnivocoArticolo", nullable=false, length=15)
+//	private String idUnivocoProdotto;
 	
-	@Column(name="idUniArticolo", nullable=false, length=15)
-	private String skuProdotto;
+	@Column(name="idCassa", nullable=false)
+	private int idCassa;
+	
+	@Column(name="idProdotto", nullable=false)
+	private int idProdotto;
 	
 	@Column(name="qta", nullable=false)
 	private int quantitaProdotto;
 	
+	/**
+	 * I tipi possibili sono: STANDARD, BUNDLE e NO.
+	 */
 	@Column(name="tipo", length=10, nullable=false)
 	private String tipo;
 	
@@ -39,7 +48,7 @@ public class Casse implements Serializable {
 	private String modello;
 	
 	/**
-	 * Codice identificativo della tipologia di cassa con una conformazione standard. (es. calzature tipo cassa ABC = 1x36, 1x37, 2x38, 2x39, 1x40)
+	 * Codice identificativo della tipologia di cassa con una conformazione standard. (es. calzature tipo cassa W8A = 1x36, 1x37, 2x38, 2x39, 1x40)
 	 */
 	@Column(name="codiceCassa", length=20)
 	private String codiceCassa;
@@ -53,22 +62,38 @@ public class Casse implements Serializable {
 	public void setId(int id) {
 		this.id = id;
 	}
-
-	public String getSkuBundle() {
-		return skuBundle;
+	
+	public int getIdCassa() {
+		return idCassa;
 	}
 
-	public void setSkuBundle(String skuBundle) {
-		this.skuBundle = skuBundle;
+	public void setIdCassa(int idCassa) {
+		this.idCassa = idCassa;
+	}
+	
+	public int getIdProdotto() {
+		return idProdotto;
 	}
 
-	public String getSkuProdotto() {
-		return skuProdotto;
+	public void setIdProdotto(int idProdotto) {
+		this.idProdotto = idProdotto;
 	}
 
-	public void setSkuProdotto(String skuProdotto) {
-		this.skuProdotto = skuProdotto;
-	}
+//	public String getIdUnivocoCassa() {
+//		return idUnivocoCassa;
+//	}
+//
+//	public void setIdUnivocoCassa(String idUnivocoCassa) {
+//		this.idUnivocoCassa = idUnivocoCassa;
+//	}
+//
+//	public String getIdUnivocoProdotto() {
+//		return idUnivocoProdotto;
+//	}
+//
+//	public void setIdUnivocoProdotto(String idUnivocoProdotto) {
+//		this.idUnivocoProdotto = idUnivocoProdotto;
+//	}
 
 	public int getQuantitaProdotto() {
 		return quantitaProdotto;
@@ -124,10 +149,14 @@ public class Casse implements Serializable {
 		return true;
 	}
 
+//	@Override
+//	public String toString() {
+//		return "BUNDLE: [ID cassa=" + idUnivocoCassa + ", ID Prodotto=" + idUnivocoProdotto + ", quantita="	+ quantitaProdotto + "]";
+//	}
+	
 	@Override
 	public String toString() {
-		return "BUNDLE: [skuBundle=" + skuBundle + ", skuProdotto=" + skuProdotto + ", quantitaProdotto="
-				+ quantitaProdotto + "]";
+		return "BUNDLE: [ID cassa=" + idCassa + ", ID Prodotto=" + idProdotto + ", quantita="	+ quantitaProdotto + "]";
 	}
 
 }

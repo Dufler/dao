@@ -17,6 +17,12 @@ public class TestataOrdiniTotali {
 		this.totaleImballato = totaleImballato;
 		this.totaleAssegnato = totaleAssegnato;
 	}
+	
+	public TestataOrdiniTotali(Integer totaleOrdinato, Integer totaleImballato, Integer totaleAssegnato) {
+		this.totaleOrdinato = (long) totaleOrdinato;
+		this.totaleImballato = (long) totaleImballato;
+		this.totaleAssegnato = (long) totaleAssegnato;
+	}
 
 	public int getTotaleOrdinato() {
 		return totaleOrdinato != null ? totaleOrdinato.intValue() : 0;

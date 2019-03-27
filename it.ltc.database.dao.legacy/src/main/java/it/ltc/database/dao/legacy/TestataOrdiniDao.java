@@ -73,6 +73,11 @@ public class TestataOrdiniDao extends CRUDDao<TestataOrdini> {
 		return entities;
 	}
 	
+	public List<TestataOrdini> trovaDaSpedizione(int idSpedizione) {
+		List<TestataOrdini> entities = findAllEqualTo("idTestaCorr", idSpedizione);
+		return entities;
+	}
+	
 	/**
 	 * Restituisce una lista di ordini che non hanno un assegnazione completa.<br>
 	 * Condizioni per la selezione: Stato: IMPO, Quantità assegnata < Quantità totale.

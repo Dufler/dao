@@ -39,12 +39,9 @@
 		<class>it.ltc.database.model.centrale.ListinoCorriereVoceScaglioni</class>
 		<class>it.ltc.database.model.centrale.ListinoCorriereVoceScaglioniPK</class>
 		<class>it.ltc.database.model.centrale.ListinoCorriereVoceScaglioniRipetuti</class>
-		<class>it.ltc.database.model.centrale.Nazione</class>
 		<class>it.ltc.database.model.centrale.Ordine</class>
 		<class>it.ltc.database.model.centrale.OrdineTipo</class>
 		<class>it.ltc.database.model.centrale.Permesso</class>
-		<class>it.ltc.database.model.centrale.Provincia</class>
-		<class>it.ltc.database.model.centrale.Regione</class>
 		<class>it.ltc.database.model.centrale.Sede</class>
 		<class>it.ltc.database.model.centrale.Spedizione</class>
 		<class>it.ltc.database.model.centrale.SpedizioneLight</class>
@@ -71,7 +68,6 @@
 		<class>it.ltc.database.model.centrale.UtentePermessiJoinPK</class>
 		<class>it.ltc.database.model.centrale.UtenteSedeJoin</class>
 		<class>it.ltc.database.model.centrale.UtenteSedeJoinPK</class>
-		<class>it.ltc.database.model.centrale.Valuta</class>
 		<class>it.ltc.database.model.centrale.FatturaModalitaPagamento</class>
 		<class>it.ltc.database.model.centrale.FatturaPreferenzeCommessa</class>
 		<class>it.ltc.database.model.centrale.FatturaPreferenzeCommessaPK</class>
@@ -180,12 +176,9 @@
 		<class>it.ltc.database.model.centrale.ListinoCorriereVoceScaglioni</class>
 		<class>it.ltc.database.model.centrale.ListinoCorriereVoceScaglioniPK</class>
 		<class>it.ltc.database.model.centrale.ListinoCorriereVoceScaglioniRipetuti</class>
-		<class>it.ltc.database.model.centrale.Nazione</class>
 		<class>it.ltc.database.model.centrale.Ordine</class>
 		<class>it.ltc.database.model.centrale.OrdineTipo</class>
 		<class>it.ltc.database.model.centrale.Permesso</class>
-		<class>it.ltc.database.model.centrale.Provincia</class>
-		<class>it.ltc.database.model.centrale.Regione</class>
 		<class>it.ltc.database.model.centrale.Sede</class>
 		<class>it.ltc.database.model.centrale.Spedizione</class>
 		<class>it.ltc.database.model.centrale.SpedizioneLight</class>
@@ -212,7 +205,6 @@
 		<class>it.ltc.database.model.centrale.UtentePermessiJoinPK</class>
 		<class>it.ltc.database.model.centrale.UtenteSedeJoin</class>
 		<class>it.ltc.database.model.centrale.UtenteSedeJoinPK</class>
-		<class>it.ltc.database.model.centrale.Valuta</class>
 		<class>it.ltc.database.model.centrale.FatturaModalitaPagamento</class>
 		<class>it.ltc.database.model.centrale.FatturaPreferenzeCommessa</class>
 		<class>it.ltc.database.model.centrale.FatturaPreferenzeCommessaPK</class>

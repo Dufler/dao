@@ -48,6 +48,8 @@ public class MOrdine implements ModelInterface {
 	protected Date dataDocumento;
 	protected String tipoDocumento;
 	
+	protected String nomeFile;
+	
 	public MOrdine() {
 		prodotti = new LinkedList<>();
 	}
@@ -298,6 +300,14 @@ public class MOrdine implements ModelInterface {
 		this.tipoDocumento = tipoDocumento;
 	}
 	
+	public String getNomeFile() {
+		return nomeFile;
+	}
+
+	public void setNomeFile(String nomeFile) {
+		this.nomeFile = nomeFile;
+	}
+
 	public void aggiungiProdotto(ProdottoOrdinato prodotto) {
 		prodotti.add(prodotto);
 	}

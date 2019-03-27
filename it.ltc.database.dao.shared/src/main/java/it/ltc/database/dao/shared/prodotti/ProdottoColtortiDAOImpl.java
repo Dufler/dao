@@ -1,6 +1,5 @@
 package it.ltc.database.dao.shared.prodotti;
 
-import java.math.BigDecimal;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
@@ -61,7 +60,7 @@ public class ProdottoColtortiDAOImpl extends ProdottoDaoConVerifiche<ArticoliCol
 			t.commit();
 			logger.info("(Legacy SQL) Prodotto inserito!");
 		} catch (Exception e) {
-			logger.error(e);
+			logger.error(e.getMessage(), e);
 			articolo = null;
 			if (t != null && t.isActive())
 				t.rollback();
@@ -99,13 +98,7 @@ public class ProdottoColtortiDAOImpl extends ProdottoDaoConVerifiche<ArticoliCol
 		try {
 			t.begin();
 			if (!presente) {
-				//Update sui barcodes
-//				for (ArtiBar barcode : barcodes) {
-//					barcode = em.find(ArtiBar.class, barcode.getIdArtiBar());
-//					barcode.setBarraEAN(prodotto.getBarcode()); 
-//					barcode.setTaglia(prodotto.getTaglia());
-//					em.merge(barcode);
-//				}
+				//Update sul primo barcode (i successivi sono solo seriali)
 				ArtiBar barcode = barcodes.get(0);
 				barcode = em.find(ArtiBar.class, barcode.getIdArtiBar());
 				barcode.setBarraEAN(prodotto.getBarcode()); 
@@ -150,13 +143,13 @@ public class ProdottoColtortiDAOImpl extends ProdottoDaoConVerifiche<ArticoliCol
 			if (prodotto.getZ() != null)
 				articolo.setArtZ(prodotto.getZ());
 			if (prodotto.getPeso() != null)
-				articolo.setArtPeso(new BigDecimal(prodotto.getPeso()));
+				articolo.setArtPeso(new Double(prodotto.getPeso()));
 			if (prodotto.getValore() != null)
-				articolo.setValVen(new BigDecimal(prodotto.getValore()));
+				articolo.setValVen(new Double(prodotto.getValore()));
 			em.merge(articolo);
 			t.commit();
 		} catch (Exception e) {
-			logger.error(e);
+			logger.error(e.getMessage(), e);
 			articolo = null;
 			if (t != null && t.isActive())
 				t.rollback();
@@ -197,7 +190,7 @@ public class ProdottoColtortiDAOImpl extends ProdottoDaoConVerifiche<ArticoliCol
 			}
 			t.commit();
 		} catch(Exception e) {
-			logger.error(e);
+			logger.error(e.getMessage(), e);
 			articolo = null;
 			if (t != null && t.isActive())
 				t.rollback();
@@ -224,12 +217,12 @@ public class ProdottoColtortiDAOImpl extends ProdottoDaoConVerifiche<ArticoliCol
 			articolo.setMadeIn(json.getMadeIn());
 			articolo.setStagione(json.getStagione());
 			if (json.getPeso() != null) //null check
-				articolo.setArtPeso(new BigDecimal(json.getPeso()));
+				articolo.setArtPeso(new Double(json.getPeso()));
 			articolo.setArtH(json.getH());
 			articolo.setArtL(json.getL());
 			articolo.setArtZ(json.getZ());
 			if (json.getValore() != null) //null check
-				articolo.setValVen(new BigDecimal(json.getValore()));
+				articolo.setValVen(new Double(json.getValore()));
 			articolo.setBarraEAN(json.getBarcodeFornitore());
 			articolo.setCodArtOld(json.getSkuFornitore());
 			articolo.setDescAggiuntiva(json.getDescrizioneAggiuntiva());
@@ -242,8 +235,9 @@ public class ProdottoColtortiDAOImpl extends ProdottoDaoConVerifiche<ArticoliCol
 	}
 
 	public ProdottoJSON serializza(ArticoliColtorti articolo) {
-		ProdottoJSON json = new ProdottoJSON();
+		ProdottoJSON json;
 		if (articolo != null) {
+			json = new ProdottoJSON();
 			json.setId(articolo.getIdArticolo());
 			//Controllo sul valore per la cassa.
 			String cassa = articolo.getTipoCassa();
@@ -275,6 +269,8 @@ public class ProdottoColtortiDAOImpl extends ProdottoDaoConVerifiche<ArticoliCol
 			json.setNote(articolo.getNote());
 			json.setParticolarita(articolo.getParticolarita());
 			json.setCommessa(commessa);
+		} else {
+			json = null;
 		}
 		return json;
 	}

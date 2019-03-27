@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import it.ltc.database.dao.common.UtenteFeatureDao;
-import it.ltc.database.dao.common.utente.UtenteFeatureUtentiDao;
+import it.ltc.database.dao.utente.UtenteFeatureUtentiDao;
 import it.ltc.database.model.centrale.UtenteFeaturesJoin;
 import it.ltc.database.model.utente.UtenteFeaturesJoinUtenti;
 import it.ltc.database.sincronizza.TableSync;

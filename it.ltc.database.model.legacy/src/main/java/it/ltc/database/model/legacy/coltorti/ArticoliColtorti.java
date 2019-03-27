@@ -39,9 +39,16 @@
 package it.ltc.database.model.legacy.coltorti;
 
 import java.io.Serializable;
-import javax.persistence.*;
-import java.math.BigDecimal;
 import java.util.Date;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
+import javax.persistence.Table;
 
 
 /**
@@ -71,8 +78,8 @@ public class ArticoliColtorti implements Serializable {
 	@Column(name="ArtL")
 	private Integer artL;
 
-	@Column(name="ArtPeso")
-	private BigDecimal artPeso;
+	@Column(name="ArtPeso", columnDefinition="money")
+	private Double artPeso;
 
 	@Column(name="ArtZ")
 	private Integer artZ;
@@ -291,7 +298,7 @@ public class ArticoliColtorti implements Serializable {
 //	private BigDecimal valPromo;
 
 	@Column(name="ValVen")
-	private BigDecimal valVen;
+	private Double valVen;
 
 //	@Column(name="Vecchia_Numerata", length=20)
 //	private String vecchia_Numerata;
@@ -376,11 +383,11 @@ public class ArticoliColtorti implements Serializable {
 		this.artL = artL;
 	}
 
-	public BigDecimal getArtPeso() {
+	public Double getArtPeso() {
 		return this.artPeso;
 	}
 
-	public void setArtPeso(BigDecimal artPeso) {
+	public void setArtPeso(Double artPeso) {
 		this.artPeso = artPeso;
 	}
 
@@ -952,11 +959,11 @@ public class ArticoliColtorti implements Serializable {
 //		this.valPromo = valPromo;
 //	}
 
-	public BigDecimal getValVen() {
+	public Double getValVen() {
 		return this.valVen;
 	}
 
-	public void setValVen(BigDecimal valVen) {
+	public void setValVen(Double valVen) {
 		this.valVen = valVen;
 	}
 

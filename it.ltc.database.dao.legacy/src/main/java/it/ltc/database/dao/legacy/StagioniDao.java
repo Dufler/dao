@@ -1,5 +1,7 @@
 package it.ltc.database.dao.legacy;
 
+import java.util.List;
+
 import it.ltc.database.dao.CRUDDao;
 import it.ltc.database.model.legacy.Stagioni;
 
@@ -22,6 +24,11 @@ public class StagioniDao extends CRUDDao<Stagioni> {
 	public Stagioni trovaDaDescrizione(String descrizione) {
 		Stagioni entity = findFirstOneEqualTo("descrizione", descrizione);
 		return entity;
+	}
+	
+	public List<Stagioni> trovaTutti() {
+		List<Stagioni> entities = findAll();
+		return entities;
 	}
 	
 	public Stagioni inserisci(Stagioni stagione) {

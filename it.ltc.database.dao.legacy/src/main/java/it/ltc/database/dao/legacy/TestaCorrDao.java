@@ -98,6 +98,11 @@ public class TestaCorrDao extends CRUDDao<TestaCorr> {
 		return entity;
 	}
 	
+	public TestaCorr trovaDaNumeroLista(String numeroLista) {
+		TestaCorr entity = findOnlyOneEqualTo("nrLista", numeroLista);
+		return entity;
+	}
+	
 	public List<TestaCorr> getSpedizioniForza(int idPartenza, int anno) {
 		List<TestaCorr> lista;
 		EntityManager em = getManager();
@@ -107,9 +112,28 @@ public class TestaCorrDao extends CRUDDao<TestaCorr> {
 	        Root<TestaCorr> member = criteria.from(c);
 	        Predicate condizioneAnno = cb.equal(member.get("annoSpe"), anno);
 	        Predicate condizioneTrasmesso = cb.equal(member.get("trasmesso"), 1);
-	        Predicate condizioneID = cb.greaterThanOrEqualTo(member.get("idTestaCor"), idPartenza);
+	        Predicate condizioneID = cb.greaterThan(member.get("idTestaCor"), idPartenza);
 	        Predicate condizioneGLS = cb.like(member.get("nomeFileCor"), "LTCGLS_LTCGL%");
 	        criteria.select(member).where(cb.and(condizioneAnno, condizioneTrasmesso, condizioneID, condizioneGLS));
+			lista = em.createQuery(criteria).getResultList();
+		} catch (Exception e) {
+			logger.error(e.getMessage(), e);
+			lista = null;
+		} finally {
+			em.close();
+		}
+		return lista;
+	}
+	
+	public List<TestaCorr> getSpedizioniDaID(int idPartenza) {
+		List<TestaCorr> lista;
+		EntityManager em = getManager();
+		try {
+			CriteriaBuilder cb = em.getCriteriaBuilder();
+	        CriteriaQuery<TestaCorr> criteria = cb.createQuery(c);
+	        Root<TestaCorr> member = criteria.from(c);
+	        Predicate condizioneID = cb.greaterThan(member.get("idTestaCor"), idPartenza);
+	        criteria.select(member).where(condizioneID);
 			lista = em.createQuery(criteria).getResultList();
 		} catch (Exception e) {
 			logger.error(e.getMessage(), e);

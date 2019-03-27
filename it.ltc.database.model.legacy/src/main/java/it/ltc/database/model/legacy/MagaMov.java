@@ -349,4 +349,31 @@ public class MagaMov implements Serializable {
 		this.utente = utente;
 	}
 
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + idMagaMov;
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		MagaMov other = (MagaMov) obj;
+		if (idMagaMov != other.idMagaMov)
+			return false;
+		return true;
+	}
+
+	@Override
+	public String toString() {
+		return "MagaMov [idMagaMov=" + idMagaMov + ", causale=" + causale + ", codMaga=" + codMaga + ", idUniArticolo=" + idUniArticolo + ", quantita=" + quantita + "]";
+	}
+
 }

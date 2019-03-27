@@ -23,8 +23,8 @@ public class ColliPreleva implements Serializable {
 	@Column(name="IdColliPreleva", unique=true, nullable=false)
 	private int idColliPreleva;
 
-//	@Column(name="Abilita", length=2)
-//	private String abilita;
+	@Column(name="Abilita", length=2, nullable=false, columnDefinition="char(2)")
+	private String abilita;
 
 //	@Column(name="Area", length=2)
 //	private String area;
@@ -160,7 +160,8 @@ public class ColliPreleva implements Serializable {
 		nrDistinta = Integer.parseInt(today);
 		vet1 = codiceCorriere;
 		if (vet2 == null) vet2 = " ";
-		if (spedito == null) spedito = "NO";
+		if (abilita == null || abilita.isEmpty()) abilita = "NO";
+		if (spedito == null || spedito.isEmpty()) spedito = "NO";
 		if (poNumber == null) poNumber = "";
 	}
 
@@ -172,13 +173,13 @@ public class ColliPreleva implements Serializable {
 		this.idColliPreleva = idColliPreleva;
 	}
 
-//	public String getAbilita() {
-//		return this.abilita;
-//	}
-//
-//	public void setAbilita(String abilita) {
-//		this.abilita = abilita;
-//	}
+	public String getAbilita() {
+		return this.abilita;
+	}
+
+	public void setAbilita(String abilita) {
+		this.abilita = abilita;
+	}
 //
 //	public String getArea() {
 //		return this.area;

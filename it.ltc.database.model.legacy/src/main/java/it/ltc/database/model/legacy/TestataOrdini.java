@@ -94,14 +94,14 @@ public class TestataOrdini implements Serializable {
 	@Column(name="DataConsegna", columnDefinition="datetime")
 	private Date dataConsegna;
 
-	// @Column(name="DataCreazione")
-	// private Date dataCreazione;
+	@Column(name="DataCreazione", insertable=false, updatable=false)
+	private Date dataCreazione;
 
 	@Column(name="DataDoc", columnDefinition="datetime")
 	private Date dataDoc;
 
-	// @Column(name="DataGeneraUscita")
-	// private Date dataGeneraUscita;
+	@Column(name="DataGeneraUscita")
+	private Date dataGeneraUscita;
 
 	// @Column(name="DataIni")
 	// private Date dataIni;
@@ -127,8 +127,8 @@ public class TestataOrdini implements Serializable {
 	 @Column(name="Flag1", length=1, insertable=false, nullable=false, columnDefinition="char(1)")
 	 private String flag1;
 
-	// @Column(name="GenMovUscita", length=2)
-	// private String genMovUscita;
+	 @Column(name="GenMovUscita", length=2, nullable=false)
+	 private String genMovUscita;
 
 	// @Column(name="Gruppo", length=1)
 	// private String gruppo;
@@ -145,8 +145,8 @@ public class TestataOrdini implements Serializable {
 	// @Column(nullable=false, length=50, insertable=false)
 	// private String IDTracking;
 
-	// @Column(name="Imballato", length=2)
-	// private String imballato;
+	 @Column(name="Imballato", length=2, insertable=false)
+	 private String imballato;
 
 	// @Column(name="Importa", length=2)
 	// private String importa;
@@ -223,11 +223,11 @@ public class TestataOrdini implements Serializable {
 	 @Column(name="PercAssegnata", nullable=false, insertable=false, columnDefinition="money")
 	 private double percAssegnata;
 
-	// @Column(name="PesoTotale")
-	// private BigDecimal pesoTotale;
+	 @Column(name="PesoTotale", columnDefinition="money", nullable=false)
+	 private double pesoTotale;
 
-	// @Column(name="Pezzieffet")
-	// private int pezzieffet;
+	 @Column(name="Pezzieffet", nullable=false)
+	 private int pezzieffet;
 
 	// @Column(length=20)
 	// private String PONumber;
@@ -294,8 +294,8 @@ public class TestataOrdini implements Serializable {
 	// @Column(name="Spedizi", length=20)
 	// private String spedizi;
 
-	// @Column(name="Stampato", length=2)
-	// private String stampato;
+	 @Column(name="Stampato", length=2, insertable=false)
+	 private String stampato;
 
 	/**
 	 * I possibili stati sono:
@@ -359,6 +359,9 @@ public class TestataOrdini implements Serializable {
 
 	@Column(name = "ValoreDoganale", columnDefinition="money")
 	private Double valoreDoganale;
+	
+	@Column(name = "Volumetot", columnDefinition="money", nullable=false)
+	private double volumetot;
 
 	// @Column(name="Verificato", length=2)
 	// private String verificato;
@@ -376,7 +379,7 @@ public class TestataOrdini implements Serializable {
 		dataArrivoFile = new Date(now.getTimeInMillis());
 		annoOrdine = now.get(Calendar.YEAR);
 		annodoc = now.get(Calendar.YEAR);
-		nomeFileArrivo = sdf.format(now.getTime());
+		genMovUscita = "NO";
 		// il numero di lista è necessario, se non c'è lo genero.
 		if (nrLista == null || nrLista.isEmpty()) {
 			nrLista = sdf.format(now.getTime());
@@ -386,6 +389,7 @@ public class TestataOrdini implements Serializable {
 			ragstampe = nrLista;
 		}
 		nrListaArrivato = 0; // TODO, in teoria sarebbe come un autoincrement
+		if (nomeFileArrivo == null || nomeFileArrivo.isEmpty()) nomeFileArrivo = sdf.format(now.getTime());
 		// Se non ho specificato l'operatore assumo che sia un servizio.
 		if (operatore == null || operatore.isEmpty()) operatore = "SERVIZIO";
 		// Priorita', se non valorizzata imposto il default.
@@ -563,13 +567,13 @@ public class TestataOrdini implements Serializable {
 		this.dataConsegna = dataConsegna;
 	}
 
-	// public Date getDataCreazione() {
-	// return this.dataCreazione;
-	// }
-	//
-	// public void setDataCreazione(Date dataCreazione) {
-	// this.dataCreazione = dataCreazione;
-	// }
+	 public Date getDataCreazione() {
+		 return this.dataCreazione;
+	 }
+	
+	 public void setDataCreazione(Date dataCreazione) {
+		 this.dataCreazione = dataCreazione;
+	 }
 
 	public Date getDataDoc() {
 		return this.dataDoc;
@@ -579,14 +583,14 @@ public class TestataOrdini implements Serializable {
 		this.dataDoc = dataDoc;
 	}
 
-	// public Date getDataGeneraUscita() {
-	// return this.dataGeneraUscita;
-	// }
-	//
-	// public void setDataGeneraUscita(Date dataGeneraUscita) {
-	// this.dataGeneraUscita = dataGeneraUscita;
-	// }
-	//
+	 public Date getDataGeneraUscita() {
+		 return this.dataGeneraUscita;
+	 }
+	
+	 public void setDataGeneraUscita(Date dataGeneraUscita) {
+		 this.dataGeneraUscita = dataGeneraUscita;
+	 }
+
 	// public Date getDataIni() {
 	// return this.dataIni;
 	// }
@@ -643,14 +647,14 @@ public class TestataOrdini implements Serializable {
 		 this.flag1 = flag1;
 	 }
 
-	// public String getGenMovUscita() {
-	// return this.genMovUscita;
-	// }
-	//
-	// public void setGenMovUscita(String genMovUscita) {
-	// this.genMovUscita = genMovUscita;
-	// }
-	//
+	 public String getGenMovUscita() {
+		 return this.genMovUscita;
+	 }
+	
+	 public void setGenMovUscita(String genMovUscita) {
+		 this.genMovUscita = genMovUscita;
+	 }
+
 	// public String getGruppo() {
 	// return this.gruppo;
 	// }
@@ -683,13 +687,13 @@ public class TestataOrdini implements Serializable {
 	// this.IDTracking = IDTracking;
 	// }
 
-	// public String getImballato() {
-	// return this.imballato;
-	// }
-	//
-	// public void setImballato(String imballato) {
-	// this.imballato = imballato;
-	// }
+	 public String getImballato() {
+		 return this.imballato;
+	 }
+	
+	 public void setImballato(String imballato) {
+		 this.imballato = imballato;
+	 }
 
 	// public String getImporta() {
 	// return this.importa;
@@ -874,23 +878,23 @@ public class TestataOrdini implements Serializable {
 	 public void setPercAssegnata(double percAssegnata) {
 		 this.percAssegnata = percAssegnata;
 	 }
-	//
-	// public BigDecimal getPesoTotale() {
-	// return this.pesoTotale;
-	// }
-	//
-	// public void setPesoTotale(BigDecimal pesoTotale) {
-	// this.pesoTotale = pesoTotale;
-	// }
-	//
-	// public int getPezzieffet() {
-	// return this.pezzieffet;
-	// }
-	//
-	// public void setPezzieffet(int pezzieffet) {
-	// this.pezzieffet = pezzieffet;
-	// }
-	//
+	
+	 public Double getPesoTotale() {
+		 return this.pesoTotale;
+	 }
+	
+	 public void setPesoTotale(Double pesoTotale) {
+		 this.pesoTotale = pesoTotale;
+	 }
+
+	 public int getPezzieffet() {
+		 return this.pezzieffet;
+	 }
+	
+	 public void setPezzieffet(int pezzieffet) {
+		 this.pezzieffet = pezzieffet;
+	 }
+
 	// public String getPONumber() {
 	// return this.PONumber;
 	// }
@@ -1066,14 +1070,14 @@ public class TestataOrdini implements Serializable {
 	// public void setSpedizi(String spedizi) {
 	// this.spedizi = spedizi;
 	// }
-	//
-	// public String getStampato() {
-	// return this.stampato;
-	// }
-	//
-	// public void setStampato(String stampato) {
-	// this.stampato = stampato;
-	// }
+
+	 public String getStampato() {
+		 return this.stampato;
+	 }
+	
+	 public void setStampato(String stampato) {
+		 this.stampato = stampato;
+	 }
 
 	public String getStato() {
 		return this.stato;
@@ -1208,6 +1212,14 @@ public class TestataOrdini implements Serializable {
 	// public void setVerificato(String verificato) {
 	// this.verificato = verificato;
 	// }
+
+	public double getVolumetot() {
+		return volumetot;
+	}
+
+	public void setVolumetot(double volumetot) {
+		this.volumetot = volumetot;
+	}
 
 	public int getIdMittente() {
 		return idMittente;

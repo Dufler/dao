@@ -16,6 +16,7 @@ public class NazioneDao extends ReadOnlyDao<Nazione> {
 	
 	private final HashMap<String, Nazione> mappaISO3;
 	private final HashMap<String, Nazione> mappaISO2;
+	private final HashMap<String, Nazione> mappaNome;
 
 	public NazioneDao() {
 		this(LOCAL_COSTANTI_PERSISTENCE_UNIT_NAME);
@@ -25,12 +26,14 @@ public class NazioneDao extends ReadOnlyDao<Nazione> {
 		super(persistenceUnit, Nazione.class);
 		mappaISO2 = new HashMap<>();
 		mappaISO3 = new HashMap<>();
+		mappaNome = new HashMap<>();
 	}
 	
 	private Nazione aggiungiMappe(Nazione nazione) {
 		if (nazione != null) {
 			mappaISO2.put(nazione.getCodiceIsoDue(), nazione);
 			mappaISO3.put(nazione.getCodiceIsoTre(), nazione);
+			mappaNome.put(nazione.getNome(), nazione);
 		}
 		return nazione;
 	}
@@ -58,7 +61,7 @@ public class NazioneDao extends ReadOnlyDao<Nazione> {
 	}
 	
 	public Nazione trovaDaNome(String nome) {
-		Nazione nazione = findOnlyOneEqualTo("nome", nome);
+		Nazione nazione = mappaNome.containsKey(nome) ? mappaNome.get(nome) : aggiungiMappe(findOnlyOneEqualTo("nome", nome));
 		return nazione;
 	}
 	
