@@ -24,35 +24,61 @@ import it.ltc.model.interfaces.prodotto.MProdotto;
 
 public class ControllerProdottoSQLServer extends Dao implements IControllerModel<MProdotto> {
 	
+	/**
+	 * Modalità d'inserimento anagrafiche.<br>
+	 * Come default se un'anagrafica è già presente (stesso SKU o stessa combinazione modello-taglia) viene saltata, con la modalità <code>AGGIUNGI_BARCODE</code> invece viene aggiunto il barcode a quelli esistenti se possibile.
+	 * @author Damiano
+	 *
+	 */
+	public enum Mode { DEFAULT, AGGIUNGI_BARCODE }
+	
 	private static final Logger logger = Logger.getLogger(ControllerProdottoSQLServer.class);
 	
 	private static final SimpleDateFormat idUnivocoGenerator = new SimpleDateFormat("yyMMddHHmmssSSS");
+	
+	protected final Mode strategy;
 	
 	protected final ArticoliDao daoArticoli;
 	protected final ArtibarDao daoBarcode;
 	protected final CategoriaMerceologicaLegacyDao daoCategoriaMerceologica;
 	
-	public ControllerProdottoSQLServer(String persistenceUnit){
+	public ControllerProdottoSQLServer(String persistenceUnit) {
+		this(persistenceUnit, Mode.DEFAULT);
+	}
+	
+	public ControllerProdottoSQLServer(String persistenceUnit, Mode mode) {
 		super(persistenceUnit);
 		daoArticoli = new ArticoliDao(persistenceUnit);
 		daoBarcode = new ArtibarDao(persistenceUnit);
 		daoCategoriaMerceologica = new CategoriaMerceologicaLegacyDao(persistenceUnit);
+		strategy = mode;
+	}
+	
+	protected Articoli trovaEsistente(MProdotto prodotto) {
+		Articoli match = daoArticoli.trovaDaSKU(prodotto.getChiaveCliente());
+		if (match == null) {
+			match = daoArticoli.trovaDaModelloETaglia(prodotto.getCodiceModello(), prodotto.getTaglia());
+		}
+		return match;
 	}
 
 	@Override
 	public MProdotto inserisci(MProdotto prodotto) throws ModelPersistenceException {
 		Articoli articolo = deserializza(prodotto);
-		ArtiBar barcodeArticolo = generaBarcodeArticolo(articolo);
-		//Genero l'ID univoco dell'articolo
-		String idUnivoco = getIDUnivoco();
-		articolo.setIdUniArticolo(idUnivoco);
-		barcodeArticolo.setIdUniArticolo(idUnivoco);
+		ArtiBar barcodeArticolo = generaBarcodeArticolo(articolo, prodotto);
+		//Genero l'ID univoco dell'articolo, se non è già presente
+		if (articolo.getIdUniArticolo() == null) {
+			String idUnivoco = getIDUnivoco();
+			articolo.setIdUniArticolo(idUnivoco);
+		}	
+		barcodeArticolo.setIdUniArticolo(articolo.getIdUniArticolo());
 		//Inserisco
 		EntityManager em = getManager();
 		EntityTransaction t = em.getTransaction();
 		try {
 			t.begin();
-			em.persist(articolo);
+			if (articolo.getIdArticolo() == 0)
+				em.persist(articolo);
 			em.persist(barcodeArticolo);
 			t.commit();
 			prodotto.setId(articolo.getIdArticolo());
@@ -68,8 +94,13 @@ public class ControllerProdottoSQLServer extends Dao implements IControllerModel
 	}
 	
 	protected Articoli deserializza(MProdotto prodotto) {
-		Articoli articolo = new Articoli();
-		if (prodotto != null) {
+		Articoli articolo = null;
+		//se sono in modalità aggiungi barcode controllo se esiste già a sistema
+		if (strategy == Mode.AGGIUNGI_BARCODE) {
+			articolo = trovaEsistente(prodotto);
+		}
+		if (articolo == null) {
+			articolo = new Articoli();
 			articolo.setCodArtStr(prodotto.getChiaveCliente());
 			articolo.setModello(prodotto.getCodiceModello());
 			articolo.setCodBarre(prodotto.getBarcode());
@@ -107,10 +138,15 @@ public class ControllerProdottoSQLServer extends Dao implements IControllerModel
 		return articolo;
 	}
 	
-	protected ArtiBar generaBarcodeArticolo(Articoli articolo) {
+	protected ArtiBar generaBarcodeArticolo(Articoli articolo, MProdotto prodotto) {
 		ArtiBar barcode = new ArtiBar();
-		barcode.setBarraEAN(articolo.getBarraEAN());
-		barcode.setBarraUPC(articolo.getBarraUPC());
+		if (strategy == Mode.AGGIUNGI_BARCODE) {
+			barcode.setBarraEAN(prodotto.getBarcode());
+			barcode.setBarraUPC(prodotto.getBarcodeFornitore());
+		} else {
+			barcode.setBarraEAN(articolo.getBarraEAN());
+			barcode.setBarraUPC(articolo.getBarraUPC());
+		}
 		barcode.setCodiceArticolo(articolo.getCodArtStr());
 		barcode.setIdUniArticolo(articolo.getIdUniArticolo());
 		barcode.setTaglia(articolo.getTaglia());
@@ -126,9 +162,18 @@ public class ControllerProdottoSQLServer extends Dao implements IControllerModel
 		try { Thread.sleep(1); } catch (InterruptedException e) {}
 		return chiave;
 	}
-
-	@Override
-	public void valida(MProdotto prodotto) throws ModelValidationException {
+	
+	protected void validaSoloBarcode(MProdotto prodotto) throws ModelValidationException {
+		//Controllo barcode
+		Articoli checkBarcode = daoArticoli.trovaDaBarcode(prodotto.getBarcode());
+		if (checkBarcode != null)
+			throw new ModelAlreadyExistentException("(Legacy) E' gia' presente un prodotto con lo stesso barcode. (" + prodotto.getBarcode() + ")");
+		ArtiBar checkBarcode2 = daoBarcode.trovaDaBarcode(prodotto.getBarcode());
+		if (checkBarcode2 != null)
+			throw new ModelAlreadyExistentException("(Legacy) E' gia' presente un prodotto con lo stesso barcode. (" + prodotto.getBarcode() + ")");
+	}
+	
+	protected void validaTutto(MProdotto prodotto) throws ModelValidationException {
 		//Controllo sul codice modello e taglia
 		Articoli checkModelloTaglia = daoArticoli.trovaDaModelloETaglia(prodotto.getCodiceModello(), prodotto.getTaglia());
 		if (checkModelloTaglia != null)
@@ -141,9 +186,21 @@ public class ControllerProdottoSQLServer extends Dao implements IControllerModel
 		Articoli checkChiave = daoArticoli.trovaDaSKU(prodotto.getChiaveCliente());
 		if (checkChiave != null)
 			throw new ModelAlreadyExistentException("(Legacy) E' gia' presente un prodotto con la stessa chiave identificativa. (" + prodotto.getChiaveCliente() + ")");
-		CatMercGruppi checkCategoria = daoCategoriaMerceologica.trovaDaCodice(prodotto.getCategoria());
-		if (checkCategoria == null)
-			throw new ModelValidationException("(Legacy) La categoria merceologica specificata non esiste. (" + prodotto.getCategoria() + ")");
+	}
+
+	@Override
+	public void valida(MProdotto prodotto) throws ModelValidationException {
+		if (strategy == Mode.AGGIUNGI_BARCODE) {
+			validaSoloBarcode(prodotto);
+		} else {
+			validaTutto(prodotto);
+		}
+		//Controllo sulla categoria di fatturazione, solo se presente
+		if (prodotto.getCategoria() != null && !prodotto.getCategoria().isEmpty()) {
+			CatMercGruppi checkCategoria = daoCategoriaMerceologica.trovaDaCodice(prodotto.getCategoria());
+			if (checkCategoria == null)
+				throw new ModelValidationException("(Legacy) La categoria merceologica specificata non esiste. (" + prodotto.getCategoria() + ")");
+		}		
 	}
 
 	@Override

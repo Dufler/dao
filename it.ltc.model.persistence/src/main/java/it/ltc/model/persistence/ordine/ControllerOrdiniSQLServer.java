@@ -40,7 +40,6 @@ import it.ltc.database.model.legacy.MittentiOrdine;
 import it.ltc.database.model.legacy.RighiOrdine;
 import it.ltc.database.model.legacy.TestataOrdini;
 import it.ltc.database.model.legacy.TestataOrdiniTipo;
-import it.ltc.database.model.legacy.model.CausaliMovimento;
 import it.ltc.model.interfaces.exception.ModelAlreadyExistentException;
 import it.ltc.model.interfaces.exception.ModelPersistenceException;
 import it.ltc.model.interfaces.exception.ModelValidationException;
@@ -319,38 +318,48 @@ public class ControllerOrdiniSQLServer extends Dao implements IControllerModel<M
 		}
 	}
 
-	public Destinatari ottieniDestinatario(MIndirizzo destinatario) throws ModelPersistenceException {
-		// Eseguo un controllo sulla ragione sociale
-		String ragioneSociale1 = destinatario.getRagioneSociale();
-		String ragioneSociale2 = "";
-		// Se è più lunga di 70 vado a tagliare la parte eccedente.
-		if (ragioneSociale1.length() > 70) {
-			ragioneSociale1 = ragioneSociale1.substring(0, 70);
-		}
-		// Se è più lunga di 35 la divido in 2
-		if (ragioneSociale1.length() > 35) {
-			ragioneSociale2 = ragioneSociale1.substring(35);
-			ragioneSociale1 = ragioneSociale1.substring(0, 35);
-		}
-		// Eseguo una ricerca per vedere se è già presente.
-		// Se ho trovato corrispondenza lo restituisco, altrimenti lo inserisco
-		Destinatari entity = daoDestinatari.trovaIndirizzo(ragioneSociale1, destinatario.getCap(), destinatario.getIndirizzo(), destinatario.getLocalita(), destinatario.getNazione());
+	protected Destinatari ottieniDestinatario(MIndirizzo destinatario) throws ModelPersistenceException {
+		Destinatari entity = null;
+		// Se è stato valorizzato il campo codice destinatario tento di recuperarlo
+		if (destinatario.getCodice() != null && !destinatario.getCodice().isEmpty())
+			entity = daoDestinatari.trovaDaCodice(destinatario.getCodice());
+		// Se invece è stato valorizzato il campo ID tento di recuperarlo da li
+		if (entity == null && destinatario.getId() > 0)
+			entity = daoDestinatari.trovaDaID(destinatario.getId());
+		// Altrimenti vado a cercarlo per indirizzo ed eventualmente ne inserisco uno nuovo.
 		if (entity == null) {
-			entity = new Destinatari();
-			entity.setCap(destinatario.getCap());
-			entity.setCodIso(destinatario.getNazioneCodiceISO3());
-			entity.setCodNaz(destinatario.getNazioneCodiceISO2());
-			entity.setEmail(destinatario.getEmail());
-			entity.setIndirizzo(destinatario.getIndirizzo());
-			entity.setLocalita(destinatario.getLocalita());
-			entity.setNazione(destinatario.getNazioneNome());
-			entity.setProvincia(destinatario.getProvincia());
-			entity.setRagSoc1(ragioneSociale1);
-			entity.setRagSoc2(ragioneSociale2);
-			entity.setTel(destinatario.getTelefono());
-			entity = daoDestinatari.inserisci(entity);
-			if (entity == null)
-				throw new ModelPersistenceException("Impossibile recuperare il destinatario.");
+			// Eseguo un controllo sulla ragione sociale
+			String ragioneSociale1 = destinatario.getRagioneSociale();
+			String ragioneSociale2 = "";
+			// Se è più lunga di 70 vado a tagliare la parte eccedente.
+			if (ragioneSociale1.length() > 70) {
+				ragioneSociale1 = ragioneSociale1.substring(0, 70);
+			}
+			// Se è più lunga di 35 la divido in 2
+			if (ragioneSociale1.length() > 35) {
+				ragioneSociale2 = ragioneSociale1.substring(35);
+				ragioneSociale1 = ragioneSociale1.substring(0, 35);
+			}
+			// Eseguo una ricerca per vedere se è già presente.
+			// Se ho trovato corrispondenza lo restituisco, altrimenti lo inserisco
+			entity = daoDestinatari.trovaIndirizzo(ragioneSociale1, destinatario.getCap(), destinatario.getIndirizzo(), destinatario.getLocalita(), destinatario.getNazione());
+			if (entity == null) {
+				entity = new Destinatari();
+				entity.setCap(destinatario.getCap());
+				entity.setCodIso(destinatario.getNazioneCodiceISO3());
+				entity.setCodNaz(destinatario.getNazioneCodiceISO2());
+				entity.setEmail(destinatario.getEmail());
+				entity.setIndirizzo(destinatario.getIndirizzo());
+				entity.setLocalita(destinatario.getLocalita());
+				entity.setNazione(destinatario.getNazioneNome());
+				entity.setProvincia(destinatario.getProvincia());
+				entity.setRagSoc1(ragioneSociale1);
+				entity.setRagSoc2(ragioneSociale2);
+				entity.setTel(destinatario.getTelefono());
+				entity = daoDestinatari.inserisci(entity);
+				if (entity == null)
+					throw new ModelPersistenceException("Impossibile recuperare il destinatario.");
+			}
 		}
 		return entity;
 	}
@@ -492,8 +501,10 @@ public class ControllerOrdiniSQLServer extends Dao implements IControllerModel<M
 				riga.setCodiceArticolo(match.getCodArtStr());
 				riga.setTaglia(match.getTaglia());
 				riga.setNumerata(match.getNumerata());
+				riga.setPosizione(match.getUmPos());
 				riga.setQtaSpedizione(quantità);
 				riga.setPezzieffet(quantitàEffetiva);
+				riga.setNumeroPezziUnita(match.getPezziCassa());
 				riga.setDescrizione(match.getDescrizione());
 				riga.setNrRigo(prodotto.getNumeroRiga());
 				riga.setIdDestina(ordine.getIdDestina());
@@ -517,7 +528,7 @@ public class ControllerOrdiniSQLServer extends Dao implements IControllerModel<M
 		ordine.setPezzieffet(totaleEffettivo);
 	}
 	
-	protected void ottieniSaldiEMovimenti(List<MagaSd> saldiDaInserire, List<MagaSd> saldiDaAggiornare, List<MagaMov> movimenti, TestataOrdini testata, MOrdine ordine) {
+	protected void ottieniSaldiEMovimenti(List<MagaSd> saldiDaInserire, List<MagaSd> saldiDaAggiornare, List<MagaMov> movimenti, TestataOrdini testata, MOrdine ordine) {		
 		//Resetto le info sui saldi prima di cominciare.
 		mappaSaldi.clear();
 		//Per ognuna delle righe d'ordine vado a ottenere il saldo e il movimento corrispondenti.
@@ -546,9 +557,13 @@ public class ControllerOrdiniSQLServer extends Dao implements IControllerModel<M
 				saldo.setIdUniArticolo(prodotto.getChiavelegacy());
 				inserisciInformazioniAggiuntiveSaldi(ordine, saldo);
 				saldiDaInserire.add(saldo);
+				//Lo aggiungo alla mappa siccome prima c'era solo un null
+				String keySaldo = prodotto.getChiavelegacy() + "-" +  prodotto.getMagazzinoLTC();
+				mappaSaldi.put(keySaldo, saldo);
 			}
 			// Movimenti
-			MagaMov movimento = daoMovimenti.getNuovoMovimento(CausaliMovimento.IOS, testata.getNrLista(), testata.getIdTestaSped(), testata.getDataOrdine(), saldo, prodotto.getChiavelegacy(), prodotto.getMagazzinoLTC(), prodotto.getQuantita());
+			//MagaMov movimento = daoMovimenti.getNuovoMovimento(CausaliMovimento.IOS, testata.getNrLista(), testata.getIdTestaSped(), testata.getDataOrdine(), saldo, prodotto.getChiavelegacy(), prodotto.getMagazzinoLTC(), prodotto.getQuantita());
+			MagaMov movimento = daoMovimenti.getNuovoMovimentoImpegnoOrdine(testata, saldo, prodotto.getQuantita());
 			inserisciInformazioniAggiuntiveMovimenti(ordine, movimento);
 			movimenti.add(movimento);
 		}
@@ -575,7 +590,12 @@ public class ControllerOrdiniSQLServer extends Dao implements IControllerModel<M
 		List<MagaMov> movimenti = new LinkedList<>();
 		//Esamino la lista dei prodotti ordinati e riempo le liste corrispondenti
 		ottieniRighe(righe, testata, ordine);
-		ottieniSaldiEMovimenti(saldiDaInserire, saldiDaAggiornare, movimenti, testata, ordine);
+		//controllo la tipologia d'importazione e verifico le attività necessarie
+		switch (ordine.getTipoImportazione()) {
+			case STANDARD : ottieniSaldiEMovimenti(saldiDaInserire, saldiDaAggiornare, movimenti, testata, ordine); break;
+			case SENZA_IMPEGNO : testata.setStato("INSE"); break;
+		}
+		//ottieniSaldiEMovimenti(saldiDaInserire, saldiDaAggiornare, movimenti, testata, ordine);
 		// Transaction
 		EntityManager em = getManager();
 		EntityTransaction t = em.getTransaction();

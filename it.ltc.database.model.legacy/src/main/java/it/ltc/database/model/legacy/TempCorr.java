@@ -69,7 +69,7 @@ public class TempCorr implements Serializable {
 	private String nrOrdine;
 
 	@Column(name="PesoKg", columnDefinition="money", nullable=false)
-	private Double pesoKg;
+	private double pesoKg;
 
 //	@Column(name="Siglaweb", length=15)
 //	private String siglaweb;
@@ -93,7 +93,7 @@ public class TempCorr implements Serializable {
 	private Double valoreDoganale;
 	
 	@Column(name="Volume", columnDefinition="money", nullable=false)
-	private Double volume;
+	private double volume;
 	
 	@Column(name="Pezzi", nullable=false)
 	private int pezzi;
@@ -218,11 +218,11 @@ public class TempCorr implements Serializable {
 		this.nrOrdine = nrOrdine;
 	}
 
-	public Double getPesoKg() {
+	public double getPesoKg() {
 		return this.pesoKg;
 	}
 
-	public void setPesoKg(Double pesoKg) {
+	public void setPesoKg(double pesoKg) {
 		this.pesoKg = pesoKg;
 	}
 
@@ -282,11 +282,11 @@ public class TempCorr implements Serializable {
 		this.valoreDoganale = valoreDoganale;
 	}
 
-	public Double getVolume() {
+	public double getVolume() {
 		return volume;
 	}
 
-	public void setVolume(Double volume) {
+	public void setVolume(double volume) {
 		this.volume = volume;
 	}
 

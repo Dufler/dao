@@ -92,6 +92,17 @@ public class ArticoliColtorti implements Serializable {
 
 	@Column(name="BarraUPC", length=50)
 	private String barraUPC;
+	
+	/**
+	 * Indica come viene gestito il prodotto, i possibili valori sono:<br>
+	 * <ul>
+	 * <li>STANDARD: una cassa di prodotto con una sua composizione ben definita in taglie e quantità, il prodotto arriva già così.</li>
+	 * <li>BUNDLE: un insieme di prodotti sfusi che viene composto in uscita.</li>
+	 * <li>NO: un prodotto sfuso, non è in cassa.</li>
+	 * </ul>
+	 */
+	@Column(name="Cassa", nullable=false, length=10, columnDefinition="varchar(10)")
+	private String cassa;
 
 	@Column(name="Categoria", nullable=false, length=150)
 	private String categoria;
@@ -421,6 +432,14 @@ public class ArticoliColtorti implements Serializable {
 
 	public void setBarraUPC(String barraUPC) {
 		this.barraUPC = barraUPC;
+	}
+
+	public String getCassa() {
+		return cassa;
+	}
+
+	public void setCassa(String cassa) {
+		this.cassa = cassa;
 	}
 
 	public String getCategoria() {

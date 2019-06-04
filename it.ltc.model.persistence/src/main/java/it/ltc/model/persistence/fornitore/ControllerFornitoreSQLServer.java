@@ -31,7 +31,7 @@ public class ControllerFornitoreSQLServer extends FornitoreDao implements IContr
 		fornitore.setCodiceFornitore(model.getCodice());
 		fornitore.setRagSoc(model.getRagioneSociale());
 		fornitore.setNote(model.getNote());
-		fornitore.setTipodocumento(model.getTipo() != null ? model.getTipo().name() : "CARICO");
+		fornitore.setTipoDocumento(model.getTipo() != null ? model.getTipo().name() : "CARICO");
 		//Info indirizzo
 		MIndirizzo indirizzo = model.getIndirizzo();
 		fornitore.setCap(indirizzo.getCap());

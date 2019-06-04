@@ -1,5 +1,6 @@
 package it.ltc.database.dao.legacy.bundle;
 
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -54,19 +55,41 @@ public class CasseDao extends CRUDDao<Casse> {
 		Casse cassa = composizioneCassa.get(0);
 		int idCassa = cassa.getIdCassa();
 		List<Casse> esistenti = trovaDaCassa(idCassa);
+		List<Casse> daAggiornare = new LinkedList<>();
+		List<Casse> daInserire = new LinkedList<>();
 		//Elimino gli elementi esistenti e inserisco i nuovi
 		EntityManager em = getManager();
 		EntityTransaction t = em.getTransaction();
 		try {
 			t.begin();
-			for (Casse esistente : esistenti) {
-				em.remove(em.contains(esistente) ? esistente : em.find(Casse.class, esistente.getId()));
-			}
 			int totalePezzi = 0;
 			for (Casse elemento : composizioneCassa) {
+				//Cerco fra quelli esistenti se esiste già
+				boolean presente = false;
+				Iterator<Casse> i = esistenti.iterator();
+				while (i.hasNext()) {
+					Casse esistente = i.next();
+					if (esistente.getIdCassa() == elemento.getIdCassa() && esistente.getIdProdotto() == elemento.getIdProdotto()) {
+						elemento.setId(esistente.getId());
+						daAggiornare.add(elemento);
+						i.remove();
+						presente = true;
+						break;
+					}
+				}
+				//Se non esiste ancora lo metto fra quelli da inserire
+				if (!presente)
+					daInserire.add(elemento);
+				//aumento il totale dei pezzi
 				totalePezzi += elemento.getQuantitaProdotto();
-				em.persist(elemento);
 			}
+			//inserisco, aggiorno ed elimino i singoli elementi della cassa
+			for (Casse elemento : daInserire)
+				em.persist(elemento);
+			for (Casse elemento : daAggiornare)
+				em.merge(elemento);
+			for (Casse esistente : esistenti)
+				em.remove(em.contains(esistente) ? esistente : em.find(Casse.class, esistente.getId()));
 			//Aggiorno le info sull'anagrafica base del prodotto.
 			Articoli anagraficaCassa = em.find(Articoli.class, idCassa);
 			anagraficaCassa.setCassa(cassa.getTipo());
@@ -140,13 +163,13 @@ public class CasseDao extends CRUDDao<Casse> {
 		}
 	}
 	
-//	public Casse trovaDaCassaEProdotto(String idUnivocoCassa, String idUnivocoProdotto) {
-//		List<CondizioneWhere> conditions = new LinkedList<>();
-//		conditions.add(new CondizioneWhere("idUnivocoCassa", idUnivocoCassa));
-//		conditions.add(new CondizioneWhere("idUnivocoProdotto", idUnivocoProdotto));
-//		Casse entity = findJustOne(conditions);
-//		return entity;
-//	}
+	public Casse trovaDaCassaEProdotto(String idUnivocoCassa, String idUnivocoProdotto) {
+		List<CondizioneWhere> conditions = new LinkedList<>();
+		conditions.add(new CondizioneWhere("idUnivocoCassa", idUnivocoCassa));
+		conditions.add(new CondizioneWhere("idUnivocoProdotto", idUnivocoProdotto));
+		Casse entity = findJustOne(conditions);
+		return entity;
+	}
 	
 	public Casse trovaDaCassaEProdotto(int idCassa, int idProdotto) {
 		List<CondizioneWhere> conditions = new LinkedList<>();
@@ -156,10 +179,10 @@ public class CasseDao extends CRUDDao<Casse> {
 		return entity;
 	}
 	
-//	public List<Casse> trovaDaCassa(String idUnivocoCassa) {
-//		List<Casse> entitites = findAllEqualTo("idUnivocoCassa", idUnivocoCassa);
-//		return entitites;
-//	}
+	public List<Casse> trovaDaCassa(String idUnivocoCassa) {
+		List<Casse> entitites = findAllEqualTo("idUnivocoCassa", idUnivocoCassa);
+		return entitites;
+	}
 	
 	public List<Casse> trovaDaCassa(int idCassa) {
 		List<Casse> entitites = findAllEqualTo("idCassa", idCassa);
@@ -169,8 +192,8 @@ public class CasseDao extends CRUDDao<Casse> {
 	@Override
 	protected void updateValues(Casse oldEntity, Casse entity) {
 		oldEntity.setQuantitaProdotto(entity.getQuantitaProdotto());
-//		oldEntity.setIdUnivocoCassa(entity.getIdUnivocoCassa());
-//		oldEntity.setIdUnivocoProdotto(entity.getIdUnivocoProdotto());
+		oldEntity.setIdUnivocoCassa(entity.getIdUnivocoCassa());
+		oldEntity.setIdUnivocoProdotto(entity.getIdUnivocoProdotto());
 		oldEntity.setIdCassa(entity.getIdCassa());
 		oldEntity.setIdProdotto(entity.getIdProdotto());
 		oldEntity.setCodiceCassa(entity.getCodiceCassa());

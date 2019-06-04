@@ -82,7 +82,7 @@ public abstract class ImportatoreFiles {
 	protected boolean accettaFile(File file) {
 		boolean accept = false;
 		if (file.isFile()) {
-			accept = file.getName().matches(regexFileName);
+			accept = regexFileName != null && !regexFileName.isEmpty() ? file.getName().matches(regexFileName) || file.getName().toUpperCase().matches(regexFileName) : true;
 		}
 		return accept;
 	}

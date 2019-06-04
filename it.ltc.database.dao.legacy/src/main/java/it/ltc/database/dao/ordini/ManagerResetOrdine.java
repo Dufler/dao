@@ -22,6 +22,7 @@ import it.ltc.database.dao.legacy.RighiOrdineDao;
 import it.ltc.database.dao.legacy.RighiUbicPreDao;
 import it.ltc.database.dao.legacy.StagioniDao;
 import it.ltc.database.dao.legacy.TestataOrdiniDao;
+import it.ltc.database.dao.legacy.FornitoreDao.TipoFornitori;
 import it.ltc.database.model.legacy.ColliImballo;
 import it.ltc.database.model.legacy.ColliPack;
 import it.ltc.database.model.legacy.Fornitori;
@@ -129,9 +130,12 @@ public class ManagerResetOrdine extends Dao {
 		}
 		if (totalePezzi > 0) {
 			//Determino gli elementi necessari
-			List<Fornitori> fornitori = daoFornitori.trovaTutte();
-			Fornitori fornitore = fornitori.get(0);
+			Fornitori fornitore = daoFornitori.trovaDaTipo(TipoFornitori.INTERNO);
+			if (fornitore == null)
+				throw new RuntimeException("Non ci sono fornitori con tipo INTERNO da poter usare per creare il carico.");
 			List<Stagioni> stagioni = daoStagioni.trovaTutti();
+			if (stagioni == null || stagioni.isEmpty())
+				throw new RuntimeException("Non ci sono stagioni da poter usare per creare il carico.");
 			Stagioni stagione = stagioni.get(stagioni.size() - 1);
 			//Inserisco le info di testata
 			testataCarico = new PakiTesta();

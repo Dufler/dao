@@ -21,6 +21,7 @@
 		<class>it.ltc.database.model.legacy.bundle.CasseStandard</class>
 		<class>it.ltc.database.model.legacy.Numerate</class>
 		<class>it.ltc.database.model.legacy.CatMercGruppi</class>
+		<class>it.ltc.database.model.legacy.Marchi</class>
 		<class>it.ltc.database.model.legacy.MagaMov</class>
 		<class>it.ltc.database.model.legacy.MagaSd</class>
 		<!-- Gestione Articoli (Fine) -->
@@ -43,12 +44,14 @@
 		<class>it.ltc.database.model.legacy.RighiImballoLight</class>
 		<class>it.ltc.database.model.legacy.RighiOrdine</class>
 		<class>it.ltc.database.model.legacy.TestaCorr</class>
+		<class>it.ltc.database.model.legacy.TestaCorrLight</class>
 		<class>it.ltc.database.model.legacy.RigaCorr</class>
 		<class>it.ltc.database.model.legacy.TestataOrdini</class>
 		<class>it.ltc.database.model.legacy.TestataOrdiniLogStato</class>
 		<class>it.ltc.database.model.legacy.TestataOrdiniTipo</class>
 		<class>it.ltc.database.model.legacy.Imballi</class>
 		<class>it.ltc.database.model.legacy.TempCorr</class>
+		<class>it.ltc.database.model.legacy.Delivery</class>
 		<!-- Gestione Uscite (Fine) -->
 		<!-- Gestione Assegnazione Ordini (Inizio) -->
 		<class>it.ltc.database.model.legacy.Righiubicpre</class>
@@ -70,7 +73,7 @@
 			<property name="hibernate.show_sql" value="true" />
 			<property name="hibernate.dialect" value="org.hibernate.dialect.SQLServer2008Dialect" />
 			<property name="hibernate.default_schema" value="dbo"/>
-			<property name="hibernate.ejb.entitymanager_factory_name" value="legacy-test"/> <!-- Aggiunta per evitare che vengano create 2 PU -->
+			<property name="hibernate.ejb.entitymanager_factory_name" value="legacy-test"/>
 			<property name="hibernate.id.new_generator_mappings" value="false"/>
 			<property name="hibernate.connection.password" value="ltcpsw"/>
 			<property name="hibernate.connection.username" value="ltc"/>
@@ -99,10 +102,12 @@
 		<class>it.ltc.database.model.legacy.ArtiBar</class>
 		<class>it.ltc.database.model.legacy.Articoli</class>
 		<class>it.ltc.database.model.legacy.bundle.Casse</class>
+		<class>it.ltc.database.model.legacy.bundle.CasseStandard</class>
 		<class>it.ltc.database.model.legacy.Numerate</class>
 		<class>it.ltc.database.model.legacy.CatMercGruppi</class>
 		<class>it.ltc.database.model.legacy.MagaMov</class>
 		<class>it.ltc.database.model.legacy.MagaSd</class>
+		<class>it.ltc.database.model.legacy.Marchi</class>
 		<!-- Gestione Articoli (Fine) -->
 		<!-- Gestione Ingressi (Inizio) -->
 		<class>it.ltc.database.model.legacy.Fornitori</class>
@@ -123,6 +128,7 @@
 		<class>it.ltc.database.model.legacy.RighiImballoLight</class>
 		<class>it.ltc.database.model.legacy.RighiOrdine</class>
 		<class>it.ltc.database.model.legacy.TestaCorr</class>
+		<class>it.ltc.database.model.legacy.TestaCorrLight</class>
 		<class>it.ltc.database.model.legacy.RigaCorr</class>
 		<class>it.ltc.database.model.legacy.TestataOrdini</class>
 		<class>it.ltc.database.model.legacy.TestataOrdiniLogStato</class>
@@ -179,6 +185,11 @@
 		<class>it.ltc.database.model.legacy.MagaSd</class>
 		<class>it.ltc.database.model.legacy.Magazzini</class>
 		<class>it.ltc.database.model.legacy.ColliCarico</class>
+		<class>it.ltc.database.model.legacy.TestaCorr</class>
+		<class>it.ltc.database.model.legacy.TestaCorrLight</class>
+		<class>it.ltc.database.model.legacy.CatMercGruppi</class>
+		<class>it.ltc.database.model.legacy.Marchi</class>
+		<exclude-unlisted-classes>true</exclude-unlisted-classes>
 		<properties>
 			<property name="javax.persistence.jdbc.driver" value="com.microsoft.sqlserver.jdbc.SQLServerDriver" />
 			<property name="javax.persistence.jdbc.url" value="jdbc:sqlserver://192.168.8.10:1433;databaseName=DBWOM" />
@@ -186,7 +197,7 @@
 			<property name="javax.persistence.jdbc.password" value="ltcpsw" />
 			<property name="hibernate.hbm2ddl.auto" value="none" />
 			<property name="hibernate.show_sql" value="false" />
-			<property name="hibernate.dialect" value="org.hibernate.dialect.SQLServer2012Dialect" />
+			<property name="hibernate.dialect" value="org.hibernate.dialect.SQLServer2008Dialect" />
 			<property name="hibernate.default_schema" value="dbo"/>
 			<property name="hibernate.ejb.entitymanager_factory_name" value="legacy-womsh"/> <!-- Aggiunta per evitare che vengano create 2 PU -->
 			<property name="hibernate.connection.password" value="ltcpsw"/>
@@ -262,10 +273,12 @@
 		<class>it.ltc.database.model.legacy.ArtiBar</class>
 		<class>it.ltc.database.model.legacy.Articoli</class>
 		<class>it.ltc.database.model.legacy.bundle.Casse</class>
+		<class>it.ltc.database.model.legacy.bundle.CasseStandard</class>
 		<class>it.ltc.database.model.legacy.Numerate</class>
 		<class>it.ltc.database.model.legacy.CatMercGruppi</class>
 		<class>it.ltc.database.model.legacy.MagaMov</class>
 		<class>it.ltc.database.model.legacy.MagaSd</class>
+		<class>it.ltc.database.model.legacy.Marchi</class>
 		<!-- Gestione Articoli (Fine) -->
 		<!-- Gestione Ingressi (Inizio) -->
 		<class>it.ltc.database.model.legacy.Fornitori</class>
@@ -286,6 +299,7 @@
 		<class>it.ltc.database.model.legacy.RighiImballoLight</class>
 		<class>it.ltc.database.model.legacy.RighiOrdine</class>
 		<class>it.ltc.database.model.legacy.TestaCorr</class>
+		<class>it.ltc.database.model.legacy.TestaCorrLight</class>
 		<class>it.ltc.database.model.legacy.RigaCorr</class>
 		<class>it.ltc.database.model.legacy.TestataOrdini</class>
 		<class>it.ltc.database.model.legacy.TestataOrdiniLogStato</class>
@@ -328,7 +342,10 @@
 	
 	<!-- ASH -->
 	<persistence-unit name="legacy-ash" transaction-type="RESOURCE_LOCAL">
-		<class>it.ltc.database.model.legacy.TestaCorr</class>
+		<class>it.ltc.database.model.legacy.TestaCorrLight</class>
+		<class>it.ltc.database.model.legacy.CatMercGruppi</class>
+		<class>it.ltc.database.model.legacy.Marchi</class>
+		<exclude-unlisted-classes>true</exclude-unlisted-classes>
 		<properties>
 			<property name="javax.persistence.jdbc.driver" value="com.microsoft.sqlserver.jdbc.SQLServerDriver" />
 			<property name="javax.persistence.jdbc.url" value="jdbc:sqlserver://192.168.5.11:1433;databaseName=DBASH" />
@@ -336,7 +353,7 @@
 			<property name="javax.persistence.jdbc.password" value="ltcpsw" />
 			<property name="hibernate.hbm2ddl.auto" value="none" />
 			<property name="hibernate.show_sql" value="false" />
-			<property name="hibernate.dialect" value="org.hibernate.dialect.SQLServer2012Dialect" />
+			<property name="hibernate.dialect" value="org.hibernate.dialect.SQLServer2008Dialect" />
 			<property name="hibernate.default_schema" value="dbo"/>
 			<property name="hibernate.ejb.entitymanager_factory_name" value="legacy-ash"/> <!-- Aggiunta per evitare che vengano create 2 PU -->
 			<property name="hibernate.connection.password" value="ltcpsw"/>
@@ -356,7 +373,7 @@
 	
 	<!-- Jelkom -->
 	<persistence-unit name="legacy-jelkom" transaction-type="RESOURCE_LOCAL">
-		<class>it.ltc.database.model.legacy.TestaCorr</class>
+		<class>it.ltc.database.model.legacy.TestaCorrLight</class>
 		<!--Gestione Generale (Inizio) -->
 		<class>it.ltc.database.model.legacy.Magazzini</class>
 		<class>it.ltc.database.model.legacy.Stagioni</class>
@@ -368,6 +385,7 @@
 		<class>it.ltc.database.model.legacy.Articoli</class>
 		<class>it.ltc.database.model.legacy.Numerata</class>
 		<class>it.ltc.database.model.legacy.CatMercGruppi</class>
+		<class>it.ltc.database.model.legacy.Marchi</class>
 		<class>it.ltc.database.model.legacy.MagaMov</class>
 		<class>it.ltc.database.model.legacy.MagaSd</class>
 		<!-- Gestione Articoli (Fine) -->
@@ -407,7 +425,10 @@
 	
 	<!-- MOA -->
 	<persistence-unit name="legacy-moa" transaction-type="RESOURCE_LOCAL">
-		<class>it.ltc.database.model.legacy.TestaCorr</class>
+		<class>it.ltc.database.model.legacy.TestaCorrLight</class>
+		<class>it.ltc.database.model.legacy.CatMercGruppi</class>
+		<class>it.ltc.database.model.legacy.Marchi</class>
+		<exclude-unlisted-classes>true</exclude-unlisted-classes>
 		<properties>
 			<property name="javax.persistence.jdbc.driver" value="com.microsoft.sqlserver.jdbc.SQLServerDriver" />
 			<property name="javax.persistence.jdbc.url" value="jdbc:sqlserver://192.168.5.11:1433;databaseName=DBLab" />
@@ -415,7 +436,7 @@
 			<property name="javax.persistence.jdbc.password" value="ltcpsw" />
 			<property name="hibernate.hbm2ddl.auto" value="none" />
 			<property name="hibernate.show_sql" value="false" />
-			<property name="hibernate.dialect" value="org.hibernate.dialect.SQLServer2012Dialect" />
+			<property name="hibernate.dialect" value="org.hibernate.dialect.SQLServer2008Dialect" />
 			<property name="hibernate.default_schema" value="dbo"/>
 			<property name="hibernate.ejb.entitymanager_factory_name" value="legacy-moa"/> <!-- Aggiunta per evitare che vengano create 2 PU -->
 			<property name="hibernate.connection.password" value="ltcpsw"/>
@@ -445,10 +466,12 @@
 		<class>it.ltc.database.model.legacy.ArtiBar</class>
 		<class>it.ltc.database.model.legacy.Articoli</class>
 		<class>it.ltc.database.model.legacy.bundle.Casse</class>
+		<class>it.ltc.database.model.legacy.bundle.CasseStandard</class>
 		<class>it.ltc.database.model.legacy.Numerate</class>
 		<class>it.ltc.database.model.legacy.CatMercGruppi</class>
 		<class>it.ltc.database.model.legacy.MagaMov</class>
 		<class>it.ltc.database.model.legacy.MagaSd</class>
+		<class>it.ltc.database.model.legacy.Marchi</class>
 		<!-- Gestione Articoli (Fine) -->
 		<!-- Gestione Ingressi (Inizio) -->
 		<class>it.ltc.database.model.legacy.Fornitori</class>
@@ -469,12 +492,14 @@
 		<class>it.ltc.database.model.legacy.RighiImballoLight</class>
 		<class>it.ltc.database.model.legacy.RighiOrdine</class>
 		<class>it.ltc.database.model.legacy.TestaCorr</class>
+		<class>it.ltc.database.model.legacy.TestaCorrLight</class>
 		<class>it.ltc.database.model.legacy.RigaCorr</class>
 		<class>it.ltc.database.model.legacy.TestataOrdini</class>
 		<class>it.ltc.database.model.legacy.TestataOrdiniLogStato</class>
 		<class>it.ltc.database.model.legacy.TestataOrdiniTipo</class>
 		<class>it.ltc.database.model.legacy.Imballi</class>
 		<class>it.ltc.database.model.legacy.TempCorr</class>
+		<class>it.ltc.database.model.legacy.Delivery</class>
 		<!-- Gestione Uscite (Fine) -->
 		<!-- Gestione Assegnazione Ordini (Inizio) -->
 		<class>it.ltc.database.model.legacy.Righiubicpre</class>
@@ -493,7 +518,7 @@
 			<property name="hibernate.show_sql" value="false" />
 			<property name="hibernate.dialect" value="org.hibernate.dialect.SQLServer2008Dialect" />
 			<property name="hibernate.default_schema" value="dbo"/>
-			<property name="hibernate.ejb.entitymanager_factory_name" value="legacy-date"/> <!-- Aggiunta per evitare che vengano create 2 PU -->
+			<property name="hibernate.ejb.entitymanager_factory_name" value="legacy-date"/>
 			<property name="hibernate.connection.password" value="ltcpsw"/>
 			<property name="hibernate.connection.username" value="ltc"/>
 			<property name="hibernate.connection.url" value="jdbc:sqlserver://192.168.0.16:1433;databaseName=DBDATE"/>
@@ -521,10 +546,12 @@
 		<class>it.ltc.database.model.legacy.ArtiBar</class>
 		<class>it.ltc.database.model.legacy.Articoli</class>
 		<class>it.ltc.database.model.legacy.bundle.Casse</class>
+		<class>it.ltc.database.model.legacy.bundle.CasseStandard</class>
 		<class>it.ltc.database.model.legacy.Numerate</class>
 		<class>it.ltc.database.model.legacy.CatMercGruppi</class>
 		<class>it.ltc.database.model.legacy.MagaMov</class>
 		<class>it.ltc.database.model.legacy.MagaSd</class>
+		<class>it.ltc.database.model.legacy.Marchi</class>
 		<!-- Gestione Articoli (Fine) -->
 		<!-- Gestione Ingressi (Inizio) -->
 		<class>it.ltc.database.model.legacy.Fornitori</class>
@@ -545,6 +572,7 @@
 		<class>it.ltc.database.model.legacy.RighiImballoLight</class>
 		<class>it.ltc.database.model.legacy.RighiOrdine</class>
 		<class>it.ltc.database.model.legacy.TestaCorr</class>
+		<class>it.ltc.database.model.legacy.TestaCorrLight</class>
 		<class>it.ltc.database.model.legacy.RigaCorr</class>
 		<class>it.ltc.database.model.legacy.TestataOrdini</class>
 		<class>it.ltc.database.model.legacy.TestataOrdiniLogStato</class>
@@ -561,7 +589,6 @@
 		<class>it.ltc.database.model.legacy.UbicaColliLog</class>
 		<!-- Gestione Assegnazione Ordini (Fine) -->
 		<!-- Specifici (Inizio) -->
-		<class>it.ltc.database.model.legacy.Marchi</class>
 		<!-- Specifici (Fine) -->
 		<exclude-unlisted-classes>true</exclude-unlisted-classes>
 		<properties>
@@ -601,10 +628,12 @@
 		<class>it.ltc.database.model.legacy.ArtiBar</class>
 		<class>it.ltc.database.model.legacy.Articoli</class>
 		<class>it.ltc.database.model.legacy.bundle.Casse</class>
+		<class>it.ltc.database.model.legacy.bundle.CasseStandard</class>
 		<class>it.ltc.database.model.legacy.Numerate</class>
 		<class>it.ltc.database.model.legacy.CatMercGruppi</class>
 		<class>it.ltc.database.model.legacy.MagaMov</class>
 		<class>it.ltc.database.model.legacy.MagaSd</class>
+		<class>it.ltc.database.model.legacy.Marchi</class>
 		<!-- Gestione Articoli (Fine) -->
 		<!-- Gestione Ingressi (Inizio) -->
 		<class>it.ltc.database.model.legacy.Fornitori</class>
@@ -625,6 +654,7 @@
 		<class>it.ltc.database.model.legacy.RighiImballoLight</class>
 		<class>it.ltc.database.model.legacy.RighiOrdine</class>
 		<class>it.ltc.database.model.legacy.TestaCorr</class>
+		<class>it.ltc.database.model.legacy.TestaCorrLight</class>
 		<class>it.ltc.database.model.legacy.RigaCorr</class>
 		<class>it.ltc.database.model.legacy.TestataOrdini</class>
 		<class>it.ltc.database.model.legacy.TestataOrdiniLogStato</class>
@@ -678,10 +708,12 @@
 		<class>it.ltc.database.model.legacy.ArtiBar</class>
 		<class>it.ltc.database.model.legacy.Articoli</class>
 		<class>it.ltc.database.model.legacy.bundle.Casse</class>
+		<class>it.ltc.database.model.legacy.bundle.CasseStandard</class>
 		<class>it.ltc.database.model.legacy.Numerate</class>
 		<class>it.ltc.database.model.legacy.CatMercGruppi</class>
 		<class>it.ltc.database.model.legacy.MagaMov</class>
 		<class>it.ltc.database.model.legacy.MagaSd</class>
+		<class>it.ltc.database.model.legacy.Marchi</class>
 		<!-- Gestione Articoli (Fine) -->
 		<!-- Gestione Ingressi (Inizio) -->
 		<class>it.ltc.database.model.legacy.Fornitori</class>
@@ -702,6 +734,7 @@
 		<class>it.ltc.database.model.legacy.RighiImballoLight</class>
 		<class>it.ltc.database.model.legacy.RighiOrdine</class>
 		<class>it.ltc.database.model.legacy.TestaCorr</class>
+		<class>it.ltc.database.model.legacy.TestaCorrLight</class>
 		<class>it.ltc.database.model.legacy.RigaCorr</class>
 		<class>it.ltc.database.model.legacy.TestataOrdini</class>
 		<class>it.ltc.database.model.legacy.TestataOrdiniLogStato</class>
@@ -788,10 +821,12 @@
 		<class>it.ltc.database.model.legacy.ArtiBar</class>
 		<class>it.ltc.database.model.legacy.Articoli</class>
 		<class>it.ltc.database.model.legacy.bundle.Casse</class>
+		<class>it.ltc.database.model.legacy.bundle.CasseStandard</class>
 		<class>it.ltc.database.model.legacy.Numerate</class>
 		<class>it.ltc.database.model.legacy.CatMercGruppi</class>
 		<class>it.ltc.database.model.legacy.MagaMov</class>
 		<class>it.ltc.database.model.legacy.MagaSd</class>
+		<class>it.ltc.database.model.legacy.Marchi</class>
 		<!-- Gestione Articoli (Fine) -->
 		<!-- Gestione Ingressi (Inizio) -->
 		<class>it.ltc.database.model.legacy.Fornitori</class>
@@ -812,6 +847,7 @@
 		<class>it.ltc.database.model.legacy.RighiImballoLight</class>
 		<class>it.ltc.database.model.legacy.RighiOrdine</class>
 		<class>it.ltc.database.model.legacy.TestaCorr</class>
+		<class>it.ltc.database.model.legacy.TestaCorrLight</class>
 		<class>it.ltc.database.model.legacy.RigaCorr</class>
 		<class>it.ltc.database.model.legacy.TestataOrdini</class>
 		<class>it.ltc.database.model.legacy.TestataOrdiniLogStato</class>
@@ -868,6 +904,7 @@
 		<class>it.ltc.database.model.legacy.CatMercGruppi</class>
 		<class>it.ltc.database.model.legacy.MagaMov</class>
 		<class>it.ltc.database.model.legacy.MagaSd</class>
+		<class>it.ltc.database.model.legacy.Marchi</class>
 		<!-- Gestione Articoli (Fine) -->
 		<!-- Gestione Ingressi (Inizio) -->
 		<class>it.ltc.database.model.legacy.Fornitori</class>
@@ -888,6 +925,7 @@
 		<class>it.ltc.database.model.legacy.RighiImballoLight</class>
 		<class>it.ltc.database.model.legacy.RighiOrdine</class>
 		<class>it.ltc.database.model.legacy.TestaCorr</class>
+		<class>it.ltc.database.model.legacy.TestaCorrLight</class>
 		<class>it.ltc.database.model.legacy.RigaCorr</class>
 		<class>it.ltc.database.model.legacy.TestataOrdini</class>
 		<class>it.ltc.database.model.legacy.TestataOrdiniLogStato</class>
@@ -907,6 +945,7 @@
 		<class>it.ltc.database.model.legacy.NumerataLegacy</class>
 		<class>it.ltc.database.model.legacy.Colori</class>
 		<class>it.ltc.database.model.legacy.bundle.Casse</class>
+		<class>it.ltc.database.model.legacy.bundle.CasseStandard</class>
 		<exclude-unlisted-classes>true</exclude-unlisted-classes>
 		<properties>
 			<property name="javax.persistence.jdbc.driver" value="com.microsoft.sqlserver.jdbc.SQLServerDriver" />
@@ -945,10 +984,12 @@
 		<class>it.ltc.database.model.legacy.ArtiBar</class>
 		<class>it.ltc.database.model.legacy.Articoli</class>
 		<class>it.ltc.database.model.legacy.bundle.Casse</class>
+		<class>it.ltc.database.model.legacy.bundle.CasseStandard</class>
 		<class>it.ltc.database.model.legacy.Numerate</class>
 		<class>it.ltc.database.model.legacy.CatMercGruppi</class>
 		<class>it.ltc.database.model.legacy.MagaMov</class>
 		<class>it.ltc.database.model.legacy.MagaSd</class>
+		<class>it.ltc.database.model.legacy.Marchi</class>
 		<!-- Gestione Articoli (Fine) -->
 		<!-- Gestione Ingressi (Inizio) -->
 		<class>it.ltc.database.model.legacy.Fornitori</class>
@@ -969,6 +1010,7 @@
 		<class>it.ltc.database.model.legacy.RighiImballoLight</class>
 		<class>it.ltc.database.model.legacy.RighiOrdine</class>
 		<class>it.ltc.database.model.legacy.TestaCorr</class>
+		<class>it.ltc.database.model.legacy.TestaCorrLight</class>
 		<class>it.ltc.database.model.legacy.RigaCorr</class>
 		<class>it.ltc.database.model.legacy.TestataOrdini</class>
 		<class>it.ltc.database.model.legacy.TestataOrdiniLogStato</class>
@@ -1023,10 +1065,12 @@
 		<class>it.ltc.database.model.legacy.ArtiBar</class>
 		<class>it.ltc.database.model.legacy.Articoli</class>
 		<class>it.ltc.database.model.legacy.bundle.Casse</class>
+		<class>it.ltc.database.model.legacy.bundle.CasseStandard</class>
 		<class>it.ltc.database.model.legacy.Numerate</class>
 		<class>it.ltc.database.model.legacy.CatMercGruppi</class>
 		<class>it.ltc.database.model.legacy.MagaMov</class>
 		<class>it.ltc.database.model.legacy.MagaSd</class>
+		<class>it.ltc.database.model.legacy.Marchi</class>
 		<!-- Gestione Articoli (Fine) -->
 		<!-- Gestione Ingressi (Inizio) -->
 		<class>it.ltc.database.model.legacy.Fornitori</class>
@@ -1047,6 +1091,7 @@
 		<class>it.ltc.database.model.legacy.RighiImballoLight</class>
 		<class>it.ltc.database.model.legacy.RighiOrdine</class>
 		<class>it.ltc.database.model.legacy.TestaCorr</class>
+		<class>it.ltc.database.model.legacy.TestaCorrLight</class>
 		<class>it.ltc.database.model.legacy.RigaCorr</class>
 		<class>it.ltc.database.model.legacy.TestataOrdini</class>
 		<class>it.ltc.database.model.legacy.TestataOrdiniLogStato</class>
@@ -1101,10 +1146,12 @@
 		<class>it.ltc.database.model.legacy.ArtiBar</class>
 		<class>it.ltc.database.model.legacy.Articoli</class>
 		<class>it.ltc.database.model.legacy.bundle.Casse</class>
+		<class>it.ltc.database.model.legacy.bundle.CasseStandard</class>
 		<class>it.ltc.database.model.legacy.Numerate</class>
 		<class>it.ltc.database.model.legacy.CatMercGruppi</class>
 		<class>it.ltc.database.model.legacy.MagaMov</class>
 		<class>it.ltc.database.model.legacy.MagaSd</class>
+		<class>it.ltc.database.model.legacy.Marchi</class>
 		<!-- Gestione Articoli (Fine) -->
 		<!-- Gestione Ingressi (Inizio) -->
 		<class>it.ltc.database.model.legacy.Fornitori</class>
@@ -1125,6 +1172,7 @@
 		<class>it.ltc.database.model.legacy.RighiImballoLight</class>
 		<class>it.ltc.database.model.legacy.RighiOrdine</class>
 		<class>it.ltc.database.model.legacy.TestaCorr</class>
+		<class>it.ltc.database.model.legacy.TestaCorrLight</class>
 		<class>it.ltc.database.model.legacy.RigaCorr</class>
 		<class>it.ltc.database.model.legacy.TestataOrdini</class>
 		<class>it.ltc.database.model.legacy.TestataOrdiniLogStato</class>
@@ -1179,10 +1227,12 @@
 		<class>it.ltc.database.model.legacy.ArtiBar</class>
 		<class>it.ltc.database.model.legacy.Articoli</class>
 		<class>it.ltc.database.model.legacy.bundle.Casse</class>
+		<class>it.ltc.database.model.legacy.bundle.CasseStandard</class>
 		<class>it.ltc.database.model.legacy.Numerate</class>
 		<class>it.ltc.database.model.legacy.CatMercGruppi</class>
 		<class>it.ltc.database.model.legacy.MagaMov</class>
 		<class>it.ltc.database.model.legacy.MagaSd</class>
+		<class>it.ltc.database.model.legacy.Marchi</class>
 		<!-- Gestione Articoli (Fine) -->
 		<!-- Gestione Ingressi (Inizio) -->
 		<class>it.ltc.database.model.legacy.Fornitori</class>
@@ -1203,6 +1253,7 @@
 		<class>it.ltc.database.model.legacy.RighiImballoLight</class>
 		<class>it.ltc.database.model.legacy.RighiOrdine</class>
 		<class>it.ltc.database.model.legacy.TestaCorr</class>
+		<class>it.ltc.database.model.legacy.TestaCorrLight</class>
 		<class>it.ltc.database.model.legacy.RigaCorr</class>
 		<class>it.ltc.database.model.legacy.TestataOrdini</class>
 		<class>it.ltc.database.model.legacy.TestataOrdiniLogStato</class>

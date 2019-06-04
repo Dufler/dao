@@ -6,6 +6,7 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Order;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
@@ -156,6 +157,32 @@ public class ReadOnlyDao<T> extends Dao {
 			em.close();
 		}		
         return lista;
+	}
+	
+	protected List<T> findAll(List<CondizioneWhere> conditions, int maxResults, String orderColumn, boolean ascendant) {
+		List<T> lista;
+		EntityManager em = getManager();
+		try {
+			CriteriaBuilder cb = em.getCriteriaBuilder();
+	        CriteriaQuery<T> criteria = cb.createQuery(c);
+	        Root<T> member = criteria.from(c);
+	        if (conditions.isEmpty()) {
+	        	criteria.select(member).orderBy(getOrder(orderColumn, cb, member, ascendant));
+	        } else {
+	        	criteria.select(member).where(getConditions(conditions, cb, member)).orderBy(getOrder(orderColumn, cb, member, ascendant));
+	        }
+			lista = em.createQuery(criteria).setMaxResults(maxResults).getResultList();
+		} catch (Exception e) {
+			logger.error(e.getMessage(), e);
+			lista = null;
+		} finally {
+			em.close();
+		}		
+        return lista;
+	}
+	
+	protected Order getOrder(String name, CriteriaBuilder cb, Root<T> member, boolean ascendant) {
+		return ascendant ? cb.asc(member.get(name)) : cb.desc(member.get(name));
 	}
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })

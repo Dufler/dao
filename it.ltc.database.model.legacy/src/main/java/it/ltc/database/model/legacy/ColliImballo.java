@@ -128,8 +128,8 @@ public class ColliImballo implements Serializable {
 	@Column(name="NrLista", length=21)
 	private String nrLista;
 
-//	@Column(name="NrRifCliente")
-//	private int nrRifCliente;
+	@Column(name="NrRifCliente")
+	private int nrRifCliente;
 
 //	@Column(name="NrSovraStp")
 //	private int nrSovraStp;
@@ -457,13 +457,13 @@ public class ColliImballo implements Serializable {
 		this.nrLista = nrLista;
 	}
 
-//	public int getNrRifCliente() {
-//		return this.nrRifCliente;
-//	}
-//
-//	public void setNrRifCliente(int nrRifCliente) {
-//		this.nrRifCliente = nrRifCliente;
-//	}
+	public int getNrRifCliente() {
+		return this.nrRifCliente;
+	}
+
+	public void setNrRifCliente(int nrRifCliente) {
+		this.nrRifCliente = nrRifCliente;
+	}
 //
 //	public int getNrSovraStp() {
 //		return this.nrSovraStp;

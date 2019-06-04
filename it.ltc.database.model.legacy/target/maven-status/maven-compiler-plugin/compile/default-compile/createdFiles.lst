@@ -1,6 +1,7 @@
 it\ltc\database\model\legacy\CatMercGruppi.class
 it\ltc\database\model\legacy\model\TestataOrdiniTotali.class
 it\ltc\database\model\legacy\ArtiBar.class
+it\ltc\database\model\legacy\TestaCorrLight.class
 it\ltc\database\model\legacy\NumerataLegacy.class
 it\ltc\database\model\legacy\documento\TestaCorrConDocumento.class
 it\ltc\database\model\legacy\UbicaColliLog.class
@@ -39,6 +40,7 @@ it\ltc\database\model\legacy\PakiTestaTipo.class
 it\ltc\database\model\legacy\Fornitori.class
 it\ltc\database\model\legacy\RighiPrelievo.class
 it\ltc\database\model\legacy\Corrieri.class
+it\ltc\database\model\legacy\Delivery.class
 it\ltc\database\model\legacy\MagaSd.class
 it\ltc\database\model\legacy\Stagioni.class
 it\ltc\database\model\legacy\Scorte.class

@@ -1,6 +1,5 @@
 package it.ltc.database.dao.ordini;
 
-import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -18,7 +17,6 @@ import it.ltc.database.model.legacy.MagaMov;
 import it.ltc.database.model.legacy.MagaSd;
 import it.ltc.database.model.legacy.RighiOrdine;
 import it.ltc.database.model.legacy.TestataOrdini;
-import it.ltc.database.model.legacy.model.CausaliMovimento;
 
 public class ManagerImpegno extends Dao {
 	
@@ -66,9 +64,8 @@ public class ManagerImpegno extends Dao {
 				int impegnato = saldo.getImpegnato() + prodotto.getQtaSpedizione();
 				saldo.setDisponibile(disponibile);
 				saldo.setImpegnato(impegnato);
-				//saldi.add(saldo);
-				//MagaMov movimento = getMovimento(saldo, prodotto);
-				MagaMov movimento = daoMovimenti.getNuovoMovimento(CausaliMovimento.IOS, ordine.getNrLista(), ordine.getIdTestaSped(), new Date(), saldo, prodotto.getIdUnicoArt(), prodotto.getMagazzino(), prodotto.getQtaSpedizione());
+				//MagaMov movimento = daoMovimenti.getNuovoMovimento(CausaliMovimento.IOS, ordine.getNrLista(), ordine.getIdTestaSped(), new Date(), saldo, prodotto.getIdUnicoArt(), prodotto.getMagazzino(), prodotto.getQtaSpedizione());
+				MagaMov movimento = daoMovimenti.getNuovoMovimentoImpegnoOrdine(ordine, saldo, prodotto.getQtaSpedizione());
 				movimenti.add(movimento);
 			}
 		}

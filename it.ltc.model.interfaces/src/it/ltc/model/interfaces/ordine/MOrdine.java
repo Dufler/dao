@@ -50,8 +50,11 @@ public class MOrdine implements ModelInterface {
 	
 	protected String nomeFile;
 	
+	protected TipoImportazioneOrdine tipoImportazione;
+	
 	public MOrdine() {
 		prodotti = new LinkedList<>();
+		tipoImportazione = TipoImportazioneOrdine.STANDARD;
 	}
 	
 	@Override
@@ -100,6 +103,8 @@ public class MOrdine implements ModelInterface {
 				prodotto.valida(tipoIdentificazioneProdotti);
 			}
 		}
+		if (tipoImportazione == null)
+			throw new ModelSimpleValidationException("Bisogna indicare una tipologia d'importazione.");
 	}
 	
 	protected void validaRiferimento() throws ModelValidationException {
@@ -306,6 +311,14 @@ public class MOrdine implements ModelInterface {
 
 	public void setNomeFile(String nomeFile) {
 		this.nomeFile = nomeFile;
+	}
+
+	public TipoImportazioneOrdine getTipoImportazione() {
+		return tipoImportazione;
+	}
+
+	public void setTipoImportazione(TipoImportazioneOrdine tipoImportazione) {
+		this.tipoImportazione = tipoImportazione;
 	}
 
 	public void aggiungiProdotto(ProdottoOrdinato prodotto) {

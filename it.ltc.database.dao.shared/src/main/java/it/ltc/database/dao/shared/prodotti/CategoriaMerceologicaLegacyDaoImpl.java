@@ -8,24 +8,23 @@ import it.ltc.database.model.legacy.CatMercGruppi;
 import it.ltc.model.shared.dao.ICategoriaMerceologicaDao;
 import it.ltc.model.shared.json.interno.CategoriaMerceologicaJSON;
 
-public class CategoriaMerceologicaLegacyDaoImpl implements ICategoriaMerceologicaDao {
+public class CategoriaMerceologicaLegacyDaoImpl extends CategoriaMerceologicaLegacyDao implements ICategoriaMerceologicaDao {
 	
-	private CategoriaMerceologicaLegacyDao dao;
 	
 	public CategoriaMerceologicaLegacyDaoImpl(String persistenceUnit) {
-		dao = new CategoriaMerceologicaLegacyDao(persistenceUnit);
+		super(persistenceUnit);
 	}
 
 	@Override
-	public CategoriaMerceologicaJSON trovaDaNome(String nome) {
-		CatMercGruppi entity = dao.trovaDaCodice(nome);
+	public CategoriaMerceologicaJSON trovaDaNome(String nome, int commessa) {
+		CatMercGruppi entity = trovaDaCodice(nome);
 		CategoriaMerceologicaJSON json = serializza(entity);
 		return json;
 	}
 
 	@Override
-	public List<CategoriaMerceologicaJSON> trovaTutte() {
-		List<CatMercGruppi> entities = dao.trovaTutte();
+	public List<CategoriaMerceologicaJSON> trovaTutti() {
+		List<CatMercGruppi> entities = trovaTutte();
 		List<CategoriaMerceologicaJSON> jsons = new LinkedList<>();
 		for (CatMercGruppi entity : entities) {
 			jsons.add(serializza(entity));
@@ -43,6 +42,24 @@ public class CategoriaMerceologicaLegacyDaoImpl implements ICategoriaMerceologic
 			json = null;
 		}
 		return json;
+	}
+
+	@Override
+	public CategoriaMerceologicaJSON inserisci(CategoriaMerceologicaJSON categoria) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public CategoriaMerceologicaJSON aggiorna(CategoriaMerceologicaJSON categoria) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public CategoriaMerceologicaJSON elimina(CategoriaMerceologicaJSON categoria) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

@@ -57,7 +57,6 @@ public class ControllerInfoSpedizioneSQLServer extends Dao implements IControlle
 	@Override
 	public void valida(MInfoSpedizione model) throws ModelValidationException {
 		model.valida();
-		
 	}
 
 	@Override
@@ -179,7 +178,7 @@ public class ControllerInfoSpedizioneSQLServer extends Dao implements IControlle
 		spedizione.setCap(destinatario.getCap());
 		spedizione.setIndirizzo(destinatario.getIndirizzo());
 		spedizione.setLocalita(destinatario.getLocalita());
-		spedizione.setNazione(destinatario.getCodIso());
+		spedizione.setNazione(destinatario.getCodNaz()); //Ci vado a mettere la ISO2, TNT la vuole così.
 		spedizione.setProvincia(destinatario.getProvincia());
 		spedizione.setRagSocDest(destinatario.getRagSoc1());
 		spedizione.setRagSocEst(destinatario.getRagSoc2());
@@ -195,10 +194,9 @@ public class ControllerInfoSpedizioneSQLServer extends Dao implements IControlle
 	}
 	
 	protected void setInfoDocumento(TestaCorr spedizione, MInfoSpedizione infoSpedizione) {
-		//Devo standardizzare TestaCorr per contenere questi campi
-		infoSpedizione.getRiferimentoDocumento();
-		infoSpedizione.getDataDocumento();
-		infoSpedizione.getTipoDocumento();
+		spedizione.setDocumentoRiferimento(infoSpedizione.getRiferimentoDocumento());
+		spedizione.setDocumentoData(infoSpedizione.getDataDocumento());
+		spedizione.setDocumentoTipo(infoSpedizione.getTipoDocumento());
 	}
 	
 	protected void setInfoSpedizione(TestataOrdini ordine, TestaCorr spedizione, MInfoSpedizione infoSpedizione) {
@@ -207,6 +205,7 @@ public class ControllerInfoSpedizioneSQLServer extends Dao implements IControlle
 		spedizione.setCodMittente(infoSpedizione.getCodiceCorriere());
 		int dataConsegna = infoSpedizione.getDataConsegna() != null ? Integer.parseInt(meseGiorno.format(infoSpedizione.getDataConsegna())) : 0;
 		spedizione.setDataConsegna(dataConsegna);
+		spedizione.setDataConsegnaTassativa(infoSpedizione.getDataConsegna());
 		String note = infoSpedizione.getNote() != null ? infoSpedizione.getNote() : "";
 		String note1 = note.length() > 35 ? note.substring(0, 35) : note;
 		String note2 = note.length() > 35 ? note.substring(35, note.length()) : "";
@@ -215,6 +214,7 @@ public class ControllerInfoSpedizioneSQLServer extends Dao implements IControlle
 		spedizione.setServizio(infoSpedizione.getServizioCorriere());
 		spedizione.setValoreMerce(infoSpedizione.getValoreDoganale());
 		spedizione.setMittenteAlfa(ordine.getNrOrdine());
+		spedizione.setPezzi(ordine.getPezzieffet());
 		//Aggiunta recente per i ws su logica 2.0
 		int trasmesso;
 		if (infoSpedizione.isAbilitaPartenza()) {
@@ -252,6 +252,7 @@ public class ControllerInfoSpedizioneSQLServer extends Dao implements IControlle
 		try {
 			transaction.begin();
 			em.merge(spedizione);
+			infoSpedizione.setId(spedizione.getIdTestaCor());
 			transaction.commit();
 		} catch (Exception e) {
 			logger.error(e.getMessage(), e);
@@ -305,6 +306,7 @@ public class ControllerInfoSpedizioneSQLServer extends Dao implements IControlle
 			ordine.setStato("INSP");
 			ordine.setCodCorriere(infoSpedizione.getCorriere());
 			ordine.setCodiceClienteCorriere(infoSpedizione.getCodiceCorriere());
+			ordine.setTipoTrasporto(infoSpedizione.getServizioCorriere());
 			MContrassegno infoContrassegno = infoSpedizione.getContrassegno();
 			if (infoContrassegno != null) {
 				ordine.setTipoIncasso(infoContrassegno.getTipo().name());
@@ -354,6 +356,7 @@ public class ControllerInfoSpedizioneSQLServer extends Dao implements IControlle
 				ordine.setIdTestaCorr(spedizione.getIdTestaCor());
 				em.merge(ordine);
 			}
+			infoSpedizione.setId(spedizione.getIdTestaCor());
 			transaction.commit();
 		} catch (Exception e) {
 			logger.error(e.getMessage(), e);
@@ -372,7 +375,8 @@ public class ControllerInfoSpedizioneSQLServer extends Dao implements IControlle
 		colloDaPrelevare.setBarcodeCorriere(colloImballato.getBarCodeImb());
 		colloDaPrelevare.setCodiceCorriere(infoSpedizione.getCorriere());
 		colloDaPrelevare.setKeyColloPre(colloImballato.getKeyColloSpe());
-		colloDaPrelevare.setNrColloCliente(colloImballato.getNrIdCollo());
+//		colloDaPrelevare.setNrColloCliente(colloImballato.getNrIdCollo());
+		colloDaPrelevare.setNrColloCliente(colloImballato.getNrRifCliente());
 		return colloDaPrelevare;
 	}
 	

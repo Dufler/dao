@@ -105,7 +105,7 @@ public class RighiImballo implements Serializable {
 	@Column(name="ProgCollo", nullable=false)
 	private int progCollo;
 
-	@Column(name="QtaImballata")
+	@Column(name="QtaImballata", nullable=false)
 	private int qtaImballata;
 
 //	@Column(name="RilPzEventi", length=2)

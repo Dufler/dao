@@ -71,6 +71,22 @@ public class TestataOrdiniDao extends CRUDDao<TestataOrdini> {
 	public List<TestataOrdini> trovaDaStato(String stato) {
 		List<TestataOrdini> entities = findAllEqualTo("stato", stato);
 		return entities;
+		
+		
+//		GregorianCalendar data = new GregorianCalendar();
+//		data.set(2019, 0, 1);
+//		EntityManager em = getManager();
+//		CriteriaBuilder cb = em.getCriteriaBuilder();
+//		CriteriaQuery<TestataOrdini> criteria = cb.createQuery(TestataOrdini.class);
+//		Root<TestataOrdini> member = criteria.from(TestataOrdini.class);
+//		Predicate condizioneStato = cb.equal(member.get("stato"), stato);
+//		Predicate condizioneData = cb.lessThan(member.get("dataCreazione"), data.getTime());
+//		Predicate condizioneO = cb.equal(member.get("operatore"), "WEB");
+//		Predicate condizioneC = cb.equal(member.get("corriere"), "DHL");
+//		criteria.select(member).where(cb.and(condizioneStato, condizioneO));
+//		List<TestataOrdini> list = em.createQuery(criteria).getResultList();
+//		em.close();
+//		return list;
 	}
 	
 	public List<TestataOrdini> trovaDaSpedizione(int idSpedizione) {
@@ -88,7 +104,7 @@ public class TestataOrdiniDao extends CRUDDao<TestataOrdini> {
 		CriteriaBuilder cb = em.getCriteriaBuilder();
 		CriteriaQuery<TestataOrdini> criteria = cb.createQuery(TestataOrdini.class);
 		Root<TestataOrdini> member = criteria.from(TestataOrdini.class);
-		Predicate condizioneStato = cb.equal(member.get("Stato"), "IMPO");
+		Predicate condizioneStato = cb.equal(member.get("stato"), "IMPO");
 		Predicate condizionePezziAssegnati = cb.lessThan(member.get("qtaAssegnata"), member.get("qtaTotaleSpedire"));
 		criteria.select(member).where(cb.and(condizioneStato, condizionePezziAssegnati));
 		List<TestataOrdini> list = em.createQuery(criteria).getResultList();

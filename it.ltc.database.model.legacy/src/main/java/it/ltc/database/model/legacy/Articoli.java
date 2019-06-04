@@ -23,6 +23,7 @@ import javax.persistence.Table;
 //@DiscriminatorColumn(name="idUniArticolo", discriminatorType = DiscriminatorType.STRING)
 //@NamedQuery(name="Articoli.findAll", query="SELECT a FROM Articoli a")
 public class Articoli implements Serializable {
+	
 	private static final long serialVersionUID = 1L;
 
 	@Id

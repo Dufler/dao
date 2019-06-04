@@ -132,16 +132,36 @@ public class MagaMovDao extends CRUDDao<MagaMov> {
 		return entity;
 	}
 	
-	public MagaMov getNuovoMovimento(CausaliMovimento causale, String riferimentoDocumento, int idDocumento, Date dataDocumento, MagaSd saldo, String codiceUnivocoArticolo, String magazzino, int quantità) {
+	public MagaMov getNuovoMovimentoChiusuraCarico(PakiTesta carico,  MagaSd saldo, int quantità) {
+		return getNuovoMovimento(CausaliMovimento.CARICO, carico.getNrPaki(), carico.getIdTestaPaki(), new Date(), saldo, quantità, carico.getRagSocFor());
+	}
+	
+	public MagaMov getNuovoMovimentoImpegnoOrdine(TestataOrdini ordine,  MagaSd saldo, int quantità) {
+		String note = ordine.getRifOrdineCli();
+		String destinatario = ordine.getRagioneSocialeDestinatario();
+		if (destinatario != null && destinatario.isEmpty())
+			note += " per " + destinatario;
+		return getNuovoMovimento(CausaliMovimento.IMPEGNO, ordine.getNrLista(), ordine.getIdTestaSped(), new Date(), saldo, quantità, note);
+	}
+	
+	public MagaMov getNuovoMovimento(CausaliMovimento causale, String riferimentoDocumento, int idDocumento, Date dataDocumento, MagaSd saldo, int quantità, String note) {
+		return getNuovoMovimento(causale.getCausaleDefault(), causale, riferimentoDocumento, idDocumento, dataDocumento, saldo, quantità, note);
+	}
+	
+	public MagaMov getNuovoMovimento(String causaleLegacy, CausaliMovimento causale, String riferimentoDocumento, int idDocumento, Date dataDocumento, MagaSd saldo, int quantità, String note) {
 		MagaMov movimento = new MagaMov();
-		movimento.setCausale(causale.name());
+		movimento.setCausale(causaleLegacy);
 		movimento.setDocNr(riferimentoDocumento);
 		movimento.setDocData(dataDocumento);
 		movimento.setIDdocum(idDocumento);
 		movimento.setDocCat(causale.getCategoriaDocumento());
-		movimento.setDocNote(causale.getDescrizione());
+		if (note == null || note.isEmpty())
+			note = causale.getDescrizione();
+		if (note != null && note.length() > 50)
+			note = note.substring(0, 50);
+		movimento.setDocNote(note);
 		movimento.setDocTipo(causale.getTipoDocumento());
-		movimento.setCodMaga(magazzino);
+		movimento.setCodMaga(saldo.getCodMaga());
 		movimento.setDisponibilemov(saldo.getDisponibile());
 		movimento.setEsistenzamov(saldo.getEsistenza());
 		movimento.setImpegnatomov(saldo.getImpegnato());
@@ -149,7 +169,7 @@ public class MagaMovDao extends CRUDDao<MagaMov> {
 		movimento.setSegnoDis(causale.getSegnoDisponibile());
 		movimento.setSegnoEsi(causale.getSegnoEsistenza());
 		movimento.setSegnoImp(causale.getSegnoImpegnato());
-		movimento.setIdUniArticolo(codiceUnivocoArticolo);
+		movimento.setIdUniArticolo(saldo.getIdUniArticolo());
 		movimento.setIncTotali(causale.getIncrementoTotali());
 		movimento.setTipo(causale.getTipoMovimento());
 		movimento.setQuantita(quantità);

@@ -21,6 +21,7 @@ import it.ltc.database.model.legacy.RighiImballo;
 import it.ltc.database.model.legacy.RighiOrdine;
 import it.ltc.database.model.legacy.TestataOrdini;
 import it.ltc.database.model.legacy.model.CausaliMovimento;
+import it.ltc.database.model.legacy.model.TestataOrdiniTotali;
 
 public class ManagerMovimentiUscita extends Dao {
 	
@@ -135,15 +136,19 @@ public class ManagerMovimentiUscita extends Dao {
 			saldo.setEsistenza(saldo.getEsistenza() - quantitàImballata);
 			saldo.setTotOut(saldo.getTotOut() + quantitàImballata);
 			//elaboro i movimenti
-			MagaMov movimentoUscita = daoMovimenti.getNuovoMovimento(CausaliMovimento.IBO, testata.getNrLista(), testata.getIdTestaSped(), new Date(), saldo, riga.getIdUnicoArt(), riga.getMagazzino(), quantitàImballata);
+			//MagaMov movimentoUscita = daoMovimenti.getNuovoMovimento(CausaliMovimento.IBO, testata.getNrLista(), testata.getIdTestaSped(), new Date(), saldo, riga.getIdUnicoArt(), riga.getMagazzino(), quantitàImballata);
+			MagaMov movimentoUscita = daoMovimenti.getNuovoMovimento(CausaliMovimento.USCITA, testata.getNrLista(), testata.getIdTestaSped(), new Date(), saldo, quantitàImballata, "Imballo ordine " + testata.getRifOrdineCli());
 			movimenti.add(movimentoUscita);
 			if (quantitàDaRettificare > 0) {
-				MagaMov movimentoRettifica = daoMovimenti.getNuovoMovimento(CausaliMovimento.REL, testata.getNrLista(), testata.getIdTestaSped(), new Date(), saldo, riga.getIdUnicoArt(), riga.getMagazzino(), quantitàDaRettificare);
+				//MagaMov movimentoRettifica = daoMovimenti.getNuovoMovimento(CausaliMovimento.REL, testata.getNrLista(), testata.getIdTestaSped(), new Date(), saldo, riga.getIdUnicoArt(), riga.getMagazzino(), quantitàDaRettificare);
+				MagaMov movimentoRettifica = daoMovimenti.getNuovoMovimento(CausaliMovimento.ANNULLA_IMPEGNO, testata.getNrLista(), testata.getIdTestaSped(), new Date(), saldo, quantitàDaRettificare, "Rettifica non imballato");
 				movimenti.add(movimentoRettifica);
 				logger.info("Aggiunto movimento di rettifica a fronte di un imballo non presente.");
 			}
 			logger.info("Riga ID " + riga.getIdRigoOrdine() + " ha generato il movimento " + movimentoUscita.toString() + " e ha modificato il saldo " + saldo.toString());
 		}
+		//Calcolo i totali per aggiornarli
+		TestataOrdiniTotali totali = daoRighe.calcolaTotali(testata.getIdTestaSped());
 		//vado in scrittura sul DB se non sono presenti errori.
 		if (risultato.getProblemi().isEmpty()) {
 			Date dataGenerazione = new Date();
@@ -156,6 +161,10 @@ public class ManagerMovimentiUscita extends Dao {
 				ordine.setStato("ELAB");
 				ordine.setGenMovUscita("SI");
 				ordine.setDataGeneraUscita(dataGenerazione);
+				ordine.setQtaimballata(totali.getTotaleImballato());
+				ordine.setQtaprelevata(totali.getTotalePrelevato());
+				ordine.setPezzieffet(totali.getTotaleOrdinatoEffettivo());
+				ordine.setPezziEffettiviImballati(totali.getTotaleImballatoEffettivo());
 				em.merge(ordine);
 				//Righe
 				for (RighiOrdine riga : righe) {

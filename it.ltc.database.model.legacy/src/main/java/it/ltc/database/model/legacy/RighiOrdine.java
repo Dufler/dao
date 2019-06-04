@@ -17,7 +17,7 @@ import java.util.List;
 	@NamedQuery(name="RighiOrdine.totaleOrdinatoPerOrdine", query="SELECT SUM(p.qtaSpedizione) FROM RighiOrdine p WHERE p.idTestataOrdine = :ordine"),
 	@NamedQuery(name="RighiOrdine.totaleImballatoPerOrdine", query="SELECT SUM(p.qtaImballata) FROM RighiOrdine p WHERE p.idTestataOrdine = :ordine"),
 	@NamedQuery(name="RighiOrdine.totaleAssegnatoPerOrdine", query="SELECT SUM(p.qtaAssegnata) FROM RighiOrdine p WHERE p.idTestataOrdine = :ordine"),
-	@NamedQuery(name="RighiOrdine.totaliPerOrdine", query="SELECT NEW it.ltc.database.model.legacy.model.TestataOrdiniTotali(SUM(p.qtaSpedizione), SUM(p.qtaImballata), SUM(p.qtaAssegnata)) FROM RighiOrdine p WHERE p.idTestataOrdine = :ordine")
+	@NamedQuery(name="RighiOrdine.totaliPerOrdine", query="SELECT NEW it.ltc.database.model.legacy.model.TestataOrdiniTotali(SUM(p.qtaSpedizione), SUM(p.qtaImballata), SUM(p.qtaAssegnata), SUM(p.qtaPrelevata), SUM(p.qtaSpedizione * p.numeroPezziUnita), SUM(p.qtaImballata * p.numeroPezziUnita)) FROM RighiOrdine p WHERE p.idTestataOrdine = :ordine")
 })
 public class RighiOrdine implements Serializable {
 	
@@ -129,6 +129,9 @@ public class RighiOrdine implements Serializable {
 
 	@Column(name="Numerata", length=20)
 	private String numerata;
+	
+	@Column(name="NumeroPezziUnita", nullable=false)
+	private int numeroPezziUnita;
 
 	@Column(name="Pezzieffet", nullable=false)
 	private int pezzieffet;
@@ -139,8 +142,8 @@ public class RighiOrdine implements Serializable {
 	@Column(length=20)
 	private String PONumber;
 
-//	@Column(name="Posizione")
-//	private int posizione;
+	@Column(name="Posizione", nullable=false)
+	private int posizione;
 
 	@Column(name="QtaAssegnata", nullable=false)
 	private int qtaAssegnata;
@@ -154,7 +157,7 @@ public class RighiOrdine implements Serializable {
 //	@Column(name="QtaPerCassa")
 //	private int qtaPerCassa;
 
-	@Column(name="QtaPrelevata")
+	@Column(name="QtaPrelevata", nullable=false)
 	private int qtaPrelevata;
 
 	@Column(name="QtaSpedizione", nullable=false)
@@ -484,6 +487,14 @@ public class RighiOrdine implements Serializable {
 		this.numerata = numerata;
 	}
 
+	public int getNumeroPezziUnita() {
+		return numeroPezziUnita;
+	}
+
+	public void setNumeroPezziUnita(int numeroPezziUnita) {
+		this.numeroPezziUnita = numeroPezziUnita;
+	}
+	
 	public int getPezzieffet() {
 		return this.pezzieffet;
 	}
@@ -507,15 +518,15 @@ public class RighiOrdine implements Serializable {
 	public void setPONumber(String PONumber) {
 		this.PONumber = PONumber;
 	}
-//
-//	public int getPosizione() {
-//		return this.posizione;
-//	}
-//
-//	public void setPosizione(int posizione) {
-//		this.posizione = posizione;
-//	}
-//
+
+	public int getPosizione() {
+		return this.posizione;
+	}
+
+	public void setPosizione(int posizione) {
+		this.posizione = posizione;
+	}
+
 	public int getQtaAssegnata() {
 		return this.qtaAssegnata;
 	}

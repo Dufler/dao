@@ -14,6 +14,7 @@ import it.ltc.database.model.legacy.coltorti.ArticoliColtorti;
 import it.ltc.model.shared.dao.IProdottoDao;
 import it.ltc.model.shared.dao.IProdottoDaoBase;
 import it.ltc.model.shared.json.cliente.ProdottoJSON;
+import it.ltc.model.shared.json.cliente.TipoCassa;
 import it.ltc.services.custom.exception.CustomException;
 
 public class ProdottoColtortiDAOImpl extends ProdottoDaoConVerifiche<ArticoliColtorti> implements IProdottoDao {
@@ -227,7 +228,8 @@ public class ProdottoColtortiDAOImpl extends ProdottoDaoConVerifiche<ArticoliCol
 			articolo.setCodArtOld(json.getSkuFornitore());
 			articolo.setDescAggiuntiva(json.getDescrizioneAggiuntiva());
 			articolo.setNote(json.getNote());
-			articolo.setTipoCassa(json.getCassa());
+//			articolo.setTipoCassa(json.getCassa());
+			articolo.setCassa(json.getCassa().name());
 			articolo.setUtente(utente);
 			logger.info("Articolo deserializzato: " + articolo);
 		}
@@ -240,10 +242,11 @@ public class ProdottoColtortiDAOImpl extends ProdottoDaoConVerifiche<ArticoliCol
 			json = new ProdottoJSON();
 			json.setId(articolo.getIdArticolo());
 			//Controllo sul valore per la cassa.
-			String cassa = articolo.getTipoCassa();
-			if (cassa == null || cassa.isEmpty())
-				cassa = "NO";
-			json.setCassa(cassa);
+//			String cassa = articolo.getTipoCassa();
+//			if (cassa == null || cassa.isEmpty())
+//				cassa = "NO";
+//			json.setCassa(cassa);
+			json.setCassa(TipoCassa.getTipo(articolo.getCassa()));
 			json.setChiaveCliente(articolo.getCodArtStr());
 			json.setCodiceModello(articolo.getModello());
 			json.setBarcode(articolo.getCodBarre());
@@ -269,6 +272,7 @@ public class ProdottoColtortiDAOImpl extends ProdottoDaoConVerifiche<ArticoliCol
 			json.setNote(articolo.getNote());
 			json.setParticolarita(articolo.getParticolarita());
 			json.setCommessa(commessa);
+			json.setDataUltimaModifica(articolo.getDataModifica());
 		} else {
 			json = null;
 		}

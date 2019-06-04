@@ -1,11 +1,14 @@
 package it.ltc.database.dao.common;
 
+import java.util.HashMap;
 import java.util.List;
 
 import it.ltc.database.dao.CRUDDao;
 import it.ltc.database.model.centrale.JoinCommessaCorriere;
 
 public class CodiceClienteCorriereDao extends CRUDDao<JoinCommessaCorriere> {
+	
+	private final HashMap<String, JoinCommessaCorriere> mappaPerCodice;
 
 	public CodiceClienteCorriereDao() {
 		this(LOCAL_CENTRALE_PERSISTENCE_UNIT_NAME);
@@ -13,10 +16,18 @@ public class CodiceClienteCorriereDao extends CRUDDao<JoinCommessaCorriere> {
 	
 	public CodiceClienteCorriereDao(String persistenceUnit) {
 		super(persistenceUnit, JoinCommessaCorriere.class);
+		this.mappaPerCodice = new HashMap<>();
+	}
+	
+	private JoinCommessaCorriere aggiungiMappe(JoinCommessaCorriere codice) {
+		if (codice != null) {
+			mappaPerCodice.put(codice.getCodiceCliente(), codice);
+		}
+		return codice;
 	}
 	
 	public JoinCommessaCorriere trovaDaCodice(String codice) {
-		JoinCommessaCorriere entity = findByID(codice);
+		JoinCommessaCorriere entity = mappaPerCodice.containsKey(codice) ? mappaPerCodice.get(codice) : aggiungiMappe(findByID(codice));
 		return entity;
 	}
 	

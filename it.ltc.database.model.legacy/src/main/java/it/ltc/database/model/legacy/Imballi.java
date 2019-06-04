@@ -26,7 +26,7 @@ public class Imballi implements Serializable {
 //	@Column(name="Attiva", nullable=false, length=2, , columnDefinition="char(2)")
 //	private String attiva;
 
-	@Column(name="CodImballo", length=2)
+	@Column(name="CodImballo", length=3, nullable=false)
 	private String codImballo;
 
 	@Column(name="Descrizione", length=30)

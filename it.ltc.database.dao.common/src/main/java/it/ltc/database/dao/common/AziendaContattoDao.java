@@ -25,4 +25,11 @@ public class AziendaContattoDao extends CRUDDao<AziendaContatti> {
 		throw new UnsupportedOperationException("E' impossibile aggiornare questa entity.");		
 	}
 
+	public AziendaContatti trovaDaID(int idAzienda, int idContatto) {
+		AziendaContattiPK pk = new AziendaContattiPK();
+		pk.setAzienda(idAzienda);
+		pk.setContatto(idContatto);
+		return findByID(pk);
+	}
+
 }

@@ -96,9 +96,10 @@ public class Fornitori implements Serializable {
 	 * - CARICO : il default, indica un fornitore di produzione.<br>
 	 * - RESO : indica che fornisce resi.<br>
 	 * - INVENTARIO : fornitore "fittizio" usato per i carichi d'inventario.<br>
+	 * - INTERNO : carichi interni, es. sprepack.<br>
 	 */
-	@Column(name="Tipodocumento", length=10)
-	private String tipodocumento;
+	@Column(name="Tipodocumento", length=10, nullable=false)
+	private String tipoDocumento;
 	
 	@Column(name="note", length=250)
 	private String note;
@@ -108,7 +109,7 @@ public class Fornitori implements Serializable {
 	@PrePersist
 	public void prePersist() {
 		//Serve ad Andrea che si inserisca questo valore.
-		if (tipodocumento == null) tipodocumento = "CARICO";
+		if (tipoDocumento == null || tipoDocumento.isEmpty()) tipoDocumento = "CARICO";
 		if (codiceFornitore == null) codiceFornitore = sdf.format(new Date());
 	}
 
@@ -296,12 +297,12 @@ public class Fornitori implements Serializable {
 		this.tel = tel;
 	}
 
-	public String getTipodocumento() {
-		return this.tipodocumento;
+	public String getTipoDocumento() {
+		return this.tipoDocumento;
 	}
 
-	public void setTipodocumento(String tipodocumento) {
-		this.tipodocumento = tipodocumento;
+	public void setTipoDocumento(String tipodocumento) {
+		this.tipoDocumento = tipodocumento;
 	}
 
 	public String getNote() {

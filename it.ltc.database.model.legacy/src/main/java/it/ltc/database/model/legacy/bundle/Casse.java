@@ -20,11 +20,13 @@ public class Casse implements Serializable {
 	@Column(name="id", unique=true, nullable=false)
 	private int id;
 	
-//	@Column(name="idUnivocoCassa", nullable=false, length=15)
-//	private String idUnivocoCassa;
-//	
-//	@Column(name="idUnivocoArticolo", nullable=false, length=15)
-//	private String idUnivocoProdotto;
+	//IdBundle
+	@Column(name="idUnivocoCassa", nullable=false, length=15)
+	private String idUnivocoCassa;
+	
+	//idUniArticolo
+	@Column(name="idUnivocoArticolo", nullable=false, length=15)
+	private String idUnivocoProdotto;
 	
 	@Column(name="idCassa", nullable=false)
 	private int idCassa;
@@ -79,21 +81,21 @@ public class Casse implements Serializable {
 		this.idProdotto = idProdotto;
 	}
 
-//	public String getIdUnivocoCassa() {
-//		return idUnivocoCassa;
-//	}
-//
-//	public void setIdUnivocoCassa(String idUnivocoCassa) {
-//		this.idUnivocoCassa = idUnivocoCassa;
-//	}
-//
-//	public String getIdUnivocoProdotto() {
-//		return idUnivocoProdotto;
-//	}
-//
-//	public void setIdUnivocoProdotto(String idUnivocoProdotto) {
-//		this.idUnivocoProdotto = idUnivocoProdotto;
-//	}
+	public String getIdUnivocoCassa() {
+		return idUnivocoCassa;
+	}
+
+	public void setIdUnivocoCassa(String idUnivocoCassa) {
+		this.idUnivocoCassa = idUnivocoCassa;
+	}
+
+	public String getIdUnivocoProdotto() {
+		return idUnivocoProdotto;
+	}
+
+	public void setIdUnivocoProdotto(String idUnivocoProdotto) {
+		this.idUnivocoProdotto = idUnivocoProdotto;
+	}
 
 	public int getQuantitaProdotto() {
 		return quantitaProdotto;
@@ -156,7 +158,7 @@ public class Casse implements Serializable {
 	
 	@Override
 	public String toString() {
-		return "BUNDLE: [ID cassa=" + idCassa + ", ID Prodotto=" + idProdotto + ", quantita="	+ quantitaProdotto + "]";
+		return "Cassa: [ID=" + id + ", ID cassa=" + idCassa + ", ID Prodotto=" + idProdotto + ", quantita="	+ quantitaProdotto + "]";
 	}
 
 }

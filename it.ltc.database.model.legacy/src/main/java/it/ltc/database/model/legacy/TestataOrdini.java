@@ -94,7 +94,7 @@ public class TestataOrdini implements Serializable {
 	@Column(name="DataConsegna", columnDefinition="datetime")
 	private Date dataConsegna;
 
-	@Column(name="DataCreazione", insertable=false, updatable=false)
+	@Column(name="DataCreazione", insertable=false, updatable=false, nullable=false)
 	private Date dataCreazione;
 
 	@Column(name="DataDoc", columnDefinition="datetime")
@@ -228,6 +228,9 @@ public class TestataOrdini implements Serializable {
 
 	 @Column(name="Pezzieffet", nullable=false)
 	 private int pezzieffet;
+	 
+	 @Column(name="PezziEffettiviImballati", nullable=false)
+	 private int pezziEffettiviImballati;
 
 	// @Column(length=20)
 	// private String PONumber;
@@ -294,7 +297,7 @@ public class TestataOrdini implements Serializable {
 	// @Column(name="Spedizi", length=20)
 	// private String spedizi;
 
-	 @Column(name="Stampato", length=2, insertable=false)
+	 @Column(name="Stampato", length=2, insertable=false, nullable=false)
 	 private String stampato;
 
 	/**
@@ -879,11 +882,11 @@ public class TestataOrdini implements Serializable {
 		 this.percAssegnata = percAssegnata;
 	 }
 	
-	 public Double getPesoTotale() {
+	 public double getPesoTotale() {
 		 return this.pesoTotale;
 	 }
 	
-	 public void setPesoTotale(Double pesoTotale) {
+	 public void setPesoTotale(double pesoTotale) {
 		 this.pesoTotale = pesoTotale;
 	 }
 
@@ -934,6 +937,14 @@ public class TestataOrdini implements Serializable {
 	// public void setPrenotatoDa(String prenotatoDa) {
 	// this.prenotatoDa = prenotatoDa;
 	// }
+
+	public int getPezziEffettiviImballati() {
+		return pezziEffettiviImballati;
+	}
+
+	public void setPezziEffettiviImballati(int pezziEffettiviImballati) {
+		this.pezziEffettiviImballati = pezziEffettiviImballati;
+	}
 
 	public int getPriorita() {
 		return this.priorita;

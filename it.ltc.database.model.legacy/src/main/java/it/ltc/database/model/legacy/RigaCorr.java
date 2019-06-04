@@ -12,6 +12,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 
 import it.ltc.utility.miscellanea.string.StringUtility;
@@ -117,6 +118,11 @@ public class RigaCorr implements Serializable {
 	public void prePersist() {
 		GregorianCalendar today = new GregorianCalendar();
 		annoSpe = today.get(Calendar.YEAR);
+		stringaBartolini = generaStringaBartolini();
+	}
+	
+	@PreUpdate
+	public void preUpdate() {
 		stringaBartolini = generaStringaBartolini();
 	}
 
@@ -274,7 +280,7 @@ public class RigaCorr implements Serializable {
 		sb.append(sdf.format(new Date())); //4 - anno spedizione
 		sb.append("00"); //2 - numero serie - TODO - in teoria 00 dovrebbe andare sempre bene, va verificato.
 		sb.append(utility.getFormattedString(nrSpedi, 7)); //7 - numero spedizione
-		sb.append(" "); //1 - tipo record
+		sb.append("E"); //1 - tipo record, viene fissato ad E sui sistemy legacy.
 		sb.append(utility.getFormattedString(nrColloStr, 35)); //35 - barcode collo
 		return sb.toString();
 	}

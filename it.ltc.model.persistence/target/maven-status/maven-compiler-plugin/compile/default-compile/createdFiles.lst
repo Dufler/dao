@@ -7,6 +7,7 @@ it\ltc\model\persistence\prodotto\ControllerCassaSQLServer.class
 it\ltc\model\persistence\fornitore\ControllerFornitoreSQLServer.class
 it\ltc\model\persistence\ordine\ControllerInfoSpedizioneSQLServer.class
 it\ltc\model\persistence\carico\ControllerCaricoMySQL.class
+it\ltc\model\persistence\prodotto\ControllerProdottoSQLServer$Mode.class
 it\ltc\model\persistence\saldi\EsportatoreSaldiMovimentiSQLServer.class
 it\ltc\model\persistence\ordine\ControllerOrdiniSQLServer$1.class
 it\ltc\model\persistence\ordine\EsportatoreImballoSQLServer.class

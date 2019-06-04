@@ -13,7 +13,7 @@ import javax.persistence.*;
 @Entity
 @Table(name="cap")
 @IdClass(CapPK.class)
-@NamedQuery(name="Cap.findAll", query="SELECT c FROM Cap c")
+//@NamedQuery(name="Cap.findAll", query="SELECT c FROM Cap c")
 public class Cap implements Serializable {
 	
 	private static final long serialVersionUID = 1L;

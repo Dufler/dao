@@ -13,7 +13,7 @@ import it.ltc.database.sincronizza.mysql.UtentiSync;
 public class SincronizzaMain {
 	
 	public static final String persistenceUnitMaster = "produzione";
-	public static final String persistenceUnitSlave = "produzione-utenti-po";
+	public static final String persistenceUnitSlave = "produzione-utenti-pg";
 
 	public static void main(String[] args) {
 		FeatureSync fs = new FeatureSync(persistenceUnitMaster, persistenceUnitSlave);

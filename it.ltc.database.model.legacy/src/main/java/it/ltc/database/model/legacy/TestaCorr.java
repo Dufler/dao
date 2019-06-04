@@ -193,7 +193,7 @@ public class TestaCorr implements Serializable {
 //	@Column(length=9)
 //	private String nplts;
 
-	@Column(name="NrColli")
+	@Column(name="NrColli", nullable=false)
 	private int nrColli;
 
 	@Column(name="NrLista", length=21)
@@ -241,8 +241,8 @@ public class TestaCorr implements Serializable {
 //	@Column(name="PartVarie", length=2)
 //	private String partVarie;
 
-	@Column(name="Peso", columnDefinition="money")
-	private Double peso;
+	@Column(name="Peso", columnDefinition="money", nullable=false)
+	private double peso;
 
 	@Column(name="Pezzi", nullable=false)
 	private int pezzi;
@@ -319,14 +319,28 @@ public class TestaCorr implements Serializable {
 //	@Column(name="ValutaMerce", length=3)
 //	private String valutaMerce;
 
-	@Column(name="Volume", columnDefinition="money")
-	private Double volume;
+	@Column(name="Volume", columnDefinition="money", nullable=false)
+	private double volume;
 
 //	@Column(name="VolumeOLD", nullable=false)
 //	private BigDecimal volumeOLD;
 
 //	@Column(name="ZonaCons")
 //	private int zonaCons;
+	
+	/**
+	 * Definisce i possibili stati della spedizione:<br>
+	 * - LEGACY/NONE: stato di default, viene impostato così quando il testacorr viene gestito dai sistemi legacy.<br>
+	 * - INSERITA: stato iniziale quando viene inserita dal nuovo sistema.<br>
+	 * - ABILITATA: stato che rappresenta l'abilitazione alla conta dei colli e alla partenza della spedizione.<br>
+	 * - DELIVERY: stato che rappresenta la stampa delle info della spedizione.<br>
+	 * - SERVIZIO: stato finale che viene assunto solo dopo che il servizio ha generato ed inviato i file necessari al corriere.<br>
+	 */
+	@Column(name="Stato", length=30, nullable=false)
+	private String stato;
+	
+	@Column(name="idDelivery", nullable=false)
+	private int idDelivery;
 
 	public TestaCorr() {}
 	
@@ -344,8 +358,8 @@ public class TestaCorr implements Serializable {
 		trasmesso = 0;
 		//priority = " ";
 		stringaBartolini = generaStringaBartolini();
-		if (valoreMerce == null)
-			valoreMerce = 0.0;
+		if (stato == null || stato.isEmpty()) stato = "INSERITA";
+		if (valoreMerce == null) valoreMerce = 0.0;
 	}
 
 	public int getIdTestaCor() {
@@ -884,11 +898,11 @@ public class TestaCorr implements Serializable {
 //		this.partVarie = partVarie;
 //	}
 
-	public Double getPeso() {
+	public double getPeso() {
 		return this.peso;
 	}
 
-	public void setPeso(Double peso) {
+	public void setPeso(double peso) {
 		this.peso = peso;
 	}
 
@@ -1092,11 +1106,11 @@ public class TestaCorr implements Serializable {
 //		this.valutaMerce = valutaMerce;
 //	}
 
-	public Double getVolume() {
+	public double getVolume() {
 		return this.volume;
 	}
 
-	public void setVolume(Double volume) {
+	public void setVolume(double volume) {
 		this.volume = volume;
 	}
 
@@ -1116,6 +1130,22 @@ public class TestaCorr implements Serializable {
 //		this.zonaCons = zonaCons;
 //	}
 	
+	public String getStato() {
+		return stato;
+	}
+
+	public void setStato(String stato) {
+		this.stato = stato;
+	}
+
+	public int getIdDelivery() {
+		return idDelivery;
+	}
+
+	public void setIdDelivery(int idDelivery) {
+		this.idDelivery = idDelivery;
+	}
+
 	public String generaStringaBartolini() {
 		StringUtility utility = new StringUtility();
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
@@ -1168,7 +1198,7 @@ public class TestaCorr implements Serializable {
 		sb.append(utility.getFormattedString(0.0, 13, 3)); //13 (3 decimali) valore merce dichiarato
 		sb.append("EUR"); //3 divisa valore merce
 		sb.append("  "); //2 - particolarità consegna
-		sb.append("  "); //2 - particolarità gianceza
+		sb.append("  "); //2 - particolarità giancenza
 		sb.append(" "); //2 - particolarità varie
 		sb.append(" "); //1 - prima consegna particolare
 		sb.append(" "); //1 - seconda consegna particolare

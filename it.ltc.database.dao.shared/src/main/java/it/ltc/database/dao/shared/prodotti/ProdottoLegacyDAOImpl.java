@@ -14,6 +14,7 @@ import it.ltc.database.model.legacy.Articoli;
 import it.ltc.model.shared.dao.IProdottoDao;
 import it.ltc.model.shared.dao.IProdottoDaoBase;
 import it.ltc.model.shared.json.cliente.ProdottoJSON;
+import it.ltc.model.shared.json.cliente.TipoCassa;
 import it.ltc.services.custom.exception.CustomException;
 
 public class ProdottoLegacyDAOImpl extends ProdottoDaoConVerifiche<Articoli> implements IProdottoDao {
@@ -114,6 +115,7 @@ public class ProdottoLegacyDAOImpl extends ProdottoDaoConVerifiche<Articoli> imp
 				articolo.setCategoria(prodotto.getCategoria());
 				articolo.setCatMercGruppo(prodotto.getCategoria());
 				articolo.setLinea(prodotto.getBrand());
+				articolo.setCassa(prodotto.getCassa().name());
 				//null check sugli opzionali
 				if (prodotto.getBarcodeFornitore() != null && !prodotto.getBarcodeFornitore().isEmpty())
 					articolo.setBarraEAN(prodotto.getBarcodeFornitore());
@@ -228,7 +230,7 @@ public class ProdottoLegacyDAOImpl extends ProdottoDaoConVerifiche<Articoli> imp
 			articolo.setCodArtOld(json.getSkuFornitore());
 			articolo.setDescAggiuntiva(json.getDescrizioneAggiuntiva());
 			articolo.setNote(json.getNote());
-			articolo.setTipoCassa(json.getCassa());
+			articolo.setCassa(json.getCassa().name());
 			articolo.setPezziCassa(json.getPezziEffettivi());
 			articolo.setUtente(utente);
 		}
@@ -241,12 +243,13 @@ public class ProdottoLegacyDAOImpl extends ProdottoDaoConVerifiche<Articoli> imp
 			json = new ProdottoJSON();
 			json.setId(articolo.getIdArticolo());
 			//Controllo sul valore per la cassa.
-			String cassa = articolo.getCassa();
-			if (cassa == null || cassa.isEmpty())
-				cassa = "NO";
-			else if (!"BUNDLE".equals(cassa)) //FIXME: Fix temporaneo per i clienti che hanno info sul campo "tipoCassa"
-				cassa = "STANDARD";
-			json.setCassa(cassa);
+//			String cassa = articolo.getCassa();
+//			if (cassa == null || cassa.isEmpty())
+//				cassa = "NO";
+//			else if (!"BUNDLE".equals(cassa)) //FIXME: Fix temporaneo per i clienti che hanno info sul campo "tipoCassa"
+//				cassa = "STANDARD";
+//			json.setCassa(cassa);
+			json.setCassa(TipoCassa.getTipo(articolo.getCassa()));
 			json.setChiaveCliente(articolo.getCodArtStr());
 			json.setCodiceModello(articolo.getModello());
 			json.setBarcode(articolo.getCodBarre());
@@ -272,6 +275,7 @@ public class ProdottoLegacyDAOImpl extends ProdottoDaoConVerifiche<Articoli> imp
 			json.setNote(articolo.getNote());
 			json.setPezziEffettivi(articolo.getPezziCassa());
 			json.setCommessa(commessa);
+			json.setDataUltimaModifica(articolo.getDataModifica());
 		} else {
 			json = null;
 		}

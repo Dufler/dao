@@ -91,6 +91,10 @@ public class TestaCorrDao extends CRUDDao<TestaCorr> {
 		oldEntity.setValoreMerce(entity.getValoreMerce());
 		oldEntity.setValutaIncasso(entity.getValutaIncasso());
 		oldEntity.setVolume(entity.getVolume());
+		oldEntity.setDocumentoData(entity.getDocumentoData());
+		oldEntity.setDocumentoRiferimento(entity.getDocumentoRiferimento());
+		oldEntity.setDocumentoTipo(entity.getDocumentoTipo());
+		oldEntity.setTrackingNumber(entity.getTrackingNumber());
 	}
 	
 	public TestaCorr trovaDaID(int id) {
@@ -101,6 +105,11 @@ public class TestaCorrDao extends CRUDDao<TestaCorr> {
 	public TestaCorr trovaDaNumeroLista(String numeroLista) {
 		TestaCorr entity = findOnlyOneEqualTo("nrLista", numeroLista);
 		return entity;
+	}
+	
+	public List<TestaCorr> trovaDaIDDelivery(int idDelivery) {
+		List<TestaCorr> entities = findAllEqualTo("idDelivery", idDelivery);
+		return entities;
 	}
 	
 	public List<TestaCorr> getSpedizioniForza(int idPartenza, int anno) {
@@ -147,6 +156,26 @@ public class TestaCorrDao extends CRUDDao<TestaCorr> {
 	public List<TestaCorr> trovaTutte() {
 		List<TestaCorr> entities = findAll();
 		return entities;
+	}
+
+	public List<TestaCorr> trovaSpedizioniPartiteSenzaTrackingNumber() {
+		List<TestaCorr> lista;
+		EntityManager em = getManager();
+		try {
+			CriteriaBuilder cb = em.getCriteriaBuilder();
+	        CriteriaQuery<TestaCorr> criteria = cb.createQuery(c);
+	        Root<TestaCorr> member = criteria.from(c);
+	        Predicate condizioneTrasmesso = cb.greaterThan(member.get("trasmesso"), 0);
+	        Predicate condizioneTrackingNumber = cb.isNull(member.get("trackingNumber"));
+	        criteria.select(member).where(cb.and(condizioneTrackingNumber, condizioneTrasmesso));
+			lista = em.createQuery(criteria).getResultList();
+		} catch (Exception e) {
+			logger.error(e.getMessage(), e);
+			lista = null;
+		} finally {
+			em.close();
+		}
+		return lista;
 	}
 
 }

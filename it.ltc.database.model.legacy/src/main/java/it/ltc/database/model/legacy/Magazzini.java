@@ -64,6 +64,13 @@ public class Magazzini implements Serializable {
 
 //	@Column(name="TipoOrdine", nullable=false, length=10)
 //	private String tipoOrdine;
+	
+	/**
+	 * Indica se il magazzino è quello da presentare come default durante la selezione utente.
+	 * Dovrebbe esserci un solo magazzino con il valore SI.
+	 */
+	@Column(name="MagazzinoDefault", nullable=false, length=2)
+	private String magazzinoDefault;
 
 	public Magazzini() {}
 
@@ -113,6 +120,14 @@ public class Magazzini implements Serializable {
 
 	public void setMagaCliente(String magaCliente) {
 		this.magaCliente = magaCliente;
+	}
+
+	public String getMagazzinoDefault() {
+		return magazzinoDefault;
+	}
+
+	public void setMagazzinoDefault(String magazzinoDefault) {
+		this.magazzinoDefault = magazzinoDefault;
 	}
 
 //	public int getScelta() {

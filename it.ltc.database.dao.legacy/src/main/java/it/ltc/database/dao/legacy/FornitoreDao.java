@@ -6,6 +6,8 @@ import it.ltc.database.dao.CRUDDao;
 import it.ltc.database.model.legacy.Fornitori;
 
 public class FornitoreDao extends CRUDDao<Fornitori> {
+	
+	public enum TipoFornitori { CARICO, RESO, INVENTARIO, INTERNO }
 
 	public FornitoreDao(String persistenceUnit) {
 		super(persistenceUnit, Fornitori.class);
@@ -18,6 +20,12 @@ public class FornitoreDao extends CRUDDao<Fornitori> {
 	
 	public Fornitori trovaDaCodice(String codiceFornitore) {
         Fornitori fornitore = findFirstOneEqualTo("codiceFornitore", codiceFornitore);
+		return fornitore;
+	}
+	
+	public Fornitori trovaDaTipo(TipoFornitori tipo) {
+		if (tipo == null) throw new RuntimeException("E' necessario specificare un tipo di fornitore.");
+        Fornitori fornitore = findFirstOneEqualTo("tipoDocumento", tipo.name());
 		return fornitore;
 	}
 	
@@ -50,6 +58,7 @@ public class FornitoreDao extends CRUDDao<Fornitori> {
 		oldEntity.setProv(entity.getProv());
 		oldEntity.setIndirizzo(entity.getIndirizzo());
 		oldEntity.setNote(entity.getNote());
+		oldEntity.setTipoDocumento(entity.getTipoDocumento());
 		//Opzionali, se non indicati lascio quello che ho gia'.
 		String email = entity.getEMail();
 		if (email != null && !email.isEmpty())

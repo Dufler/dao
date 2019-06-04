@@ -135,7 +135,7 @@ public class ColliPreleva implements Serializable {
 	/**
 	 * Come il campo codiceCorriere
 	 */
-	@Column(name="Vet1", length=25)
+	@Column(name="Vet1", length=25, nullable=false)
 	private String vet1;
 
 	/**
@@ -143,11 +143,40 @@ public class ColliPreleva implements Serializable {
 	 */
 	@Column(name="Vet2", length=25)
 	private String vet2;
+	
+	@Column(name="Volume", columnDefinition="money", nullable=false)
+	private double volume;
+	
+	@Column(name="Peso", columnDefinition="money", nullable=false)
+	private double peso;
+
+	@Column(name="Pezzi", nullable=false)
+	private int pezzi;
+	
+	@Column(name="formato", length=3, nullable=false)
+	private String formato;
 
 	public ColliPreleva() {}
 	
 	@PrePersist
 	public void prePersist() {
+		setGruppo();
+		vet1 = codiceCorriere;
+		if (vet2 == null) vet2 = " ";
+		if (abilita == null || abilita.isEmpty()) abilita = "NO";
+		if (spedito == null || spedito.isEmpty()) spedito = "NO";
+		if (poNumber == null) poNumber = "";
+	}
+	
+	@PreUpdate
+	public void preUpdate() {
+		setGruppo();
+	}
+	
+	/**
+	 * Metodo richiamato durante l'insert e l'update per impostare in automatico i campi: dataDistinta, gruppo e nrDistinta con la data attuale.
+	 */
+	public void setGruppo() {
 		Date now = new Date();
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
 		String today = sdf.format(now);
@@ -156,13 +185,8 @@ public class ColliPreleva implements Serializable {
 		} catch (ParseException e) {
 			dataDistinta = new Date(now.getTime());
 		}
-		gruppo = today + "00000";
+		gruppo = today + "00000" + vet1; //Ci aggiungo il codice del vettore.
 		nrDistinta = Integer.parseInt(today);
-		vet1 = codiceCorriere;
-		if (vet2 == null) vet2 = " ";
-		if (abilita == null || abilita.isEmpty()) abilita = "NO";
-		if (spedito == null || spedito.isEmpty()) spedito = "NO";
-		if (poNumber == null) poNumber = "";
 	}
 
 	public int getIdColliPreleva() {
@@ -285,13 +309,13 @@ public class ColliPreleva implements Serializable {
 //		this.genFile = genFile;
 //	}
 
-//	public String getGruppo() {
-//		return this.gruppo;
-//	}
-//
-//	public void setGruppo(String gruppo) {
-//		this.gruppo = gruppo;
-//	}
+	public String getGruppo() {
+		return this.gruppo;
+	}
+
+	public void setGruppo(String gruppo) {
+		this.gruppo = gruppo;
+	}
 
 	public String getKeyColloPre() {
 		return this.keyColloPre;
@@ -419,6 +443,38 @@ public class ColliPreleva implements Serializable {
 
 	public void setVet2(String vet2) {
 		this.vet2 = vet2;
+	}
+
+	public double getVolume() {
+		return volume;
+	}
+
+	public void setVolume(double volume) {
+		this.volume = volume;
+	}
+
+	public double getPeso() {
+		return peso;
+	}
+
+	public void setPeso(double peso) {
+		this.peso = peso;
+	}
+
+	public int getPezzi() {
+		return pezzi;
+	}
+
+	public void setPezzi(int pezzi) {
+		this.pezzi = pezzi;
+	}
+
+	public String getFormato() {
+		return formato;
+	}
+
+	public void setFormato(String formato) {
+		this.formato = formato;
 	}
 
 }

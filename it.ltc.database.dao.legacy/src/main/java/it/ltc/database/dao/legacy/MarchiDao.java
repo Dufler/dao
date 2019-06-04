@@ -3,16 +3,22 @@ package it.ltc.database.dao.legacy;
 import java.util.HashMap;
 import java.util.List;
 
-import it.ltc.database.dao.ReadOnlyDao;
+import it.ltc.database.dao.CRUDDao;
 import it.ltc.database.model.legacy.Marchi;
 
-public class MarchiDao extends ReadOnlyDao<Marchi> {
+public class MarchiDao extends CRUDDao<Marchi> {
 	
 	protected final HashMap<Integer, Marchi> mappaPerCodice;
 
 	public MarchiDao(String persistenceUnit) {
 		super(persistenceUnit, Marchi.class);
 		mappaPerCodice = new HashMap<>();
+	}
+	
+	@Override
+	protected void updateValues(Marchi oldEntity, Marchi entity) {
+		oldEntity.setCodice(entity.getCodice());
+		oldEntity.setDescrizione(entity.getDescrizione());
 	}
 	
 	private Marchi inserisciInMappe(Marchi entity) {

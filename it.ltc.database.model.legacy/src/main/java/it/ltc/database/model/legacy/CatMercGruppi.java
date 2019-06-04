@@ -7,6 +7,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.PrePersist;
 import javax.persistence.Table;
 
 /**
@@ -31,7 +32,21 @@ public class CatMercGruppi implements Serializable {
 	@Column(name="Descrizione", length=50)
 	private String descrizione;
 	
+	/**
+	 * Indica lo stato della categoria di fatturazione, può essere usato se il valore è "ATTIVO".
+	 */
+	@Column(name="Stato", length=10, nullable=false)
+	private String stato;
+	
+	@Column(name="Marchio", nullable=false)
+	private int marchio;
+	
 	public CatMercGruppi() {}
+	
+	@PrePersist
+	public void prePersist() {
+		if (stato == null || stato.isEmpty()) stato = "ATTIVO";
+	}
 
 	public int getIdGruCatMer() {
 		return idGruCatMer;
@@ -55,6 +70,22 @@ public class CatMercGruppi implements Serializable {
 
 	public void setDescrizione(String descrizione) {
 		this.descrizione = descrizione;
+	}
+
+	public String getStato() {
+		return stato;
+	}
+
+	public void setStato(String stato) {
+		this.stato = stato;
+	}
+
+	public int getMarchio() {
+		return marchio;
+	}
+
+	public void setMarchio(int marchio) {
+		this.marchio = marchio;
 	}
 
 	@Override

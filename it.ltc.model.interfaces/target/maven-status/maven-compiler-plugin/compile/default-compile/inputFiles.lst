@@ -13,6 +13,7 @@ C:\Users\Damiano\git-dao\it.ltc.model.interfaces\src\it\ltc\model\interfaces\ord
 C:\Users\Damiano\git-dao\it.ltc.model.interfaces\src\it\ltc\model\interfaces\ordine\ProdottoOrdinato.java
 C:\Users\Damiano\git-dao\it.ltc.model.interfaces\src\it\ltc\model\interfaces\prodotto\MCassa.java
 C:\Users\Damiano\git-dao\it.ltc.model.interfaces\src\it\ltc\model\interfaces\importatore\RisultatoImportazioneStandard.java
+C:\Users\Damiano\git-dao\it.ltc.model.interfaces\src\it\ltc\model\interfaces\ordine\TipoImportazioneOrdine.java
 C:\Users\Damiano\git-dao\it.ltc.model.interfaces\src\it\ltc\model\interfaces\fornitore\MFornitore.java
 C:\Users\Damiano\git-dao\it.ltc.model.interfaces\src\it\ltc\model\interfaces\exception\CustomErrorCause.java
 C:\Users\Damiano\git-dao\it.ltc.model.interfaces\src\it\ltc\model\interfaces\fornitore\TipoFornitore.java
